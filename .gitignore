@@ -1,0 +1,127 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+/dist/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# 🔒 ENVIRONMENT VARIABLES - NUNCA COMMITAR CREDENCIAIS!
+.env
+.env.local
+.env.public
+.env.*.local
+.env.prod
+.env.*.prod
+tool/external-access/pass-through/.env.host
+
+# Android signing artifacts
+android/key.properties
+android/keystore-secrets.txt
+*.jks
+*.keystore
+
+# Artefatos operacionais locais (nao commitar)
+/.e2e_*
+/diag_*
+/e2e*
+/flow*
+/check*
+/doccheck*
+/linkdoc*
+/status_*.json
+/auth_*.json
+/appshape_*.json
+/itil_*.json
+/bad_*.json
+/put_nonexistent.json
+/tmp_*.json
+/prefs_inject*.xml
+/ui_*.xml
+/window_*.xml
+/after_*.xml
+/after_*.png
+/attachment_*.txt
+/attachment_*.xml
+/catalog_after_fix.xml
+/codex-ui-attach.txt
+/current_*.png
+/current_*.xml
+/em_atendimento_recheck.xml
+/file_picker_ui.xml
+/focus_test.xml
+/flutter_*.log
+/messages_*.png
+/messages_*.xml
+/my_tickets_recheck.xml
+/post_*.xml
+/pre_*.xml
+/pwd_test.xml
+/relaunch_*.png
+/relaunch_*.xml
+/release-signing-report.txt
+/sis_*.png
+/sis_*.txt
+/sis_*.xml
+/sis-*.png
+/sis-*.txt
+/sis-*.xml
+/solution_*.png
+/solution_*.txt
+/solution_*.xml
+/ticket_*.png
+/ticket_*.xml
+/type_menu_*.png
+/type_menu_*.xml
+/initSession_resp.bin
+/auditoria-automatica-sis.md
+.localappdata/
+.appdata/
+.gitconfig*
+
+
+# Git config local/Windows (nao commitar)
+.gitconfig*
+
+# JDK bundled para build Android (runtime local, não versionar)
+tool/android/runtime/jdk*/
+tool/android/runtime/*.zip

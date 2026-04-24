@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Win32, linux, macOS",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/linux/flutter/ephemeral", 
+                "${workspaceFolder}/macos/Flutter/ephemeral", 
+                "${workspaceFolder}/windows/flutter/ephemeral"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/linux/flutter/ephemeral",
+                    "${workspaceFolder}/macos/Flutter/ephemeral", 
+                    "${workspaceFolder}/windows/flutter/ephemeral"
+                ]
+            }
+        }
+    ],
+    "version": 4
+}

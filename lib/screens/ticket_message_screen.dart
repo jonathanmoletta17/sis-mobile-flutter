@@ -1,0 +1,1206 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:async';
+import '../state/app_state.dart';
+import '../models/ticket_message.dart';
+import '../utils/avatar_colors.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:gal/gal.dart';
+
+import '../theme/app_colors.dart';
+import '../theme/app_radius.dart';
+import '../theme/app_spacing.dart';
+import '../theme/app_status.dart';
+import '../widgets/ui/sis_empty_state.dart';
+import '../widgets/ui/sis_page_scaffold.dart';
+import '../widgets/ui/sis_status_chip.dart';
+
+class TicketMessageScreen extends StatefulWidget {
+  final String ticketId;
+  final bool startInSolutionMode;
+  final String? ticketOwner;
+  final bool isClosed;
+
+  const TicketMessageScreen({
+    super.key,
+    required this.ticketId,
+    this.startInSolutionMode = false,
+    this.ticketOwner,
+    this.isClosed = false,
+  });
+
+  @override
+  State<TicketMessageScreen> createState() => _TicketMessageScreenState();
+}
+
+class _TicketMessageScreenState extends State<TicketMessageScreen> {
+  final TextEditingController _messageController = TextEditingController();
+  final ImagePicker _imagePicker = ImagePicker();
+  final List<String> _selectedFiles = [];
+
+  bool _isLoading = false;
+  bool _isSending = false;
+  late List<TicketMessage> _messages;
+  XFile? _selectedImage;
+
+  final ScrollController _scrollController = ScrollController();
+  Timer? _pollingTimer;
+  bool _isFetching = false;
+  final Map<String, Uint8List> _imageCache = {};
+  String _lastDataHash = '';
+  bool _isFirstLoadComplete = false;
+  bool _showScrollToBottomBtn = false;
+  bool _isSolutionMode = false;
+  bool _isTicketClosed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _messages = [];
+    _isSolutionMode = widget.startInSolutionMode;
+    _isTicketClosed = widget.isClosed;
+    _loadMessages();
+    _startPolling();
+
+    _scrollController.addListener(() {
+      if (!mounted) return;
+      if (_scrollController.hasClients) {
+        final maxScroll = _scrollController.position.maxScrollExtent;
+        final currentScroll = _scrollController.position.pixels;
+        final showBtn = (maxScroll - currentScroll) > 300;
+        if (showBtn != _showScrollToBottomBtn) {
+          setState(() => _showScrollToBottomBtn = showBtn);
+        }
+      }
+    });
+  }
+
+  void _startPolling() {
+    _pollingTimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+      if (mounted && !_isFetching) {
+        _isFetching = true;
+        try {
+          await _loadMessages();
+        } finally {
+          _isFetching = false;
+        }
+      }
+    });
+  }
+
+  Future<void> _loadMessages() async {
+    if (!mounted) return;
+    if (!_isFirstLoadComplete && _messages.isEmpty && !_isLoading) {
+      setState(() => _isLoading = true);
+    }
+    try {
+      final appState = Provider.of<AppState>(context, listen: false);
+      final messages = await appState.fetchTicketMessages(widget.ticketId);
+
+      if (mounted) {
+        final currentHash = messages
+            .map((m) => '${m.id}_${m.createdAt}')
+            .join('|');
+        if (_lastDataHash != currentHash) {
+          _lastDataHash = currentHash;
+          bool shouldScroll = false;
+
+          if (!_isFirstLoadComplete) {
+            shouldScroll = true;
+          } else if (_scrollController.hasClients) {
+            final maxScroll = _scrollController.position.maxScrollExtent;
+            final currentScroll = _scrollController.position.pixels;
+            if ((maxScroll - currentScroll) <= 150) shouldScroll = true;
+          }
+
+          setState(() {
+            _messages = messages;
+            _isLoading = false;
+          });
+
+          if (shouldScroll) _scrollToBottom();
+          if (!_isFirstLoadComplete) _isFirstLoadComplete = true;
+        } else {
+          if (_isLoading) setState(() => _isLoading = false);
+        }
+      }
+    } catch (e) {
+      if (mounted && !_isFirstLoadComplete) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (mounted && _scrollController.hasClients) {
+          try {
+            _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          } catch (_) {}
+        }
+      });
+    }
+  }
+
+  Future<void> _downloadAndOpenFile(String url, String fileName) async {
+    _showSnackBar('Baixando $fileName...', color: Colors.blueAccent);
+    try {
+      final appState = Provider.of<AppState>(context, listen: false);
+      final bytes = await appState.downloadImage(url);
+
+      if (bytes == null || bytes.isEmpty) {
+        _showSnackBar('Erro: o arquivo falhou ao baixar.', color: Colors.red);
+        return;
+      }
+
+      final safeFileName = fileName.replaceAll(RegExp(r'[\\/]'), '_');
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/$safeFileName');
+      await file.writeAsBytes(bytes, flush: true);
+
+      if (mounted) {
+        _showSnackBar('Abrindo visualizador...', color: Colors.blueAccent);
+      }
+      final result = await OpenFilex.open(file.path);
+      if (result.type != ResultType.done) {
+        _showSnackBar(
+          'Nao foi possivel abrir: ${result.message}',
+          color: Colors.orange,
+        );
+      }
+    } catch (e) {
+      _showSnackBar('Erro ao processar arquivo: $e', color: Colors.red);
+    }
+  }
+
+  Future<void> _sendMessage() async {
+    final messageText = _messageController.text.trim();
+    if (_isSolutionMode && messageText.isEmpty) {
+      _showSnackBar(
+        'Para enviar uma solucao, voce deve digitar uma mensagem.',
+        color: Colors.orange,
+      );
+      return;
+    }
+    if (messageText.isEmpty &&
+        _selectedImage == null &&
+        _selectedFiles.isEmpty) {
+      return;
+    }
+    if (_isSending) {
+      return;
+    }
+
+    setState(() => _isSending = true);
+
+    try {
+      final appState = Provider.of<AppState>(context, listen: false);
+      final filePaths = <String>[..._selectedFiles];
+      if (_selectedImage?.path != null) filePaths.add(_selectedImage!.path);
+
+      final result = await appState.sendTicketMessageWithAttachments(
+        ticketId: widget.ticketId,
+        messageContent: messageText,
+        filePaths: filePaths,
+        isSolution: _isSolutionMode,
+      );
+
+      if (result['success'] == true) {
+        _messageController.clear();
+        _selectedImage = null;
+        _selectedFiles.clear();
+        _lastDataHash = '';
+        await _loadMessages();
+        _scrollToBottom();
+      } else {
+        _showSnackBar(result['error'] ?? 'Falha ao enviar', color: Colors.red);
+      }
+    } catch (e) {
+      _showSnackBar('Erro: $e', color: Colors.red);
+    } finally {
+      if (mounted) setState(() => _isSending = false);
+    }
+  }
+
+  Future<Uint8List?> _getCachedImage(String url) async {
+    if (_imageCache.containsKey(url)) return _imageCache[url];
+    final appState = Provider.of<AppState>(context, listen: false);
+    if (!mounted) return null;
+    final bytes = await appState.downloadImage(url);
+    if (bytes != null && mounted) _imageCache[url] = bytes;
+    return bytes;
+  }
+
+  Future<void> _selectImage() async {
+    try {
+      final img = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+      );
+      if (img != null) setState(() => _selectedImage = img);
+    } catch (e) {
+      debugPrint('Erro ao selecionar imagem: $e');
+    }
+  }
+
+  Future<void> _takePhoto() async {
+    try {
+      final img = await _imagePicker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 80,
+      );
+      if (img != null) setState(() => _addFileIfValid(img.path));
+    } catch (e) {
+      debugPrint('Erro ao capturar foto: $e');
+    }
+  }
+
+  Future<void> _pickFiles() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+      );
+      if (result != null) {
+        setState(() {
+          for (var p in result.paths) {
+            if (p != null) _addFileIfValid(p);
+          }
+        });
+      }
+    } catch (e) {
+      debugPrint('Erro ao selecionar arquivo: $e');
+    }
+  }
+
+  void _addFileIfValid(String path) {
+    if (!_selectedFiles.contains(path)) _selectedFiles.add(path);
+  }
+
+  void _removeFile(int index) {
+    setState(() => _selectedFiles.removeAt(index));
+  }
+
+  void _showSnackBar(String msg, {Color color = AppColors.danger}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: color,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pollingTimer?.cancel();
+    _messageController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  //
+  // ==================== WIDGETS DE UI ======================
+  //
+  // ==========================================================
+  // CARD DE VALIDAÃ‡ÃƒO DE SOLUÃ‡ÃƒO (STORY 4)
+  // ==========================================================
+
+  Widget _buildSolutionCard(TicketMessage message) {
+    final isPending =
+        message.solutionStatus == 2 || message.solutionStatus == 1;
+    final isApproved = message.solutionStatus == 3;
+    final isRejected = message.solutionStatus == 4;
+
+    Color cardColor = AppColors.warningSoft;
+    Color borderColor = AppColors.warning;
+    String statusLabel = 'Aguardando aprovacao';
+    IconData statusIcon = Icons.hourglass_empty;
+
+    if (isApproved) {
+      cardColor = AppColors.successSoft;
+      borderColor = AppColors.success;
+      statusLabel = 'Solucao aprovada';
+      statusIcon = Icons.check_circle;
+    } else if (isRejected) {
+      cardColor = AppColors.dangerSoft;
+      borderColor = AppColors.danger;
+      statusLabel = 'Solucao recusada';
+      statusIcon = Icons.cancel;
+    }
+
+    // ðŸŸ¢ TRAVA DE SEGURANÃ‡A: SÃ³ exibe botÃµes se for o Requerente ou o Dono do Ticket
+    final appState = Provider.of<AppState>(context, listen: false);
+    final loggedUser = appState.loggedUsername?.toLowerCase().trim() ?? '';
+    final activeProfile = appState.activeProfile?.toLowerCase() ?? '';
+    final bool isRequesterProfile =
+        activeProfile.contains('self-service') ||
+        activeProfile.contains('requerente') ||
+        activeProfile.contains('solicitante');
+    final bool canApprove =
+        isRequesterProfile ||
+        (widget.ticketOwner != null && widget.ticketOwner == loggedUser);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+      child: Card(
+        color: cardColor,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
+              decoration: BoxDecoration(
+                color: borderColor.withValues(alpha: 0.2),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(AppRadius.md),
+                  topRight: Radius.circular(AppRadius.md),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(statusIcon, color: borderColor, size: 20),
+                  const SizedBox(width: AppSpacing.xs),
+                  Expanded(
+                    child: Text(
+                      statusLabel,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleSmall?.copyWith(color: borderColor),
+                    ),
+                  ),
+                  SisStatusChip(
+                    label: isApproved
+                        ? 'Aprovada'
+                        : isRejected
+                        ? 'Recusada'
+                        : 'Pendente',
+                    tone: isApproved
+                        ? AppStatusTone.success
+                        : isRejected
+                        ? AppStatusTone.danger
+                        : AppStatusTone.warning,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Tecnico: ${message.sender}',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    message.content,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    _formatDateTime(message.createdAt),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ),
+            if (isPending && canApprove)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  0,
+                  AppSpacing.md,
+                  AppSpacing.md,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.danger,
+                          foregroundColor: AppColors.textInverse,
+                        ),
+                        icon: const Icon(Icons.close, size: 18),
+                        label: const Text('Recusar'),
+                        onPressed: () =>
+                            _showRejectDialog(widget.ticketId, message.id),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.success,
+                          foregroundColor: AppColors.textInverse,
+                        ),
+                        icon: const Icon(Icons.check, size: 18),
+                        label: const Text('Aprovar'),
+                        onPressed: () =>
+                            _approveSolution(widget.ticketId, message.id),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _approveSolution(String ticketId, String solutionId) async {
+    setState(() => _isSending = true);
+    final appState = Provider.of<AppState>(context, listen: false);
+    final result = await appState.approveSolution(ticketId, solutionId);
+    if (!mounted) return;
+
+    if (result['success'] == true) {
+      _showSnackBar(
+        'Solucao aprovada. O chamado foi fechado.',
+        color: AppColors.success,
+      );
+      setState(
+        () => _isTicketClosed = true,
+      ); // ðŸŸ¢ NOVO: Tranca o chat na mesma hora!
+      _lastDataHash = '';
+      await _loadMessages();
+    } else {
+      _showSnackBar('Erro: ${result['error']}', color: AppColors.danger);
+    }
+    setState(() => _isSending = false);
+  }
+
+  void _showRejectDialog(String ticketId, String solutionId) {
+    final TextEditingController justificationController =
+        TextEditingController();
+    List<String> localImagePaths =
+        []; // ðŸŸ¢ AGORA Ã‰ UMA LISTA (MÃºltiplas Imagens)
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          return AlertDialog(
+            title: const Text(
+              'Recusar solucao',
+              style: TextStyle(color: Colors.red),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Por favor, justifique o motivo da recusa.'),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: justificationController,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Digite o que faltou ser feito...',
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Anexar Imagens (Opcional):',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () async {
+                            final img = await _imagePicker.pickImage(
+                              source: ImageSource.camera,
+                              imageQuality: 80,
+                            );
+                            if (img != null) {
+                              setDialogState(
+                                () => localImagePaths.add(img.path),
+                              );
+                            }
+                          },
+                          icon: const Icon(Icons.camera_alt, size: 14),
+                          label: const Text(
+                            'Camera',
+                            style: TextStyle(fontSize: 11),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () async {
+                            // SeleÃ§Ã£o mÃºltipla da galeria
+                            final images = await _imagePicker.pickMultiImage(
+                              imageQuality: 80,
+                            );
+                            if (images.isNotEmpty) {
+                              setDialogState(
+                                () => localImagePaths.addAll(
+                                  images.map((i) => i.path),
+                                ),
+                              );
+                            }
+                          },
+                          icon: const Icon(Icons.photo_library, size: 14),
+                          label: const Text(
+                            'Galeria',
+                            style: TextStyle(fontSize: 11),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (localImagePaths.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8.0,
+                      children: localImagePaths.asMap().entries.map((entry) {
+                        return Chip(
+                          label: Text(
+                            'Img ${entry.key + 1}',
+                            style: const TextStyle(fontSize: 10),
+                          ),
+                          onDeleted: () => setDialogState(
+                            () => localImagePaths.removeAt(entry.key),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: const Text(
+                  'Cancelar',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () async {
+                  if (justificationController.text.trim().isEmpty) {
+                    _showSnackBar(
+                      'A justificativa e obrigatoria!',
+                      color: Colors.orange,
+                    );
+                    return;
+                  }
+
+                  Navigator.pop(dialogContext);
+                  if (!mounted) return;
+                  setState(() => _isSending = true);
+
+                  final appState = Provider.of<AppState>(
+                    context,
+                    listen: false,
+                  );
+                  final result = await appState.rejectSolution(
+                    ticketId,
+                    solutionId,
+                    justificationController.text.trim(),
+                    attachmentPaths:
+                        localImagePaths, // ðŸŸ¢ Manda as mÃºltiplas imagens
+                  );
+
+                  if (!mounted) return;
+                  if (result['success'] == true) {
+                    _showSnackBar(
+                      'Solucao recusada e chamado reaberto.',
+                      color: Colors.orange,
+                    );
+                    _lastDataHash = '';
+                    await _loadMessages();
+                    _scrollToBottom();
+                  } else {
+                    _showSnackBar(
+                      'Erro: ${result['error']}',
+                      color: Colors.red,
+                    );
+                  }
+                  setState(() => _isSending = false);
+                },
+                child: const Text('Confirmar Recusa'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  /// ConstrÃ³i o balÃ£o de mensagem para ANEXOS (Imagens ou Arquivos)
+  Widget _buildAttachmentMessage(TicketMessage message) {
+    final name = message.content.toLowerCase();
+
+    // Verifica se Ã© imagem pela extensÃ£o ou mime type
+    final isImageByExt =
+        name.endsWith('.jpg') ||
+        name.endsWith('.jpeg') ||
+        name.endsWith('.png') ||
+        name.endsWith('.webp');
+    final isImageByMime = message.mimeType?.startsWith('image/') ?? false;
+    final isImage = isImageByMime || isImageByExt;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Flexible(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 250),
+              padding: const EdgeInsets.all(AppSpacing.sm),
+              decoration: BoxDecoration(
+                color: AppColors.brandSoft,
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                border: Border.all(color: AppColors.brandSoft),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        isImage ? Icons.image : Icons.insert_drive_file,
+                        color: AppColors.brandDark,
+                        size: 20,
+                      ),
+                      const SizedBox(width: AppSpacing.xs),
+                      Expanded(
+                        child: Text(
+                          message.content,
+                          style: Theme.of(context).textTheme.titleSmall,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  if (isImage && message.documentUrl != null)
+                    FutureBuilder<Uint8List?>(
+                      key: ValueKey(message.documentUrl),
+                      future: _getCachedImage(message.documentUrl!),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container(
+                            height: 150,
+                            color: AppColors.neutralSoft,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+                        if (snapshot.hasData && snapshot.data != null) {
+                          return GestureDetector(
+                            onTap: () => _showImagePreviewBytes(snapshot.data!),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(AppRadius.sm),
+                              child: Image.memory(
+                                snapshot.data!,
+                                fit: BoxFit.cover,
+                                height: 150,
+                                width: double.infinity,
+                              ),
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    )
+                  else
+                    InkWell(
+                      onTap: () => message.documentUrl != null
+                          ? _downloadAndOpenFile(
+                              message.documentUrl!,
+                              message.content,
+                            )
+                          : null,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(AppSpacing.md),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
+                          border: Border.all(color: AppColors.border),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.open_in_new,
+                              size: 16,
+                              color: AppColors.brand,
+                            ),
+                            const SizedBox(width: AppSpacing.xs),
+                            Text(
+                              'Abrir Arquivo',
+                              style: Theme.of(context).textTheme.labelLarge
+                                  ?.copyWith(color: AppColors.brand),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: AppSpacing.xxs),
+                    child: Text(
+                      '${message.sender} - ${_formatDateTime(message.createdAt)}',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.xs),
+        ],
+      ),
+    );
+  }
+
+  /// Exibe preview de imagem em tela cheia com opÃ§Ã£o de salvar na galeria
+  void _showImagePreviewBytes(Uint8List bytes) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            InteractiveViewer(child: Image.memory(bytes)),
+
+            // BotÃ£o Fechar (Canto Superior Direito)
+            Positioned(
+              top: 10,
+              right: 10,
+              child: CircleAvatar(
+                backgroundColor: Colors.black54,
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 10,
+              left: 10,
+              child: CircleAvatar(
+                backgroundColor: AppColors.brandDark,
+                child: IconButton(
+                  icon: const Icon(Icons.download, color: Colors.white),
+                  onPressed: () async {
+                    try {
+                      final hasAccess = await Gal.hasAccess();
+                      if (!hasAccess) {
+                        await Gal.requestAccess();
+                      }
+                      final fileName =
+                          'glpi_anexo_${DateTime.now().millisecondsSinceEpoch}';
+                      await Gal.putImageBytes(bytes, name: fileName);
+
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Imagem salva na galeria.'),
+                            backgroundColor: AppColors.success,
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Erro ao salvar: $e'),
+                            backgroundColor: AppColors.danger,
+                          ),
+                        );
+                      }
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SisPageScaffold(
+      title: 'Chamado: ${widget.ticketId}',
+      subtitle: _isSolutionMode ? 'Modo solucao ativo' : 'Conversa e anexos',
+      floatingActionButton: _showScrollToBottomBtn
+          ? FloatingActionButton.small(
+              backgroundColor: AppColors.brand,
+              child: const Icon(Icons.arrow_downward, color: Colors.white),
+              onPressed: () {
+                _scrollToBottom();
+                setState(() => _showScrollToBottomBtn = false);
+              },
+            )
+          : null,
+      body: Column(
+        children: [
+          Expanded(
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : _messages.isEmpty
+                ? ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    children: const [
+                      SizedBox(
+                        height: 420,
+                        child: SisEmptyState(
+                          icon: Icons.chat_bubble_outline,
+                          title: 'Nenhuma mensagem ainda',
+                          message:
+                              'O historico da conversa aparecera aqui assim que houver interacoes no ticket.',
+                        ),
+                      ),
+                    ],
+                  )
+                : ListView.builder(
+                    controller: _scrollController,
+                    itemCount: _messages.length,
+                    padding: const EdgeInsets.only(
+                      left: AppSpacing.md,
+                      right: AppSpacing.md,
+                      top: AppSpacing.md,
+                      bottom: 60,
+                    ),
+                    itemBuilder: (context, index) {
+                      final msg = _messages[index];
+                      if (msg.type == 'solution') {
+                        return _buildSolutionCard(msg);
+                      }
+                      if (msg.type == 'attachment') {
+                        return _buildAttachmentMessage(msg);
+                      }
+                      return _buildTextMessage(msg);
+                    },
+                  ),
+          ),
+
+          if (_selectedImage != null || _selectedFiles.isNotEmpty)
+            _buildAttachmentPreview(),
+          _buildInputArea(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextMessage(TicketMessage message) {
+    final avatarColor = AvatarColors.getColor(message.senderColorHash);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            backgroundColor: avatarColor,
+            child: Text(
+              message.initials,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    message.sender,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: AppColors.textStrong,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.xxs),
+                  Text(
+                    message.content,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    _formatDateTime(message.createdAt),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInputArea() {
+    if (_isTicketClosed) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(AppSpacing.md),
+        color: AppColors.surfaceMuted,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.lock_outline,
+              color: AppColors.textMuted,
+              size: 20,
+            ),
+            const SizedBox(width: AppSpacing.xs),
+            Flexible(
+              child: Text(
+                'Chamado fechado. Novas interacoes desabilitadas.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textMuted,
+                  fontWeight: FontWeight.w700,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final appState = Provider.of<AppState>(context);
+    final activeProfile = appState.activeProfile?.toLowerCase() ?? '';
+    final bool isRequesterOnly =
+        activeProfile.contains('self-service') ||
+        activeProfile.contains('post-only') ||
+        activeProfile.contains('requerente') ||
+        activeProfile.contains('solicitante');
+
+    final hasPendingSolution = _messages.any(
+      (m) =>
+          m.type == 'solution' &&
+          (m.solutionStatus == 1 || m.solutionStatus == 2),
+    );
+
+    if (hasPendingSolution && _isSolutionMode) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _isSolutionMode = false);
+      });
+    }
+
+    return SafeArea(
+      top: false,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.sm,
+          AppSpacing.sm,
+          AppSpacing.sm,
+          AppSpacing.sm,
+        ),
+        decoration: const BoxDecoration(
+          color: AppColors.surface,
+          border: Border(top: BorderSide(color: AppColors.border)),
+        ),
+        child: Column(
+          children: [
+            if (!isRequesterOnly && !hasPendingSolution)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: AppSpacing.xs),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.sm,
+                    vertical: AppSpacing.xxs,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _isSolutionMode
+                        ? AppColors.brandSoft
+                        : AppColors.surfaceMuted,
+                    borderRadius: BorderRadius.circular(AppRadius.pill),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<bool>(
+                      isDense: true,
+                      value: _isSolutionMode,
+                      items: const [
+                        DropdownMenuItem(
+                          value: false,
+                          child: Text('Acompanhamento'),
+                        ),
+                        DropdownMenuItem(
+                          value: true,
+                          child: Text('Solucionar chamado'),
+                        ),
+                      ],
+                      onChanged: (val) {
+                        if (val != null) setState(() => _isSolutionMode = val);
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                PopupMenuButton<String>(
+                  icon: const Icon(Icons.add_circle_outline),
+                  onSelected: (value) {
+                    if (value == 'camera') _takePhoto();
+                    if (value == 'gallery') _selectImage();
+                    if (value == 'files') _pickFiles();
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<String>>[
+                        const PopupMenuItem<String>(
+                          value: 'camera',
+                          child: ListTile(
+                            leading: Icon(Icons.camera_alt_outlined),
+                            title: Text('Camera'),
+                          ),
+                        ),
+                        const PopupMenuItem<String>(
+                          value: 'gallery',
+                          child: ListTile(
+                            leading: Icon(Icons.photo_outlined),
+                            title: Text('Galeria'),
+                          ),
+                        ),
+                        const PopupMenuItem<String>(
+                          value: 'files',
+                          child: ListTile(
+                            leading: Icon(Icons.insert_drive_file_outlined),
+                            title: Text('Arquivos'),
+                          ),
+                        ),
+                      ],
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
+                      border: Border.all(color: AppColors.border),
+                    ),
+                    child: TextField(
+                      controller: _messageController,
+                      minLines: 1,
+                      maxLines: 4,
+                      decoration: InputDecoration(
+                        hintText: _isSolutionMode
+                            ? 'Descreva a solucao aplicada...'
+                            : 'Mensagem...',
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.md,
+                          vertical: AppSpacing.sm,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                _isSending
+                    ? const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      )
+                    : IconButton.filled(
+                        style: IconButton.styleFrom(
+                          backgroundColor: _isSolutionMode
+                              ? AppColors.brand
+                              : AppColors.info,
+                          foregroundColor: AppColors.textInverse,
+                        ),
+                        icon: const Icon(Icons.send),
+                        onPressed: _sendMessage,
+                      ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAttachmentPreview() {
+    if (_selectedFiles.isEmpty && _selectedImage == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.md,
+        AppSpacing.sm,
+        AppSpacing.md,
+        AppSpacing.xs,
+      ),
+      color: AppColors.surfaceMuted,
+      child: Wrap(
+        spacing: AppSpacing.xs,
+        runSpacing: AppSpacing.xs,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          Text('Anexando:', style: Theme.of(context).textTheme.labelLarge),
+          if (_selectedImage != null)
+            InputChip(
+              avatar: const Icon(Icons.image_outlined, size: 16),
+              label: const Text('Imagem'),
+              onDeleted: () => setState(() => _selectedImage = null),
+            ),
+          ..._selectedFiles.asMap().entries.map((entry) {
+            return InputChip(
+              avatar: const Icon(Icons.insert_drive_file_outlined, size: 16),
+              label: Text('Arquivo ${entry.key + 1}'),
+              onDeleted: () => _removeFile(entry.key),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  String _formatDateTime(DateTime d) {
+    return '${d.day}/${d.month} ${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+  }
+}

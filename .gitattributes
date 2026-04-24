@@ -1,0 +1,34 @@
+# Normaliza line endings: checkout com LF em todos os ambientes
+* text=auto eol=lf
+
+# Força LF em todos os arquivos de código e configuração
+*.dart text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.gradle text eol=lf
+*.kts text eol=lf
+*.xml text eol=lf
+*.properties text eol=lf
+*.sh text eol=lf
+
+# Scripts PowerShell mantêm CRLF (executados no Windows)
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+
+# Binários — sem conversão
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.apk binary
+*.aab binary
+*.keystore binary
+*.jks binary
+*.zip binary
+*.jar binary
+*.class binary
+*.so binary
+*.dll binary

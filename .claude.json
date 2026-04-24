@@ -1,0 +1,33 @@
+{
+  "project": "sis-mobile-flutter",
+  "description": "Aplicativo Flutter SIS para chamados GLPI",
+  "stack": "Flutter / Dart",
+  "context": {
+    "primaryDocs": [
+      "HERMES.md",
+      "AGENTS.md",
+      "BOOTSTRAP.md",
+      "CLAUDE.md",
+      "docs/RUNTIME_CANONICO_E_VALIDACAO.md"
+    ],
+    "entryPoints": [
+      "lib/main.dart",
+      "pubspec.yaml"
+    ],
+    "ignoreOnContext": [
+      "build/",
+      ".dart_tool/",
+      "android/.gradle/",
+      "ios/Pods/",
+      "*.xml",
+      "*.png"
+    ]
+  },
+  "hints": {
+    "requiresVpn": true,
+    "targetPlatform": "android",
+    "sdkConstraint": "^3.9.2",
+    "stateManagement": "provider",
+    "backendProtocol": "GLPI REST API"
+  }
+}

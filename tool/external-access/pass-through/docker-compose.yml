@@ -1,0 +1,49 @@
+services:
+  sis-pass-through:
+    image: ${NGINX_IMAGE:-nginx:1.27-alpine}
+    container_name: sis-pass-through
+    restart: unless-stopped
+    env_file:
+      - ./.env.host
+    ports:
+      - "${LOCAL_BIND_ADDRESS:-127.0.0.1}:${LOCAL_BIND_PORT:-18080}:8080"
+    volumes:
+      - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+    command:
+      - /bin/sh
+      - -c
+      - |
+        envsubst '$$GLPI_INTERNAL_ORIGIN $$PUBLIC_HOSTNAME $$CLIENT_MAX_BODY_SIZE' \
+          < /etc/nginx/templates/default.conf.template \
+          > /etc/nginx/conf.d/default.conf
+        exec nginx -g 'daemon off;'
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/healthz | grep -q ok"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - sis-external-access
+
+  cloudflared:
+    image: ${CLOUDFLARED_IMAGE:-cloudflare/cloudflared:latest}
+    container_name: sis-cloudflared
+    profiles:
+      - tunnel
+    restart: unless-stopped
+    depends_on:
+      sis-pass-through:
+        condition: service_healthy
+    command:
+      - tunnel
+      - --no-autoupdate
+      - run
+      - --token
+      - ${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - sis-external-access
+
+networks:
+  sis-external-access:
+    driver: bridge

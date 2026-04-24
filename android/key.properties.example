@@ -1,0 +1,7 @@
+# Copie este arquivo para android/key.properties e ajuste os valores reais.
+# Nao versione o arquivo final com segredos.
+
+storeFile=../keystores/sis-mobile-upload.jks
+storePassword=ALTERAR_STORE_PASSWORD
+keyAlias=sis-mobile
+keyPassword=ALTERAR_KEY_PASSWORD
