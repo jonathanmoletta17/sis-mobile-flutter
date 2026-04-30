@@ -98,7 +98,7 @@ class _WideServiceCardContent extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    'Abrir solicitacao',
+                    'Abrir solicitação',
                     style: Theme.of(
                       context,
                     ).textTheme.labelLarge?.copyWith(color: service.color),
@@ -154,7 +154,7 @@ class _CompactServiceCardContent extends StatelessWidget {
         Row(
           children: [
             Text(
-              'Abrir solicitacao',
+              'Abrir solicitação',
               style: Theme.of(
                 context,
               ).textTheme.labelLarge?.copyWith(color: service.color),

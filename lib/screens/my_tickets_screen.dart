@@ -218,7 +218,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
 
     return SisPageScaffold(
       title: 'Meus Chamados',
-      subtitle: 'Acompanhe status, filtros e pendencias de sincronizacao',
+      subtitle: 'Acompanhe status, filtros e pendências de sincronização',
       actions: [
         IconButton(
           icon: Icon(
@@ -331,7 +331,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
                               : 'Nenhum chamado encontrado',
                           message: isFilterActive
                               ? 'Revise os filtros aplicados para continuar.'
-                              : 'Abra um novo chamado a partir do catalogo principal.',
+                              : 'Abra um novo chamado a partir do catálogo principal.',
                           actionLabel: isFilterActive ? 'Limpar filtros' : null,
                           onAction: isFilterActive
                               ? () {
@@ -470,7 +470,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
                                             ),
                                       ),
                                       subtitle: Text(
-                                        'Servico: ${ticket['serviceName'] ?? 'N/A'}',
+                                        'Serviço: ${ticket['serviceName'] ?? 'N/A'}',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall

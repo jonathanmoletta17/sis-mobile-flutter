@@ -26,7 +26,7 @@ class ServiceCategory {
     required this.categoryId,
     required this.locations,
     required this.typeOptions,
-    this.urgencyOptions = const ['3 - Media (Padrao)', '1 - Baixa', '5 - Alta'],
+    this.urgencyOptions = const ['3 - Média (Padrão)', '1 - Baixa', '5 - Alta'],
     this.includeNomePessoa = true,
     this.includeUrgencia = true,
     this.includeLocalizacao = true,
@@ -53,8 +53,8 @@ const List<ServiceCategory> serviceCategories = [
       'Local (Root 70): Outro',
     ],
     typeOptions: [
-      'Manutencao Preventiva Agendada',
-      'Aparelho Nao Liga',
+      'Manutenção Preventiva Agendada',
+      'Aparelho Não Liga',
       'Vazamento/Gotejamento',
       'Barulho Anormal',
       'Outro',
@@ -74,7 +74,7 @@ const List<ServiceCategory> serviceCategories = [
     ],
     typeOptions: [
       'Transporte de Material Pesado',
-      'Solicitacao de Ajudante',
+      'Solicitação de Ajudante',
       'Movimentacao de Mobiliario',
       'Outro',
     ],
@@ -141,7 +141,7 @@ const List<ServiceCategory> serviceCategories = [
     locations: [
       'Local (Root 70): Banheiro Social',
       'Local (Root 70): Cozinha Industrial',
-      'Local (Root 70): Area de Servico/Lavanderia',
+      'Local (Root 70): Área de Serviço/Lavanderia',
       'Local (Root 70): Outro',
     ],
     typeOptions: [
@@ -188,7 +188,7 @@ const List<ServiceCategory> serviceCategories = [
       'Limpeza de Emergencia',
       'Higienizacao de Sanitario',
       'Limpeza de Janelas',
-      'Solicitacao de Material de Limpeza',
+      'Solicitação de Material de Limpeza',
     ],
     includeUrgencia: false,
   ),
@@ -305,8 +305,8 @@ const List<ServiceCategory> serviceCategories = [
     ],
     typeOptions: [
       'Problema de Conectividade (Cabo)',
-      'Solicitacao de Novo Ponto de Rede',
-      'Configuracao de Equipamento de Rede',
+      'Solicitação de Novo Ponto de Rede',
+      'Configuração de Equipamento de Rede',
       'Problema com WiFi',
       'Outro',
     ],
@@ -325,7 +325,7 @@ const List<ServiceCategory> serviceCategories = [
     ],
     typeOptions: [
       'Vidro Quebrado',
-      'Manutencao de Esquadria',
+      'Manutenção de Esquadria',
       'Troca de Borracha/Vedacao',
       'Outro',
     ],

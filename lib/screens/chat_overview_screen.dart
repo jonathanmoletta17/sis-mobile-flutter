@@ -189,7 +189,7 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
                     height: 420,
                     child: SisLoadingState(
                       title: 'Carregando conversas',
-                      message: 'Buscando tickets com interacao em andamento.',
+                      message: 'Buscando tickets com interação em andamento.',
                     ),
                   ),
                 ],
@@ -249,7 +249,7 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
                           : 'Nenhuma conversa ativa',
                       message: isFilterActive
                           ? 'Revise os filtros para encontrar a conversa desejada.'
-                          : 'As conversas abertas aparecerao aqui assim que houver tickets em andamento.',
+                          : 'As conversas abertas aparecerão aqui assim que houver tickets em andamento.',
                       actionLabel: isFilterActive ? 'Limpar filtros' : null,
                       onAction: isFilterActive
                           ? () {

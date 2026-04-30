@@ -1,3 +1,4 @@
+import '../models/glpi_status.dart';
 import '../services/glpi_client.dart';
 
 class AppStateSolutionSupport {
@@ -11,10 +12,21 @@ class AppStateSolutionSupport {
     required Future<void> Function(Object error) handleSessionInvalid,
   }) async {
     if (!isAuthenticated || sessionToken == null) {
-      return {'success': false, 'error': 'Sessao expirada'};
+      return {'success': false, 'error': 'Sessão expirada'};
     }
 
     try {
+      final currentTicket = await apiService.getTicketById(
+        ticketId,
+        sessionToken,
+      );
+      if (!GlpiStatusMapper.isOpenForInteraction(currentTicket['status'])) {
+        return {
+          'success': false,
+          'error': 'Chamado já está solucionado ou fechado. Recarregue a tela.',
+        };
+      }
+
       final success = await apiService.updateSolutionStatus(
         solutionId: solutionId,
         newStatus: 3,
@@ -54,10 +66,21 @@ class AppStateSolutionSupport {
     required Future<void> Function(Object error) handleSessionInvalid,
   }) async {
     if (!isAuthenticated || sessionToken == null) {
-      return {'success': false, 'error': 'Sessao expirada'};
+      return {'success': false, 'error': 'Sessão expirada'};
     }
 
     try {
+      final currentTicket = await apiService.getTicketById(
+        ticketId,
+        sessionToken,
+      );
+      if (!GlpiStatusMapper.isOpenForInteraction(currentTicket['status'])) {
+        return {
+          'success': false,
+          'error': 'Chamado já está solucionado ou fechado. Recarregue a tela.',
+        };
+      }
+
       final success = await apiService.updateSolutionStatus(
         solutionId: solutionId,
         newStatus: 4,

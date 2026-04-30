@@ -17,6 +17,7 @@ class TicketMessage {
   final String? mimeType;
   final String? documentUrl;
   final int? solutionStatus;
+  final String? senderUserId;
 
   TicketMessage({
     required this.id,
@@ -32,6 +33,7 @@ class TicketMessage {
     this.documentUrl,
     this.mimeType,
     this.solutionStatus,
+    this.senderUserId,
   });
 
   Map<String, dynamic> toMap() {
@@ -49,7 +51,27 @@ class TicketMessage {
       'mimeType': mimeType,
       'documentUrl': documentUrl,
       'solutionStatus': solutionStatus,
+      'senderUserId': senderUserId,
     };
+  }
+
+  static String? _extractUserId(dynamic userField) {
+    if (userField == null) return null;
+
+    if (userField is int) return userField.toString();
+
+    if (userField is String) {
+      final trimmed = userField.trim();
+      return RegExp(r'^[0-9]+$').hasMatch(trimmed) ? trimmed : null;
+    }
+
+    if (userField is Map) {
+      final id = userField['id'] ?? userField['users_id'];
+      final idText = id?.toString().trim();
+      return idText == null || idText.isEmpty ? null : idText;
+    }
+
+    return null;
   }
 
   static String _decodeHtml(String? htmlText) {
@@ -138,7 +160,8 @@ class TicketMessage {
     final rawContent =
         map['content']?.toString() ?? map['text']?.toString() ?? '';
 
-    final hadHtml = rawContent.contains('<') ||
+    final hadHtml =
+        rawContent.contains('<') ||
         rawContent.contains('&#') ||
         rawContent.contains('&lt;') ||
         rawContent.contains('&gt;');
@@ -154,9 +177,10 @@ class TicketMessage {
 
     String senderName = 'Desconhecido';
     final userIdField = map['users_id'] ?? map['users_id_editor'];
+    final senderUserId = _extractUserId(userIdField);
 
     if (userIdField is String) {
-      senderName = userIdField;
+      senderName = GlpiNameFormatter.getFriendlyName(userIdField);
     } else if (userIdField is Map) {
       final userData = userIdField as Map<String, dynamic>;
       senderName = GlpiNameFormatter.getFriendlyName(
@@ -166,10 +190,12 @@ class TicketMessage {
         username:
             userData['name']?.toString() ??
             userData['login']?.toString() ??
+            userData['id']?.toString() ??
+            userData['users_id']?.toString() ??
             'Desconhecido',
       );
     } else if (userIdField is int) {
-      senderName = 'Usuario $userIdField';
+      senderName = GlpiNameFormatter.fallbackUserLabel(userIdField);
     }
 
     return TicketMessage(
@@ -183,6 +209,7 @@ class TicketMessage {
       imageUrls: imageUrls,
       containsHtml: hadHtml,
       type: 'text',
+      senderUserId: senderUserId,
     );
   }
 
@@ -193,22 +220,29 @@ class TicketMessage {
 
     String senderName = 'Tecnico';
     final userIdField = map['users_id'];
+    final senderUserId = _extractUserId(userIdField);
 
     if (userIdField is String) {
-      senderName = userIdField;
+      senderName = GlpiNameFormatter.getFriendlyName(userIdField);
     } else if (userIdField is Map) {
       final userData = userIdField as Map<String, dynamic>;
-      senderName = GlpiNameFormatter.getFriendlyName(
-        null,
-        firstname: userData['firstname'],
-        realname: userData['realname'],
-        username:
-            userData['name']?.toString() ??
-            userData['login']?.toString() ??
-            'Tecnico',
-      );
+      final username =
+          userData['name']?.toString() ?? userData['login']?.toString();
+      senderName =
+          username == null &&
+              GlpiNameFormatter.extractNumericId(userData) != null
+          ? GlpiNameFormatter.fallbackUserLabel(userData, prefix: 'Tecnico')
+          : GlpiNameFormatter.getFriendlyName(
+              null,
+              firstname: userData['firstname'],
+              realname: userData['realname'],
+              username: username ?? 'Tecnico',
+            );
     } else if (userIdField is int) {
-      senderName = 'Tecnico $userIdField';
+      senderName = GlpiNameFormatter.fallbackUserLabel(
+        userIdField,
+        prefix: 'Tecnico',
+      );
     }
 
     var parsedStatus = 2;
@@ -236,9 +270,10 @@ class TicketMessage {
 
     return TicketMessage(
       id: map['id']?.toString() ?? '',
-      ticketId: map['items_id']?.toString() ?? map['tickets_id']?.toString() ?? '',
+      ticketId:
+          map['items_id']?.toString() ?? map['tickets_id']?.toString() ?? '',
       content: cleanedContent.isEmpty
-          ? 'Solucao submetida sem texto.'
+          ? 'Solução submetida sem texto.'
           : cleanedContent,
       sender: senderName,
       createdAt: _parseDateSafely(map),
@@ -248,6 +283,7 @@ class TicketMessage {
       containsHtml: rawContent.contains('<'),
       type: 'solution',
       solutionStatus: parsedStatus,
+      senderUserId: senderUserId,
     );
   }
 
@@ -257,10 +293,16 @@ class TicketMessage {
         : DateTime.now();
 
     String uploaderName = 'Sistema';
-    final uploaderField = docMap['users_id'] ?? docMap['uploader_id'];
+    final uploaderIdField = docMap['uploader_id'] ?? docMap['users_id'];
+    final senderUserId = _extractUserId(uploaderIdField);
+    final uploaderField =
+        docMap['uploader_name'] ??
+        docMap['users_name'] ??
+        docMap['users_id'] ??
+        docMap['uploader_id'];
 
     if (uploaderField is String) {
-      uploaderName = uploaderField;
+      uploaderName = GlpiNameFormatter.getFriendlyName(uploaderField);
     } else if (uploaderField is Map) {
       final userData = uploaderField as Map<String, dynamic>;
       uploaderName = GlpiNameFormatter.getFriendlyName(
@@ -270,10 +312,12 @@ class TicketMessage {
         username:
             userData['name']?.toString() ??
             userData['login']?.toString() ??
+            userData['id']?.toString() ??
+            userData['users_id']?.toString() ??
             'Sistema',
       );
     } else if (uploaderField is int) {
-      uploaderName = 'Usuario $uploaderField';
+      uploaderName = GlpiNameFormatter.fallbackUserLabel(uploaderField);
     }
 
     return TicketMessage(
@@ -288,6 +332,7 @@ class TicketMessage {
       mimeType: docMap['mime']?.toString() ?? 'application/octet-stream',
       documentUrl:
           docMap['download_url']?.toString() ?? docMap['filepath']?.toString(),
+      senderUserId: senderUserId,
     );
   }
 

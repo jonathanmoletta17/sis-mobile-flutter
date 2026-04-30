@@ -6,10 +6,42 @@
 ///
 /// Respeita a configuração de formato de nomes do sistema GLPI (names_format)
 class GlpiNameFormatter {
-
   /// Constantes para os formatos de nomes
   static const int firstNameBefore = 1;
   static const int realNameBefore = 0;
+
+  static final RegExp _numericIdPattern = RegExp(r'^[0-9]+$');
+  static final RegExp _fallbackLabelPattern = RegExp(
+    r'^(?:usuario|usuário|tecnico|técnico)\s+([0-9]+)$',
+    caseSensitive: false,
+  );
+
+  static String? extractNumericId(dynamic value) {
+    if (value == null) return null;
+
+    if (value is int) return value.toString();
+
+    if (value is Map) {
+      return extractNumericId(value['id'] ?? value['users_id']);
+    }
+
+    final text = value.toString().trim();
+    if (text.isEmpty) return null;
+    if (_numericIdPattern.hasMatch(text)) return text;
+
+    final labeledMatch = _fallbackLabelPattern.firstMatch(text);
+    return labeledMatch?.group(1);
+  }
+
+  static String fallbackUserLabel(dynamic value, {String prefix = 'Usuario'}) {
+    final numericId = extractNumericId(value);
+    if (numericId != null && numericId.isNotEmpty) {
+      return '$prefix $numericId';
+    }
+
+    final cleaned = _sanitize(value?.toString());
+    return cleaned.isEmpty ? '$prefix Desconhecido' : '$prefix $cleaned';
+  }
 
   /// ----------------------------------------------------------
   /// ENGINE PRINCIPAL (vinda da branch main)
@@ -25,7 +57,9 @@ class GlpiNameFormatter {
     final cleanUsername = _sanitize(username);
 
     if (cleanFirstname.isEmpty && cleanRealname.isEmpty) {
-      return cleanUsername.isNotEmpty ? cleanUsername : 'Usuário Desconhecido';
+      if (cleanUsername.isEmpty) return 'Usuário Desconhecido';
+      final numericId = extractNumericId(cleanUsername);
+      return numericId == null ? cleanUsername : fallbackUserLabel(numericId);
     }
 
     if (cleanFirstname.isEmpty) {
@@ -52,7 +86,12 @@ class GlpiNameFormatter {
   }) {
     final firstname = userMap['firstname'] ?? userMap['first_name'];
     final realname = userMap['realname'] ?? userMap['real_name'];
-    final username = userMap['name'] ?? userMap['login'] ?? 'Usuário';
+    final username =
+        userMap['name'] ??
+        userMap['login'] ??
+        userMap['id'] ??
+        userMap['users_id'] ??
+        'Usuário';
 
     return formatName(
       firstname: firstname,
@@ -72,7 +111,6 @@ class GlpiNameFormatter {
     String? username,
     int nameFormat = firstNameBefore,
   }) {
-
     // Se vier firstname/realname usa o novo sistema
     if (firstname != null || realname != null) {
       return formatName(
@@ -96,6 +134,11 @@ class GlpiNameFormatter {
   /// ----------------------------------------------------------
   static String _cleanUser(String value) {
     final cleaned = value.trim();
+
+    final numericId = extractNumericId(cleaned);
+    if (numericId != null) {
+      return fallbackUserLabel(numericId);
+    }
 
     if (cleaned.contains('@')) {
       return cleaned.split('@').first;

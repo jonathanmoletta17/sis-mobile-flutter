@@ -1,3 +1,4 @@
+import '../models/glpi_status.dart';
 import '../models/ticket_message.dart';
 import '../services/glpi_client.dart';
 
@@ -15,10 +16,10 @@ class AppStateMessageSupport {
     if (isSolution &&
         lowered.contains('categoria') &&
         lowered.contains('obrigat')) {
-      return 'Defina a categoria do chamado antes de registrar a solucao.';
+      return 'Defina a categoria do chamado antes de registrar a solução.';
     }
 
-    return cleaned.isEmpty ? 'Falha ao enviar interacao.' : cleaned;
+    return cleaned.isEmpty ? 'Falha ao enviar interação.' : cleaned;
   }
 
   static Future<List<TicketMessage>> fetchTicketMessages({
@@ -111,10 +112,21 @@ class AppStateMessageSupport {
     void Function(String message)? log,
   }) async {
     if (!isAuthenticated || sessionToken == null) {
-      return {'success': false, 'error': 'Sessao expirada'};
+      return {'success': false, 'error': 'Sessão expirada'};
     }
 
     try {
+      final currentTicket = await apiService.getTicketById(
+        ticketId,
+        sessionToken,
+      );
+      if (!GlpiStatusMapper.isOpenForInteraction(currentTicket['status'])) {
+        return {
+          'success': false,
+          'error': 'Chamado já está solucionado ou fechado. Recarregue a tela.',
+        };
+      }
+
       final trimmedMessage = messageContent.trim();
       log?.call(
         'Enviando ${isSolution ? "SOLUCAO" : "MENSAGEM"} para ticket $ticketId...',
@@ -145,7 +157,7 @@ class AppStateMessageSupport {
 
         if (result['success'] != true) {
           final err = _normalizeInteractionError(
-            result['error']?.toString() ?? 'Falha ao enviar interacao.',
+            result['error']?.toString() ?? 'Falha ao enviar interação.',
             isSolution: isSolution,
           );
           if (isSessionInvalidError(err)) {

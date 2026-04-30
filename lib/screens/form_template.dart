@@ -31,7 +31,7 @@ class FormTemplate extends StatefulWidget {
     required this.localizacaoOptions,
     required this.tipoServicoOptions,
     this.urgenciaOptions = const [
-      '3 - Media (Padrao)',
+      '3 - Média (Padrão)',
       '1 - Baixa',
       '5 - Alta',
     ],
@@ -155,11 +155,11 @@ class _FormTemplateState extends State<FormTemplate> {
             ? _nomePessoaController.text
             : null,
         'localizacao': widget.includeLocalizacao
-            ? (_localizacao ?? 'Nao Informado')
-            : 'Nao Aplicavel',
+            ? (_localizacao ?? 'Não Informado')
+            : 'Não Aplicável',
         'telefone': _telefoneController.text,
         'urgencia': widget.includeUrgencia
-            ? (_urgencia ?? '3 - Media (Padrao)')
+            ? (_urgencia ?? '3 - Média (Padrão)')
             : null,
         'tipo': _tipoDetalhamento ?? '',
         'assunto': _assuntoController.text,
@@ -221,7 +221,7 @@ class _FormTemplateState extends State<FormTemplate> {
               const SisSectionHeader(
                 title: 'Dados Gerais',
                 subtitle:
-                    'Informacoes de contexto e identificacao do solicitante.',
+                    'Informações de contexto e identificação do solicitante.',
               ),
               const SizedBox(height: AppSpacing.md),
               CustomDropdownField(
@@ -245,7 +245,7 @@ class _FormTemplateState extends State<FormTemplate> {
                 ),
               if (widget.includeLocalizacao)
                 CustomDropdownField(
-                  label: 'Localizacao',
+                  label: 'Localização',
                   items: widget.localizacaoOptions,
                   isRequired: true,
                   initialValue: _localizacao,
@@ -263,7 +263,7 @@ class _FormTemplateState extends State<FormTemplate> {
               ),
               if (widget.includeUrgencia)
                 CustomDropdownField(
-                  label: 'Urgencia',
+                  label: 'Urgência',
                   items: widget.urgenciaOptions,
                   initialValue: _urgencia ?? widget.urgenciaOptions.first,
                   onChanged: (newValue) => _urgencia = newValue,
@@ -273,7 +273,7 @@ class _FormTemplateState extends State<FormTemplate> {
               const SisSectionHeader(
                 title: 'Detalhamento',
                 subtitle:
-                    'Descreva o tipo do servico, assunto e contexto da solicitacao.',
+                    'Descreva o tipo do serviço, assunto e contexto da solicitação.',
               ),
               const SizedBox(height: AppSpacing.md),
               CustomDropdownField(
@@ -289,7 +289,7 @@ class _FormTemplateState extends State<FormTemplate> {
                 isRequired: true,
               ),
               CustomTextField(
-                label: 'Descricao',
+                label: 'Descrição',
                 controller: _descricaoController,
                 helperText: '(Indicar o local e o ocorrido)',
                 isRequired: true,

@@ -101,7 +101,7 @@ class SisShellDrawer extends StatelessWidget {
                     Text(
                       appState.selectedTicketEntityName ??
                           appState.activeEntityName ??
-                          'Nao definida',
+                          'Não definida',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textMuted,
                       ),
@@ -127,7 +127,7 @@ class SisShellDrawer extends StatelessWidget {
                   _DrawerTile(
                     active: activeDestination == SisShellDestination.catalog,
                     icon: Icons.home_outlined,
-                    label: 'Servicos',
+                    label: 'Serviços',
                     onTap: () => Navigator.pop(context),
                   ),
                   _DrawerTile(

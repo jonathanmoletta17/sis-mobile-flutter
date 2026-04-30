@@ -6,10 +6,13 @@ import 'package:provider/provider.dart';
 
 import '../models/glpi_status.dart';
 import '../state/app_state.dart';
+import '../state/app_state_ticket_support.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_status.dart';
+import '../utils/glpi_name_formatter.dart';
+import '../utils/ticket_form_summary.dart';
 import '../widgets/ui/sis_empty_state.dart';
 import '../widgets/ui/sis_page_scaffold.dart';
 import '../widgets/ui/sis_section_header.dart';
@@ -58,6 +61,46 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
   String get _statusLabel => GlpiStatusMapper.label(_ticketData['status']);
   int? get _statusCode => GlpiStatusMapper.code(_ticketData['status']);
   bool get _isClosedTicket => GlpiStatusMapper.isClosed(_ticketData['status']);
+  bool get _isClosedForInteraction =>
+      !GlpiStatusMapper.isOpenForInteraction(_ticketData['status']);
+
+  String? get _ticketOwnerUserId {
+    final raw =
+        _ticketData['requester_user_id'] ??
+        _ticketData['users_id_recipient_id'] ??
+        _ticketData['Users_id_recipient_id'];
+    final value = raw?.toString().trim();
+    return value == null || value.isEmpty ? null : value;
+  }
+
+  String? get _ticketOwnerName {
+    final raw =
+        _ticketData['Users_id_recipient'] ?? _ticketData['users_id_recipient'];
+    final value = raw?.toString().trim();
+    return value == null || value.isEmpty ? null : value;
+  }
+
+  String? _displayPersonName(
+    dynamic rawName, {
+    dynamic rawId,
+    required String fallbackPrefix,
+  }) {
+    final value = rawName?.toString().trim();
+    if (value == null || value.isEmpty || value == '-') {
+      if (rawId == null) return null;
+      return GlpiNameFormatter.fallbackUserLabel(rawId, prefix: fallbackPrefix);
+    }
+
+    final numericId = GlpiNameFormatter.extractNumericId(value);
+    if (numericId != null) {
+      return GlpiNameFormatter.fallbackUserLabel(
+        numericId,
+        prefix: fallbackPrefix,
+      );
+    }
+
+    return value;
+  }
 
   Future<void> _rehydrateTicket() async {
     if (_isOfflineTicket || _isLoadingTicket) {
@@ -136,24 +179,10 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
     return decoded.replaceAll(RegExp(r'\s+'), ' ').trim();
   }
 
-  static String _decodeEntitiesPreserveLines(String input) {
-    final flat = _decodeEntities(
-      input,
-    ).replaceAll(' • ', '\n• ').replaceAll(' - ', '\n- ');
-
-    return flat.replaceAll('\r\n', '\n').replaceAll('\r', '\n').trim();
-  }
-
   Widget _buildResumoFormularioWidget(String rawValue) {
-    final value = _decodeEntitiesPreserveLines(rawValue);
+    final summary = TicketFormSummary.parse(rawValue);
 
-    final lines = value
-        .split('\n')
-        .map((line) => line.trim())
-        .where((line) => line.isNotEmpty)
-        .toList();
-
-    if (lines.isEmpty) {
+    if (summary.isEmpty) {
       return Text(
         '-',
         style: Theme.of(
@@ -164,47 +193,48 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: lines.map((line) {
-        final isBullet = line.startsWith('•') || line.startsWith('-');
-
-        if (!isBullet) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 6.0),
-            child: Text(
-              line,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.textMuted,
-                height: 1.3,
-              ),
+      children: [
+        if (summary.description.isNotEmpty) ...[
+          Text(
+            summary.description,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.textStrong,
+              height: 1.4,
             ),
-          );
-        }
-
-        final text = line.replaceFirst(RegExp(r'^[•-]\s*'), '');
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 6.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '•  ',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: AppColors.textMuted),
-              ),
-              Expanded(
-                child: Text(
-                  text,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textMuted,
-                    height: 1.3,
+          ),
+          if (summary.fields.isNotEmpty) const SizedBox(height: AppSpacing.sm),
+        ],
+        ...summary.fields.map((field) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 128,
+                  child: Text(
+                    field.label,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: AppColors.textMuted,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        );
-      }).toList(),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Text(
+                    field.value,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textStrong,
+                      height: 1.3,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+      ],
     );
   }
 
@@ -277,7 +307,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
       return const SisEmptyState(
         icon: Icons.attachment_outlined,
         title: 'Nenhum anexo encontrado',
-        message: 'Os anexos do chamado aparecerao aqui quando existirem.',
+        message: 'Os anexos do chamado aparecerão aqui quando existirem.',
       );
     }
 
@@ -372,12 +402,13 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
   }) {
     final currentCode = _statusCode;
     final isCurrentStatus = currentCode == targetStatus.code;
+    final isTerminal = _isClosedForInteraction;
 
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: ElevatedButton(
-          onPressed: (_isUpdating || isCurrentStatus)
+          onPressed: (_isUpdating || isCurrentStatus || isTerminal)
               ? null
               : () async {
                   if (targetStatus == GlpiStatus.solucionado) {
@@ -386,10 +417,8 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                         builder: (context) => TicketMessageScreen(
                           ticketId: _ticketId,
                           startInSolutionMode: true,
-                          ticketOwner: _ticketData['users_id_recipient']
-                              ?.toString()
-                              .toLowerCase()
-                              .trim(),
+                          ticketOwner: _ticketOwnerName,
+                          ticketOwnerUserId: _ticketOwnerUserId,
                           isClosed: _isClosedTicket,
                         ),
                       ),
@@ -532,58 +561,84 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
     final anexoPath = _ticketData['anexoPath'] as String?;
 
     final appState = Provider.of<AppState>(context);
-    final activeProfile = appState.activeProfile?.toLowerCase() ?? '';
-    final isRequesterOnly =
-        activeProfile.contains('self-service') ||
-        activeProfile.contains('solicitante') ||
-        activeProfile.contains('requerente');
+    final showTechnicianActions =
+        AppStateTicketSupport.canShowTechnicianActions(
+          _ticketData,
+          activeProfile: appState.activeProfile,
+          loggedUsername: appState.loggedUsername,
+          loggedUserId: appState.loggedUserId,
+        );
 
     final friendlyDetails = <MapEntry<String, String>>[];
+    final metadataDetails = <MapEntry<String, String>>[];
 
-    void addDetail(String label, dynamic rawValue) {
+    void addDetail(
+      String label,
+      dynamic rawValue, {
+      List<MapEntry<String, String>>? target,
+    }) {
       if (rawValue == null) return;
 
-      if (label == 'Resumo do Formulario') {
-        final value = _decodeEntitiesPreserveLines(rawValue.toString());
-        if (value.isEmpty) return;
-        friendlyDetails.add(MapEntry(label, value));
+      if (label == 'Resumo do Atendimento') {
+        final summary = TicketFormSummary.parse(rawValue.toString());
+        if (summary.isEmpty) return;
+        (target ?? friendlyDetails).add(MapEntry(label, rawValue.toString()));
         return;
       }
 
       final value = _decodeEntities(rawValue.toString());
-      if (value.isEmpty) return;
-      friendlyDetails.add(MapEntry(label, value));
+      if (value.isEmpty || value == '-') return;
+      (target ?? friendlyDetails).add(MapEntry(label, value));
     }
 
-    addDetail('ID do Chamado', _ticketData['id']);
-    addDetail('Assunto', _ticketData['assunto'] ?? _ticketData['name']);
-    addDetail('Servico Solicitado', _ticketData['serviceName']);
-    addDetail('Categoria', _ticketData['categoria_completa']);
+    addDetail('Serviço Solicitado', _ticketData['serviceName']);
     addDetail(
       'Solicitante',
-      _ticketData['Users_id_recipient'] ?? _ticketData['users_id_recipient'],
+      _displayPersonName(
+        _ticketData['Users_id_recipient'] ?? _ticketData['users_id_recipient'],
+        rawId: _ticketOwnerUserId,
+        fallbackPrefix: 'Usuario',
+      ),
     );
     addDetail(
-      'Tecnico Responsavel',
-      _ticketData['Users_id_assign'] ??
-          _ticketData['users_id_assign'] ??
-          _ticketData['assignee_user_id'] ??
-          'Nao atribuido',
+      'Técnico Responsável',
+      _displayPersonName(
+            _ticketData['Users_id_assign'] ?? _ticketData['users_id_assign'],
+            rawId: _ticketData['assignee_user_id'],
+            fallbackPrefix: 'Tecnico',
+          ) ??
+          'Não atribuído',
     );
     addDetail(
-      'Tipo de Solicitacao',
-      _ticketData['Requesttypes_id'] ?? _ticketData['requesttypes_id'],
+      'Criado em',
+      _ticketData['criado_em'] ??
+          _ticketData['date_creation'] ??
+          _ticketData['Date'],
     );
-    addDetail('Localizacao', _ticketData['localizacao']);
+    addDetail('Localização', _ticketData['localizacao']);
     addDetail('Telefone', _ticketData['telefone']);
+    addDetail('Resumo do Atendimento', _ticketData['content']);
+
+    addDetail('ID do Chamado', _ticketData['id'], target: metadataDetails);
     addDetail(
-      'Urgencia',
+      'Assunto',
+      _ticketData['assunto'] ?? _ticketData['name'],
+      target: metadataDetails,
+    );
+    addDetail(
+      'Categoria',
+      _ticketData['categoria_completa'],
+      target: metadataDetails,
+    );
+    addDetail(
+      'Urgência',
       _translateMatrixLevel(
         _ticketData['urgencia'] ??
             _ticketData['Urgency'] ??
             _ticketData['urgency'],
         'Urgencia',
       ),
+      target: metadataDetails,
     );
     addDetail(
       'Impacto',
@@ -593,6 +648,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
             _ticketData['Impacto'],
         'Impacto',
       ),
+      target: metadataDetails,
     );
     addDetail(
       'Prioridade',
@@ -602,20 +658,15 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
             _ticketData['priority'],
         'Prioridade',
       ),
+      target: metadataDetails,
     );
     addDetail(
-      'Criado em',
-      _ticketData['criado_em'] ??
-          _ticketData['date_creation'] ??
-          _ticketData['Date'],
-    );
-    addDetail(
-      'Ultima Atualizacao',
+      'Última Atualização',
       _ticketData['atualizado_em'] ??
           _ticketData['date_mod'] ??
           _ticketData['Date_mod'],
+      target: metadataDetails,
     );
-    addDetail('Resumo do Formulario', _ticketData['content']);
 
     if (friendlyDetails.isEmpty) {
       addDetail('Status', _statusLabel);
@@ -654,7 +705,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                             const SizedBox(height: AppSpacing.xs),
                             Text(
                               _ticketData['serviceName']?.toString() ??
-                                  'Servico nao identificado',
+                                  'Serviço não identificado',
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(color: AppColors.textMuted),
                             ),
@@ -699,10 +750,8 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                         MaterialPageRoute(
                           builder: (context) => TicketMessageScreen(
                             ticketId: _ticketId,
-                            ticketOwner: _ticketData['users_id_recipient']
-                                ?.toString()
-                                .toLowerCase()
-                                .trim(),
+                            ticketOwner: _ticketOwnerName,
+                            ticketOwnerUserId: _ticketOwnerUserId,
                             isClosed: _isClosedTicket,
                           ),
                         ),
@@ -719,7 +768,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-          if (!isRequesterOnly && !_isOfflineTicket) ...[
+          if (showTechnicianActions) ...[
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(AppSpacing.md),
@@ -727,9 +776,9 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SisSectionHeader(
-                      title: 'Acoes de Status',
+                      title: 'Ações de Status',
                       subtitle:
-                          'Atualize o andamento do chamado ou encaminhe para solucao.',
+                          'Atualize o andamento do chamado ou encaminhe para solução.',
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Row(
@@ -759,7 +808,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SisSectionHeader(title: 'Descricao Detalhada'),
+                    const SisSectionHeader(title: 'Descrição Detalhada'),
                     const SizedBox(height: AppSpacing.md),
                     Text(
                       descricao,
@@ -835,13 +884,34 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                   ),
                   const SizedBox(height: AppSpacing.md),
                   ...friendlyDetails.map((item) {
-                    final isResumo = item.key == 'Resumo do Formulario';
+                    final isResumo = item.key == 'Resumo do Atendimento';
                     return _buildDetailRow(
                       item.key,
                       item.value,
                       rich: isResumo,
                     );
                   }),
+                  if (metadataDetails.isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    Theme(
+                      data: Theme.of(
+                        context,
+                      ).copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        tilePadding: EdgeInsets.zero,
+                        childrenPadding: EdgeInsets.zero,
+                        title: Text(
+                          'Metadados GLPI',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        children: metadataDetails
+                            .map(
+                              (item) => _buildDetailRow(item.key, item.value),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

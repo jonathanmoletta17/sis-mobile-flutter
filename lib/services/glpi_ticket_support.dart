@@ -42,7 +42,7 @@ class GlpiTicketSupport {
     buffer.writeln('--------------------------------');
 
     if (servico.isNotEmpty) {
-      buffer.writeln('Servico: $servico');
+      buffer.writeln('Serviço: $servico');
     }
     if (atendimentoPara.isNotEmpty) {
       buffer.writeln('Atendimento para: $atendimentoPara');
@@ -54,10 +54,10 @@ class GlpiTicketSupport {
       buffer.writeln('Telefone: $telefone');
     }
     if (localizacao.isNotEmpty) {
-      buffer.writeln('Localizacao: $localizacao');
+      buffer.writeln('Localização: $localizacao');
     }
     if (urgencia.isNotEmpty) {
-      buffer.writeln('Urgencia: $urgencia');
+      buffer.writeln('Urgência: $urgencia');
     }
     if (tipo.isNotEmpty) {
       buffer.writeln('Tipo: $tipo');

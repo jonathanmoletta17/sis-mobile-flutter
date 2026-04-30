@@ -34,7 +34,7 @@ class _OfflineQueueScreenState extends State<OfflineQueueScreen> {
     final initialCount = appState.pendingTickets.length;
     if (initialCount == 0) {
       setState(() {
-        _syncFeedbackMessage = 'Nenhuma pendencia offline para sincronizar.';
+        _syncFeedbackMessage = 'Nenhuma pendência offline para sincronizar.';
         _syncFeedbackTone = AppStatusTone.neutral;
       });
       return;
@@ -111,7 +111,7 @@ class _OfflineQueueScreenState extends State<OfflineQueueScreen> {
 
     return SisPageScaffold(
       title: 'Fila offline',
-      subtitle: 'Pendencias locais e sincronizacao com o GLPI',
+      subtitle: 'Pendências locais e sincronização com o GLPI',
       actions: [
         IconButton(
           onPressed: _isSynchronizing ? null : _synchronizeQueue,
@@ -175,12 +175,12 @@ class _OfflineQueueScreenState extends State<OfflineQueueScreen> {
                         label:
                             appState.selectedTicketEntityName ??
                             appState.activeEntityName ??
-                            'Entidade nao definida',
+                            'Entidade não definida',
                         tone: AppStatusTone.brand,
                       ),
                       SisStatusChip(
                         label: pendingTickets.isEmpty
-                            ? 'Sem pendencias'
+                            ? 'Sem pendências'
                             : 'Pronto para sincronizar',
                         tone: pendingTickets.isEmpty
                             ? AppStatusTone.neutral
@@ -233,9 +233,9 @@ class _OfflineQueueScreenState extends State<OfflineQueueScreen> {
               height: MediaQuery.of(context).size.height * 0.58,
               child: SisEmptyState(
                 icon: Icons.cloud_done_outlined,
-                title: 'Nenhuma pendencia offline',
+                title: 'Nenhuma pendência offline',
                 message:
-                    'Os chamados salvos localmente aparecerao aqui quando houver necessidade de sincronizacao.',
+                    'Os chamados salvos localmente aparecerão aqui quando houver necessidade de sincronização.',
                 actionLabel: 'Abrir meus chamados',
                 onAction: () {
                   Navigator.of(context).push(
@@ -248,7 +248,7 @@ class _OfflineQueueScreenState extends State<OfflineQueueScreen> {
             const SisSectionHeader(
               title: 'Chamados pendentes',
               subtitle:
-                  'Revise o conteudo local antes de disparar uma nova tentativa de sincronizacao.',
+                  'Revise o conteúdo local antes de disparar uma nova tentativa de sincronização.',
             ),
             const SizedBox(height: AppSpacing.md),
             for (var index = 0; index < pendingTickets.length; index++)
@@ -424,7 +424,7 @@ class _OfflineTicketCard extends StatelessWidget {
                     if (locationLabel.isNotEmpty)
                       _MiniPill(label: locationLabel),
                     if (urgencyLabel.isNotEmpty)
-                      _MiniPill(label: 'Urgencia: $urgencyLabel'),
+                      _MiniPill(label: 'Urgência: $urgencyLabel'),
                     if (hasAttachment) const _MiniPill(label: 'Com anexo'),
                   ],
                 ),

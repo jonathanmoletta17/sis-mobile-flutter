@@ -43,6 +43,7 @@ class AppState extends ChangeNotifier {
 
   bool get isAuthenticated => _isAuthenticated;
   String? get loggedUsername => _loggedUsername;
+  int? get loggedUserId => _loggedUserId;
   String? get activeProfile => _activeProfile;
   int? get activeEntityId => _activeEntityId;
   String? get activeEntityName => _activeEntityName;
@@ -89,10 +90,7 @@ class AppState extends ChangeNotifier {
         final sessionContext = await _apiService.getSessionContext(storedToken);
         _sessionToken = storedToken;
         _isAuthenticated = true;
-        _applySessionContext(
-          sessionContext,
-          fallbackUsername: _loggedUsername,
-        );
+        _applySessionContext(sessionContext, fallbackUsername: _loggedUsername);
         _reconcileSelectedTicketEntity(
           preferredId: snapshot.selectedTicketEntityId,
           preferredName: snapshot.selectedTicketEntityName,
@@ -297,6 +295,7 @@ class AppState extends ChangeNotifier {
       return "⚠️ Chamado salvo localmente (offline). Será sincronizado quando houver conexão.";
     }
   }
+
   bool _ticketBelongsToLoggedUser(Map<String, dynamic> ticket) {
     return AppStateTicketSupport.ticketBelongsToLoggedUser(
       ticket,
@@ -382,6 +381,28 @@ class AppState extends ChangeNotifier {
         'success': false,
         'message':
             'Não é possível alterar status de chamados Offline. Sincronize primeiro.',
+      };
+    }
+
+    try {
+      final currentTicket = await _apiService.getTicketById(
+        ticketId,
+        _sessionToken!,
+      );
+      if (!GlpiStatusMapper.isOpenForInteraction(currentTicket['status'])) {
+        return {
+          'success': false,
+          'message':
+              'Chamado já está solucionado ou fechado. Recarregue a tela.',
+        };
+      }
+    } catch (e) {
+      if (_isSessionInvalidError(e)) {
+        await _handleSessionInvalid(e);
+      }
+      return {
+        'success': false,
+        'message': 'Falha ao confirmar o status atual do chamado.',
       };
     }
 
@@ -534,7 +555,6 @@ class AppState extends ChangeNotifier {
     );
   }
 
-
   /// Envia mensagem e processa múltiplos anexos
   /// Suporta envio de ACOMPANHAMENTO ou SOLUÇÃO formal
   Future<Map<String, dynamic>> sendTicketMessageWithAttachments({
@@ -638,7 +658,6 @@ class AppState extends ChangeNotifier {
     );
   }
 
-
   /// Recusa a solução, exige justificativa (com múltiplos anexos) e reabre o chamado
   Future<Map<String, dynamic>> rejectSolution(
     String ticketId,
@@ -736,7 +755,8 @@ class AppState extends ChangeNotifier {
       final matched = _findAvailableEntity(candidateId);
       if (matched != null) {
         _selectedTicketEntityId = matched['id'] as int;
-        _selectedTicketEntityName = matched['name']?.toString() ?? preferredName;
+        _selectedTicketEntityName =
+            matched['name']?.toString() ?? preferredName;
         return;
       }
     }
@@ -745,9 +765,7 @@ class AppState extends ChangeNotifier {
       final matched = _findAvailableEntity(_activeEntityId!);
       _selectedTicketEntityId = _activeEntityId;
       _selectedTicketEntityName =
-          matched?['name']?.toString() ??
-          _activeEntityName ??
-          preferredName;
+          matched?['name']?.toString() ?? _activeEntityName ?? preferredName;
       return;
     }
 
@@ -777,6 +795,4 @@ class AppState extends ChangeNotifier {
     if (value is int) return value;
     return int.tryParse(value.toString());
   }
-
 }
-

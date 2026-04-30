@@ -5,6 +5,8 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:async';
 import '../state/app_state.dart';
+import '../state/app_state_ticket_support.dart';
+import '../models/glpi_status.dart';
 import '../models/ticket_message.dart';
 import '../utils/avatar_colors.dart';
 import 'package:file_picker/file_picker.dart';
@@ -24,6 +26,7 @@ class TicketMessageScreen extends StatefulWidget {
   final String ticketId;
   final bool startInSolutionMode;
   final String? ticketOwner;
+  final String? ticketOwnerUserId;
   final bool isClosed;
 
   const TicketMessageScreen({
@@ -31,6 +34,7 @@ class TicketMessageScreen extends StatefulWidget {
     required this.ticketId,
     this.startInSolutionMode = false,
     this.ticketOwner,
+    this.ticketOwnerUserId,
     this.isClosed = false,
   });
 
@@ -57,6 +61,8 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
   bool _showScrollToBottomBtn = false;
   bool _isSolutionMode = false;
   bool _isTicketClosed = false;
+  String? _ticketOwner;
+  String? _ticketOwnerUserId;
 
   @override
   void initState() {
@@ -64,7 +70,9 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     _messages = [];
     _isSolutionMode = widget.startInSolutionMode;
     _isTicketClosed = widget.isClosed;
-    _loadMessages();
+    _ticketOwner = _normalizeIdentity(widget.ticketOwner);
+    _ticketOwnerUserId = _normalizeIdentity(widget.ticketOwnerUserId);
+    _refreshTicketState();
     _startPolling();
 
     _scrollController.addListener(() {
@@ -86,11 +94,80 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
         _isFetching = true;
         try {
           await _loadMessages();
+          await _refreshTicketStatus();
         } finally {
           _isFetching = false;
         }
       }
     });
+  }
+
+  String? _normalizeIdentity(dynamic value) {
+    final normalized = AppStateTicketSupport.normalizeIdentity(value);
+    return normalized.isEmpty ? null : normalized;
+  }
+
+  Future<void> _refreshTicketState() async {
+    await _refreshTicketStatus();
+    await _loadMessages();
+  }
+
+  Future<void> _refreshTicketStatus() async {
+    if (!mounted) return;
+    try {
+      final appState = Provider.of<AppState>(context, listen: false);
+      final ticket = await appState.fetchTicketById(widget.ticketId);
+      if (!mounted || ticket == null) return;
+
+      final requesterId =
+          ticket['requester_user_id'] ??
+          ticket['users_id_recipient_id'] ??
+          ticket['Users_id_recipient_id'];
+      final requesterName =
+          ticket['Users_id_recipient'] ?? ticket['users_id_recipient'];
+
+      setState(() {
+        _isTicketClosed = GlpiStatusMapper.isClosed(ticket['status']);
+        _ticketOwnerUserId =
+            _normalizeIdentity(requesterId) ?? _ticketOwnerUserId;
+        _ticketOwner = _normalizeIdentity(requesterName) ?? _ticketOwner;
+      });
+    } catch (_) {
+      // Mantem o estado atual se a consulta pontual falhar; o proximo polling
+      // tenta novamente e as acoes criticas ainda validam no AppState.
+    }
+  }
+
+  bool _isLoggedUserTicketOwner(AppState appState) {
+    final loggedUserId = _normalizeIdentity(appState.loggedUserId);
+    final loggedUsername = _normalizeIdentity(appState.loggedUsername);
+
+    if (_ticketOwnerUserId != null &&
+        loggedUserId != null &&
+        _ticketOwnerUserId == loggedUserId) {
+      return true;
+    }
+
+    return _ticketOwner != null &&
+        loggedUsername != null &&
+        _ticketOwner == loggedUsername;
+  }
+
+  bool _isSolutionAuthor(TicketMessage message, AppState appState) {
+    final loggedUserId = _normalizeIdentity(appState.loggedUserId);
+    final loggedUsername = _normalizeIdentity(appState.loggedUsername);
+    final senderUserId = _normalizeIdentity(message.senderUserId);
+    final senderName = _normalizeIdentity(message.sender);
+
+    if (senderUserId != null &&
+        loggedUserId != null &&
+        senderUserId == loggedUserId) {
+      return true;
+    }
+
+    return senderName != null &&
+        loggedUsername != null &&
+        senderName == loggedUsername;
   }
 
   Future<void> _loadMessages() async {
@@ -126,7 +203,14 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
           if (shouldScroll) _scrollToBottom();
           if (!_isFirstLoadComplete) _isFirstLoadComplete = true;
         } else {
-          if (_isLoading) setState(() => _isLoading = false);
+          // Hash igual = dados não mudaram (inclusive lista vazia na 1ª carga).
+          // Garante que _isFirstLoadComplete seja marcado mesmo sem mensagens.
+          if (_isLoading || !_isFirstLoadComplete) {
+            setState(() {
+              _isLoading = false;
+              _isFirstLoadComplete = true;
+            });
+          }
         }
       }
     } catch (e) {
@@ -174,7 +258,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
       final result = await OpenFilex.open(file.path);
       if (result.type != ResultType.done) {
         _showSnackBar(
-          'Nao foi possivel abrir: ${result.message}',
+          'Não foi possível abrir: ${result.message}',
           color: Colors.orange,
         );
       }
@@ -187,7 +271,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     final messageText = _messageController.text.trim();
     if (_isSolutionMode && messageText.isEmpty) {
       _showSnackBar(
-        'Para enviar uma solucao, voce deve digitar uma mensagem.',
+        'Para enviar uma solução, você deve digitar uma mensagem.',
         color: Colors.orange,
       );
       return;
@@ -220,7 +304,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
         _selectedImage = null;
         _selectedFiles.clear();
         _lastDataHash = '';
-        await _loadMessages();
+        await _refreshTicketState();
         _scrollToBottom();
       } else {
         _showSnackBar(result['error'] ?? 'Falha ao enviar', color: Colors.red);
@@ -323,32 +407,41 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
 
     Color cardColor = AppColors.warningSoft;
     Color borderColor = AppColors.warning;
-    String statusLabel = 'Aguardando aprovacao';
+    String statusLabel = 'Aguardando aprovação';
     IconData statusIcon = Icons.hourglass_empty;
+    String statusChipLabel = 'Pendente';
+    AppStatusTone statusChipTone = AppStatusTone.warning;
 
     if (isApproved) {
       cardColor = AppColors.successSoft;
       borderColor = AppColors.success;
-      statusLabel = 'Solucao aprovada';
+      statusLabel = 'Solução aprovada';
       statusIcon = Icons.check_circle;
+      statusChipLabel = 'Aprovada';
+      statusChipTone = AppStatusTone.success;
     } else if (isRejected) {
       cardColor = AppColors.dangerSoft;
       borderColor = AppColors.danger;
-      statusLabel = 'Solucao recusada';
+      statusLabel = 'Solução recusada';
       statusIcon = Icons.cancel;
+      statusChipLabel = 'Recusada';
+      statusChipTone = AppStatusTone.danger;
     }
 
-    // ðŸŸ¢ TRAVA DE SEGURANÃ‡A: SÃ³ exibe botÃµes se for o Requerente ou o Dono do Ticket
+    if (_isTicketClosed && !isApproved) {
+      cardColor = AppColors.neutralSoft;
+      borderColor = AppColors.neutral;
+      statusLabel = 'Solução registrada';
+      statusIcon = Icons.history;
+      statusChipLabel = 'Histórico';
+      statusChipTone = AppStatusTone.neutral;
+    }
+
     final appState = Provider.of<AppState>(context, listen: false);
-    final loggedUser = appState.loggedUsername?.toLowerCase().trim() ?? '';
-    final activeProfile = appState.activeProfile?.toLowerCase() ?? '';
-    final bool isRequesterProfile =
-        activeProfile.contains('self-service') ||
-        activeProfile.contains('requerente') ||
-        activeProfile.contains('solicitante');
-    final bool canApprove =
-        isRequesterProfile ||
-        (widget.ticketOwner != null && widget.ticketOwner == loggedUser);
+    final canApprove =
+        !_isTicketClosed &&
+        _isLoggedUserTicketOwner(appState) &&
+        !_isSolutionAuthor(message, appState);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
@@ -381,18 +474,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                       ).textTheme.titleSmall?.copyWith(color: borderColor),
                     ),
                   ),
-                  SisStatusChip(
-                    label: isApproved
-                        ? 'Aprovada'
-                        : isRejected
-                        ? 'Recusada'
-                        : 'Pendente',
-                    tone: isApproved
-                        ? AppStatusTone.success
-                        : isRejected
-                        ? AppStatusTone.danger
-                        : AppStatusTone.warning,
-                  ),
+                  SisStatusChip(label: statusChipLabel, tone: statusChipTone),
                 ],
               ),
             ),
@@ -402,7 +484,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Tecnico: ${message.sender}',
+                    'Técnico: ${message.sender}',
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const SizedBox(height: AppSpacing.xs),
@@ -470,14 +552,12 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
 
     if (result['success'] == true) {
       _showSnackBar(
-        'Solucao aprovada. O chamado foi fechado.',
+        'Solução aprovada. O chamado foi fechado.',
         color: AppColors.success,
       );
-      setState(
-        () => _isTicketClosed = true,
-      ); // ðŸŸ¢ NOVO: Tranca o chat na mesma hora!
       _lastDataHash = '';
-      await _loadMessages();
+      setState(() => _isTicketClosed = true);
+      await _refreshTicketState();
     } else {
       _showSnackBar('Erro: ${result['error']}', color: AppColors.danger);
     }
@@ -497,7 +577,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
         builder: (context, setDialogState) {
           return AlertDialog(
             title: const Text(
-              'Recusar solucao',
+              'Recusar solução',
               style: TextStyle(color: Colors.red),
             ),
             content: SingleChildScrollView(
@@ -633,11 +713,11 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                   if (!mounted) return;
                   if (result['success'] == true) {
                     _showSnackBar(
-                      'Solucao recusada e chamado reaberto.',
+                      'Solução recusada e chamado reaberto.',
                       color: Colors.orange,
                     );
                     _lastDataHash = '';
-                    await _loadMessages();
+                    await _refreshTicketState();
                     _scrollToBottom();
                   } else {
                     _showSnackBar(
@@ -860,7 +940,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
   Widget build(BuildContext context) {
     return SisPageScaffold(
       title: 'Chamado: ${widget.ticketId}',
-      subtitle: _isSolutionMode ? 'Modo solucao ativo' : 'Conversa e anexos',
+      subtitle: _isSolutionMode ? 'Modo solução ativo' : 'Conversa e anexos',
       floatingActionButton: _showScrollToBottomBtn
           ? FloatingActionButton.small(
               backgroundColor: AppColors.brand,
@@ -887,7 +967,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                           icon: Icons.chat_bubble_outline,
                           title: 'Nenhuma mensagem ainda',
                           message:
-                              'O historico da conversa aparecera aqui assim que houver interacoes no ticket.',
+                              'O histórico da conversa aparecerá aqui assim que houver interações no ticket.',
                         ),
                       ),
                     ],
@@ -991,7 +1071,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
             const SizedBox(width: AppSpacing.xs),
             Flexible(
               child: Text(
-                'Chamado fechado. Novas interacoes desabilitadas.',
+                'Chamado fechado. Novas interações desabilitadas.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textMuted,
                   fontWeight: FontWeight.w700,
@@ -1005,12 +1085,10 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     }
 
     final appState = Provider.of<AppState>(context);
-    final activeProfile = appState.activeProfile?.toLowerCase() ?? '';
-    final bool isRequesterOnly =
-        activeProfile.contains('self-service') ||
-        activeProfile.contains('post-only') ||
-        activeProfile.contains('requerente') ||
-        activeProfile.contains('solicitante');
+    final isRequesterForTicket = _isLoggedUserTicketOwner(appState);
+    final canProposeSolution =
+        !isRequesterForTicket &&
+        !AppStateTicketSupport.isRequesterProfile(appState.activeProfile);
 
     final hasPendingSolution = _messages.any(
       (m) =>
@@ -1019,6 +1097,11 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     );
 
     if (hasPendingSolution && _isSolutionMode) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _isSolutionMode = false);
+      });
+    }
+    if (!canProposeSolution && _isSolutionMode) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) setState(() => _isSolutionMode = false);
       });
@@ -1039,7 +1122,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
         ),
         child: Column(
           children: [
-            if (!isRequesterOnly && !hasPendingSolution)
+            if (canProposeSolution && !hasPendingSolution)
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
@@ -1123,7 +1206,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                       maxLines: 4,
                       decoration: InputDecoration(
                         hintText: _isSolutionMode
-                            ? 'Descreva a solucao aplicada...'
+                            ? 'Descreva a solução aplicada...'
                             : 'Mensagem...',
                         border: InputBorder.none,
                         contentPadding: const EdgeInsets.symmetric(

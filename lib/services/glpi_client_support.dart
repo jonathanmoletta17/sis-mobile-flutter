@@ -61,7 +61,7 @@ class GlpiClientSupport {
     if (detail.contains('Failed host lookup')) {
       return const GlpiAuthFailure(
         userMessage:
-            'O celular nao conseguiu localizar o servidor interno da SIS. Estar no Wi-Fi nao basta; a rede precisa resolver cau.ppiratini.intra.rs.gov.br.',
+            'O celular não conseguiu localizar o servidor interno da SIS. Estar no Wi-Fi não basta; a rede precisa resolver cau.ppiratini.intra.rs.gov.br.',
         detail: 'AUTH_DNS_FAILURE',
       );
     }
@@ -70,7 +70,7 @@ class GlpiClientSupport {
         detail.contains('CLEARTEXT communication')) {
       return const GlpiAuthFailure(
         userMessage:
-            'O Android bloqueou a conexao HTTP com o GLPI. Esta rede ou aparelho exige uma revisao de seguranca de trafego.',
+            'O Android bloqueou a conexão HTTP com o GLPI. Esta rede ou aparelho exige uma revisão de segurança de tráfego.',
         detail: 'AUTH_CLEARTEXT_BLOCKED',
       );
     }
@@ -82,7 +82,7 @@ class GlpiClientSupport {
         detail.contains('Network is unreachable')) {
       return const GlpiAuthFailure(
         userMessage:
-            'O celular nao conseguiu alcancar o GLPI pela rede atual. Verifique Wi-Fi corporativo, VPN e acesso ao dominio interno.',
+            'O celular não conseguiu alcançar o GLPI pela rede atual. Verifique Wi-Fi corporativo, VPN e acesso ao domínio interno.',
         detail: 'AUTH_NETWORK_FAILURE',
       );
     }

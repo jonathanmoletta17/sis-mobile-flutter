@@ -5,6 +5,7 @@ import 'package:http_parser/http_parser.dart';
 
 import '../config/glpi_config.dart';
 import '../models/glpi_status.dart';
+import '../utils/glpi_name_formatter.dart';
 import 'glpi_client_support.dart';
 import 'glpi_ticket_support.dart';
 
@@ -50,7 +51,8 @@ class GlpiClient {
   void _logResponse(String label, http.Response response) =>
       GlpiClientSupport.logResponse(label, response);
 
-  bool _isAuthError(int statusCode) => GlpiClientSupport.isAuthError(statusCode);
+  bool _isAuthError(int statusCode) =>
+      GlpiClientSupport.isAuthError(statusCode);
 
   Exception _authException(http.Response response) =>
       GlpiClientSupport.authException(response);
@@ -239,7 +241,9 @@ class GlpiClient {
     String sessionToken, {
     String? requesterUsername,
   }) async {
-    _debugLog('ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â½ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â« Buscando tickets...');
+    _debugLog(
+      'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â½ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â« Buscando tickets...',
+    );
 
     try {
       final headers = {
@@ -265,7 +269,9 @@ class GlpiClient {
           '&order=DESC'
           '&range=0-500',
         );
-        _debugLog('ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¤ GET: $searchUri');
+        _debugLog(
+          'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¤ GET: $searchUri',
+        );
 
         final searchResponse = await http
             .get(searchUri, headers: headers)
@@ -307,7 +313,9 @@ class GlpiClient {
       final uri = Uri.parse(
         '${GlpiConfig.baseUrl}/Ticket?expand_dropdowns=true&range=0-100&sort=date_mod&order=DESC',
       );
-      _debugLog('ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¤ GET: $uri');
+      _debugLog(
+        'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¤ GET: $uri',
+      );
 
       final response = await http
           .get(uri, headers: headers)
@@ -336,7 +344,9 @@ class GlpiClient {
         'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ Erro ao buscar tickets: [${response.statusCode}] - ${response.body}',
       );
     } catch (e) {
-      _debugLog('ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ Falha ao buscar tickets: $e');
+      _debugLog(
+        'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ Falha ao buscar tickets: $e',
+      );
       rethrow;
     }
   }
@@ -375,11 +385,11 @@ class GlpiClient {
     }
 
     final ticket = (jsonDecode(response.body) as Map).cast<String, dynamic>();
-    await _hydrateTicketAssignee(ticketId, headers, ticket);
+    await _hydrateTicketUsers(ticketId, headers, ticket);
     return ticket;
   }
 
-  Future<void> _hydrateTicketAssignee(
+  Future<void> _hydrateTicketUsers(
     String ticketId,
     Map<String, String> headers,
     Map<String, dynamic> ticket,
@@ -403,42 +413,78 @@ class GlpiClient {
       final relations = jsonDecode(relationResp.body);
       if (relations is! List) return;
 
-      final dynamic relation = relations.cast<dynamic>().firstWhere((r) {
-        final type = r['type'];
-        return type == 2 || type?.toString() == '2';
-      }, orElse: () => null);
-      if (relation == null) return;
-
-      final userId = relation['users_id']?.toString();
-      if (userId == null || userId.isEmpty) return;
-
-      String? assigneeName;
-      try {
-        final userUri = Uri.parse(
-          '${GlpiConfig.baseUrl}/User/$userId?expand_dropdowns=true',
-        );
-        final userResp = await http
-            .get(userUri, headers: headers)
-            .timeout(GlpiConfig.requestTimeout);
-        if (userResp.statusCode == 200) {
-          final userMap = jsonDecode(userResp.body);
-          assigneeName =
-              userMap['realname']?.toString().trim().isNotEmpty == true
-              ? userMap['realname'].toString().trim()
-              : userMap['name']?.toString().trim();
+      dynamic requesterRelation;
+      dynamic assigneeRelation;
+      for (final relation in relations) {
+        if (relation is! Map) continue;
+        final type = relation['type']?.toString();
+        if (type == '1' && requesterRelation == null) {
+          requesterRelation = relation;
+        } else if (type == '2' && assigneeRelation == null) {
+          assigneeRelation = relation;
         }
-      } catch (_) {
-        assigneeName = null;
+        if (requesterRelation != null && assigneeRelation != null) break;
       }
 
-      ticket['assignee_user_id'] = userId;
-      ticket['users_id_assign'] = assigneeName ?? userId;
-      ticket['Users_id_assign'] = assigneeName ?? userId;
+      if (requesterRelation != null) {
+        final requesterId = requesterRelation['users_id']?.toString();
+        if (requesterId != null && requesterId.isNotEmpty) {
+          final requesterName =
+              await _resolveUserDisplayName(requesterId, headers) ??
+              GlpiNameFormatter.fallbackUserLabel(requesterId);
+          ticket['requester_user_id'] = requesterId;
+          ticket['users_id_recipient_id'] = requesterId;
+          ticket['Users_id_recipient_id'] = requesterId;
+          ticket['users_id_recipient'] = requesterName;
+          ticket['Users_id_recipient'] = requesterName;
+        }
+      }
+
+      if (assigneeRelation != null) {
+        final assigneeId = assigneeRelation['users_id']?.toString();
+        if (assigneeId != null && assigneeId.isNotEmpty) {
+          final assigneeName =
+              await _resolveUserDisplayName(assigneeId, headers) ??
+              GlpiNameFormatter.fallbackUserLabel(
+                assigneeId,
+                prefix: 'Tecnico',
+              );
+          ticket['assignee_user_id'] = assigneeId;
+          ticket['users_id_assign'] = assigneeName;
+          ticket['Users_id_assign'] = assigneeName;
+        }
+      }
     } catch (e) {
       if (_isSessionInvalidException(e)) rethrow;
-      _debugLog(
-        'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Falha ao hidratar tÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©cnico responsÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡vel: $e',
+      _debugLog('Falha ao hidratar solicitante/tecnico responsavel: $e');
+    }
+  }
+
+  Future<String?> _resolveUserDisplayName(
+    String userId,
+    Map<String, String> headers,
+  ) async {
+    try {
+      final userUri = Uri.parse(
+        '${GlpiConfig.baseUrl}/User/$userId?expand_dropdowns=true',
       );
+      final userResp = await http
+          .get(userUri, headers: headers)
+          .timeout(GlpiConfig.requestTimeout);
+
+      if (_isAuthError(userResp.statusCode)) {
+        throw _authException(userResp);
+      }
+
+      if (userResp.statusCode != 200) return null;
+
+      final userMap = (jsonDecode(userResp.body) as Map)
+          .cast<String, dynamic>();
+      final displayName = GlpiNameFormatter.formatNameFromMap(userMap).trim();
+      return displayName.isEmpty ? null : displayName;
+    } catch (e) {
+      if (_isSessionInvalidException(e)) rethrow;
+      return null;
     }
   }
 
@@ -517,7 +563,6 @@ class GlpiClient {
   // ====================================================================
   // AJUSTE PRINCIPAL: FORMULÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂRIO COMPLETO NO CONTENT + CONTACT
   // ====================================================================
-
 
   // ====================================================================
   // ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦ ANEXOS (UPLOAD + VINCULAR AO TICKET)
@@ -917,7 +962,6 @@ class GlpiClient {
   // MAPEAMENTOS
   // ====================================================================
 
-
   // ====================================================================
   // MENSAGENS / FOLLOWUPS
   // ====================================================================
@@ -1041,7 +1085,8 @@ class GlpiClient {
       return {
         'success': false,
         'error':
-            _extractApiErrorMessage(response.body) ?? 'Falha ao enviar resposta.',
+            _extractApiErrorMessage(response.body) ??
+            'Falha ao enviar resposta.',
       };
     } catch (e) {
       _debugLog(
@@ -1116,8 +1161,9 @@ class GlpiClient {
 
       return {
         'success': false,
-        'error': _extractApiErrorMessage(response.body) ??
-            'Falha ao enviar solucao.',
+        'error':
+            _extractApiErrorMessage(response.body) ??
+            'Falha ao enviar solução.',
       };
     } catch (e) {
       _debugLog(
@@ -1279,12 +1325,20 @@ class GlpiClient {
 
         if (responseDoc.statusCode == 200) {
           final docData = jsonDecode(responseDoc.body);
+          final uploaderId = docData['users_id']?.toString();
+          final uploaderName =
+              uploaderId != null && uploaderId.trim().isNotEmpty
+              ? await _resolveUserDisplayName(uploaderId, headers)
+              : null;
           return {
             'id': id,
             'items_id': contextId,
             'name': docData['filename'] ?? docData['name'] ?? 'Anexo-$id',
             'date_creation': docData['date_creation'],
             'users_id': docData['users_id'],
+            'uploader_id': docData['users_id'],
+            if (uploaderName != null && uploaderName.trim().isNotEmpty)
+              'uploader_name': uploaderName,
             'mime': docData['mime'],
             'download_url': '${GlpiConfig.baseUrl}/Document/$id?alt=media',
           };

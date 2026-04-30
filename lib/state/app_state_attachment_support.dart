@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import '../models/glpi_status.dart';
 import '../services/glpi_client.dart';
 
 class AppStateAttachmentSupport {
@@ -18,14 +19,25 @@ class AppStateAttachmentSupport {
   }) async {
     if (!isAuthenticated || sessionToken == null) {
       log?.call('Nao autenticado para enviar imagem');
-      return {'success': false, 'error': 'Sessao expirada'};
+      return {'success': false, 'error': 'Sessão expirada'};
     }
 
     try {
+      final currentTicket = await apiService.getTicketById(
+        ticketId,
+        sessionToken,
+      );
+      if (!GlpiStatusMapper.isOpenForInteraction(currentTicket['status'])) {
+        return {
+          'success': false,
+          'error': 'Chamado já está solucionado ou fechado. Recarregue a tela.',
+        };
+      }
+
       final file = File(imagePath);
       if (!await file.exists()) {
         log?.call('Arquivo nao encontrado: $imagePath');
-        return {'success': false, 'error': 'Arquivo nao encontrado'};
+        return {'success': false, 'error': 'Arquivo não encontrado'};
       }
 
       final hasSpecificTarget =
@@ -143,15 +155,15 @@ class AppStateAttachmentSupport {
     var errorMessage = error.toString();
 
     if (errorMessage.contains('403') || errorMessage.contains('Forbidden')) {
-      return 'Permissao negada. Seu perfil pode nao ter acesso a esta operacao.';
+      return 'Permissão negada. Seu perfil pode não ter acesso a esta operação.';
     }
 
     if (errorMessage.contains('401') || errorMessage.contains('Unauthorized')) {
-      return 'Nao autorizado. Sessao pode ter expirado.';
+      return 'Não autorizado. Sessão pode ter expirado.';
     }
 
     if (errorMessage.contains('400')) {
-      return 'Arquivo rejeitado (tamanho ou extensao invalida).';
+      return 'Arquivo rejeitado (tamanho ou extensão inválida).';
     }
 
     return errorMessage;

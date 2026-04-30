@@ -94,7 +94,7 @@ class ServiceCatalogScreen extends StatelessWidget {
     final pendingCount = appState.pendingTickets.length;
 
     return SisPageScaffold(
-      title: 'Servicos',
+      title: 'Serviços',
       subtitle: 'Atendimento operacional SIS',
       drawer: SisShellDrawer(
         activeDestination: SisShellDestination.catalog,
@@ -165,7 +165,7 @@ class ServiceCatalogScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      'Abra novos chamados, acompanhe pendencias e acesse as conversas ativas a partir de uma unica superficie.',
+                      'Abra novos chamados, acompanhe pendências e acesse as conversas ativas a partir de uma única superfície.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.white.withValues(alpha: 0.82),
                       ),
@@ -180,13 +180,13 @@ class ServiceCatalogScreen extends StatelessWidget {
                           label:
                               appState.selectedTicketEntityName ??
                               appState.activeEntityName ??
-                              'Entidade nao definida',
+                              'Entidade não definida',
                         ),
                         _InfoPill(
                           icon: Icons.cloud_sync_outlined,
                           label: pendingCount > 0
-                              ? '$pendingCount pendente(s) de sincronizacao'
-                              : 'Sem pendencias de sincronizacao',
+                              ? '$pendingCount pendente(s) de sincronização'
+                              : 'Sem pendências de sincronização',
                         ),
                       ],
                     ),
@@ -262,7 +262,7 @@ class ServiceCatalogScreen extends StatelessWidget {
               const SisSectionHeader(
                 title: 'Categorias',
                 subtitle:
-                    'Escolha o servico a partir do catalogo operacional da SIS.',
+                    'Escolha o serviço a partir do catálogo operacional da SIS.',
               ),
               const SizedBox(height: AppSpacing.md),
               GridView.builder(
