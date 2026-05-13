@@ -60,26 +60,42 @@ final Map<String, dynamic> workbenchDetailTicket = {
   'descricao':
       'Luminaria do corredor norte oscilando desde o inicio do expediente. '
       'Equipe precisa liberar o espaco antes das 15h.',
+  'content': '''
+Solicitacao aberta pela equipe administrativa.
+
+-- FORMULARIO DO APP
+--------------------------------
+Servico: Eletrica
+Atendimento para: Para mim
+Telefone: (51) 99999-1234
+Localizacao: Predio Principal > 2o Andar > Corredor Norte
+Urgencia: 4
+Tipo: Manutencao
+Anexo: 6df4a4cc-768b-43de-95c6-6fe5f6f33a91.jpg
+''',
 };
 
 final List<MapEntry<String, String>> workbenchDetailRows = [
-  const MapEntry('ID do Chamado', '8090'),
+  const MapEntry('Servico Solicitado', 'Eletrica'),
   const MapEntry('Solicitante', 'jonathan-moletta'),
   const MapEntry('Tecnico Responsavel', 'Equipe Predial 02'),
+  const MapEntry('Criado em', '11/04/2026 08:02'),
   const MapEntry('Localizacao', 'Predio Principal > 2o Andar > Corredor Norte'),
   const MapEntry('Telefone', '(51) 99999-1234'),
+  MapEntry(
+    'Resumo do Atendimento',
+    workbenchDetailTicket['content'].toString(),
+  ),
+];
+
+final List<MapEntry<String, String>> workbenchMetadataRows = [
+  const MapEntry('ID do Chamado', '8090'),
+  const MapEntry('Assunto', 'Troca de luminaria no corredor norte'),
+  const MapEntry('Categoria', 'Predial > Eletrica > Iluminacao'),
   const MapEntry('Urgencia', 'Alta'),
   const MapEntry('Impacto', 'Medio'),
   const MapEntry('Prioridade', 'Alta'),
-  const MapEntry('Criado em', '11/04/2026 08:02'),
   const MapEntry('Ultima Atualizacao', '11/04/2026 08:47'),
-  const MapEntry(
-    'Resumo do Formulario',
-    'Solicitacao aberta pela equipe administrativa.\n'
-        '- Necessidade de atendimento antes da agenda de reunioes.\n'
-        '- Risco de escurecimento parcial do corredor.\n'
-        '- Validar se ha material em estoque antes do deslocamento.',
-  ),
 ];
 
 final ServiceCategory workbenchCriticalService = serviceCategories.firstWhere(
@@ -160,5 +176,21 @@ final List<TicketMessage> workbenchPendingSolutionMessages = [
     senderType: 'tech',
     type: 'solution',
     solutionStatus: 2,
+  ),
+];
+
+final List<TicketMessage> workbenchClosedSolutionMessages = [
+  ...workbenchConversationMessages,
+  TicketMessage(
+    id: 'solution-closed-1',
+    ticketId: '8090',
+    content:
+        'Registro historico de solucao mantido no chamado apos encerramento.',
+    sender: 'Equipe Predial 02',
+    createdAt: DateTime(2026, 4, 11, 14, 18),
+    isPrivate: false,
+    senderType: 'tech',
+    type: 'solution',
+    solutionStatus: 4,
   ),
 ];

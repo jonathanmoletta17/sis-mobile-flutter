@@ -4,6 +4,7 @@ import 'package:sis_mobile_flutter/theme/app_colors.dart';
 import 'package:sis_mobile_flutter/theme/app_radius.dart';
 import 'package:sis_mobile_flutter/theme/app_spacing.dart';
 import 'package:sis_mobile_flutter/theme/app_status.dart';
+import 'package:sis_mobile_flutter/widgets/ui/glpi_app_navigation.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_empty_state.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_loading_state.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_page_scaffold.dart';
@@ -32,6 +33,11 @@ class ChatOverviewSurfacePreview extends StatelessWidget {
       child: SisPageScaffold(
         title: 'Conversas',
         subtitle: 'Tickets abertos com atividade nova e pendencias de resposta',
+        bottomNavigationBar: GlpiAppNavigationBar(
+          current: GlpiAppSection.conversations,
+          destinations: sisShellDestinations(pendingCount: 1),
+          onDestinationSelected: (_) {},
+        ),
         actions: [
           IconButton(
             onPressed: () {},

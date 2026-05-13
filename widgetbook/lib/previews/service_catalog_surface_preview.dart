@@ -3,6 +3,7 @@ import 'package:sis_mobile_flutter/theme/app_colors.dart';
 import 'package:sis_mobile_flutter/theme/app_radius.dart';
 import 'package:sis_mobile_flutter/theme/app_spacing.dart';
 import 'package:sis_mobile_flutter/widgets/service_card.dart';
+import 'package:sis_mobile_flutter/widgets/ui/glpi_app_navigation.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_action_badge.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_page_scaffold.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_section_header.dart';
@@ -18,25 +19,29 @@ class ServiceCatalogSurfacePreview extends StatelessWidget {
   const ServiceCatalogSurfacePreview({super.key, required this.variant});
 
   int get _pendingCount => switch (variant) {
-        ServiceCatalogSurfaceVariant.ready => 0,
-        ServiceCatalogSurfaceVariant.pendingSync => 3,
-        ServiceCatalogSurfaceVariant.entityUndefined => 0,
-      };
+    ServiceCatalogSurfaceVariant.ready => 0,
+    ServiceCatalogSurfaceVariant.pendingSync => 3,
+    ServiceCatalogSurfaceVariant.entityUndefined => 0,
+  };
 
   String get _entityLabel => switch (variant) {
-        ServiceCatalogSurfaceVariant.ready => 'Casa Civil RS > Atendimento',
-        ServiceCatalogSurfaceVariant.pendingSync =>
-          'Casa Civil RS > Atendimento',
-        ServiceCatalogSurfaceVariant.entityUndefined => 'Entidade nao definida',
-      };
+    ServiceCatalogSurfaceVariant.ready => 'Casa Civil RS > Atendimento',
+    ServiceCatalogSurfaceVariant.pendingSync => 'Casa Civil RS > Atendimento',
+    ServiceCatalogSurfaceVariant.entityUndefined => 'Entidade não definida',
+  };
 
   @override
   Widget build(BuildContext context) {
     return WorkbenchSurface(
       fullBleed: true,
       child: SisPageScaffold(
-        title: 'Servicos',
+        title: 'Serviços',
         subtitle: 'Atendimento operacional SIS',
+        bottomNavigationBar: GlpiAppNavigationBar(
+          current: GlpiAppSection.services,
+          destinations: sisShellDestinations(pendingCount: _pendingCount),
+          onDestinationSelected: (_) {},
+        ),
         actions: [
           if (_pendingCount > 0)
             Stack(
@@ -60,10 +65,10 @@ class ServiceCatalogSurfacePreview extends StatelessWidget {
             final crossAxisCount = constraints.maxWidth >= 1100
                 ? 4
                 : constraints.maxWidth >= 760
-                    ? 3
-                    : constraints.maxWidth >= 460
-                        ? 2
-                        : 1;
+                ? 3
+                : constraints.maxWidth >= 460
+                ? 2
+                : 1;
 
             return ListView(
               padding: const EdgeInsets.all(AppSpacing.md),
@@ -95,7 +100,7 @@ class ServiceCatalogSurfacePreview extends StatelessWidget {
                       ),
                       const SizedBox(height: AppSpacing.xs),
                       Text(
-                        'Abra novos chamados, acompanhe pendencias e acesse as conversas ativas a partir de uma unica superficie.',
+                        'Abra novos chamados, acompanhe pendências e acesse as conversas ativas a partir de uma única superfície.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.white.withValues(alpha: 0.82),
                         ),
@@ -112,8 +117,8 @@ class ServiceCatalogSurfacePreview extends StatelessWidget {
                           _InfoPill(
                             icon: Icons.cloud_sync_outlined,
                             label: _pendingCount > 0
-                                ? '$_pendingCount pendente(s) de sincronizacao'
-                                : 'Sem pendencias de sincronizacao',
+                                ? '$_pendingCount pendente(s) de sincronização'
+                                : 'Sem pendências de sincronização',
                           ),
                         ],
                       ),
@@ -144,6 +149,22 @@ class ServiceCatalogSurfacePreview extends StatelessWidget {
                             icon: const Icon(Icons.chat_bubble_outline),
                             label: const Text('Conversas'),
                           ),
+                          OutlinedButton.icon(
+                            onPressed: () {},
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.textInverse,
+                              side: BorderSide(
+                                color: Colors.white.withValues(alpha: 0.4),
+                              ),
+                              minimumSize: const Size(0, 48),
+                            ),
+                            icon: const Icon(Icons.cloud_upload_outlined),
+                            label: Text(
+                              _pendingCount > 0
+                                  ? 'Fila offline ($_pendingCount)'
+                                  : 'Fila offline',
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -153,7 +174,7 @@ class ServiceCatalogSurfacePreview extends StatelessWidget {
                 const SisSectionHeader(
                   title: 'Categorias',
                   subtitle:
-                      'Escolha o servico a partir do catalogo operacional da SIS.',
+                      'Escolha o serviço a partir do catálogo operacional da SIS.',
                 ),
                 const SizedBox(height: AppSpacing.md),
                 GridView.count(
@@ -205,9 +226,9 @@ class _InfoPill extends StatelessWidget {
             child: Text(
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.textInverse,
-                    fontWeight: FontWeight.w600,
-                  ),
+                color: AppColors.textInverse,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

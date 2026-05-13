@@ -7,6 +7,7 @@ import 'package:sis_mobile_flutter/widgets/ui/sis_empty_state.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_page_scaffold.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_section_header.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_status_chip.dart';
+import 'package:sis_mobile_flutter/utils/ticket_form_summary.dart';
 
 import '../workbench_surface.dart';
 import 'workbench_fixtures.dart';
@@ -37,8 +38,9 @@ class TicketDetailSurfacePreview extends StatelessWidget {
   String get _ticketId =>
       _isOffline ? 'OFFLINE-2' : workbenchDetailTicket['id'].toString();
 
-  String get _serviceName =>
-      _isOffline ? 'Marcenaria' : workbenchDetailTicket['serviceName'].toString();
+  String get _serviceName => _isOffline
+      ? 'Marcenaria'
+      : workbenchDetailTicket['serviceName'].toString();
 
   String get _statusLabel => _isOffline ? 'Offline' : 'Em Atendimento';
 
@@ -78,8 +80,11 @@ class TicketDetailSurfacePreview extends StatelessWidget {
                               Text(
                                 _isOffline
                                     ? 'Ajuste de fechadura no almoxarifado'
-                                    : workbenchDetailTicket['assunto'].toString(),
-                                style: Theme.of(context).textTheme.headlineSmall,
+                                    : workbenchDetailTicket['assunto']
+                                          .toString(),
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.headlineSmall,
                               ),
                               const SizedBox(height: AppSpacing.xs),
                               Text(
@@ -196,7 +201,9 @@ class TicketDetailSurfacePreview extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SisSectionHeader(
-                      title: _isOffline ? 'Anexos do chamado' : 'Anexos do chamado',
+                      title: _isOffline
+                          ? 'Anexos do chamado'
+                          : 'Anexos do chamado',
                       subtitle: _isOffline
                           ? 'Documentos remotos ficam disponiveis somente apos sincronizacao.'
                           : 'Superficie pensada para imagens, comprovantes e documentos de apoio.',
@@ -224,7 +231,30 @@ class TicketDetailSurfacePreview extends StatelessWidget {
                       (entry) => _DetailRow(
                         label: entry.key,
                         value: entry.value,
-                        rich: entry.key == 'Resumo do Formulario',
+                        rich: entry.key == 'Resumo do Atendimento',
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    Theme(
+                      data: Theme.of(
+                        context,
+                      ).copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        tilePadding: EdgeInsets.zero,
+                        childrenPadding: EdgeInsets.zero,
+                        title: Text(
+                          'Metadados GLPI',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        children: workbenchMetadataRows
+                            .map(
+                              (entry) => _DetailRow(
+                                label: entry.key,
+                                value: entry.value,
+                                rich: false,
+                              ),
+                            )
+                            .toList(),
                       ),
                     ),
                   ],
@@ -323,10 +353,7 @@ class _AttachmentState extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('Abrir'),
-                  ),
+                  TextButton(onPressed: () {}, child: const Text('Abrir')),
                 ],
               ),
             ),
@@ -361,9 +388,9 @@ class _MetaPill extends StatelessWidget {
           Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.textStrong,
-                  fontWeight: FontWeight.w700,
-                ),
+              color: AppColors.textStrong,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ],
       ),
@@ -384,11 +411,7 @@ class _DetailRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lines = value
-        .split('\n')
-        .map((line) => line.trim())
-        .where((line) => line.isNotEmpty)
-        .toList();
+    final summary = TicketFormSummary.parse(value);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
@@ -407,46 +430,51 @@ class _DetailRow extends StatelessWidget {
           else
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: lines.map((line) {
-                final isBullet = line.startsWith('-');
-                if (!isBullet) {
+              children: [
+                if (summary.description.isNotEmpty) ...[
+                  Text(
+                    summary.description,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textStrong,
+                      height: 1.4,
+                    ),
+                  ),
+                  if (summary.fields.isNotEmpty)
+                    const SizedBox(height: AppSpacing.sm),
+                ],
+                ...summary.fields.map((field) {
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: Text(
-                      line,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textMuted,
-                            height: 1.3,
+                    padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 128,
+                          child: Text(
+                            field.label,
+                            style: Theme.of(context).textTheme.labelMedium
+                                ?.copyWith(
+                                  color: AppColors.textMuted,
+                                  fontWeight: FontWeight.w700,
+                                ),
                           ),
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        Expanded(
+                          child: Text(
+                            field.value,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: AppColors.textStrong,
+                                  height: 1.3,
+                                ),
+                          ),
+                        ),
+                      ],
                     ),
                   );
-                }
-
-                final text = line.replaceFirst(RegExp(r'^-\s*'), '');
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '- ',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.textMuted,
-                            ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          text,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppColors.textMuted,
-                                height: 1.3,
-                              ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
+                }),
+              ],
             ),
         ],
       ),

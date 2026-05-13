@@ -3,6 +3,7 @@ import 'package:sis_mobile_flutter/theme/app_colors.dart';
 import 'package:sis_mobile_flutter/theme/app_radius.dart';
 import 'package:sis_mobile_flutter/theme/app_spacing.dart';
 import 'package:sis_mobile_flutter/theme/app_status.dart';
+import 'package:sis_mobile_flutter/widgets/ui/glpi_app_navigation.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_empty_state.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_loading_state.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_page_scaffold.dart';
@@ -26,29 +27,36 @@ class OfflineQueueSurfacePreview extends StatelessWidget {
       child: SisPageScaffold(
         title: 'Fila offline',
         subtitle: 'Pendencias locais e sincronizacao com o GLPI',
+        bottomNavigationBar: GlpiAppNavigationBar(
+          current: GlpiAppSection.offline,
+          destinations: sisShellDestinations(
+            pendingCount: variant == OfflineQueueSurfaceVariant.empty ? 0 : 2,
+          ),
+          onDestinationSelected: (_) {},
+        ),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.refresh)),
         ],
         body: switch (variant) {
           OfflineQueueSurfaceVariant.empty => ListView(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              children: const [
-                SizedBox(
-                  height: 560,
-                  child: SisEmptyState(
-                    icon: Icons.cloud_done_outlined,
-                    title: 'Nenhuma pendencia offline',
-                    message:
-                        'Os chamados salvos localmente aparecerao aqui quando houver necessidade de sincronizacao.',
-                  ),
+            padding: const EdgeInsets.all(AppSpacing.md),
+            children: const [
+              SizedBox(
+                height: 560,
+                child: SisEmptyState(
+                  icon: Icons.cloud_done_outlined,
+                  title: 'Nenhuma pendencia offline',
+                  message:
+                      'Os chamados salvos localmente aparecerao aqui quando houver necessidade de sincronizacao.',
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
           OfflineQueueSurfaceVariant.syncing => const SisLoadingState(
-              title: 'Sincronizando fila offline',
-              message:
-                  'Enviando chamados locais e conciliando identificadores remotos.',
-            ),
+            title: 'Sincronizando fila offline',
+            message:
+                'Enviando chamados locais e conciliando identificadores remotos.',
+          ),
           _ => _OfflineQueueContent(variant: variant),
         },
       ),
@@ -181,16 +189,16 @@ class _OfflineMetric extends StatelessWidget {
         children: [
           Text(
             label,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.textMuted,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: AppColors.textMuted),
           ),
           const SizedBox(height: AppSpacing.xxs),
           Text(
             value,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: visuals.foreground,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(color: visuals.foreground),
           ),
         ],
       ),
@@ -226,9 +234,9 @@ class _OfflineErrorBanner extends StatelessWidget {
                 const SizedBox(height: AppSpacing.xxs),
                 Text(
                   'O GLPI rejeitou o envio por indisponibilidade momentanea. O chamado continua preservado no dispositivo.',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textMuted,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: AppColors.textMuted),
                 ),
               ],
             ),
@@ -280,8 +288,8 @@ class _OfflineTicketCard extends StatelessWidget {
                       Text(
                         'ID local: ${ticket['id']}',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.textMuted,
-                            ),
+                          color: AppColors.textMuted,
+                        ),
                       ),
                     ],
                   ),
@@ -297,13 +305,15 @@ class _OfflineTicketCard extends StatelessWidget {
               spacing: AppSpacing.sm,
               runSpacing: AppSpacing.sm,
               children: [
-                _MiniPill(label: ticket['serviceName']?.toString() ?? 'Servico'),
+                _MiniPill(
+                  label: ticket['serviceName']?.toString() ?? 'Servico',
+                ),
                 const _MiniPill(label: 'Entidade: Casa Civil RS'),
                 Text(
                   ticket['lastUpdateLabel']?.toString() ?? '',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textMuted,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: AppColors.textMuted),
                 ),
               ],
             ),
@@ -333,9 +343,9 @@ class _MiniPill extends StatelessWidget {
       child: Text(
         label,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: AppColors.textStrong,
-              fontWeight: FontWeight.w600,
-            ),
+          color: AppColors.textStrong,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

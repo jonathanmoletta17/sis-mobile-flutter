@@ -37,8 +37,8 @@ class TicketMessageSurfacePreview extends StatelessWidget {
   List<TicketMessage> get _messages => _showPendingSolution
       ? workbenchPendingSolutionMessages
       : _isClosed
-          ? workbenchConversationMessages
-          : workbenchConversationMessages;
+      ? workbenchClosedSolutionMessages
+      : workbenchConversationMessages;
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +49,8 @@ class TicketMessageSurfacePreview extends StatelessWidget {
         subtitle: _showPendingSolution
             ? 'Validacao de solucao pendente'
             : _isClosed
-                ? 'Chamado fechado'
-                : 'Conversa e anexos',
+            ? 'Chamado fechado'
+            : 'Conversa e anexos',
         floatingActionButton: (_showLoading || _showEmpty || _showError)
             ? null
             : FloatingActionButton.small(
@@ -66,64 +66,66 @@ class TicketMessageSurfacePreview extends StatelessWidget {
             Expanded(
               child: switch (variant) {
                 TicketMessageSurfaceVariant.loading => const SizedBox(
-                    height: 420,
-                    child: SisLoadingState(
-                      title: 'Carregando conversa',
-                      message:
-                          'Buscando followups, solucoes e anexos do ticket.',
-                    ),
+                  height: 420,
+                  child: SisLoadingState(
+                    title: 'Carregando conversa',
+                    message: 'Buscando followups, solucoes e anexos do ticket.',
                   ),
+                ),
                 TicketMessageSurfaceVariant.error => ListView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(AppSpacing.md),
-                    children: [
-                      SizedBox(
-                        height: 420,
-                        child: SisEmptyState(
-                          icon: Icons.chat_bubble_outline,
-                          title: 'Falha ao carregar a conversa',
-                          message:
-                              'Nao foi possivel buscar o historico do ticket agora. Revise a conexao e tente novamente.',
-                          actionLabel: 'Tentar novamente',
-                          onAction: () {},
-                        ),
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  children: [
+                    SizedBox(
+                      height: 420,
+                      child: SisEmptyState(
+                        icon: Icons.chat_bubble_outline,
+                        title: 'Falha ao carregar a conversa',
+                        message:
+                            'Nao foi possivel buscar o historico do ticket agora. Revise a conexao e tente novamente.',
+                        actionLabel: 'Tentar novamente',
+                        onAction: () {},
                       ),
-                    ],
-                  ),
-                TicketMessageSurfaceVariant.empty => ListView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(AppSpacing.md),
-                    children: const [
-                      SizedBox(
-                        height: 420,
-                        child: SisEmptyState(
-                          icon: Icons.chat_bubble_outline,
-                          title: 'Nenhuma mensagem ainda',
-                          message:
-                              'O historico da conversa aparecera aqui assim que houver interacoes no ticket.',
-                        ),
-                      ),
-                    ],
-                  ),
-                _ => ListView.builder(
-                    itemCount: _messages.length,
-                    padding: const EdgeInsets.only(
-                      left: AppSpacing.md,
-                      right: AppSpacing.md,
-                      top: AppSpacing.md,
-                      bottom: 60,
                     ),
-                    itemBuilder: (context, index) {
-                      final message = _messages[index];
-                      if (message.type == 'solution') {
-                        return _SolutionCard(message: message);
-                      }
-                      if (message.type == 'attachment') {
-                        return _AttachmentMessage(message: message);
-                      }
-                      return _TextMessage(message: message);
-                    },
+                  ],
+                ),
+                TicketMessageSurfaceVariant.empty => ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  children: const [
+                    SizedBox(
+                      height: 420,
+                      child: SisEmptyState(
+                        icon: Icons.chat_bubble_outline,
+                        title: 'Nenhuma mensagem ainda',
+                        message:
+                            'O historico da conversa aparecera aqui assim que houver interacoes no ticket.',
+                      ),
+                    ),
+                  ],
+                ),
+                _ => ListView.builder(
+                  itemCount: _messages.length,
+                  padding: const EdgeInsets.only(
+                    left: AppSpacing.md,
+                    right: AppSpacing.md,
+                    top: AppSpacing.md,
+                    bottom: 60,
                   ),
+                  itemBuilder: (context, index) {
+                    final message = _messages[index];
+                    if (message.type == 'solution') {
+                      return _SolutionCard(
+                        message: message,
+                        isClosed: _isClosed,
+                      );
+                    }
+                    if (message.type == 'attachment') {
+                      return _AttachmentMessage(message: message);
+                    }
+                    return _TextMessage(message: message);
+                  },
+                ),
               },
             ),
             if (_showPendingSolution) const _AttachmentPreview(),
@@ -177,8 +179,8 @@ class _TextMessage extends StatelessWidget {
                   Text(
                     message.sender,
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: AppColors.textStrong,
-                        ),
+                      color: AppColors.textStrong,
+                    ),
                   ),
                   const SizedBox(height: AppSpacing.xxs),
                   Text(
@@ -262,9 +264,8 @@ class _AttachmentMessage extends StatelessWidget {
                         const SizedBox(width: AppSpacing.xs),
                         Text(
                           'Abrir anexo',
-                          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                color: AppColors.brandDark,
-                              ),
+                          style: Theme.of(context).textTheme.labelLarge
+                              ?.copyWith(color: AppColors.brandDark),
                         ),
                       ],
                     ),
@@ -286,12 +287,38 @@ class _AttachmentMessage extends StatelessWidget {
 
 class _SolutionCard extends StatelessWidget {
   final TicketMessage message;
+  final bool isClosed;
 
-  const _SolutionCard({required this.message});
+  const _SolutionCard({required this.message, required this.isClosed});
 
   @override
   Widget build(BuildContext context) {
-    const tone = AppStatusTone.warning;
+    final isApproved = message.solutionStatus == 3;
+    final isRejected = message.solutionStatus == 4;
+    var tone = AppStatusTone.warning;
+    var title = 'Aguardando aprovacao';
+    var chipLabel = 'Pendente';
+    var icon = Icons.hourglass_empty;
+
+    if (isApproved) {
+      tone = AppStatusTone.success;
+      title = 'Solucao aprovada';
+      chipLabel = 'Aprovada';
+      icon = Icons.check_circle;
+    } else if (isRejected) {
+      tone = AppStatusTone.danger;
+      title = 'Solucao recusada';
+      chipLabel = 'Recusada';
+      icon = Icons.cancel;
+    }
+
+    if (isClosed && !isApproved) {
+      tone = AppStatusTone.neutral;
+      title = 'Solucao registrada';
+      chipLabel = 'Historico';
+      icon = Icons.history;
+    }
+
     final visuals = AppStatusPalette.resolve(tone);
 
     return Padding(
@@ -315,24 +342,17 @@ class _SolutionCard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.hourglass_empty,
-                    color: visuals.foreground,
-                    size: 20,
-                  ),
+                  Icon(icon, color: visuals.foreground, size: 20),
                   const SizedBox(width: AppSpacing.xs),
                   Expanded(
                     child: Text(
-                      'Aguardando aprovacao',
+                      title,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: visuals.foreground,
-                          ),
+                        color: visuals.foreground,
+                      ),
                     ),
                   ),
-                  const SisStatusChip(
-                    label: 'Pendente',
-                    tone: AppStatusTone.warning,
-                  ),
+                  SisStatusChip(label: chipLabel, tone: tone),
                 ],
               ),
             ),
@@ -358,41 +378,42 @@ class _SolutionCard extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.md,
-                0,
-                AppSpacing.md,
-                AppSpacing.md,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.danger,
-                        foregroundColor: AppColors.textInverse,
+            if (!isClosed && !isApproved && !isRejected)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  0,
+                  AppSpacing.md,
+                  AppSpacing.md,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.danger,
+                          foregroundColor: AppColors.textInverse,
+                        ),
+                        icon: const Icon(Icons.close, size: 18),
+                        label: const Text('Recusar'),
                       ),
-                      icon: const Icon(Icons.close, size: 18),
-                      label: const Text('Recusar'),
                     ),
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.success,
-                        foregroundColor: AppColors.textInverse,
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.success,
+                          foregroundColor: AppColors.textInverse,
+                        ),
+                        icon: const Icon(Icons.check, size: 18),
+                        label: const Text('Aprovar'),
                       ),
-                      icon: const Icon(Icons.check, size: 18),
-                      label: const Text('Aprovar'),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -435,9 +456,9 @@ class _InputArea extends StatelessWidget {
               child: Text(
                 'Chamado fechado. Novas interacoes desabilitadas.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textMuted,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  color: AppColors.textMuted,
+                  fontWeight: FontWeight.w700,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -479,8 +500,8 @@ class _InputArea extends StatelessWidget {
                   child: Text(
                     solutionMode ? 'Solucionar chamado' : 'Acompanhamento',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
@@ -528,8 +549,9 @@ class _InputArea extends StatelessWidget {
                     : IconButton.filled(
                         onPressed: disabled ? null : () {},
                         style: IconButton.styleFrom(
-                          backgroundColor:
-                              solutionMode ? AppColors.brand : AppColors.info,
+                          backgroundColor: solutionMode
+                              ? AppColors.brand
+                              : AppColors.info,
                           foregroundColor: AppColors.textInverse,
                         ),
                         icon: const Icon(Icons.send),

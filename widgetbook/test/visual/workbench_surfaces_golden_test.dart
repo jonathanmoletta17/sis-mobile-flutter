@@ -2,6 +2,8 @@ import 'package:alchemist/alchemist.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sis_mobile_widgetbook/previews/chat_overview_surface_preview.dart';
+import 'package:sis_mobile_widgetbook/previews/dtic_app_surfaces_preview.dart';
+import 'package:sis_mobile_widgetbook/previews/dtic_formcreator_surface_preview.dart';
 import 'package:sis_mobile_widgetbook/previews/form_surface_preview.dart';
 import 'package:sis_mobile_widgetbook/previews/login_surface_preview.dart';
 import 'package:sis_mobile_widgetbook/previews/my_tickets_surface_preview.dart';
@@ -18,7 +20,7 @@ void main() {
       'renders login states',
       fileName: 'login_surface_states',
       constraints: const BoxConstraints(maxWidth: 860),
-      pumpBeforeTest: pumpNTimes(2),
+      pumpBeforeTest: _precacheImagesAndPump,
       builder: () => GoldenTestGroup(
         columns: 2,
         scenarioConstraints: mobileSurface,
@@ -319,5 +321,215 @@ void main() {
         ],
       ),
     );
+
+    goldenTest(
+      'renders DTIC login states',
+      fileName: 'dtic_login_surface_states',
+      constraints: const BoxConstraints(maxWidth: 860),
+      pumpBeforeTest: pumpNTimes(2),
+      builder: () => GoldenTestGroup(
+        columns: 2,
+        scenarioConstraints: mobileSurface,
+        children: [
+          GoldenTestScenario(
+            name: 'idle',
+            child: DticLoginSurfacePreview(
+              variant: DticLoginSurfaceVariant.idle,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'loading',
+            child: DticLoginSurfacePreview(
+              variant: DticLoginSurfaceVariant.loading,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'failure',
+            child: DticLoginSurfacePreview(
+              variant: DticLoginSurfaceVariant.failure,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    goldenTest(
+      'renders DTIC catalog states',
+      fileName: 'dtic_catalog_surface_states',
+      constraints: const BoxConstraints(maxWidth: 860),
+      pumpBeforeTest: pumpNTimes(2),
+      builder: () => GoldenTestGroup(
+        columns: 2,
+        scenarioConstraints: mobileSurface,
+        children: [
+          GoldenTestScenario(
+            name: 'ready',
+            child: DticCatalogSurfacePreview(
+              variant: DticCatalogSurfaceVariant.ready,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'loading',
+            child: DticCatalogSurfacePreview(
+              variant: DticCatalogSurfaceVariant.loading,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'empty',
+            child: DticCatalogSurfacePreview(
+              variant: DticCatalogSurfaceVariant.empty,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    goldenTest(
+      'renders DTIC tickets states',
+      fileName: 'dtic_tickets_surface_states',
+      constraints: const BoxConstraints(maxWidth: 860),
+      pumpBeforeTest: pumpNTimes(2),
+      builder: () => GoldenTestGroup(
+        columns: 2,
+        scenarioConstraints: mobileSurface,
+        children: [
+          GoldenTestScenario(
+            name: 'populated',
+            child: DticTicketsSurfacePreview(
+              variant: DticTicketsSurfaceVariant.populated,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'filtered-empty',
+            child: DticTicketsSurfacePreview(
+              variant: DticTicketsSurfaceVariant.filteredEmpty,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'loading',
+            child: DticTicketsSurfacePreview(
+              variant: DticTicketsSurfaceVariant.loading,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'error',
+            child: DticTicketsSurfacePreview(
+              variant: DticTicketsSurfaceVariant.error,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    goldenTest(
+      'renders DTIC conversation states',
+      fileName: 'dtic_conversations_surface_states',
+      constraints: const BoxConstraints(maxWidth: 860),
+      pumpBeforeTest: pumpNTimes(2),
+      builder: () => GoldenTestGroup(
+        columns: 2,
+        scenarioConstraints: mobileSurface,
+        children: [
+          GoldenTestScenario(
+            name: 'populated',
+            child: DticConversationsSurfacePreview(
+              variant: DticConversationsSurfaceVariant.populated,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'empty',
+            child: DticConversationsSurfacePreview(
+              variant: DticConversationsSurfaceVariant.empty,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'loading',
+            child: DticConversationsSurfacePreview(
+              variant: DticConversationsSurfaceVariant.loading,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    goldenTest(
+      'renders DTIC ticket detail states',
+      fileName: 'dtic_ticket_detail_surface_states',
+      constraints: const BoxConstraints(maxWidth: 860),
+      pumpBeforeTest: pumpNTimes(2),
+      builder: () => GoldenTestGroup(
+        columns: 2,
+        scenarioConstraints: mobileSurface,
+        children: [
+          GoldenTestScenario(
+            name: 'read-only',
+            child: DticTicketDetailSurfacePreview(
+              variant: DticTicketDetailSurfaceVariant.readOnly,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'response-enabled',
+            child: DticTicketDetailSurfacePreview(
+              variant: DticTicketDetailSurfaceVariant.responseEnabled,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'closed',
+            child: DticTicketDetailSurfacePreview(
+              variant: DticTicketDetailSurfaceVariant.closed,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'loading',
+            child: DticTicketDetailSurfacePreview(
+              variant: DticTicketDetailSurfaceVariant.loading,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    goldenTest(
+      'renders DTIC FormCreator states',
+      fileName: 'dtic_formcreator_surface_states',
+      constraints: const BoxConstraints(maxWidth: 860),
+      pumpBeforeTest: pumpNTimes(2),
+      builder: () => GoldenTestGroup(
+        columns: 2,
+        scenarioConstraints: mobileSurface,
+        children: [
+          GoldenTestScenario(
+            name: 'simple',
+            child: DticFormCreatorSurfacePreview(
+              variant: DticFormCreatorSurfaceVariant.simple,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'large-select',
+            child: DticFormCreatorSurfacePreview(
+              variant: DticFormCreatorSurfaceVariant.largeSelect,
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'complex-blocked',
+            child: DticFormCreatorSurfacePreview(
+              variant: DticFormCreatorSurfaceVariant.complexBlocked,
+            ),
+          ),
+        ],
+      ),
+    );
   });
+}
+
+Future<void> _precacheImagesAndPump(WidgetTester tester) async {
+  await tester.runAsync(() async {
+    final images = <Future<void>>[];
+    for (final element in find.byType(Image).evaluate()) {
+      final widget = element.widget as Image;
+      images.add(precacheImage(widget.image, element));
+    }
+    await Future.wait(images);
+  });
+  await tester.pump();
 }

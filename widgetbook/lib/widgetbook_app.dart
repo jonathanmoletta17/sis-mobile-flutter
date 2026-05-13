@@ -10,6 +10,8 @@ import 'package:sis_mobile_flutter/widgets/ui/sis_status_chip.dart';
 import 'package:widgetbook/widgetbook.dart';
 
 import 'previews/chat_overview_surface_preview.dart';
+import 'previews/dtic_app_surfaces_preview.dart';
+import 'previews/dtic_formcreator_surface_preview.dart';
 import 'previews/form_surface_preview.dart';
 import 'previews/login_surface_preview.dart';
 import 'previews/my_tickets_surface_preview.dart';
@@ -192,13 +194,160 @@ class SisMobileWidgetbookApp extends StatelessWidget {
           ],
         ),
         WidgetbookComponent(
+          name: 'DTIC Login Surface',
+          useCases: [
+            WidgetbookUseCase(
+              name: 'Idle',
+              builder: (context) => const DticLoginSurfacePreview(
+                variant: DticLoginSurfaceVariant.idle,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Loading',
+              builder: (context) => const DticLoginSurfacePreview(
+                variant: DticLoginSurfaceVariant.loading,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Failure',
+              builder: (context) => const DticLoginSurfacePreview(
+                variant: DticLoginSurfaceVariant.failure,
+              ),
+            ),
+          ],
+        ),
+        WidgetbookComponent(
+          name: 'DTIC Catalog Surface',
+          useCases: [
+            WidgetbookUseCase(
+              name: 'Ready',
+              builder: (context) => const DticCatalogSurfacePreview(
+                variant: DticCatalogSurfaceVariant.ready,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Loading',
+              builder: (context) => const DticCatalogSurfacePreview(
+                variant: DticCatalogSurfaceVariant.loading,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Empty',
+              builder: (context) => const DticCatalogSurfacePreview(
+                variant: DticCatalogSurfaceVariant.empty,
+              ),
+            ),
+          ],
+        ),
+        WidgetbookComponent(
+          name: 'DTIC My Tickets Surface',
+          useCases: [
+            WidgetbookUseCase(
+              name: 'Populated',
+              builder: (context) => const DticTicketsSurfacePreview(
+                variant: DticTicketsSurfaceVariant.populated,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Filtered Empty',
+              builder: (context) => const DticTicketsSurfacePreview(
+                variant: DticTicketsSurfaceVariant.filteredEmpty,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Loading',
+              builder: (context) => const DticTicketsSurfacePreview(
+                variant: DticTicketsSurfaceVariant.loading,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Error',
+              builder: (context) => const DticTicketsSurfacePreview(
+                variant: DticTicketsSurfaceVariant.error,
+              ),
+            ),
+          ],
+        ),
+        WidgetbookComponent(
+          name: 'DTIC Conversations Surface',
+          useCases: [
+            WidgetbookUseCase(
+              name: 'Populated',
+              builder: (context) => const DticConversationsSurfacePreview(
+                variant: DticConversationsSurfaceVariant.populated,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Empty',
+              builder: (context) => const DticConversationsSurfacePreview(
+                variant: DticConversationsSurfaceVariant.empty,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Loading',
+              builder: (context) => const DticConversationsSurfacePreview(
+                variant: DticConversationsSurfaceVariant.loading,
+              ),
+            ),
+          ],
+        ),
+        WidgetbookComponent(
+          name: 'DTIC Ticket Detail Surface',
+          useCases: [
+            WidgetbookUseCase(
+              name: 'Read Only',
+              builder: (context) => const DticTicketDetailSurfacePreview(
+                variant: DticTicketDetailSurfaceVariant.readOnly,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Response Enabled',
+              builder: (context) => const DticTicketDetailSurfacePreview(
+                variant: DticTicketDetailSurfaceVariant.responseEnabled,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Closed',
+              builder: (context) => const DticTicketDetailSurfacePreview(
+                variant: DticTicketDetailSurfaceVariant.closed,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Loading',
+              builder: (context) => const DticTicketDetailSurfacePreview(
+                variant: DticTicketDetailSurfaceVariant.loading,
+              ),
+            ),
+          ],
+        ),
+        WidgetbookComponent(
+          name: 'DTIC Solicitation Surface',
+          useCases: [
+            WidgetbookUseCase(
+              name: 'Simples',
+              builder: (context) => const DticFormCreatorSurfacePreview(),
+            ),
+            WidgetbookUseCase(
+              name: 'Select pesquisavel',
+              builder: (context) => const DticFormCreatorSurfacePreview(
+                variant: DticFormCreatorSurfaceVariant.largeSelect,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Condicional avancado',
+              builder: (context) => const DticFormCreatorSurfacePreview(
+                variant: DticFormCreatorSurfaceVariant.complexBlocked,
+              ),
+            ),
+          ],
+        ),
+        WidgetbookComponent(
           name: 'LoginSurface',
           useCases: [
             WidgetbookUseCase(
               name: 'Idle',
-              builder: (context) => const LoginSurfacePreview(
-                variant: LoginSurfaceVariant.idle,
-              ),
+              builder: (context) =>
+                  const LoginSurfacePreview(variant: LoginSurfaceVariant.idle),
             ),
             WidgetbookUseCase(
               name: 'Loading',
@@ -419,9 +568,8 @@ class SisMobileWidgetbookApp extends StatelessWidget {
             ),
             WidgetbookUseCase(
               name: 'Seeded',
-              builder: (context) => const FormSurfacePreview(
-                variant: FormSurfaceVariant.seeded,
-              ),
+              builder: (context) =>
+                  const FormSurfacePreview(variant: FormSurfaceVariant.seeded),
             ),
             WidgetbookUseCase(
               name: 'Validation Error',

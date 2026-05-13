@@ -4,6 +4,7 @@ import 'package:sis_mobile_flutter/theme/app_colors.dart';
 import 'package:sis_mobile_flutter/theme/app_radius.dart';
 import 'package:sis_mobile_flutter/theme/app_spacing.dart';
 import 'package:sis_mobile_flutter/theme/app_status.dart';
+import 'package:sis_mobile_flutter/widgets/ui/glpi_app_navigation.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_action_badge.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_empty_state.dart';
 import 'package:sis_mobile_flutter/widgets/ui/sis_loading_state.dart';
@@ -33,6 +34,11 @@ class MyTicketsSurfacePreview extends StatelessWidget {
       child: SisPageScaffold(
         title: 'Meus Chamados',
         subtitle: 'Fila agrupada por status e contexto de sincronizacao',
+        bottomNavigationBar: GlpiAppNavigationBar(
+          current: GlpiAppSection.tickets,
+          destinations: sisShellDestinations(pendingCount: 1),
+          onDestinationSelected: (_) {},
+        ),
         actions: [
           IconButton(
             onPressed: () {},

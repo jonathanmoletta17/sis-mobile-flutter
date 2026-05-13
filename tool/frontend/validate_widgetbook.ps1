@@ -7,6 +7,17 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+$windowsRoot = if ($env:WINDIR) { $env:WINDIR } else { 'C:\Windows' }
+$script:baseWindowsPath = (@(
+    (Join-Path $windowsRoot 'System32'),
+    $windowsRoot,
+    (Join-Path $windowsRoot 'System32\Wbem'),
+    (Join-Path $windowsRoot 'System32\WindowsPowerShell\v1.0'),
+    'C:\Program Files\Git\cmd',
+    'C:\Program Files\Git\bin'
+) -join ';')
+$env:Path = $script:baseWindowsPath
+
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
 $widgetbookRoot = Join-Path $repoRoot 'widgetbook'
 
@@ -42,9 +53,30 @@ function Invoke-Flutter {
 
     Push-Location $widgetbookRoot
     try {
-        & $script:flutter @FlutterArgs
-        if ($LASTEXITCODE -ne 0) {
-            throw "flutter $($FlutterArgs -join ' ') failed with exit code $LASTEXITCODE"
+        $cmd = Join-Path $windowsRoot 'System32\cmd.exe'
+        $quotedFlutter = '"' + $script:flutter + '"'
+        $quotedArgs = ($FlutterArgs | ForEach-Object { '"' + ($_ -replace '"', '\"') + '"' }) -join ' '
+        $flutterDir = Split-Path -Parent $script:flutter
+        $runner = Join-Path ([IO.Path]::GetTempPath()) "sis-widgetbook-$([Guid]::NewGuid()).cmd"
+        $runnerLines = @(
+            '@echo off',
+            ('set "PATH=' + $script:baseWindowsPath + ';' + $flutterDir + '"'),
+            'set "PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"',
+            ('cd /d "' + $widgetbookRoot + '"'),
+            ($quotedFlutter + ' ' + $quotedArgs),
+            'exit /b %ERRORLEVEL%'
+        )
+        Set-Content -LiteralPath $runner -Value $runnerLines -Encoding ASCII
+        $process = Start-Process `
+            -FilePath $cmd `
+            -ArgumentList @('/d', '/c', $runner) `
+            -NoNewWindow `
+            -PassThru `
+            -Wait
+        $exitCode = $process.ExitCode
+        Remove-Item -LiteralPath $runner -Force -ErrorAction SilentlyContinue
+        if ($exitCode -ne 0) {
+            throw "flutter $($FlutterArgs -join ' ') failed with exit code $exitCode"
         }
     } finally {
         Pop-Location
