@@ -8,10 +8,14 @@ import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_status.dart';
+import '../widgets/ui/glpi_app_navigation.dart';
 import '../widgets/ui/sis_empty_state.dart';
 import '../widgets/ui/sis_loading_state.dart';
 import '../widgets/ui/sis_page_scaffold.dart';
 import '../widgets/ui/sis_status_chip.dart';
+import 'my_tickets_screen.dart';
+import 'offline_queue_screen.dart';
+import 'service_catalog_screen.dart';
 import 'ticket_message_screen.dart';
 
 class ChatOverviewScreen extends StatefulWidget {
@@ -30,6 +34,19 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
+
+  void _openShellDestination(GlpiAppSection destination) {
+    switch (destination) {
+      case GlpiAppSection.services:
+        replaceAppRoot(context, const ServiceCatalogScreen());
+      case GlpiAppSection.tickets:
+        replaceAppRoot(context, const MyTicketsScreen());
+      case GlpiAppSection.conversations:
+        return;
+      case GlpiAppSection.offline:
+        replaceAppRoot(context, const OfflineQueueScreen());
+    }
+  }
 
   @override
   void initState() {
@@ -161,11 +178,19 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     final isFilterActive = _filterTicketId != null || _filterCategory != null;
 
     return SisPageScaffold(
       title: 'Conversas',
       subtitle: 'Monitore atividade recente e acompanhe tickets abertos',
+      bottomNavigationBar: GlpiAppNavigationBar(
+        current: GlpiAppSection.conversations,
+        destinations: sisShellDestinations(
+          pendingCount: appState.pendingTickets.length,
+        ),
+        onDestinationSelected: _openShellDestination,
+      ),
       actions: [
         IconButton(
           icon: Icon(
@@ -284,7 +309,6 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
 
                 final dateMod = ticket['date_mod']?.toString();
 
-                final appState = Provider.of<AppState>(context, listen: true);
                 final isUnread = appState.hasUnreadContent(ticketId, dateMod);
 
                 return Card(

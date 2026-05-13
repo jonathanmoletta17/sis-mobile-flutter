@@ -8,12 +8,15 @@ import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_status.dart';
+import '../widgets/ui/glpi_app_navigation.dart';
 import '../widgets/ui/sis_action_badge.dart';
 import '../widgets/ui/sis_empty_state.dart';
 import '../widgets/ui/sis_loading_state.dart';
 import '../widgets/ui/sis_page_scaffold.dart';
 import '../widgets/ui/sis_status_chip.dart';
+import 'chat_overview_screen.dart';
 import 'offline_queue_screen.dart';
+import 'service_catalog_screen.dart';
 import 'ticket_detail_screen.dart';
 
 class MyTicketsScreen extends StatefulWidget {
@@ -32,6 +35,19 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
 
   late final List<String> _statusOptions;
   late final List<String> _categoryOptions;
+
+  void _openShellDestination(GlpiAppSection destination) {
+    switch (destination) {
+      case GlpiAppSection.services:
+        replaceAppRoot(context, const ServiceCatalogScreen());
+      case GlpiAppSection.tickets:
+        return;
+      case GlpiAppSection.conversations:
+        replaceAppRoot(context, const ChatOverviewScreen());
+      case GlpiAppSection.offline:
+        replaceAppRoot(context, const OfflineQueueScreen());
+    }
+  }
 
   @override
   void initState() {
@@ -219,6 +235,13 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
     return SisPageScaffold(
       title: 'Meus Chamados',
       subtitle: 'Acompanhe status, filtros e pendências de sincronização',
+      bottomNavigationBar: GlpiAppNavigationBar(
+        current: GlpiAppSection.tickets,
+        destinations: sisShellDestinations(
+          pendingCount: appState.pendingTickets.length,
+        ),
+        onDestinationSelected: _openShellDestination,
+      ),
       actions: [
         IconButton(
           icon: Icon(

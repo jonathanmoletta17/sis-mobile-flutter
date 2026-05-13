@@ -8,11 +8,14 @@ import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_status.dart';
+import '../widgets/ui/glpi_app_navigation.dart';
 import '../widgets/ui/sis_empty_state.dart';
 import '../widgets/ui/sis_page_scaffold.dart';
 import '../widgets/ui/sis_section_header.dart';
 import '../widgets/ui/sis_status_chip.dart';
+import 'chat_overview_screen.dart';
 import 'my_tickets_screen.dart';
+import 'service_catalog_screen.dart';
 import 'ticket_detail_screen.dart';
 
 class OfflineQueueScreen extends StatefulWidget {
@@ -26,6 +29,19 @@ class _OfflineQueueScreenState extends State<OfflineQueueScreen> {
   bool _isSynchronizing = false;
   String? _syncFeedbackMessage;
   AppStatusTone _syncFeedbackTone = AppStatusTone.neutral;
+
+  void _openShellDestination(GlpiAppSection destination) {
+    switch (destination) {
+      case GlpiAppSection.services:
+        replaceAppRoot(context, const ServiceCatalogScreen());
+      case GlpiAppSection.tickets:
+        replaceAppRoot(context, const MyTicketsScreen());
+      case GlpiAppSection.conversations:
+        replaceAppRoot(context, const ChatOverviewScreen());
+      case GlpiAppSection.offline:
+        return;
+    }
+  }
 
   Future<void> _synchronizeQueue() async {
     if (_isSynchronizing) return;
@@ -112,6 +128,11 @@ class _OfflineQueueScreenState extends State<OfflineQueueScreen> {
     return SisPageScaffold(
       title: 'Fila offline',
       subtitle: 'Pendências locais e sincronização com o GLPI',
+      bottomNavigationBar: GlpiAppNavigationBar(
+        current: GlpiAppSection.offline,
+        destinations: sisShellDestinations(pendingCount: pendingTickets.length),
+        onDestinationSelected: _openShellDestination,
+      ),
       actions: [
         IconButton(
           onPressed: _isSynchronizing ? null : _synchronizeQueue,

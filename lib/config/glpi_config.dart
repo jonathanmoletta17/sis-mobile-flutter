@@ -4,11 +4,24 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class GlpiConfig {
   /// URL base da API GLPI (com /apirest.php incluído)
   static String get baseUrl {
-    final url = dotenv.env['GLPI_BASE_URL'] ?? '';
+    final url =
+        dotenv.env['SIS_GLPI_BASE_URL'] ?? dotenv.env['GLPI_BASE_URL'] ?? '';
     if (url.isEmpty) {
-      debugPrint('AVISO: GLPI_BASE_URL nao esta configurada no .env');
+      debugPrint(
+        'AVISO: SIS_GLPI_BASE_URL/GLPI_BASE_URL nao esta configurada no .env',
+      );
+      return url;
     }
-    return url;
+
+    final normalized = url.trim();
+    if (_looksLikeDticEndpoint(normalized)) {
+      throw Exception(
+        'Configuracao invalida: app SIS apontando para endpoint DTIC. '
+        'Use SIS_GLPI_BASE_URL ou GLPI_BASE_URL com /sis/apirest.php.',
+      );
+    }
+
+    return normalized;
   }
 
   static const Duration requestTimeout = Duration(seconds: 30);
@@ -35,4 +48,11 @@ class GlpiConfig {
 
   /// Endpoint de tickets
   static String get ticketEndpoint => '$baseUrl/Ticket';
+
+  static bool _looksLikeDticEndpoint(String url) {
+    final lower = url.toLowerCase();
+    return lower.contains('dtic-glpi') ||
+        lower.contains('/glpi/apirest.php') ||
+        lower.contains('cau.ppiratini.intra.rs.gov.br/glpi');
+  }
 }

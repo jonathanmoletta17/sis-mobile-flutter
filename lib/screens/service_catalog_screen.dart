@@ -7,6 +7,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 import '../widgets/service_card.dart';
+import '../widgets/ui/glpi_app_navigation.dart';
 import '../widgets/ui/sis_action_badge.dart';
 import '../widgets/ui/sis_page_scaffold.dart';
 import '../widgets/ui/sis_section_header.dart';
@@ -17,6 +18,19 @@ import 'offline_queue_screen.dart';
 
 class ServiceCatalogScreen extends StatelessWidget {
   const ServiceCatalogScreen({super.key});
+
+  void _openShellDestination(BuildContext context, GlpiAppSection destination) {
+    switch (destination) {
+      case GlpiAppSection.services:
+        return;
+      case GlpiAppSection.tickets:
+        replaceAppRoot(context, const MyTicketsScreen());
+      case GlpiAppSection.conversations:
+        replaceAppRoot(context, const ChatOverviewScreen());
+      case GlpiAppSection.offline:
+        replaceAppRoot(context, const OfflineQueueScreen());
+    }
+  }
 
   Future<void> _openEntitySelector(
     BuildContext context,
@@ -99,6 +113,13 @@ class ServiceCatalogScreen extends StatelessWidget {
       drawer: SisShellDrawer(
         activeDestination: SisShellDestination.catalog,
         onOpenEntitySelector: _openEntitySelector,
+      ),
+      bottomNavigationBar: GlpiAppNavigationBar(
+        current: GlpiAppSection.services,
+        destinations: sisShellDestinations(pendingCount: pendingCount),
+        onDestinationSelected: (destination) {
+          _openShellDestination(context, destination);
+        },
       ),
       actions: [
         if (pendingCount > 0)

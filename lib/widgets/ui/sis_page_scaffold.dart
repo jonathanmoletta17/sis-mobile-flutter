@@ -9,6 +9,7 @@ class SisPageScaffold extends StatelessWidget {
   final List<Widget>? actions;
   final Widget? drawer;
   final PreferredSizeWidget? bottom;
+  final Widget? bottomNavigationBar;
   final FloatingActionButton? floatingActionButton;
 
   const SisPageScaffold({
@@ -19,6 +20,7 @@ class SisPageScaffold extends StatelessWidget {
     this.actions,
     this.drawer,
     this.bottom,
+    this.bottomNavigationBar,
     this.floatingActionButton,
   });
 
@@ -26,6 +28,7 @@ class SisPageScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: drawer,
+      bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingActionButton,
       appBar: AppBar(
         titleSpacing: 20,

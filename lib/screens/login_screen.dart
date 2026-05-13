@@ -4,9 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../services/glpi_client_support.dart';
 import '../state/app_state.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
+import '../widgets/ui/glpi_login_surface.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -100,178 +99,77 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.brandDark,
-              AppColors.brand,
-              AppColors.background,
-            ],
-            stops: [0, 0.36, 0.36],
-          ),
+      body: GlpiLoginSurface(
+        badge: 'GLPI SIS',
+        title: 'Acesse o atendimento operacional',
+        description:
+            'Entre com sua conta GLPI para consultar chamados, interagir com conversas e abrir novas solicitacoes.',
+        footer: 'Autenticacao segura via GLPI SIS',
+        brandMark: Image.asset(
+          'assets/images/logo.png',
+          height: 108,
+          fit: BoxFit.contain,
+          semanticLabel: 'SIS',
         ),
-        child: Stack(
-          children: [
-            Positioned(
-              top: -60,
-              right: -30,
-              child: _DecorativeOrb(
-                size: 180,
-                color: Colors.white.withValues(alpha: 0.08),
-              ),
-            ),
-            Positioned(
-              top: 120,
-              left: -40,
-              child: _DecorativeOrb(
-                size: 120,
-                color: Colors.white.withValues(alpha: 0.06),
-              ),
-            ),
-            Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                child: Container(
-                  constraints: const BoxConstraints(maxWidth: 420),
-                  padding: const EdgeInsets.all(AppSpacing.lg),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(AppRadius.lg),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.12),
-                        blurRadius: 24,
-                        offset: const Offset(0, 18),
-                      ),
-                    ],
+        children: [
+          Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  controller: _userController,
+                  decoration: const InputDecoration(
+                    labelText: 'Usuario GLPI',
+                    prefixIcon: Icon(Icons.person_outline),
                   ),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppSpacing.sm,
-                            vertical: AppSpacing.xs,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.brandSoft,
-                            borderRadius: BorderRadius.circular(AppRadius.pill),
-                          ),
-                          child: Text(
-                            'GLPI SIS',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.labelLarge
-                                ?.copyWith(color: AppColors.brandDark),
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.md),
-                        Center(
-                          child: Image.asset(
-                            'assets/images/logo.png',
-                            height: 108,
-                            fit: BoxFit.contain,
-                            semanticLabel: 'SIS',
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.md),
-                        Text(
-                          'Acesse o atendimento operacional',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        const SizedBox(height: AppSpacing.xs),
-                        Text(
-                          'Entre com sua conta GLPI para consultar chamados, interagir com conversas e abrir novas solicitacoes.',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(color: AppColors.textMuted),
-                        ),
-                        const SizedBox(height: AppSpacing.lg),
-                        TextFormField(
-                          controller: _userController,
-                          decoration: const InputDecoration(
-                            labelText: 'Usuario GLPI',
-                            prefixIcon: Icon(Icons.person_outline),
-                          ),
-                          textInputAction: TextInputAction.next,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'O nome de usuario e obrigatorio';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: AppSpacing.md),
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            labelText: 'Senha',
-                            prefixIcon: Icon(Icons.lock_outline),
-                          ),
-                          onFieldSubmitted: (_) {
-                            if (!_isLoading) {
-                              _handleLogin();
-                            }
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'A senha e obrigatoria';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: AppSpacing.lg),
-                        ElevatedButton(
-                          onPressed: _isLoading ? null : _handleLogin,
-                          child: _isLoading
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : const Text('Entrar'),
-                        ),
-                        const SizedBox(height: AppSpacing.md),
-                        Text(
-                          'Autenticacao segura via GLPI SIS',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                  ),
+                  textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'O nome de usuario e obrigatorio';
+                    }
+                    return null;
+                  },
                 ),
-              ),
+                const SizedBox(height: AppSpacing.md),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Senha',
+                    prefixIcon: Icon(Icons.lock_outline),
+                  ),
+                  onFieldSubmitted: (_) {
+                    if (!_isLoading) {
+                      _handleLogin();
+                    }
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'A senha e obrigatoria';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _handleLogin,
+                  child: _isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Text('Entrar'),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
-}
-
-class _DecorativeOrb extends StatelessWidget {
-  final double size;
-  final Color color;
-
-  const _DecorativeOrb({required this.size, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 }
