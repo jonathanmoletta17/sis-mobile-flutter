@@ -1,0 +1,13 @@
+{
+  "name": "sis-glpi",
+  "main": "src/index.js",
+  "compatibility_date": "2026-04-28",
+  "workers_dev": true,
+  "vpc_services": [
+    {
+      "binding": "GLPI",
+      "service_id": "019dd5ec-ca3b-7fe1-8669-4989afd15bac",
+      "remote": true
+    }
+  ]
+}

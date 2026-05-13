@@ -5,7 +5,7 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = sis_mobile_flutter
+PRODUCT_NAME = SIS Mobile
 
 // The application's bundle identifier
 PRODUCT_BUNDLE_IDENTIFIER = br.gov.rs.casacivil.sismobile

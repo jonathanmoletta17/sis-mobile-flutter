@@ -1,6 +1,8 @@
 param(
     [switch]$Aab,
     [switch]$Clean,
+    [ValidateSet("sis", "dtic")]
+    [string]$App = "sis",
     [string]$GlpiBaseUrl,
     [string]$EnvFile,
     [string]$GlpiDebugLogs = "false"
@@ -75,6 +77,9 @@ if ($GlpiBaseUrl -and $EnvFile) {
     throw "Use apenas um entre -GlpiBaseUrl e -EnvFile."
 }
 
+$flavor = $App.ToLowerInvariant()
+$targetFile = if ($flavor -eq "dtic") { "lib/main_dtic.dart" } else { "lib/main.dart" }
+
 $envPath = Join-Path $repoRoot ".env"
 $originalEnvExists = Test-Path $envPath
 $originalEnvBytes = if ($originalEnvExists) {
@@ -131,9 +136,11 @@ function Resolve-RequestedEnvFile {
 }
 
 if ($GlpiBaseUrl) {
-    Write-Host "Aplicando .env temporario para build com GLPI_BASE_URL customizada..."
+    Write-Host "Aplicando .env temporario para build com URL GLPI customizada..."
+    $specificBaseUrlKey = if ($flavor -eq "dtic") { "DTIC_GLPI_BASE_URL" } else { "SIS_GLPI_BASE_URL" }
     $tempEnvContent = @(
         "GLPI_BASE_URL=$GlpiBaseUrl"
+        "$specificBaseUrlKey=$GlpiBaseUrl"
         "GLPI_DEBUG_LOGS=$GlpiDebugLogs"
         ""
     ) -join [Environment]::NewLine
@@ -208,19 +215,27 @@ try {
     & $flutterCmd pub get
 
     if ($Aab) {
-        & $flutterCmd build appbundle --release
-        $artifact = Join-Path $repoRoot "build\app\outputs\bundle\release\app-release.aab"
+        & $flutterCmd build appbundle --release --flavor $flavor -t $targetFile
+        $artifactCandidates = @(
+            (Join-Path $repoRoot ("build\app\outputs\bundle\{0}Release\app-{0}-release.aab" -f $flavor)),
+            (Join-Path $repoRoot "build\app\outputs\bundle\release\app-release.aab")
+        )
     } else {
-        & $flutterCmd build apk --release
-        $artifact = Join-Path $repoRoot "build\app\outputs\flutter-apk\app-release.apk"
+        & $flutterCmd build apk --release --flavor $flavor -t $targetFile
+        $artifactCandidates = @(
+            (Join-Path $repoRoot ("build\app\outputs\flutter-apk\app-{0}-release.apk" -f $flavor)),
+            (Join-Path $repoRoot "build\app\outputs\flutter-apk\app-release.apk")
+        )
     }
 
-    if (-not (Test-Path $artifact)) {
-        throw "Artefato nao encontrado em: $artifact"
+    $artifact = $artifactCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+
+    if (-not $artifact) {
+        throw "Artefato nao encontrado. Candidatos: $($artifactCandidates -join ', ')"
     }
 
     Write-Host ""
-    Write-Host "Build concluido com sucesso:"
+    Write-Host "Build concluido com sucesso para app/flavor: $flavor"
     Write-Host $artifact
 } finally {
     if ($temporaryEnvApplied) {

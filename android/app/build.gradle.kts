@@ -39,6 +39,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["appLabel"] = "SIS Mobile"
 
         // ✅ ALTERAÇÃO: Onde: defaultConfig
         // Por quê: o build está falhando ao configurar CMake/NDK para armeabi-v7a (32-bit).
@@ -46,6 +47,22 @@ android {
         // Obs: remove armeabi-v7a para evitar o erro.
         ndk {
             abiFilters += setOf("x86_64", "arm64-v8a")
+        }
+    }
+
+    flavorDimensions += "app"
+
+    productFlavors {
+        create("sis") {
+            dimension = "app"
+            applicationId = "br.gov.rs.casacivil.sismobile"
+            manifestPlaceholders["appLabel"] = "SIS Mobile"
+        }
+
+        create("dtic") {
+            dimension = "app"
+            applicationId = "br.gov.rs.casacivil.dticmobile"
+            manifestPlaceholders["appLabel"] = "DTIC Mobile"
         }
     }
 

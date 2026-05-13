@@ -46,11 +46,11 @@ static void my_application_activate(GApplication* application) {
   if (use_header_bar) {
     GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
     gtk_widget_show(GTK_WIDGET(header_bar));
-    gtk_header_bar_set_title(header_bar, "sis_mobile_flutter");
+    gtk_header_bar_set_title(header_bar, "SIS Mobile");
     gtk_header_bar_set_show_close_button(header_bar, TRUE);
     gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
   } else {
-    gtk_window_set_title(window, "sis_mobile_flutter");
+    gtk_window_set_title(window, "SIS Mobile");
   }
 
   gtk_window_set_default_size(window, 1280, 720);
@@ -66,8 +66,10 @@ static void my_application_activate(GApplication* application) {
   gtk_widget_show(GTK_WIDGET(view));
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 
-  // Show the window when Flutter renders.
-  // Requires the view to be realized so we can start rendering.
+  // Show the window unconditionally so it appears on headless/virtual displays.
+  gtk_widget_show_all(GTK_WIDGET(window));
+
+  // Also connect first-frame as a fallback.
   g_signal_connect_swapped(view, "first-frame", G_CALLBACK(first_frame_cb), self);
   gtk_widget_realize(GTK_WIDGET(view));
 

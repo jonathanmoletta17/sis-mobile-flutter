@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "dtic-glpi",
+  "main": "src/index.js",
+  "compatibility_date": "2026-05-04",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 0.1
+  },
+  "vars": {
+    "ALLOW_TICKET_ACTIONS": "false",
+    "ALLOW_FORMCREATOR_SUBMISSION": "false"
+  },
+  "vpc_services": [
+    {
+      "binding": "GLPI",
+      "service_id": "<DTIC_GLPI_VPC_SERVICE_ID>",
+      "remote": true
+    }
+  ]
+}
