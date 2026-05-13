@@ -32,31 +32,44 @@ Na pratica, isso significa:
 
 ## Ordem correta de decisao
 
-Para uso real fora da intranet, a ordem recomendada e:
+Para uso real fora da intranet, a decisao depende do requisito operacional:
 
-1. VPN institucional no celular
-2. endpoint externo estavel publicado por host sempre ligado
-3. relay de aplicacao proprio, se houver exigencia de autenticacao adicional no edge
+1. desenvolvimento interno ou validacao controlada pode usar intranet/VPN institucional
+2. distribuicao para usuarios finais com "somente o APK" nao deve exigir VPN por aparelho
+3. primeira fase sem dominio proprio: Cloudflare Worker em `workers.dev` + Workers VPC + Tunnel
+4. quando houver dominio institucional controlado: hostname proprio via Cloudflare Tunnel ou rota equivalente
+5. se houver exigencia de autenticacao adicional no edge: relay de aplicacao proprio
 
-## Caminho preferencial de curto prazo
+## Caminho preferencial para "somente o APK"
 
-Se a organizacao ja possuir VPN institucional para celular, essa e a melhor saida de curto prazo.
+Se o requisito for evitar VPN em cada celular, o caminho preferencial deste projeto passa a ser:
+
+- Cloudflare Worker publicado em `workers.dev`
+- Workers VPC Service apontando para o GLPI interno
+- Cloudflare Tunnel outbound rodando em host institucional sempre ligado
+- APK apontando `GLPI_BASE_URL` para o Worker
 
 Vantagens:
 
-- preserva o endpoint interno atual
-- nao exige expor o GLPI para internet publica
-- tende a nao exigir mudanca no app
-- aproveita autenticacao e governanca ja existentes no ambiente corporativo
+- nao exige instalar VPN em cada aparelho
+- nao exige comprar dominio nem trocar nameservers
+- nao move a fonte canonica WSL para Windows
+- mantem o GLPI sem porta inbound publica direta
+- fornece URL HTTPS publica e estavel para o APK dentro da conta Cloudflare
 
-Implicacao pratica:
+Detalhamento operacional:
 
-- o app continua apontando para o `GLPI_BASE_URL` interno
-- o aparelho passa a alcancar a intranet por VPN
+- `ACESSO_EXTERNO_WORKERS_VPC.md`
 
-## Quando VPN nao estiver disponivel
+## Caminho por VPN
 
-Se nao houver VPN institucional viavel, o app so podera funcionar fora da intranet quando existir um endpoint externo controlado que:
+VPN institucional mobile continua valida para desenvolvimento, suporte ou grupos pequenos quando a organizacao ja possui esse fluxo operacional.
+
+Ela nao deve ser tratada como primeira fase para distribuicao ampla do APK, porque exige configuracao por aparelho e aumenta o suporte operacional fora do app.
+
+## Quando VPN por usuario nao for viavel
+
+Se VPN por usuario nao for viavel, o app so podera funcionar fora da intranet quando existir um endpoint externo controlado que:
 
 - seja estavel
 - tenha hostname fixo
@@ -66,6 +79,8 @@ Se nao houver VPN institucional viavel, o app so podera funcionar fora da intran
 - tenha protecao e monitoracao adequadas
 
 Sem isso, uso externo continua nao suportado.
+
+Na primeira fase sem dominio proprio, o hostname fixo pode ser o `workers.dev` do Worker da conta Cloudflare. Dominio proprio e nameserver Cloudflare nao sao requisitos para essa fase.
 
 ## Desenho aceito para endpoint externo
 
@@ -90,19 +105,36 @@ Esse caminho precisa preservar:
 
 ## Arquitetura recomendada para "so o app no celular"
 
-Se o requisito for que a pessoa usuaria precise apenas do APK, sem VPN, sem app auxiliar e sem configuracao manual adicional no celular, a arquitetura recomendada passa a ser:
+Se a pessoa usuaria deve usar apenas o APK, sem VPN, sem app auxiliar e sem configuracao manual adicional no celular, a arquitetura recomendada agora e:
 
-1. um host intermediario sempre ligado dentro do ambiente que alcanca o GLPI interno
-2. um reverse proxy ou relay HTTP nesse host
-3. `cloudflared` publicando um hostname publico fixo
-4. o app apontando para esse hostname publico
+1. um Cloudflare Worker publico em `workers.dev`
+2. um Workers VPC Service para o GLPI interno
+3. um Cloudflare Tunnel outbound a partir de host institucional com acesso ao GLPI
+4. o app apontando para a URL do Worker
 5. o usuario final usando apenas o app
 
 Fluxo logico:
 
-- celular -> hostname publico -> Cloudflare Tunnel -> host intermediario -> GLPI interno
+- celular -> Worker `workers.dev` -> Workers VPC -> Cloudflare Tunnel -> host interno -> GLPI interno
 
-## Opcao A: pass-through rapido
+Esse desenho evita a etapa de ativar dominio no painel Cloudflare. A tela `Connect your domain` so e necessaria quando o projeto decidir usar um hostname proprio como `sis-glpi.seu-dominio`.
+
+## Opcao A: Workers VPC + Worker em `workers.dev`
+
+Opcao preferencial para a primeira fase sem VPN por aparelho e sem dominio proprio.
+
+Playbook operacional:
+
+- `ACESSO_EXTERNO_WORKERS_VPC.md`
+
+Contrato esperado para o app:
+
+- `GLPI_BASE_URL=https://sis-glpi.<subdominio-da-conta>.workers.dev/sis/apirest.php`
+- `initSession` retorna `session_token`
+- `getFullSession` e `killSession` funcionam pelo mesmo hostname
+- upload/download e followup preservam metodos, headers e multipart
+
+## Opcao B: pass-through rapido com hostname proprio
 
 Opcao mais simples para validar o modelo:
 
@@ -123,7 +155,7 @@ Riscos:
 - exige endurecimento no host e observabilidade melhor
 - qualquer comportamento inesperado do GLPI fica mais proximo da internet
 
-### Build do APK para a Opcao A
+### Build do APK para a Opcao B
 
 O app atual le `.env` como asset empacotado no build.
 
@@ -132,7 +164,7 @@ Isso implica:
 - a URL publica precisa entrar no APK no momento do build
 - nao existe troca de ambiente no aparelho depois da instalacao
 
-Script suportado para piloto:
+Script suportado para piloto com hostname proprio:
 
 ```powershell
 .\tool\android\build_release.ps1 -GlpiBaseUrl https://hostname-publico/sis/apirest.php
@@ -150,7 +182,9 @@ Playbook operacional desta opcao:
 
 - `PILOTO_CLOUDFLARE_PASS_THROUGH.md`
 
-## Opcao B: relay de aplicacao proprio
+Essa opcao exige dominio ou hostname controlado fora de `workers.dev`. Nao e mais a primeira escolha quando o bloqueio principal e evitar compra/delegacao de dominio.
+
+## Opcao C: relay de aplicacao proprio
 
 Opcao mais segura para piloto e producao:
 
@@ -172,10 +206,20 @@ Subconjunto minimo hoje observado no app:
 - `/Ticket/{id}/TicketFollowup`
 - `/TicketFollowup`
 - `/ITILSolution`
+- `/ITILSolution/{id}`
 - `/Document`
 - `/Document_Item`
+- `/Ticket/{id}/Document`
+- `/ITILFollowup/{id}/Document`
+- `/ITILSolution/{id}/Document`
 - `/User/{id}`
 - `/Ticket_User`
+
+Na linha DTIC, esse mesmo subconjunto deve passar pelo Worker DTIC com
+`App-Token` injetado apenas no servidor. Acoes de ticket usam guarda propria
+(`ALLOW_TICKET_ACTIONS`) e submissao FormCreator usa guarda separada
+(`ALLOW_FORMCREATOR_SUBMISSION`). Para DTIC, `POST /Ticket` direto nao deve ser
+tratado como abertura canonica; a abertura precisa preservar o FormCreator.
 
 Vantagens:
 
@@ -244,9 +288,10 @@ Nao e aceitavel embutir segredo permanente de edge no aplicativo como solucao pa
 
 Se o objetivo for colocar o APK na mao do usuario final sem exigir mais nada no celular, a melhor ordem e:
 
-1. piloto rapido com host intermediario + pass-through controlado
+1. piloto com Worker `workers.dev` + Workers VPC + Tunnel
 2. validacao real de login, listagem, detalhe, followup, criacao e anexo
-3. endurecimento para relay proprio se a exposicao direta do GLPI nao for aceitavel
+3. endurecimento para relay proprio se a exposicao pass-through do GLPI nao for aceitavel
+4. migrar para hostname institucional proprio apenas quando houver dominio e governanca DNS disponiveis
 
 Se ja houver exigencia forte de seguranca desde o inicio, pule a etapa de pass-through e comece direto pelo relay proprio.
 
@@ -254,8 +299,9 @@ Se ja houver exigencia forte de seguranca desde o inicio, pule a etapa de pass-t
 
 Se a necessidade for uso real em celular fora da intranet, a direcao correta e uma destas:
 
-- VPN institucional mobile, quando existir
-- endpoint externo controlado em host estavel
+- Worker `workers.dev` + Workers VPC + Tunnel para "somente o APK" sem dominio proprio
+- VPN institucional mobile para desenvolvimento, suporte ou grupos controlados
+- endpoint externo controlado em host estavel quando houver dominio/hostname institucional
 - relay proprio se a camada de seguranca exigir contrato extra
 
 Nao reintroduzir:
@@ -269,7 +315,8 @@ Nao reintroduzir:
 
 Escolher uma destas linhas:
 
-1. validar se existe VPN institucional suportada para celular e testar o APK nesse contexto
-2. publicar um endpoint externo institucional ou corporativo para o GLPI/app
-3. montar um tunnel gerenciado em host estavel com hostname fixo
-4. desenhar um relay de aplicacao proprio, se a camada de seguranca exigir autenticacao adicional no edge
+1. criar o caminho Worker `workers.dev` + Workers VPC + Tunnel
+2. validar `initSession`, `getFullSession` e `killSession` pelo Worker
+3. gerar APK com `GLPI_BASE_URL` do Worker
+4. validar login real em celular fora da intranet sem VPN
+5. desenhar um relay de aplicacao proprio, se a camada de seguranca exigir autenticacao adicional no edge

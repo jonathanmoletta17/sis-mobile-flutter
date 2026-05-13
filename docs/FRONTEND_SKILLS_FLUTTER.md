@@ -25,7 +25,7 @@ Antes de criar uma skill real:
 Toda skill futura deste repo deve:
 
 - ler `AGENTS.md`, `BOOTSTRAP.md`, `README.md`, `docs/README.md` e `docs/RUNTIME_CANONICO_E_VALIDACAO.md`
-- usar o Cerebro Central como fonte consultiva em discovery nao trivial
+- usar contexto cross-project apenas quando ele existir no filesystem atual e for relevante
 - tratar o repo atual como fonte decisiva
 - nao reintroduzir bridge USB/LAN, `adb reverse` ou proxy de notebook como solucao suportada
 - nao promover redesign direto em `lib/` sem Widgetbook e baseline local
@@ -57,7 +57,7 @@ Entradas obrigatorias:
 - `docs/SIS_MOBILE_PRODUTO_UI_CANONICO.md`
 - `docs/FRONTEND_PROFISSIONAL_FLUTTER.md`
 - `docs/PLANO_LABORATORIO_E_GUARDA_VISUAL_FLUTTER.md`
-- Cerebro Central, quando disponivel
+- contexto cross-project local, quando disponivel
 
 Saida esperada:
 

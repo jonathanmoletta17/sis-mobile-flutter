@@ -61,6 +61,9 @@ android/keystore-secrets.txt
 *.keystore
 
 # Artefatos operacionais locais (nao commitar)
+/.playwright-cli/
+/output/
+/nul
 /.e2e_*
 /diag_*
 /e2e*

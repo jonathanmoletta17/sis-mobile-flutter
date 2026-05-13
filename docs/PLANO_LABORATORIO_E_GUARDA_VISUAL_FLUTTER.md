@@ -106,7 +106,7 @@ Entradas:
 - `docs/RUNTIME_CANONICO_E_VALIDACAO.md`
 - `docs/SIS_MOBILE_PRODUTO_UI_CANONICO.md`
 - `docs/FRONTEND_PROFISSIONAL_FLUTTER.md`
-- Cerebro Central
+- contexto cross-project local, quando disponivel
 
 Saidas:
 

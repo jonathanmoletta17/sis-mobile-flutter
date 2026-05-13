@@ -52,3 +52,6 @@ So materialize esses arquivos quando existir um workflow Gemini especifico deste
 - Se usar o Cerebro Central para busca semantica, trate o resultado como insumo de descoberta e confirme no repo atual.
 - Se surgir ambiguidade entre o que pertence ao projeto e o que pertence ao runtime global do Gemini, prefira documentar primeiro o projeto.
 - Nao trate bridge USB/LAN ou proxy de notebook como opcao valida de acesso externo.
+- preservar funcionalidades reais de producao do app; nao remover capacidades funcionais por causa de riscos de validacao
+- Gemini/agentes nao devem executar validacoes mutaveis contra tickets reais de usuarios, nem usar Worker SIS pass-through para metodo destrutivo, `DELETE /Ticket`, purge ou cleanup automatizado sem aprovacao humana explicita e ambiente isolado
+- usar validacoes read-only por padrao quando houver GLPI real no caminho

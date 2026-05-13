@@ -42,8 +42,13 @@ Ele e um **app Flutter unico**, focado no dominio **SIS**, com operacao centrada
 
 ## 2. Identidade visual do produto
 
-O app tem **um unico dominio visual principal**: **SIS**.
-Nao existe variacao de dominio como DTIC, Manutencao, Conservacao e Carregadores dentro desta base.
+O runtime SIS tem **um unico dominio visual principal**: **SIS**.
+Nao existe variacao de dominio como DTIC, Manutencao, Conservacao e
+Carregadores dentro do app SIS.
+
+A linha DTIC existe de forma isolada neste repositorio, com entrypoint, estado,
+flavor e Worker proprios. A padronizacao entre SIS e DTIC e definida em
+`PADRONIZACAO_APPS_SIS_DTIC.md`.
 
 ### Cor ancora do produto
 
@@ -205,6 +210,7 @@ Arquivo principal:
 Requisitos:
 
 - identidade SIS clara
+- marca grafica SIS apenas; nao exibir DTIC ou outra marca secundaria como identidade da tela SIS
 - dois campos visiveis: usuario e senha
 - erro de autenticacao direto e compreensivel
 - CTA primaria unica

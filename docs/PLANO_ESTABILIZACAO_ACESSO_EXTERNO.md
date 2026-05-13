@@ -4,6 +4,20 @@
 
 Transformar o piloto de acesso externo do `sis-mobile-flutter` em uma operacao estavel para celular fora da intranet, sem depender de USB, LAN, notebook de desenvolvimento ou quick tunnel efemero.
 
+## Atualizacao de decisao
+
+O plano abaixo registra a trilha com hostname proprio/named tunnel e continua util quando houver dominio ou zona DNS controlada.
+
+Para a primeira fase sem custos adicionais de dominio e sem VPN por aparelho, a decisao atual do projeto e:
+
+- Cloudflare Worker em `workers.dev`
+- Workers VPC Service
+- Cloudflare Tunnel outbound
+
+Documento operacional:
+
+- `ACESSO_EXTERNO_WORKERS_VPC.md`
+
 ## Estado comprovado nesta maquina
 
 ### O que ja foi provado
@@ -28,7 +42,7 @@ Transformar o piloto de acesso externo do `sis-mobile-flutter` em uma operacao e
 
 ## O que ainda nao esta resolvido
 
-### Bloqueios reais
+### Bloqueios reais do plano com dominio proprio
 
 1. o hostname publico atual e de quick tunnel
    - serve para prova
@@ -38,7 +52,7 @@ Transformar o piloto de acesso externo do `sis-mobile-flutter` em uma operacao e
 4. ainda nao houve smoke test final em aparelho fisico fora da rede usando o hostname estavel
 5. a exposicao atual continua sendo pass-through direto para o GLPI
 
-### Bloqueio comprovado nesta rodada
+### Bloqueio comprovado nesta rodada do plano com dominio proprio
 
 Foi validado que o token de API testado:
 
@@ -61,7 +75,7 @@ O requisito aqui e:
 - sem cliente WARP adicional no celular
 - apenas o APK consumindo um hostname HTTP publico
 
-Para isso, a trilha correta no Cloudflare e:
+Para a trilha com dominio proprio, o caminho Cloudflare seria:
 
 - `Cloudflare Tunnel`
 - `Published application`
@@ -72,7 +86,8 @@ Private hostname e WARP Connector pertencem a uma topologia diferente, voltada a
 
 ### Decisao tecnica
 
-- curto prazo estavel: named tunnel + hostname controlado + pass-through
+- curto prazo sem dominio proprio: Worker `workers.dev` + Workers VPC + Tunnel
+- curto prazo com dominio controlado: named tunnel + hostname controlado + pass-through
 - medio prazo mais seguro: relay proprio de aplicacao
 
 ## Plano por fases
@@ -83,7 +98,35 @@ Private hostname e WARP Connector pertencem a uma topologia diferente, voltada a
 2. provar conectividade publica com tunnel
 3. gerar APK release com URL publica
 
-### Fase 1 - estabilizacao minima obrigatoria
+### Fase 1A - estabilizacao sem dominio proprio
+
+1. configurar o subdominio `workers.dev` da conta Cloudflare
+2. criar o Tunnel na trilha Workers VPC
+3. instalar e executar `cloudflared` em host institucional com acesso ao GLPI interno
+4. criar VPC Service para `cau.ppiratini.intra.rs.gov.br:80` ou IP interno equivalente
+5. criar Worker `sis-glpi` com binding do VPC Service
+6. validar:
+
+```powershell
+curl -v https://sis-glpi.<subdominio-da-conta>.workers.dev/sis/apirest.php/initSession -H "Content-Type: application/json" -u USUARIO:SENHA
+```
+
+7. gerar `.env.public` local, nao versionado, apontando para:
+
+```env
+GLPI_BASE_URL=https://sis-glpi.<subdominio-da-conta>.workers.dev/sis/apirest.php
+GLPI_DEBUG_LOGS=false
+```
+
+8. buildar o APK pelo fluxo oficial no Windows host:
+
+```powershell
+.\tool\android\build_release.ps1 -EnvFile .env.public
+```
+
+9. instalar no celular fora da intranet e executar smoke test sem VPN
+
+### Fase 1B - estabilizacao com dominio proprio
 
 1. criar ou selecionar um hostname fixo sob controle
    - exemplo: `sis-mobile.<dominio-controlado>`

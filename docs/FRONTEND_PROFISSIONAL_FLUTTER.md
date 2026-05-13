@@ -85,8 +85,8 @@ Objetivo:
 
 Ferramentas:
 
-- Cerebro Central
 - docs deste repo
+- contexto cross-project local, quando existir de fato no filesystem atual
 - referencias oficiais
 - repertorio institucional e de service design
 
@@ -223,7 +223,7 @@ Saida esperada:
 
 ## Papel das skills
 
-### Cerebro Central
+### Contexto cross-project local
 
 Uso:
 
@@ -231,6 +231,11 @@ Uso:
 - precedentes
 - historico cross-project
 - reducao de invencao desnecessaria
+
+Limite:
+
+- nao assumir existencia de Cerebro Central em Windows, `/mnt/c` ou outro local indisponivel
+- usar somente fontes externas realmente presentes no ambiente atual
 
 ### frontend-skill
 

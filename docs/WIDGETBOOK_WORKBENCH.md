@@ -37,10 +37,25 @@ O workbench existe para:
 - preview de `Conversa do chamado`
 - preview de `Formulario base`
 - preview de `Fila offline`
+- preview de `DTIC Login Surface`
+- preview de `DTIC Catalog Surface`
+- preview de `DTIC My Tickets Surface`
+- preview de `DTIC Ticket Detail Surface`
+- preview de `DTIC Solicitation Surface` para FormCreator
 
 ## Comandos
 
-Gate canonico a partir da raiz do repo:
+Gate canonico na WSL:
+
+```bash
+cd widgetbook
+/opt/flutter/bin/flutter pub get
+/opt/flutter/bin/flutter analyze
+/opt/flutter/bin/flutter test
+/opt/flutter/bin/flutter build web
+```
+
+Gate canonico no Windows host, quando usar o script PowerShell:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File tool\frontend\validate_widgetbook.ps1
@@ -54,9 +69,9 @@ powershell -ExecutionPolicy Bypass -File tool\frontend\validate_widgetbook.ps1 -
 
 Execucao interativa do laboratorio:
 
-```powershell
+```bash
 cd widgetbook
-& 'C:\Users\jonathan-moletta\code\tools\flutter\bin\flutter.bat' run -d chrome
+/opt/flutter/bin/flutter run -d chrome
 ```
 
 ## Regras
@@ -74,3 +89,8 @@ Depois desta base inicial, a sequencia correta e:
 1. revisar diffs de golden antes de aceitar alteracoes visuais
 2. escolher a proxima superficie do app principal a convergir com o laboratorio
 3. levar a prova de runtime Android apenas depois do gate local passar
+
+Para padronizacao SIS + DTIC, o laboratorio DTIC ja cobre login, catalogo, meus
+chamados, detalhe e FormCreator em preview inicial. A lacuna restante e evoluir
+essa cobertura para golden baseline completo e prova de runtime Android das
+duas linhas.

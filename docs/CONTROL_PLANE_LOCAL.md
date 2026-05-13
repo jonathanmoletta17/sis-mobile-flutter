@@ -4,6 +4,17 @@
 
 Explicar como este repositorio deve ser representado pelo ecossistema de CLIs e pelo control plane local, sem portar cegamente a modelagem de outro repo.
 
+## Identidade local
+
+- Projeto: `sis-mobile-flutter`.
+- Raiz canonica: `/home/jonathan/projects/work/mobile/sis-mobile-flutter`.
+- Classe de workspace: WSL/ext4.
+- Ambiente operacional: hibrido WSL + Windows.
+- WSL e a camada de desenvolvimento de codigo, `analyze`, `test`, web local e Widgetbook por comandos Flutter Linux.
+- Windows e a camada preferencial de Android SDK, emulator, dispositivo fisico, `adb`, `flutter run -d android` e build Android.
+- Flutter SDK, Android SDK e PowerShell entram como runtime/build da camada correspondente; nao como raiz de codigo-fonte.
+- Ausencia de PowerShell ou Android SDK dentro da WSL nao deve ser classificada como falha do projeto.
+
 ## Superficies de projeto que existem hoje
 
 ### Contexto de projeto
@@ -37,8 +48,9 @@ Explicar como este repositorio deve ser representado pelo ecossistema de CLIs e 
 ### Validacao
 
 - `../test/*.dart`
-- `flutter analyze`
-- `flutter test`
+- `/opt/flutter/bin/flutter analyze` na WSL, ou `flutter analyze` quando o PATH estiver configurado
+- `/opt/flutter/bin/flutter test` na WSL, ou `flutter test` quando o PATH estiver configurado
+- `flutter doctor -v`, `adb devices`, `flutter devices` e `flutter run -d android` no Windows host para validacao Android
 
 ## Como modelar este repo no control plane
 
@@ -69,6 +81,7 @@ Mapear para:
 - `entity-governance-and-android-testing.md`
 - `flutter analyze`
 - `flutter test`
+- diagnostico Android no Windows host: `where flutter`, `where adb`, `adb devices`, `flutter devices`
 
 ### Modulo docs operacionais
 
@@ -119,23 +132,20 @@ Regra:
 
 - so criar esses arquivos quando houver um caso de uso operacional real deste repo que exija comportamento local diferente do user-scope
 
-## Uso do Cerebro Central
+## Uso de contexto externo
 
-Repositorio:
+Nao ha Cerebro Central canonico disponivel neste workspace WSL.
 
-- `C:\Users\jonathan-moletta\code\inteligencia-md-local\cerebro_central`
+Regra:
 
-Papel aqui:
-
-- busca semantica de padroes
-- descoberta de docs analogos
-- corroboracao historica cross-project
-- apoio obrigatorio de discovery antes de criar governanca nova, docs estruturantes ou modelagem local para CLIs
+- nao modelar este repo como dependente de repo cross-project externo em Windows
+- nao assumir `/mnt/c/...` ou outro repo externo que nao exista no filesystem atual
+- contexto cross-project, quando existir de fato, e apenas consultivo
 
 Limite:
 
-- o Cerebro nao substitui a leitura do repo atual
-- o Cerebro nao autoriza criar config local sem aderencia real a este projeto
+- contexto externo nao substitui a leitura do repo atual
+- contexto externo nao autoriza criar config local sem aderencia real a este projeto
 
 ## Acao recomendada quando o control plane apontar para este repo
 

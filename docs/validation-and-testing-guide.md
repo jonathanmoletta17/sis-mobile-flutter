@@ -1,5 +1,14 @@
 # SIS Mobile - validacao atual e roteiro de teste
 
+## Seguranca operacional GLPI
+
+Este documento preserva historico de validacao, mas nao autoriza agentes a mutar tickets reais de usuarios.
+
+- Validacao assistida por agente contra GLPI real deve ser read-only por padrao.
+- Criacao, follow-up, anexo, solucao, status e sincronizacao offline continuam sendo funcionalidades reais do produto para usuarios autorizados.
+- Teste mutavel exige aprovacao humana explicita, ambiente de homologacao/sandbox ou ticket sintetico isolado, credencial apropriada e criterio de parada.
+- Nao usar Worker SIS pass-through para `DELETE /Ticket`, purge ou cleanup automatizado sem aprovacao formal.
+
 ## Estado atual
 
 Esta base ja foi validada em 3 niveis:
@@ -49,26 +58,31 @@ O backend da SIS esta em ambiente interno:
 
 - `http://cau.ppiratini.intra.rs.gov.br/sis/apirest.php`
 
-Isso significa que o app so vai funcionar em teste real se o aparelho tiver acesso a essa rede.
+Isso significa que o app so vai funcionar em teste real contra a URL interna se o aparelho tiver acesso a essa rede.
 
 Na pratica, o teste em celular exige um destes cenarios:
 
 - estar na rede interna que alcanca esse host
-- estar em VPN corporativa com acesso a esse host
-- estar em um ambiente onde esse endpoint esteja roteavel
+- estar em VPN corporativa com acesso a esse host, para teste controlado
+- usar um APK gerado com `GLPI_BASE_URL` apontando para endpoint externo controlado
 
 Sem isso, a app abre, mas o login e as operacoes online nao vao responder.
+
+Para distribuicao externa com "somente o APK", nao exigir VPN por aparelho como primeira fase. O caminho documentado e Worker `workers.dev` + Workers VPC + Tunnel:
+
+- `ACESSO_EXTERNO_WORKERS_VPC.md`
 
 ## APK atual para teste local
 
 Build atual para teste manual:
 
-- `C:\Users\jonathan-moletta\code\sis-mobile-flutter\build\app\outputs\flutter-apk\app-debug.apk`
+- `C:\Users\jonathan-moletta\build-mirrors\sis-mobile-flutter\build\app\outputs\flutter-apk\app-debug.apk`
 - `C:\Users\jonathan-moletta\Downloads\sis-mobile-debug-teste-manual.apk`
 
 Observacao:
 
 - esta build e de debug
+- o espelho em `C:\Users\jonathan-moletta\build-mirrors\sis-mobile-flutter` e operacional; a raiz canonica de fonte continua em `/home/jonathan/projects/work/mobile/sis-mobile-flutter`
 - esta versao atual nao usa auto-login de QA
 - ela e apropriada para teste manual local com login real
 - isso ainda nao deve ser tratado como distribuicao final
@@ -79,7 +93,7 @@ Observacao:
 
 1. Copie o APK para o celular.
 2. Instale o app.
-3. Garanta que o celular consegue acessar o GLPI interno.
+3. Garanta que o celular consegue acessar o endpoint configurado no APK.
 4. Abra a app.
 5. Faca login com sua conta real do GLPI.
 

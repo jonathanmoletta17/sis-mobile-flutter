@@ -12,6 +12,9 @@ Ele traduz:
 
 em uma leitura operacional unica para o proximo ciclo de frontend.
 
+Escopo: este documento cobre principalmente as superficies SIS em `lib/screens/`.
+A matriz entre SIS e DTIC fica em `PADRONIZACAO_APPS_SIS_DTIC.md`.
+
 ## Decisao de familia
 
 ### Familia dominante do produto

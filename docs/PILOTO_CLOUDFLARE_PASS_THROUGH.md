@@ -4,9 +4,17 @@
 
 Subir um host intermediario estavel para que a pessoa usuaria precise apenas do APK no celular, sem VPN nem app auxiliar no aparelho.
 
+## Status atual
+
+Este playbook permanece valido como fallback quando houver dominio/hostname proprio controlado.
+
+Para a primeira fase sem compra/delegacao de dominio, use o desenho preferencial:
+
+- `ACESSO_EXTERNO_WORKERS_VPC.md`
+
 ## Escopo
 
-Este playbook cobre a Opcao A descrita em `ACESSO_EXTERNO_CONTROLADO.md`:
+Este playbook cobre a Opcao B descrita em `ACESSO_EXTERNO_CONTROLADO.md`:
 
 - reverse proxy pass-through
 - `cloudflared`
@@ -18,6 +26,7 @@ Nao cobre:
 - Cloudflare Access no cliente
 - relay proprio de aplicacao
 - publicacao do GLPI bruto sem hardening minimo
+- Workers VPC com Worker em `workers.dev`
 
 ## Artefatos do repo
 
@@ -35,7 +44,7 @@ Nao cobre:
 
 - host sempre ligado com acesso ao GLPI interno
 - Docker e Docker Compose no host
-- conta Cloudflare com dominio sob controle
+- conta Cloudflare com dominio sob controle, somente se este fallback com hostname proprio for escolhido
 - tunnel nomeado criado no Cloudflare
 - token do tunnel disponivel
 
@@ -185,4 +194,4 @@ Edite `.env.public` com o hostname real e rode:
 
 ## Linha de evolucao
 
-Se o piloto validar conectividade mas a exposicao direta do GLPI for considerada fraca demais, a proxima etapa correta e migrar para o relay proprio da Opcao B.
+Se o piloto validar conectividade mas a exposicao direta do GLPI for considerada fraca demais, a proxima etapa correta e migrar para o relay proprio da Opcao C.

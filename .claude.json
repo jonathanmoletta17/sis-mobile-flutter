@@ -1,33 +1,113 @@
 {
   "project": "sis-mobile-flutter",
-  "description": "Aplicativo Flutter SIS para chamados GLPI",
+  "description": "Interface Flutter multiplataforma do ecossistema SIS para chamados GLPI",
+  "canonicalRepoPath": "/home/jonathan/projects/work/mobile/sis-mobile-flutter",
+  "workspaceClass": "wsl-ext4",
   "stack": "Flutter / Dart",
+  "sourceBoundary": {
+    "canonicalSource": "WSL ext4 project root",
+    "hostPaths": "C:\\Users\\... and /mnt/c/... are host/tooling/history references, not source roots",
+    "hybridRuntime": "WSL for source development/analyze/test; Windows host for Android SDK, emulator, adb, flutter run -d android, and Android release builds",
+    "wslAndroidPolicy": "PowerShell, Android SDK, and ANDROID_HOME are not required inside WSL; absence there is not a project failure",
+    "validatedWindowsFlutter": "C:\\Users\\jonathan-moletta\\tools\\flutter",
+    "validatedWindowsAndroidSdk": "C:\\Users\\jonathan-moletta\\Android\\Sdk",
+    "validatedWindowsJdk": "C:\\Program Files\\Microsoft\\jdk-21.0.10.7-hotspot",
+    "windowsBuildMirror": "C:\\Users\\jonathan-moletta\\build-mirrors\\sis-mobile-flutter is an operational build mirror only; it is not a source root",
+    "runtimeDependencies": [
+      "Flutter SDK",
+      "Android SDK",
+      "PowerShell for Windows-host project scripts when available"
+    ]
+  },
   "context": {
     "primaryDocs": [
       "HERMES.md",
       "AGENTS.md",
       "BOOTSTRAP.md",
       "CLAUDE.md",
-      "docs/RUNTIME_CANONICO_E_VALIDACAO.md"
+      "docs/RUNTIME_CANONICO_E_VALIDACAO.md",
+      "docs/CONTROL_PLANE_LOCAL.md"
     ],
     "entryPoints": [
       "lib/main.dart",
-      "pubspec.yaml"
+      "pubspec.yaml",
+      "widgetbook/"
     ],
     "ignoreOnContext": [
       "build/",
       ".dart_tool/",
+      "widgetbook/build/",
+      "widgetbook/.dart_tool/",
       "android/.gradle/",
       "ios/Pods/",
       "*.xml",
-      "*.png"
+      "*.png",
+      "*.log"
     ]
   },
   "hints": {
-    "requiresVpn": true,
-    "targetPlatform": "android",
+    "requiresVpn": false,
+    "requiresVpnForDirectInternalGlpi": true,
+    "mobileUserRequiresVpn": false,
+    "targetPlatforms": [
+      "android",
+      "web",
+      "desktop"
+    ],
+    "runtimeConfig": ".env na raiz",
     "sdkConstraint": "^3.9.2",
     "stateManagement": "provider",
-    "backendProtocol": "GLPI REST API"
+    "backendProtocol": "GLPI REST API",
+    "authContract": "login/senha via initSession com Session-Token",
+    "externalAccessStrategy": "Para distribuicao somente APK: Cloudflare Worker em workers.dev + Workers VPC + Tunnel; VPN fica para acesso direto interno, desenvolvimento ou grupos controlados; sem bridge USB/LAN, adb reverse ou proxy de notebook",
+    "preferredNoDomainExternalEndpoint": "Cloudflare workers.dev",
+    "glpiMutationSafety": "Preserve production app functions, but agents must default to read-only validation against real GLPI and must not use SIS pass-through Worker for DELETE /Ticket, purge, or automated cleanup without explicit human approval and isolated synthetic target."
+  },
+  "validation": {
+    "code": [
+      "/opt/flutter/bin/flutter analyze",
+      "/opt/flutter/bin/flutter test"
+    ],
+    "visualWsl": "cd widgetbook && /opt/flutter/bin/flutter pub get && /opt/flutter/bin/flutter analyze && /opt/flutter/bin/flutter test && /opt/flutter/bin/flutter build web",
+    "visualWindows": "powershell -ExecutionPolicy Bypass -File tool\\frontend\\validate_widgetbook.ps1",
+    "androidHostDiagnostics": [
+      "where flutter",
+      "where adb",
+      "adb devices",
+      "flutter doctor -v",
+      "flutter devices"
+    ],
+    "androidDistributionWindows": "powershell -ExecutionPolicy Bypass -File tool\\android\\build_release.ps1"
+  },
+  "governance": {
+    "agentDocs": [
+      "AGENTS.md",
+      "BOOTSTRAP.md",
+      "CLAUDE.md",
+      "HERMES.md"
+    ],
+    "treatHostPathsAsLegacy": true,
+    "doNotVersion": [
+      ".env",
+      ".env.local",
+      ".env.public",
+      ".env.*.local",
+      ".env.prod",
+      ".env.*.prod",
+      "tool/external-access/pass-through/.env.host",
+      ".claude/settings.json",
+      ".claude/settings.local.json",
+      ".mcp.json",
+      "android/key.properties",
+      "android/keystore-secrets.txt",
+      "android/keystores/",
+      "*.jks",
+      "*.keystore",
+      "build/",
+      ".dart_tool/",
+      "widgetbook/build/",
+      "widgetbook/.dart_tool/",
+      "tool/android/runtime/"
+    ]
   }
 }
