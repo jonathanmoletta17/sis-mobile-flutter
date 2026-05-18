@@ -92,6 +92,15 @@ class GlpiStatusMapper {
     return status != GlpiStatus.solucionado && status != GlpiStatus.fechado;
   }
 
+  static bool canValidateSolution(dynamic rawStatus) {
+    if (isOffline(rawStatus)) return false;
+
+    final status = tryParse(rawStatus);
+    if (status == null) return false;
+
+    return status == GlpiStatus.solucionado;
+  }
+
   static GlpiStatus? _fromCode(int code) {
     for (final status in ordered) {
       if (status.code == code) return status;

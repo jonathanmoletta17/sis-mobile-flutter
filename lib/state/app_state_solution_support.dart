@@ -20,10 +20,10 @@ class AppStateSolutionSupport {
         ticketId,
         sessionToken,
       );
-      if (!GlpiStatusMapper.isOpenForInteraction(currentTicket['status'])) {
+      if (!GlpiStatusMapper.canValidateSolution(currentTicket['status'])) {
         return {
           'success': false,
-          'error': 'Chamado já está solucionado ou fechado. Recarregue a tela.',
+          'error': 'Só é possível validar solução quando o chamado está solucionado. Recarregue a tela.',
         };
       }
 
@@ -34,8 +34,20 @@ class AppStateSolutionSupport {
       );
 
       if (success) {
-        await apiService.updateTicketStatus(ticketId, 'Fechado', sessionToken);
-        return {'success': true};
+        final closeResult = await apiService.updateTicketStatus(
+          ticketId,
+          'Fechado',
+          sessionToken,
+        );
+        if (closeResult['success'] == true) {
+          return {'success': true};
+        }
+        return {
+          'success': false,
+          'error': closeResult['message'] ??
+              closeResult['error'] ??
+              'Solução aprovada, mas o chamado não foi fechado.',
+        };
       }
 
       return {'success': false, 'error': 'Falha na API ao aprovar.'};
@@ -74,10 +86,10 @@ class AppStateSolutionSupport {
         ticketId,
         sessionToken,
       );
-      if (!GlpiStatusMapper.isOpenForInteraction(currentTicket['status'])) {
+      if (!GlpiStatusMapper.canValidateSolution(currentTicket['status'])) {
         return {
           'success': false,
-          'error': 'Chamado já está solucionado ou fechado. Recarregue a tela.',
+          'error': 'Só é possível validar solução quando o chamado está solucionado. Recarregue a tela.',
         };
       }
 
@@ -88,14 +100,34 @@ class AppStateSolutionSupport {
       );
 
       if (success) {
-        await sendTicketMessageWithAttachments(
+        final reopenResult = await apiService.updateTicketStatus(
+          ticketId,
+          'Novo',
+          sessionToken,
+        );
+        if (reopenResult['success'] != true) {
+          return {
+            'success': false,
+            'error': reopenResult['message'] ??
+                reopenResult['error'] ??
+                'Solução recusada, mas o chamado não foi reaberto.',
+          };
+        }
+
+        final messageResult = await sendTicketMessageWithAttachments(
           ticketId: ticketId,
           messageContent:
               '❌ Solução recusada.\n\nJustificativa do usuário:\n$justification',
           filePaths: attachmentPaths,
         );
+        if (messageResult['success'] != true) {
+          return {
+            'success': false,
+            'error': messageResult['error'] ??
+                'Chamado reaberto, mas a justificativa não foi registrada.',
+          };
+        }
 
-        await apiService.updateTicketStatus(ticketId, 'Novo', sessionToken);
         return {'success': true};
       }
 

@@ -48,5 +48,18 @@ void main() {
       expect(GlpiStatusMapper.isClosed('Fechado'), isTrue);
       expect(GlpiStatusMapper.isSolved('Solucionado'), isTrue);
     });
+
+    test('solution validation is allowed only in solved status', () {
+      expect(GlpiStatusMapper.canValidateSolution(1), isFalse);
+      expect(GlpiStatusMapper.canValidateSolution(2), isFalse);
+      expect(GlpiStatusMapper.canValidateSolution(3), isFalse);
+      expect(GlpiStatusMapper.canValidateSolution(4), isFalse);
+      expect(GlpiStatusMapper.canValidateSolution(5), isTrue);
+      expect(GlpiStatusMapper.canValidateSolution(6), isFalse);
+      expect(
+        GlpiStatusMapper.canValidateSolution(GlpiStatusMapper.offlineLabel),
+        isFalse,
+      );
+    });
   });
 }

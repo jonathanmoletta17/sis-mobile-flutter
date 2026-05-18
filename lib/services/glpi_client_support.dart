@@ -11,10 +11,7 @@ class GlpiAuthFailure implements Exception {
   final String userMessage;
   final String detail;
 
-  const GlpiAuthFailure({
-    required this.userMessage,
-    required this.detail,
-  });
+  const GlpiAuthFailure({required this.userMessage, required this.detail});
 
   @override
   String toString() => detail;
@@ -130,6 +127,62 @@ class GlpiClientSupport {
     }
 
     return null;
+  }
+
+  static String? extractDocumentIdFromBody(String body) {
+    if (body.trim().isEmpty) return null;
+
+    try {
+      final decoded = jsonDecode(body);
+      if (decoded is Map<String, dynamic>) {
+        final id = decoded['id'] ?? decoded['documents_id'];
+        final normalized = id?.toString().trim();
+        if (normalized == null || normalized.isEmpty) return null;
+        return normalized;
+      }
+    } catch (_) {
+      return null;
+    }
+
+    return null;
+  }
+
+  static bool isVerifiableDocumentUploadSuccess({
+    required int statusCode,
+    required String body,
+  }) {
+    if (statusCode != 200 && statusCode != 201) return false;
+    return extractDocumentIdFromBody(body) != null;
+  }
+
+  static Set<String> extractDocumentIdsFromDocumentItemBody(String body) {
+    if (body.trim().isEmpty) return <String>{};
+
+    try {
+      final decoded = jsonDecode(body);
+      final Iterable<dynamic> rows = decoded is List
+          ? decoded
+          : decoded is Map<String, dynamic>
+          ? [decoded]
+          : const [];
+
+      return rows
+          .whereType<Map>()
+          .map((row) => row['documents_id'] ?? row['id'])
+          .where((id) => id != null)
+          .map((id) => id.toString().trim())
+          .where((id) => id.isNotEmpty)
+          .toSet();
+    } catch (_) {
+      return <String>{};
+    }
+  }
+
+  static bool hasNewDocumentLink({
+    required Set<String> before,
+    required Set<String> after,
+  }) {
+    return after.difference(before).isNotEmpty;
   }
 
   static String? extractApiErrorMessage(String body) {

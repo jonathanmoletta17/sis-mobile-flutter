@@ -28,6 +28,7 @@ class TicketMessageScreen extends StatefulWidget {
   final String? ticketOwner;
   final String? ticketOwnerUserId;
   final bool isClosed;
+  final dynamic ticketStatus;
 
   const TicketMessageScreen({
     super.key,
@@ -36,6 +37,7 @@ class TicketMessageScreen extends StatefulWidget {
     this.ticketOwner,
     this.ticketOwnerUserId,
     this.isClosed = false,
+    this.ticketStatus,
   });
 
   @override
@@ -61,6 +63,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
   bool _showScrollToBottomBtn = false;
   bool _isSolutionMode = false;
   bool _isTicketClosed = false;
+  dynamic _ticketStatus;
   String? _ticketOwner;
   String? _ticketOwnerUserId;
 
@@ -70,6 +73,9 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     _messages = [];
     _isSolutionMode = widget.startInSolutionMode;
     _isTicketClosed = widget.isClosed;
+    _ticketStatus =
+        widget.ticketStatus ??
+        (widget.isClosed ? GlpiStatus.fechado.code : null);
     _ticketOwner = _normalizeIdentity(widget.ticketOwner);
     _ticketOwnerUserId = _normalizeIdentity(widget.ticketOwnerUserId);
     _refreshTicketState();
@@ -127,6 +133,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
           ticket['Users_id_recipient'] ?? ticket['users_id_recipient'];
 
       setState(() {
+        _ticketStatus = ticket['status'];
         _isTicketClosed = GlpiStatusMapper.isClosed(ticket['status']);
         _ticketOwnerUserId =
             _normalizeIdentity(requesterId) ?? _ticketOwnerUserId;
@@ -136,38 +143,6 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
       // Mantem o estado atual se a consulta pontual falhar; o proximo polling
       // tenta novamente e as acoes criticas ainda validam no AppState.
     }
-  }
-
-  bool _isLoggedUserTicketOwner(AppState appState) {
-    final loggedUserId = _normalizeIdentity(appState.loggedUserId);
-    final loggedUsername = _normalizeIdentity(appState.loggedUsername);
-
-    if (_ticketOwnerUserId != null &&
-        loggedUserId != null &&
-        _ticketOwnerUserId == loggedUserId) {
-      return true;
-    }
-
-    return _ticketOwner != null &&
-        loggedUsername != null &&
-        _ticketOwner == loggedUsername;
-  }
-
-  bool _isSolutionAuthor(TicketMessage message, AppState appState) {
-    final loggedUserId = _normalizeIdentity(appState.loggedUserId);
-    final loggedUsername = _normalizeIdentity(appState.loggedUsername);
-    final senderUserId = _normalizeIdentity(message.senderUserId);
-    final senderName = _normalizeIdentity(message.sender);
-
-    if (senderUserId != null &&
-        loggedUserId != null &&
-        senderUserId == loggedUserId) {
-      return true;
-    }
-
-    return senderName != null &&
-        loggedUsername != null &&
-        senderName == loggedUsername;
   }
 
   Future<void> _loadMessages() async {
@@ -438,10 +413,17 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     }
 
     final appState = Provider.of<AppState>(context, listen: false);
-    final canApprove =
-        !_isTicketClosed &&
-        _isLoggedUserTicketOwner(appState) &&
-        !_isSolutionAuthor(message, appState);
+    final canApprove = AppStateTicketSupport.canValidateSolutionForTicket(
+      {
+        'status': _ticketStatus,
+        'requester_user_id': _ticketOwnerUserId,
+        'users_id_recipient': _ticketOwner,
+      },
+      loggedUsername: appState.loggedUsername,
+      loggedUserId: appState.loggedUserId,
+      solutionAuthorName: message.sender,
+      solutionAuthorUserId: message.senderUserId,
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
@@ -1055,7 +1037,11 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
   }
 
   Widget _buildInputArea() {
-    if (_isTicketClosed) {
+    final canSendCommonInteraction =
+        AppStateTicketSupport.canSendCommonInteraction(_ticketStatus);
+
+    if (!canSendCommonInteraction) {
+      final isSolved = GlpiStatusMapper.isSolved(_ticketStatus);
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(AppSpacing.md),
@@ -1071,7 +1057,9 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
             const SizedBox(width: AppSpacing.xs),
             Flexible(
               child: Text(
-                'Chamado fechado. Novas interações desabilitadas.',
+                isSolved
+                    ? 'Chamado solucionado. Use aprovar ou recusar solução quando disponível.'
+                    : 'Chamado fechado. Novas interações desabilitadas.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textMuted,
                   fontWeight: FontWeight.w700,
@@ -1085,10 +1073,16 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     }
 
     final appState = Provider.of<AppState>(context);
-    final isRequesterForTicket = _isLoggedUserTicketOwner(appState);
-    final canProposeSolution =
-        !isRequesterForTicket &&
-        !AppStateTicketSupport.isRequesterProfile(appState.activeProfile);
+    final canProposeSolution = AppStateTicketSupport.canProposeSolution(
+      {
+        'status': _ticketStatus,
+        'requester_user_id': _ticketOwnerUserId,
+        'users_id_recipient': _ticketOwner,
+      },
+      activeProfile: appState.activeProfile,
+      loggedUsername: appState.loggedUsername,
+      loggedUserId: appState.loggedUserId,
+    );
 
     final hasPendingSolution = _messages.any(
       (m) =>

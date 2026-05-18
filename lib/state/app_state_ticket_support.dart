@@ -126,14 +126,27 @@ class AppStateTicketSupport {
         profile.contains('solicitante');
   }
 
+  static bool canOpenConversation(Map<String, dynamic> ticket) {
+    final id = ticket['id']?.toString() ?? '';
+    if (id.contains('OFFLINE')) return false;
+    if (GlpiStatusMapper.isOffline(ticket['status'])) return false;
+
+    // Conversa/historico sao leitura: devem permanecer acessiveis mesmo em
+    // Solucionado/Fechado. O status bloqueia o composer, nao a tela.
+    return true;
+  }
+
+  static bool canSendCommonInteraction(dynamic rawStatus) {
+    return GlpiStatusMapper.isOpenForInteraction(rawStatus);
+  }
+
   static bool canShowTechnicianActions(
     Map<String, dynamic> ticket, {
     required String? activeProfile,
     required String? loggedUsername,
     required int? loggedUserId,
   }) {
-    if (GlpiStatusMapper.isOffline(ticket['status'])) return false;
-    if (!GlpiStatusMapper.isOpenForInteraction(ticket['status'])) return false;
+    if (!canSendCommonInteraction(ticket['status'])) return false;
     if (isRequesterProfile(activeProfile)) return false;
 
     return !isLoggedUserRequester(
@@ -141,6 +154,57 @@ class AppStateTicketSupport {
       loggedUsername: loggedUsername,
       loggedUserId: loggedUserId,
     );
+  }
+
+  static bool canProposeSolution(
+    Map<String, dynamic> ticket, {
+    required String? activeProfile,
+    required String? loggedUsername,
+    required int? loggedUserId,
+  }) {
+    if (!canSendCommonInteraction(ticket['status'])) return false;
+    if (isRequesterProfile(activeProfile)) return false;
+
+    return !isLoggedUserRequester(
+      ticket,
+      loggedUsername: loggedUsername,
+      loggedUserId: loggedUserId,
+    );
+  }
+
+  static bool canValidateSolutionForTicket(
+    Map<String, dynamic> ticket, {
+    required String? loggedUsername,
+    required int? loggedUserId,
+    String? solutionAuthorName,
+    dynamic solutionAuthorUserId,
+  }) {
+    if (!GlpiStatusMapper.canValidateSolution(ticket['status'])) return false;
+    if (!isLoggedUserRequester(
+      ticket,
+      loggedUsername: loggedUsername,
+      loggedUserId: loggedUserId,
+    )) {
+      return false;
+    }
+
+    final normalizedLoggedUsername = normalizeIdentity(loggedUsername);
+    final normalizedLoggedUserId = normalizeIdentity(loggedUserId);
+    final normalizedAuthorName = normalizeIdentity(solutionAuthorName);
+    final normalizedAuthorUserId = normalizeIdentity(solutionAuthorUserId);
+
+    if (normalizedLoggedUserId.isNotEmpty &&
+        normalizedAuthorUserId.isNotEmpty &&
+        normalizedLoggedUserId == normalizedAuthorUserId) {
+      return false;
+    }
+    if (normalizedLoggedUsername.isNotEmpty &&
+        normalizedAuthorName.isNotEmpty &&
+        normalizedLoggedUsername == normalizedAuthorName) {
+      return false;
+    }
+
+    return true;
   }
 
   static String normalizeServiceCategory(dynamic rawCategory) {

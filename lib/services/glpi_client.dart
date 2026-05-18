@@ -621,6 +621,12 @@ class GlpiClient {
       'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ [UPLOAD] Arquivo: $filename (${bytes.length} bytes)',
     );
 
+    final linkedDocumentIdsBefore = await _getLinkedDocumentIdsForItem(
+      sessionToken: sessionToken,
+      itemType: itemType,
+      itemId: itemId,
+    );
+
     final request = http.MultipartRequest('POST', uriDirect);
     request.headers.addAll({
       'Accept': 'application/json',
@@ -655,9 +661,12 @@ class GlpiClient {
     final response = await http.Response.fromStream(streamed);
     _logResponse('UPLOAD_ITEM_DOCUMENT', response);
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
+    if (GlpiClientSupport.isVerifiableDocumentUploadSuccess(
+      statusCode: response.statusCode,
+      body: response.body,
+    )) {
       _debugLog(
-        'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦ Anexo enviado/vinculado em $itemType/$itemId',
+        'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â“ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦ Anexo direto retornou documento verificavel em $itemType/$itemId',
       );
       return;
     }
@@ -666,32 +675,58 @@ class GlpiClient {
       throw _authException(response);
     }
 
-    _debugLog(
-      'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Falha no endpoint direto de $itemType/$itemId. Aplicando fallback via /Document + /Document_Item...',
-    );
-
-    final documentId = await uploadDocument(
-      sessionToken: sessionToken,
-      bytes: bytes,
-      filename: filename,
-      mimeType: resolvedMime,
-    );
-
-    if (documentId == null || documentId.isEmpty) {
-      throw Exception(
-        'Upload em /Document nÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o retornou ID do documento.',
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final linkedDocumentIdsAfter = await _getLinkedDocumentIdsForItem(
+        sessionToken: sessionToken,
+        itemType: itemType,
+        itemId: itemId,
       );
+      if (GlpiClientSupport.hasNewDocumentLink(
+        before: linkedDocumentIdsBefore,
+        after: linkedDocumentIdsAfter,
+      )) {
+        _debugLog(
+          'Anexo direto nao retornou ID no body, mas novo vinculo Document_Item foi confirmado em $itemType/$itemId.',
+        );
+        return;
+      }
     }
 
-    await linkDocumentToItem(
-      sessionToken: sessionToken,
-      itemType: itemType,
-      itemId: itemId,
-      documentId: documentId,
+    throw Exception(
+      'Upload de anexo não retornou ID verificável nem novo vínculo '
+      'Document_Item em $itemType/$itemId. Operação abortada para evitar '
+      'criação de Document sem vínculo no GLPI SIS.',
     );
+  }
 
-    _debugLog(
-      'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦ Anexo enviado via fallback e vinculado ao item correto',
+  Future<Set<String>> _getLinkedDocumentIdsForItem({
+    required String sessionToken,
+    required String itemType,
+    required String itemId,
+  }) async {
+    final uri = Uri.parse(
+      '${GlpiConfig.baseUrl}/$itemType/$itemId/Document_Item',
+    );
+    final response = await http
+        .get(
+          uri,
+          headers: {
+            'Accept': 'application/json',
+            if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+          },
+        )
+        .timeout(GlpiConfig.requestTimeout);
+
+    if (_isAuthError(response.statusCode)) throw _authException(response);
+    if (response.statusCode != 200 && response.statusCode != 206) {
+      _debugLog(
+        'Falha ao consultar Document_Item de $itemType/$itemId para verificacao de upload: [${response.statusCode}] ${response.body}',
+      );
+      return <String>{};
+    }
+
+    return GlpiClientSupport.extractDocumentIdsFromDocumentItemBody(
+      response.body,
     );
   }
 

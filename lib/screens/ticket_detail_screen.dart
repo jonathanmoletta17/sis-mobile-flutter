@@ -568,6 +568,9 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
           loggedUsername: appState.loggedUsername,
           loggedUserId: appState.loggedUserId,
         );
+    final canOpenConversation = AppStateTicketSupport.canOpenConversation(
+      _ticketData,
+    );
 
     final friendlyDetails = <MapEntry<String, String>>[];
     final metadataDetails = <MapEntry<String, String>>[];
@@ -745,23 +748,30 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                   ],
                   const SizedBox(height: AppSpacing.lg),
                   ElevatedButton.icon(
-                    onPressed: () async {
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => TicketMessageScreen(
-                            ticketId: _ticketId,
-                            ticketOwner: _ticketOwnerName,
-                            ticketOwnerUserId: _ticketOwnerUserId,
-                            isClosed: _isClosedTicket,
-                          ),
-                        ),
-                      );
+                    onPressed: canOpenConversation
+                        ? () async {
+                            await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => TicketMessageScreen(
+                                  ticketId: _ticketId,
+                                  ticketOwner: _ticketOwnerName,
+                                  ticketOwnerUserId: _ticketOwnerUserId,
+                                  isClosed: _isClosedTicket,
+                                  ticketStatus: _ticketData['status'],
+                                ),
+                              ),
+                            );
 
-                      if (!mounted) return;
-                      await _rehydrateTicket();
-                    },
+                            if (!mounted) return;
+                            await _rehydrateTicket();
+                          }
+                        : null,
                     icon: const Icon(Icons.chat_bubble_outline),
-                    label: const Text('Abrir conversa'),
+                    label: Text(
+                      canOpenConversation
+                          ? 'Abrir conversa'
+                          : 'Conversa disponível após sincronização',
+                    ),
                   ),
                 ],
               ),
