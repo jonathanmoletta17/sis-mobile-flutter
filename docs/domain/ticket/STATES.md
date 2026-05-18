@@ -52,9 +52,11 @@ Essa regra esta implementada hoje em `GlpiStatusMapper.isOpenForInteraction()`.
 `Solucionado` nao e terminal no GLPI, mas e um estado sensivel no app:
 
 - a solucao ja foi proposta;
-- o solicitante pode aprovar ou recusar, conforme regra de negocio real;
 - acoes tecnicas comuns, como mudar status por botoes antigos de detalhe, nao devem continuar expostas;
-- qualquer acao nesse estado precisa confirmar o estado remoto antes de mutar.
+- mensagem/anexo comum ficam bloqueados por guarda de execucao;
+- aprovacao ou recusa de solucao usam politica propria: precisam reconsultar o GLPI e so prosseguir se o estado remoto ainda for `Solucionado`;
+- o solicitante pode aprovar ou recusar, conforme regra de negocio real e politica de autoria;
+- `Fechado` continua bloqueado antes de qualquer mutacao.
 
 ## Estado fechado
 

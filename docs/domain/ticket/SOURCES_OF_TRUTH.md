@@ -65,15 +65,15 @@ Objetivo: evitar que lista, detalhe, conversa e GLPI sustentem verdades diferent
 | voltar de conversa para detalhe | detalhe deve reidratar |
 | app volta ao foco | superficies abertas devem considerar refresh quando houver ticket ativo |
 
-## Guardas de execucao observadas em 2026-04-29
+## Guardas de execucao observadas em 2026-04-29, atualizadas em 2026-05-18
 
 | Acao critica | Guarda local de estado remoto antes de mutar | Observacao |
 | --- | --- | --- |
-| Mudar status direto | Sim | `AppState.updateTicketStatus()` reconsulta o ticket antes do PUT remoto. |
-| Aprovar solucao | Nao confirmada | `AppStateSolutionSupport.approveSolution()` precisa de teste e guarda minima. |
-| Recusar solucao | Nao confirmada | `AppStateSolutionSupport.rejectSolution()` precisa de teste e guarda minima. |
-| Enviar mensagem | Nao confirmada | `AppStateMessageSupport.sendTicketMessageWithAttachments()` valida sessao, nao estado remoto. |
-| Enviar anexo | Nao confirmada | `AppStateAttachmentSupport.uploadAndLinkImage()` valida sessao/arquivo, nao estado remoto. |
+| Mudar status direto | Sim | `AppState.updateTicketStatus()` reconsulta o ticket antes do PUT remoto e bloqueia estados nao interativos. |
+| Aprovar solucao | Sim | `AppStateSolutionSupport.approveSolution()` reconsulta o ticket e permite validacao somente quando o estado remoto ainda e `Solucionado`; `Fechado` aborta antes de alterar solucao ou ticket; falha no fechamento e propagada como erro. |
+| Recusar solucao | Sim | `AppStateSolutionSupport.rejectSolution()` reconsulta o ticket e permite recusa somente quando o estado remoto ainda e `Solucionado`; depois reabre o ticket para `Novo` antes de registrar o followup de justificativa; falha na reabertura ou no followup e propagada como erro. |
+| Enviar mensagem | Sim | `AppStateMessageSupport.sendTicketMessageWithAttachments()` reconsulta o ticket e bloqueia `Solucionado`/`Fechado` para mensagem comum. |
+| Enviar anexo | Sim | `AppStateAttachmentSupport.uploadAndLinkImage()` reconsulta o ticket e bloqueia `Solucionado`/`Fechado` para anexo comum. |
 
 Detalhe: `TicketMessageScreen` faz refresh e polling, mas isso nao substitui guarda de execucao para acao critica quando a tela esta stale.
 

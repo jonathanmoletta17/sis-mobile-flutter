@@ -264,6 +264,7 @@ A conversa opera como historico confiavel, sem confundir followup, anexo, soluca
 - Teste manual de envio de followup curto.
 - Teste manual de anexo.
 - Teste multiusuario de solucao.
+- E2E sintetico deve validar anexo por leitura posterior em `Document_Item` e detalhe do `Document`; `Ticket/{id}/Document` pode retornar vazio mesmo quando o vinculo existe. HTTP 200/201 no endpoint direto nao basta se a resposta nao retornar ID de documento.
 
 ### Criterio de aceite
 
@@ -271,6 +272,7 @@ A conversa opera como historico confiavel, sem confundir followup, anexo, soluca
 - Ticket fechado bloqueia input.
 - Solucao historica em ticket fechado nao aparece como acao pendente.
 - Anexos abrem ou exibem erro claro.
+- Upload direto de anexo so pode ser considerado sucesso se houver ID de documento ou vinculo verificavel em `Document_Item`; caso contrario, o app deve abortar com erro claro. No GLPI SIS, nao usar fallback `/Document` + `/Document_Item`, pois pode criar `Document` sem vinculo quando o link for negado pela API.
 
 ## Etapa 7 - Criacao de chamado e anexos
 
@@ -295,6 +297,7 @@ Criar chamado funciona de modo previsivel para todos os servicos relevantes e ti
 - Confirmar ticket no GLPI web.
 - Confirmar documento/anexo no GLPI web.
 - Confirmar entidade correta.
+- Antes de solucionar/fechar ticket criado pelo app, confirmar categoria GLPI preenchida; GLPI SIS rejeita solucao/fechamento sem categoria.
 
 ### Criterio de aceite
 

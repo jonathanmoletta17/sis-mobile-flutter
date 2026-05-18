@@ -49,10 +49,14 @@ app.*.map.json
 .env
 .env.local
 .env.public
+.env.public.*
+!.env.public.example
+!.env.public.*.example
 .env.*.local
 .env.prod
 .env.*.prod
 tool/external-access/pass-through/.env.host
+tool/external-access/**/.wrangler/
 
 # Android signing artifacts
 android/key.properties

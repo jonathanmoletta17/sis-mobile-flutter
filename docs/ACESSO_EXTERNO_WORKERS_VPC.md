@@ -217,13 +217,18 @@ interface Env {
 }
 ```
 
-O Worker deve ser pass-through HTTP para o contrato atual do app:
+O Worker SIS nao deve ser pass-through irrestrito. Ele deve preservar o contrato atual do app, mas com allowlist operacional:
 
-- `GET`, `POST` e `PUT`
-- headers `Accept`, `Content-Type` e `Session-Token`
-- upload multipart
-- download de documentos
-- codigos de resposta originais do GLPI
+- `GET`, `POST` e `PUT` somente nas rotas usadas pelo app;
+- `DELETE`, purge, cleanup e metodos desconhecidos bloqueados;
+- `POST /Document` e `POST /Document_Item` bloqueados na linha SIS para evitar criacao de `Document` orfao;
+- anexos devem usar `POST /(Ticket|ITILFollowup|ITILSolution)/{id}/Document`;
+- headers `Accept`, `Content-Type` e `Session-Token` preservados;
+- upload multipart preservado;
+- download de documentos preservado;
+- codigos de resposta originais do GLPI preservados quando a chamada for permitida;
+- `/healthz` deve responder sem acionar o GLPI;
+- falha de VPC/upstream deve retornar JSON `502`, nao Cloudflare 1101 cru.
 
 ### 5. Deploy
 
@@ -274,14 +279,36 @@ Para debug APK via espelho Windows, o espelho continua sendo derivado da fonte W
 
 ## Checklist de aceite
 
-- `workers.dev` ativo e com URL HTTPS publica.
-- Tunnel conectado a partir de host institucional sempre ligado.
-- VPC Service criado para `cau.ppiratini.intra.rs.gov.br:80` ou IP interno equivalente.
-- Worker publicado e respondendo.
-- `initSession`, `getFullSession` e `killSession` funcionando pelo Worker.
-- APK gerado com `GLPI_BASE_URL` do Worker.
+### Estado validado em 2026-05-18
+
+Validação local WSL/Docker:
+
+- `sis-pass-through` local em `127.0.0.1:28180` respondeu `/healthz`, `initSession`, `getFullSession`, `ITILCategory?range=0-0` e `killSession`.
+- Worker SIS local foi endurecido com allowlist e testes Node.
+- `npx wrangler deploy --dry-run` do Worker SIS passou e reconheceu o binding VPC `env.GLPI`.
+
+Validação Cloudflare Workers VPC:
+
+- Conta Cloudflare usada: `143962d5b1564408b10e48ea4bd6328f`.
+- Subdominio `workers.dev` registrado: `jonathan-sis-mobile-20260518.workers.dev`.
+- Worker publicado: `https://sis-glpi.jonathan-sis-mobile-20260518.workers.dev`.
+- VPC Service SIS: `019e39d4-a7ac-7362-ac8b-24a09050ae72`.
+- Tunnel `sismobile` ficou `healthy` no painel Cloudflare.
+- `/healthz` respondeu HTTP `200` com corpo `ok` apos propagacao TLS.
+- `DELETE /sis/apirest.php/Ticket/1` foi bloqueado pelo Worker com HTTP `403`.
+- `POST /sis/apirest.php/Document` e `POST /sis/apirest.php/Document_Item` foram bloqueados pelo Worker com HTTP `403`.
+- `GET /sis/apirest.php/ITILCategory`, `GET /sis/apirest.php/Entity` e `GET /sis/apirest.php/listSearchOptions/Ticket` chegaram ao GLPI interno e retornaram `ERROR_SESSION_TOKEN_MISSING`, confirmando caminho Worker -> VPC -> Tunnel -> SIS sem credenciais.
+- `.env.public` local aponta para `https://sis-glpi.jonathan-sis-mobile-20260518.workers.dev/sis/apirest.php`.
+
+Pendências antes de aceite operacional completo:
+
+- Validar `initSession`, `getFullSession` e `killSession` pelo Worker com credencial autorizada, sem imprimir segredo.
+- APK release SIS gerado com `.env.public` apontando para `https://sis-glpi.jonathan-sis-mobile-20260518.workers.dev/sis/apirest.php`.
+- Artefato validado: `build/app/outputs/flutter-apk/app-sis-release.apk`, SHA-256 `89735609df88b791386df56a1ded875a7d2a57a08caebfd350ffe57f5e4dd0f7`, assinatura APK v2 válida, package `br.gov.rs.casacivil.sismobile`, label `SIS Mobile`.
+- Cópia operacional Windows: `C:\Users\jonathan-moletta\ops\sis-mobile\sis-mobile-release-worker-20260518.apk`.
+- Instalação automática não executada porque nenhum dispositivo Android apareceu em `adb devices`.
 - Login real no celular fora da intranet sem VPN.
-- Catalogo, meus chamados, detalhe, followup, criacao e anexo validados pelo mesmo endpoint.
+- Catalogo, meus chamados, detalhe, followup, criacao e anexo validados pelo mesmo endpoint, respeitando a regra de ticket sintetico.
 
 ## Referencias oficiais
 

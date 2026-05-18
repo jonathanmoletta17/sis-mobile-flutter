@@ -44,6 +44,16 @@ Contexto de projeto para Hermes neste repositorio.
 - `AGENTS.md`
 - `BOOTSTRAP.md`
 - `docs/*.md`
+- `/home/jonathan/design/docs/96-docker-storage-stabilization-2026-05-17.md`
+
+## Incidente operacional Docker - 2026-05-17
+
+- Docker Desktop parou por exaustao de espaco no SSD `C:`.
+- `C:` e SSD NVMe; `D:` e HDD SATA. Docker/WSL/builds devem permanecer preferencialmente no SSD; o HDD deve receber artefatos frios, como modelos locais.
+- `/mnt/c/models` foi migrado para `/mnt/d/models` e preservado por junction `C:\models -> D:\models`.
+- Docker voltou a operar apos limpeza de sockets runtime obsoletos e inicializacao do Docker Desktop com ambiente Windows saneado.
+- O runbook completo, evidencias, comandos e pendencias estao em `/home/jonathan/design/docs/96-docker-storage-stabilization-2026-05-17.md`.
+- Estado atual conhecido: Docker operacional, `docker-desktop` rodando, 14 containers ativos; `C:` ainda precisa de margem maior, alvo recomendado `60-100 GB` livres.
 
 Arquivos de user-scope do Hermes NAO pertencem a este repo:
 

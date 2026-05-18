@@ -35,8 +35,11 @@ Uma regra so deve ser tratada como invariante operacional forte quando houver:
 
 - `test/glpi_status_mapper_test.dart`
 - `test/ticket_role_policy_test.dart`
+- `test/app_state_solution_guard_test.dart`
+- `test/app_state_reject_solution_guard_test.dart`
+- `test/app_state_message_guard_test.dart`
 
-**Lacuna:** confirmar se `approveSolution()`, `rejectSolution()` e envio de mensagem possuem guarda de execucao com estado remoto fresco antes de mutar.
+**Estado atual:** `approveSolution()`, `rejectSolution()`, envio de mensagem e anexos reconsultam o ticket remoto antes de mutar. Aprovacao/recusa de solucao usam politica propria: so prosseguem quando o estado remoto e `Solucionado`; `Fechado` aborta antes de qualquer mutacao. Falhas nas mutacoes encadeadas de fechar/reabrir/registrar justificativa sao propagadas como erro, evitando sucesso local mentiroso.
 
 ## I-2 - Solucionado nao expõe acao tecnica comum
 
