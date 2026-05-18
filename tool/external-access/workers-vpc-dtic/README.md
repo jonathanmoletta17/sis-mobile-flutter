@@ -5,6 +5,9 @@ Worker separado para o app DTIC.
 ## Contrato
 
 - Origem interna: `http://cau.ppiratini.intra.rs.gov.br/glpi/apirest.php`
+- VPC Service atual: `019e39d4-a7ac-7362-ac8b-24a09050ae72`, compartilhado
+  com o Worker SIS por apontar para o mesmo host/porta; a separacao SIS/DTIC
+  ocorre no path (`/sis/apirest.php` vs `/glpi/apirest.php`).
 - O app Flutter aponta `DTIC_GLPI_BASE_URL` para:
 
 ```env
@@ -24,6 +27,7 @@ npx wrangler secret put GLPI_APP_TOKEN
 
 Por padrao, o Worker permite apenas:
 
+- `GET /healthz` sem tocar no GLPI ou exigir secret
 - `POST /initSession`
 - `GET /killSession`
 - leituras de sessao, tickets, documentos e metadados FormCreator
@@ -43,13 +47,16 @@ ticket, followup, solucao, atribuicao e anexos:
 - `POST /TicketFollowup`
 - `POST /ITILSolution`
 - `POST /Ticket_User`
-- `POST /Document`
-- `POST /Document_Item`
 - `POST /Ticket/{id}/Document`
 - `POST /ITILFollowup/{id}/Document`
 - `POST /ITILSolution/{id}/Document`
 - `PUT /Ticket/{id}`
 - `PUT /ITILSolution/{id}`
+
+`POST /Document` e `POST /Document_Item` standalone permanecem bloqueados mesmo
+com `ALLOW_TICKET_ACTIONS=true`, porque podem criar documento orfao se o upload
+for aceito e o vinculo falhar. O caminho liberado e o upload direto para o item
+do GLPI: `/{Ticket|ITILFollowup|ITILSolution}/{id}/Document`.
 
 Criacao direta por `POST /Ticket` nao faz parte da linha DTIC. Abertura real de
 chamado DTIC deve preservar o FormCreator.

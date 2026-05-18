@@ -1,12 +1,18 @@
 {
   "name": "sis-glpi",
+  "account_id": "143962d5b1564408b10e48ea4bd6328f",
   "main": "src/index.js",
-  "compatibility_date": "2026-04-28",
+  "compatibility_date": "2026-05-04",
+  "compatibility_flags": ["nodejs_compat"],
   "workers_dev": true,
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 0.1
+  },
   "vpc_services": [
     {
       "binding": "GLPI",
-      "service_id": "019dd5ec-ca3b-7fe1-8669-4989afd15bac",
+      "service_id": "019e39d4-a7ac-7362-ac8b-24a09050ae72",
       "remote": true
     }
   ]

@@ -1,4 +1,4 @@
-const GLPI_ORIGIN = 'http://cau.ppiratini.intra.rs.gov.br';
+const GLPI_ORIGIN = 'http://10.72.30.39';
 const GLPI_API_PREFIX = '/glpi/apirest.php';
 
 const READ_ONLY_ITEM_PATTERN =
@@ -10,29 +10,34 @@ const TICKET_ACTION_POST_PATTERNS = [
   /^\/TicketFollowup(?:$|[/?])/,
   /^\/ITILSolution(?:$|[/?])/,
   /^\/Ticket_User(?:$|[/?])/,
-  /^\/Document(?:$|[/?])/,
-  /^\/Document_Item(?:$|[/?])/,
   /^\/(?:Ticket|ITILFollowup|ITILSolution)\/\d+\/Document(?:$|[/?])/,
 ];
 const TICKET_ACTION_PUT_PATTERN = /^\/(?:Ticket|ITILSolution)\/\d+(?:$|[/?])/;
 
-export default {
+const worker = {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204 });
     }
 
-    const appToken = env.GLPI_APP_TOKEN;
-    if (!appToken) {
-      return jsonError(500, 'GLPI_APP_TOKEN secret is not configured.');
+    const incoming = new URL(request.url);
+    if (request.method === 'GET' && incoming.pathname === '/healthz') {
+      return new Response('ok', {
+        status: 200,
+        headers: {'Content-Type': 'text/plain; charset=utf-8'},
+      });
     }
 
-    const incoming = new URL(request.url);
     const glpiPath = normalizeGlpiPath(incoming.pathname);
     const apiPath = glpiPath.slice(GLPI_API_PREFIX.length) || '/';
 
     if (!isAllowedRequest(request.method, apiPath, env)) {
       return jsonError(403, 'Endpoint blocked by DTIC Worker allowlist.');
+    }
+
+    const appToken = env.GLPI_APP_TOKEN;
+    if (!appToken) {
+      return jsonError(500, 'GLPI_APP_TOKEN secret is not configured.');
     }
 
     const target = new URL(glpiPath + incoming.search, GLPI_ORIGIN);
@@ -47,9 +52,15 @@ export default {
       redirect: 'manual',
     });
 
-    return env.GLPI.fetch(upstreamRequest);
+    try {
+      return await env.GLPI.fetch(upstreamRequest);
+    } catch {
+      return jsonError(502, 'DTIC upstream unavailable through Workers VPC.');
+    }
   },
 };
+
+export default worker;
 
 function normalizeGlpiPath(pathname) {
   if (pathname.startsWith(GLPI_API_PREFIX)) {
@@ -88,6 +99,7 @@ function isAllowedRequest(method, apiPath, env) {
 }
 
 export const __test = {
+  fetch: (...args) => worker.fetch(...args),
   isAllowedRequest,
 };
 

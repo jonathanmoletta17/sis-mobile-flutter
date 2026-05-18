@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "dtic-glpi",
+  "account_id": "143962d5b1564408b10e48ea4bd6328f",
   "main": "src/index.js",
   "compatibility_date": "2026-05-04",
   "compatibility_flags": ["nodejs_compat"],
@@ -16,7 +17,7 @@
   "vpc_services": [
     {
       "binding": "GLPI",
-      "service_id": "<DTIC_GLPI_VPC_SERVICE_ID>",
+      "service_id": "019e39d4-a7ac-7362-ac8b-24a09050ae72",
       "remote": true
     }
   ]

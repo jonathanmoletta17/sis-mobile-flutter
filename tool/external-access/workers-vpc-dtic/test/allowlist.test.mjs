@@ -13,6 +13,20 @@ const ticketActionsOff = {
   ALLOW_FORMCREATOR_SUBMISSION: 'false',
 };
 
+test('DTIC worker healthz does not require GLPI secret or upstream', async () => {
+  const response = await __test.fetch(new Request('https://example.test/healthz'), {});
+  assert.equal(response.status, 200);
+  assert.equal(await response.text(), 'ok');
+});
+
+test('DTIC worker applies allowlist before checking GLPI secret', async () => {
+  const response = await __test.fetch(
+    new Request('https://example.test/glpi/apirest.php/Ticket/1', {method: 'DELETE'}),
+    {},
+  );
+  assert.equal(response.status, 403);
+});
+
 test('DTIC worker always allows login and read-only ticket endpoints', () => {
   assert.equal(__test.isAllowedRequest('POST', '/initSession', ticketActionsOff), true);
   assert.equal(__test.isAllowedRequest('GET', '/Ticket/123', ticketActionsOff), true);
@@ -43,9 +57,13 @@ test('DTIC worker allows operational ticket actions when explicitly enabled', ()
   assert.equal(__test.isAllowedRequest('POST', '/Ticket/123/Document', ticketActionsOn), true);
   assert.equal(__test.isAllowedRequest('POST', '/ITILFollowup/456/Document', ticketActionsOn), true);
   assert.equal(__test.isAllowedRequest('POST', '/ITILSolution/789/Document', ticketActionsOn), true);
-  assert.equal(__test.isAllowedRequest('POST', '/Document_Item', ticketActionsOn), true);
   assert.equal(__test.isAllowedRequest('PUT', '/Ticket/123', ticketActionsOn), true);
   assert.equal(__test.isAllowedRequest('PUT', '/ITILSolution/456', ticketActionsOn), true);
+});
+
+test('DTIC worker blocks orphan-prone standalone document writes even when ticket actions are enabled', () => {
+  assert.equal(__test.isAllowedRequest('POST', '/Document', ticketActionsOn), false);
+  assert.equal(__test.isAllowedRequest('POST', '/Document_Item', ticketActionsOn), false);
 });
 
 test('DTIC worker does not allow direct ticket creation or broad Ticket POST passthrough', () => {
