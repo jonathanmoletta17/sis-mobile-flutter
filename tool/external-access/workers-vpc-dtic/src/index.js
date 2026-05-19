@@ -17,15 +17,15 @@ const TICKET_ACTION_PUT_PATTERN = /^\/(?:Ticket|ITILSolution)\/\d+(?:$|[/?])/;
 const worker = {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204 });
+      return withCors(new Response(null, { status: 204 }));
     }
 
     const incoming = new URL(request.url);
     if (request.method === 'GET' && incoming.pathname === '/healthz') {
-      return new Response('ok', {
+      return withCors(new Response('ok', {
         status: 200,
         headers: {'Content-Type': 'text/plain; charset=utf-8'},
-      });
+      }));
     }
 
     const glpiPath = normalizeGlpiPath(incoming.pathname);
@@ -53,7 +53,7 @@ const worker = {
     });
 
     try {
-      return await env.GLPI.fetch(upstreamRequest);
+      return withCors(await env.GLPI.fetch(upstreamRequest));
     } catch {
       return jsonError(502, 'DTIC upstream unavailable through Workers VPC.');
     }
@@ -108,10 +108,27 @@ function hasRequestBody(method) {
 }
 
 function jsonError(status, message) {
-  return new Response(JSON.stringify({ error: message }), {
+  return withCors(new Response(JSON.stringify({ error: message }), {
     status,
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
     },
+  }));
+}
+
+function withCors(response) {
+  const headers = new Headers(response.headers);
+  headers.set('Access-Control-Allow-Origin', '*');
+  headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+  headers.set(
+    'Access-Control-Allow-Headers',
+    'Accept, Authorization, Content-Type, App-Token, Session-Token',
+  );
+  headers.set('Access-Control-Expose-Headers', 'Content-Range, Accept-Range');
+  headers.set('Vary', 'Origin');
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
   });
 }

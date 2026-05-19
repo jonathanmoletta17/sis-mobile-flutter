@@ -9,6 +9,24 @@ test('SIS worker normalizes supported API paths', () => {
   assert.equal(__test.normalizeGlpiPath('/Ticket/123'), '/sis/apirest.php/Ticket/123');
 });
 
+test('SIS worker answers browser CORS preflight for JSON login', async () => {
+  const response = await __test.fetch(
+    new Request('https://example.test/sis/apirest.php/initSession', {
+      method: 'OPTIONS',
+      headers: {
+        Origin: 'https://sis-dtic-mobile-pwa.pages.dev',
+        'Access-Control-Request-Method': 'POST',
+        'Access-Control-Request-Headers': 'content-type',
+      },
+    }),
+    {},
+  );
+  assert.equal(response.status, 204);
+  assert.equal(response.headers.get('Access-Control-Allow-Origin'), '*');
+  assert.match(response.headers.get('Access-Control-Allow-Headers'), /Content-Type/);
+  assert.match(response.headers.get('Access-Control-Allow-Methods'), /POST/);
+});
+
 test('SIS worker allows login, session close and read-only ticket endpoints', () => {
   assert.equal(__test.isAllowedRequest('POST', '/initSession'), true);
   assert.equal(__test.isAllowedRequest('GET', '/killSession'), true);

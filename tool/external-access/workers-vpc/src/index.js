@@ -17,18 +17,18 @@ const SIS_ACTION_POST_PATTERNS = [
 ];
 const SIS_ACTION_PUT_PATTERN = /^\/(?:Ticket|ITILSolution)\/\d+(?:$|[/?])/;
 
-export default {
+const worker = {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204 });
+      return withCors(new Response(null, { status: 204 }));
     }
 
     const incoming = new URL(request.url);
     if (incoming.pathname === '/healthz') {
-      return new Response('ok', {
+      return withCors(new Response('ok', {
         status: 200,
         headers: {'Content-Type': 'text/plain; charset=utf-8'},
-      });
+      }));
     }
 
     if (!env.GLPI) {
@@ -54,12 +54,14 @@ export default {
     });
 
     try {
-      return await env.GLPI.fetch(upstreamRequest);
+      return withCors(await env.GLPI.fetch(upstreamRequest));
     } catch {
       return jsonError(502, 'SIS upstream unavailable through Workers VPC.');
     }
   },
 };
+
+export default worker;
 
 function normalizeGlpiPath(pathname) {
   if (pathname.startsWith(GLPI_API_PREFIX)) {
@@ -85,6 +87,7 @@ function isAllowedRequest(method, apiPath) {
 }
 
 export const __test = {
+  fetch: (...args) => worker.fetch(...args),
   isAllowedRequest,
   normalizeGlpiPath,
 };
@@ -94,10 +97,27 @@ function hasRequestBody(method) {
 }
 
 function jsonError(status, message) {
-  return new Response(JSON.stringify({error: message}), {
+  return withCors(new Response(JSON.stringify({error: message}), {
     status,
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
     },
+  }));
+}
+
+function withCors(response) {
+  const headers = new Headers(response.headers);
+  headers.set('Access-Control-Allow-Origin', '*');
+  headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+  headers.set(
+    'Access-Control-Allow-Headers',
+    'Accept, Authorization, Content-Type, App-Token, Session-Token',
+  );
+  headers.set('Access-Control-Expose-Headers', 'Content-Range, Accept-Range');
+  headers.set('Vary', 'Origin');
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
   });
 }

@@ -27,6 +27,24 @@ test('DTIC worker applies allowlist before checking GLPI secret', async () => {
   assert.equal(response.status, 403);
 });
 
+test('DTIC worker answers browser CORS preflight for JSON login', async () => {
+  const response = await __test.fetch(
+    new Request('https://example.test/glpi/apirest.php/initSession', {
+      method: 'OPTIONS',
+      headers: {
+        Origin: 'https://sis-dtic-mobile-pwa.pages.dev',
+        'Access-Control-Request-Method': 'POST',
+        'Access-Control-Request-Headers': 'content-type',
+      },
+    }),
+    {},
+  );
+  assert.equal(response.status, 204);
+  assert.equal(response.headers.get('Access-Control-Allow-Origin'), '*');
+  assert.match(response.headers.get('Access-Control-Allow-Headers'), /Content-Type/);
+  assert.match(response.headers.get('Access-Control-Allow-Methods'), /POST/);
+});
+
 test('DTIC worker always allows login and read-only ticket endpoints', () => {
   assert.equal(__test.isAllowedRequest('POST', '/initSession', ticketActionsOff), true);
   assert.equal(__test.isAllowedRequest('GET', '/Ticket/123', ticketActionsOff), true);
