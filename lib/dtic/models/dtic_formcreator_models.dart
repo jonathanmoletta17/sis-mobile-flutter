@@ -10,6 +10,8 @@ class DticFormCatalog {
     required this.questions,
     required this.conditions,
     required this.targetTickets,
+    this.profiles = const [],
+    this.formProfiles = const [],
   });
 
   final List<DticForm> forms;
@@ -18,6 +20,41 @@ class DticFormCatalog {
   final List<DticFormQuestion> questions;
   final List<DticFormCondition> conditions;
   final List<DticTargetTicket> targetTickets;
+  final List<DticProfile> profiles;
+  final List<DticFormProfile> formProfiles;
+
+  DticFormCatalog forActiveProfile(String? activeProfileName) {
+    if (formProfiles.isEmpty) return this;
+
+    final normalizedProfile = _normalize(activeProfileName);
+    int? profileId;
+    for (final profile in profiles) {
+      if (_normalize(profile.name) == normalizedProfile) {
+        profileId = profile.id;
+        break;
+      }
+    }
+
+    final restrictedFormIds = formProfiles.map((link) => link.formId).toSet();
+    final filteredForms = forms.where((form) {
+      if (!restrictedFormIds.contains(form.id)) return true;
+      if (profileId == null) return false;
+      return formProfiles.any(
+        (link) => link.formId == form.id && link.profileId == profileId,
+      );
+    }).toList();
+
+    return DticFormCatalog(
+      forms: filteredForms,
+      categories: categories,
+      sections: sections,
+      questions: questions,
+      conditions: conditions,
+      targetTickets: targetTickets,
+      profiles: profiles,
+      formProfiles: formProfiles,
+    );
+  }
 
   List<DticFormSection> sectionsForForm(int formId) {
     final sectionIds = questions
@@ -174,6 +211,44 @@ class DticFormCategory {
         json['completename'] ?? json['name'],
         fallback: 'Categoria',
       ),
+    );
+  }
+}
+
+class DticProfile {
+  const DticProfile({required this.id, required this.name});
+
+  final int id;
+  final String name;
+
+  factory DticProfile.fromJson(Map<String, dynamic> json) {
+    return DticProfile(
+      id: _readInt(json['id']) ?? 0,
+      name: _readText(json['name'], fallback: 'Perfil'),
+    );
+  }
+}
+
+class DticFormProfile {
+  const DticFormProfile({
+    required this.id,
+    required this.formId,
+    required this.profileId,
+  });
+
+  final int id;
+  final int formId;
+  final int profileId;
+
+  factory DticFormProfile.fromJson(Map<String, dynamic> json) {
+    return DticFormProfile(
+      id: _readInt(json['id']) ?? 0,
+      formId:
+          _readInt(json['plugin_formcreator_forms_id']) ??
+          _readLinkedId(json, 'PluginFormcreatorForm') ??
+          0,
+      profileId:
+          _readInt(json['profiles_id']) ?? _readLinkedId(json, 'Profile') ?? 0,
     );
   }
 }

@@ -101,7 +101,7 @@ class DticAppState extends ChangeNotifier {
   Future<void> loadCatalog() async {
     final token = _requireSession();
     final catalog = await _client.fetchFormCatalog(token);
-    _catalog = catalog;
+    _catalog = catalog.forActiveProfile(_profile);
     notifyListeners();
   }
 
@@ -395,7 +395,9 @@ class DticAppState extends ChangeNotifier {
         hasUnsupported = true;
         continue;
       }
-      final answer = rawAnswers[question.id];
+      final answer = rawAnswers.containsKey(question.id)
+          ? rawAnswers[question.id]
+          : question.defaultValue;
       final normalized = _normalizeAnswer(answer);
       if (question.required && normalized == null) {
         missing.add(question.id);

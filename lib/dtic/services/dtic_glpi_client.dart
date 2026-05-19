@@ -124,6 +124,11 @@ class DticGlpiClient {
         '/PluginFormcreatorCondition?range=0-2000&expand_dropdowns=true',
         sessionToken,
       ),
+      _getList('/Profile?range=0-300&expand_dropdowns=true', sessionToken),
+      _getList(
+        '/PluginFormcreatorForm_Profile?range=0-1000&expand_dropdowns=true',
+        sessionToken,
+      ),
     ]);
 
     final forms =
@@ -182,6 +187,14 @@ class DticGlpiClient {
           .toList(),
       targetTickets: results[4]
           .map((json) => DticTargetTicket.fromJson(json))
+          .toList(),
+      profiles: results[6]
+          .map((json) => DticProfile.fromJson(json))
+          .where((profile) => profile.id > 0)
+          .toList(),
+      formProfiles: results[7]
+          .map((json) => DticFormProfile.fromJson(json))
+          .where((link) => link.formId > 0 && link.profileId > 0)
           .toList(),
     );
   }

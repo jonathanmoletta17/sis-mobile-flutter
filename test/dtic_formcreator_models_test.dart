@@ -241,6 +241,90 @@ void main() {
       );
     });
 
+    test('filters restricted forms by active GLPI profile', () {
+      const openForm = DticForm(
+        id: 1,
+        name: 'Solicitacao aberta',
+        categoryId: null,
+        isActive: true,
+        description: '',
+      );
+      const restrictedForm = DticForm(
+        id: 2,
+        name: 'NOMEIA / EXONERA',
+        categoryId: null,
+        isActive: true,
+        description: '',
+      );
+      const catalog = DticFormCatalog(
+        forms: [openForm, restrictedForm],
+        categories: [],
+        sections: [],
+        questions: [],
+        conditions: [],
+        targetTickets: [],
+        profiles: [
+          DticProfile(id: 12, name: 'DRH'),
+          DticProfile(id: 14, name: 'N3'),
+          DticProfile(id: 9, name: 'Self-Service'),
+        ],
+        formProfiles: [
+          DticFormProfile(id: 1, formId: 2, profileId: 12),
+          DticFormProfile(id: 2, formId: 2, profileId: 14),
+        ],
+      );
+
+      expect(
+        catalog.forActiveProfile('Self-Service').forms.map((form) => form.name),
+        ['Solicitacao aberta'],
+      );
+      expect(catalog.forActiveProfile('DRH').forms.map((form) => form.name), [
+        'Solicitacao aberta',
+        'NOMEIA / EXONERA',
+      ]);
+      expect(catalog.forActiveProfile(null).forms.map((form) => form.name), [
+        'Solicitacao aberta',
+      ]);
+    });
+
+    test(
+      'uses explicit FormCreator default values for hostname dry-run only',
+      () {
+        final state = DticAppState(DticGlpiClient());
+        const form = DticForm(
+          id: 15,
+          name: 'Problema de Rede',
+          categoryId: null,
+          isActive: true,
+          description: '',
+        );
+        const hostname = DticFormQuestion(
+          id: 10863,
+          formId: 15,
+          sectionId: 1,
+          name: 'HOSTNAME:',
+          fieldType: 'hostname',
+          required: true,
+          description: '',
+          row: 0,
+          col: 0,
+          width: 0,
+          showRule: 1,
+          options: [],
+          defaultValue: 'PC-GLPI-001',
+          rawValues: '',
+        );
+
+        final prepared = state.validateFormAnswers(form, [hostname], {});
+
+        expect(prepared.canSubmitDryRun, isTrue);
+        expect(
+          prepared.toFormCreatorInput()['formcreator_field_10863'],
+          'PC-GLPI-001',
+        );
+      },
+    );
+
     test('uses conditions for section visibility', () {
       const section = DticFormSection(
         id: 40,

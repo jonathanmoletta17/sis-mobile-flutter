@@ -326,10 +326,12 @@ class _QuestionField extends StatelessWidget {
   Widget build(BuildContext context) {
     final label = question.required ? '${question.name} *' : question.name;
     final helper = question.description;
+    final initialText = value?.toString() ?? question.defaultValue;
 
     switch (question.fieldType) {
       case 'textarea':
         return TextFormField(
+          initialValue: initialText,
           minLines: 3,
           maxLines: 6,
           decoration: InputDecoration(labelText: label, helperText: helper),
@@ -338,6 +340,7 @@ class _QuestionField extends StatelessWidget {
         );
       case 'integer':
         return TextFormField(
+          initialValue: initialText,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(labelText: label, helperText: helper),
           onChanged: onChanged,
@@ -346,6 +349,7 @@ class _QuestionField extends StatelessWidget {
       case 'hostname':
       case 'text':
         return TextFormField(
+          initialValue: initialText,
           decoration: InputDecoration(labelText: label, helperText: helper),
           onChanged: onChanged,
           validator: _requiredValidator,
