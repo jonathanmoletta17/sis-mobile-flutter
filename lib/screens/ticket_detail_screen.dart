@@ -12,6 +12,7 @@ import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_status.dart';
 import '../utils/glpi_name_formatter.dart';
+import '../utils/glpi_text_formatter.dart';
 import '../utils/ticket_form_summary.dart';
 import '../widgets/ui/sis_empty_state.dart';
 import '../widgets/ui/sis_page_scaffold.dart';
@@ -33,6 +34,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
 
   bool _isUpdating = false;
   bool _isLoadingTicket = false;
+  bool _mutationPermissionDenied = false;
 
   final List<Map<String, dynamic>> _remoteDocs = [];
   final Map<String, Uint8List> _remoteImageBytesByDocId = {};
@@ -151,32 +153,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
   }
 
   static String _decodeEntities(String input) {
-    var decoded = input;
-
-    decoded = decoded
-        .replaceAll('&lt;', '<')
-        .replaceAll('&gt;', '>')
-        .replaceAll('&amp;', '&')
-        .replaceAll('&quot;', '"')
-        .replaceAll('&#39;', "'")
-        .replaceAll('&apos;', "'")
-        .replaceAll('&nbsp;', ' ');
-
-    decoded = decoded.replaceAllMapped(RegExp(r'&#(\d+);'), (m) {
-      final codePoint = int.tryParse(m.group(1) ?? '');
-      return codePoint == null
-          ? (m.group(0) ?? '')
-          : String.fromCharCode(codePoint);
-    });
-
-    decoded = decoded.replaceAllMapped(RegExp(r'&#x([0-9a-fA-F]+);'), (m) {
-      final codePoint = int.tryParse(m.group(1) ?? '', radix: 16);
-      return codePoint == null
-          ? (m.group(0) ?? '')
-          : String.fromCharCode(codePoint);
-    });
-
-    return decoded.replaceAll(RegExp(r'\s+'), ' ').trim();
+    return GlpiTextFormatter.toPlainText(input);
   }
 
   Widget _buildResumoFormularioWidget(String rawValue) {
@@ -467,6 +444,13 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
     );
 
     if (mounted) {
+      final permissionDenied = result['permissionDenied'] == true;
+      if (permissionDenied) {
+        setState(() {
+          _mutationPermissionDenied = true;
+        });
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -557,11 +541,15 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final assunto = _ticketData['assunto'] ?? _ticketData['name'] ?? 'Chamado';
-    final descricao = (_ticketData['descricao'] ?? '').toString();
+    final descricao = GlpiTextFormatter.toPlainText(
+      _ticketData['descricao'] ?? '',
+      preserveLineBreaks: true,
+    );
     final anexoPath = _ticketData['anexoPath'] as String?;
 
     final appState = Provider.of<AppState>(context);
     final showTechnicianActions =
+        !_mutationPermissionDenied &&
         AppStateTicketSupport.canShowTechnicianActions(
           _ticketData,
           activeProfile: appState.activeProfile,
@@ -889,8 +877,9 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SisSectionHeader(
-                    title: 'Outros Detalhes',
-                    subtitle: 'Resumo operacional e metadados do chamado.',
+                    title: 'Atendimento',
+                    subtitle:
+                        'Dados principais para entender e executar o chamado.',
                   ),
                   const SizedBox(height: AppSpacing.md),
                   ...friendlyDetails.map((item) {
@@ -901,31 +890,32 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                       rich: isResumo,
                     );
                   }),
-                  if (metadataDetails.isNotEmpty) ...[
-                    const SizedBox(height: AppSpacing.sm),
-                    Theme(
-                      data: Theme.of(
-                        context,
-                      ).copyWith(dividerColor: Colors.transparent),
-                      child: ExpansionTile(
-                        tilePadding: EdgeInsets.zero,
-                        childrenPadding: EdgeInsets.zero,
-                        title: Text(
-                          'Metadados GLPI',
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        children: metadataDetails
-                            .map(
-                              (item) => _buildDetailRow(item.key, item.value),
-                            )
-                            .toList(),
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),
           ),
+          if (metadataDetails.isNotEmpty) ...[
+            const SizedBox(height: AppSpacing.md),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SisSectionHeader(
+                      title: 'Informações GLPI',
+                      subtitle:
+                          'Identificadores, classificação e datas técnicas do ticket.',
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    ...metadataDetails.map(
+                      (item) => _buildDetailRow(item.key, item.value),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

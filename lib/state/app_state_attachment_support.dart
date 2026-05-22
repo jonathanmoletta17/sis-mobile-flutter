@@ -132,7 +132,10 @@ class AppStateAttachmentSupport {
 
     try {
       log?.call('Baixando imagem: $url');
-      final imageBytes = await apiService.downloadSecureImage(url, sessionToken);
+      final imageBytes = await apiService.downloadSecureImage(
+        url,
+        sessionToken,
+      );
 
       if (imageBytes != null) {
         log?.call('Imagem baixada com sucesso (${imageBytes.length} bytes)');

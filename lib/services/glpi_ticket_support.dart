@@ -26,7 +26,7 @@ class GlpiTicketSupport {
         .trim();
     final nomePessoa = (formData['nomePessoa'] ?? '').toString().trim();
     final telefone = (formData['telefone'] ?? '').toString().trim();
-    final localizacao = (formData['localizacao'] ?? '').toString().trim();
+    final localizacao = _locationLabel(formData['localizacao']);
     final urgencia = (formData['urgencia'] ?? '').toString().trim();
     final tipo = (formData['tipo'] ?? '').toString().trim();
     final servico = (formData['serviceName'] ?? '').toString().trim();
@@ -113,8 +113,7 @@ class GlpiTicketSupport {
         'requesttypes_id': 1,
         if (entityId != null && entityId > 0) 'entities_id': entityId,
         'itilcategories_id': getCategoryId(formData['serviceName']),
-        if (formData['localizacao'] != null &&
-            formData['localizacao'].toString().isNotEmpty)
+        if (_hasGovernedLocation(formData['localizacao']))
           'locations_id': getLocationId(formData['localizacao']),
         if (formData['urgencia'] != null)
           'urgency': mapUrgency(formData['urgencia']),
@@ -274,12 +273,26 @@ class GlpiTicketSupport {
 
   static int getLocationId(dynamic location) {
     if (location is int) return location;
-    final raw = location?.toString() ?? '';
+    if (location is LocationOption) return location.id;
+    if (location is Map) {
+      final id = _parseOptionalInt(
+        location['id'] ?? location['location_id'] ?? location['locations_id'],
+      );
+      if (id != null && id > 0) return id;
+    }
+
+    final raw = location?.toString().trim() ?? '';
     final match = RegExp(r'Root (\d+)').firstMatch(raw);
     if (match != null) {
-      return int.tryParse(match.group(1) ?? '1') ?? 1;
+      final parsed = int.tryParse(match.group(1) ?? '');
+      if (parsed != null && parsed > 0) return parsed;
     }
-    return 1;
+
+    throw ArgumentError.value(
+      location,
+      'location',
+      'Localizacao SIS sem ID GLPI governado; abortando para evitar fallback silencioso para o root 1.',
+    );
   }
 
   static int mapUrgency(dynamic urgency) {
@@ -302,6 +315,39 @@ class GlpiTicketSupport {
       return 2;
     }
     return 2;
+  }
+
+  static bool _hasGovernedLocation(dynamic location) {
+    if (location == null) return false;
+    if (location is int) return location > 0;
+    if (location is LocationOption) return location.id > 0;
+    if (location is Map) {
+      return _parseOptionalInt(
+            location['id'] ??
+                location['location_id'] ??
+                location['locations_id'],
+          ) !=
+          null;
+    }
+
+    final raw = location.toString().trim();
+    if (raw.isEmpty || raw == 'Não Informado' || raw == 'Não Aplicável') {
+      return false;
+    }
+    return true;
+  }
+
+  static String _locationLabel(dynamic location) {
+    if (location is LocationOption) return location.label.trim();
+    if (location is Map) {
+      final label =
+          (location['label'] ?? location['full_label'] ?? location['name'])
+              ?.toString()
+              .trim() ??
+          '';
+      if (label.isNotEmpty) return label;
+    }
+    return (location ?? '').toString().trim();
   }
 
   static List<String> _extractAttachmentNames(Map<String, dynamic> formData) {

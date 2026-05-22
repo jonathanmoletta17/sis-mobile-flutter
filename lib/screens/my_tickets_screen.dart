@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../data/service_data.dart';
+import '../catalog/service_catalog_provider.dart';
 import '../models/glpi_status.dart';
 import '../state/app_state.dart';
 import '../theme/app_colors.dart';
@@ -58,7 +58,8 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
       ...GlpiStatusMapper.ordered.map((s) => s.label),
     ];
     _categoryOptions =
-        ['Todos'] + serviceCategories.map((s) => s.name).toList();
+        ['Todos'] +
+        serviceCatalogRepository.services.map((s) => s.name).toList();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadTickets();

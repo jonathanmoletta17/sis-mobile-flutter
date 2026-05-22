@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
+import 'catalog/service_catalog_provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/service_catalog_screen.dart';
 import 'services/glpi_client.dart';
@@ -10,7 +11,9 @@ import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: '.env');
+  const envFile = String.fromEnvironment('ENV_FILE', defaultValue: '.env');
+  await dotenv.load(fileName: envFile);
+  await initializeServiceCatalogRepository();
 
   runApp(
     MultiProvider(

@@ -3,12 +3,38 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../theme/app_colors.dart';
 
+class LocationOption {
+  final int id;
+  final String label;
+  final String fullLabel;
+  final int? rootId;
+  final int? sourceQuestionId;
+
+  const LocationOption({
+    required this.id,
+    required this.label,
+    String? fullLabel,
+    this.rootId,
+    this.sourceQuestionId,
+  }) : fullLabel = fullLabel ?? label;
+
+  Map<String, dynamic> toPayload() => {
+    'id': id,
+    'label': label,
+    'full_label': fullLabel,
+    if (rootId != null) 'root_id': rootId,
+    if (sourceQuestionId != null) 'source_question_id': sourceQuestionId,
+  };
+}
+
 class ServiceCategory {
   final String name;
   final IconData icon;
   final Color color;
   final int categoryId;
   final List<String> locations;
+  final int? staticLocationRootId;
+  final List<LocationOption> locationOptions;
   final List<String> typeOptions;
   final List<String> urgencyOptions;
   final bool includeNomePessoa;
@@ -18,6 +44,10 @@ class ServiceCategory {
   final String? extraFieldLabel;
   final List<String> extraFieldOptions;
   final List<String> aliases;
+  final String domainLabel;
+  final String? assignmentGroupLabel;
+  final String uiSchemaSource;
+  final String? runtimeFormStatus;
 
   const ServiceCategory({
     required this.name,
@@ -25,6 +55,8 @@ class ServiceCategory {
     required this.color,
     required this.categoryId,
     required this.locations,
+    this.staticLocationRootId,
+    this.locationOptions = const [],
     required this.typeOptions,
     this.urgencyOptions = const ['3 - Média (Padrão)', '1 - Baixa', '5 - Alta'],
     this.includeNomePessoa = true,
@@ -34,10 +66,110 @@ class ServiceCategory {
     this.extraFieldLabel,
     this.extraFieldOptions = const [],
     this.aliases = const [],
+    this.domainLabel = 'Catálogo estático',
+    this.assignmentGroupLabel,
+    this.uiSchemaSource = 'static_bootstrap',
+    this.runtimeFormStatus,
   });
 
   bool get hasExtraField =>
       extraFieldLabel != null && extraFieldOptions.isNotEmpty;
+
+  List<LocationOption> get effectiveLocationOptions {
+    if (locationOptions.isNotEmpty) return locationOptions;
+    if (staticLocationRootId != null) {
+      return List<LocationOption>.unmodifiable(
+        locations.map(
+          (location) => LocationOption(
+            id: staticLocationRootId!,
+            label: _stripLegacyLocationPrefix(location),
+            rootId: staticLocationRootId,
+          ),
+        ),
+      );
+    }
+    final parsed = <LocationOption>[];
+    for (final location in locations) {
+      final option = _parseLegacyLocationOption(location);
+      if (option != null) parsed.add(option);
+    }
+    return List<LocationOption>.unmodifiable(parsed);
+  }
+
+  List<String> get displayLocations {
+    final options = effectiveLocationOptions;
+    if (options.isNotEmpty) {
+      return List<String>.unmodifiable(options.map((option) => option.label));
+    }
+    return List<String>.unmodifiable(locations.map(_stripLegacyLocationPrefix));
+  }
+
+  ServiceCategory copyWith({
+    String? name,
+    int? categoryId,
+    List<String>? locations,
+    int? staticLocationRootId,
+    List<LocationOption>? locationOptions,
+    List<String>? typeOptions,
+    List<String>? urgencyOptions,
+    bool? includeNomePessoa,
+    bool? includeUrgencia,
+    bool? includeLocalizacao,
+    bool? includeAnexo,
+    String? extraFieldLabel,
+    List<String>? extraFieldOptions,
+    List<String>? aliases,
+    String? domainLabel,
+    String? assignmentGroupLabel,
+    String? uiSchemaSource,
+    String? runtimeFormStatus,
+  }) {
+    return ServiceCategory(
+      name: name ?? this.name,
+      icon: icon,
+      color: color,
+      categoryId: categoryId ?? this.categoryId,
+      locations: locations ?? this.locations,
+      staticLocationRootId: staticLocationRootId ?? this.staticLocationRootId,
+      locationOptions: locationOptions ?? this.locationOptions,
+      typeOptions: typeOptions ?? this.typeOptions,
+      urgencyOptions: urgencyOptions ?? this.urgencyOptions,
+      includeNomePessoa: includeNomePessoa ?? this.includeNomePessoa,
+      includeUrgencia: includeUrgencia ?? this.includeUrgencia,
+      includeLocalizacao: includeLocalizacao ?? this.includeLocalizacao,
+      includeAnexo: includeAnexo ?? this.includeAnexo,
+      extraFieldLabel: extraFieldLabel ?? this.extraFieldLabel,
+      extraFieldOptions: extraFieldOptions ?? this.extraFieldOptions,
+      aliases: aliases ?? this.aliases,
+      domainLabel: domainLabel ?? this.domainLabel,
+      assignmentGroupLabel: assignmentGroupLabel ?? this.assignmentGroupLabel,
+      uiSchemaSource: uiSchemaSource ?? this.uiSchemaSource,
+      runtimeFormStatus: runtimeFormStatus ?? this.runtimeFormStatus,
+    );
+  }
+}
+
+LocationOption? _parseLegacyLocationOption(String rawLocation) {
+  final raw = rawLocation.trim();
+  if (raw.isEmpty) return null;
+  final match = RegExp(r'Root\s+(\d+)').firstMatch(raw);
+  if (match == null) return null;
+  final id = int.tryParse(match.group(1) ?? '');
+  if (id == null || id <= 0) return null;
+  return LocationOption(
+    id: id,
+    label: _stripLegacyLocationPrefix(raw),
+    fullLabel: raw,
+  );
+}
+
+String _stripLegacyLocationPrefix(String rawLocation) {
+  final raw = rawLocation.trim();
+  final stripped = raw.replaceFirst(
+    RegExp(r'^Local\s*\(Root\s+\d+\)\s*:\s*'),
+    '',
+  );
+  return stripped.trim().isEmpty ? raw : stripped.trim();
 }
 
 const List<ServiceCategory> serviceCategories = [
@@ -46,11 +178,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.snowflake,
     color: AppColors.catalogCritical,
     categoryId: 1,
+    staticLocationRootId: 70,
     locations: [
-      'Local (Root 70): Sala/Escritorio',
-      'Local (Root 70): Sala de Reuniao',
-      'Local (Root 70): Area Tecnica/Servidores',
-      'Local (Root 70): Outro',
+      'Sala/Escritorio',
+      'Sala de Reuniao',
+      'Area Tecnica/Servidores',
+      'Outro',
     ],
     typeOptions: [
       'Manutenção Preventiva Agendada',
@@ -66,11 +199,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.peopleCarryBox,
     color: AppColors.catalogOperational,
     categoryId: 55,
+    staticLocationRootId: 36,
     locations: [
-      'Local (Root 36): Armazem',
-      'Local (Root 36): Patio de Carga',
-      'Local (Root 36): Estoque',
-      'Local (Root 36): Outro',
+      'Armazem',
+      'Patio de Carga',
+      'Estoque',
+      'Outro',
     ],
     typeOptions: [
       'Transporte de Material Pesado',
@@ -84,11 +218,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.mugHot,
     color: AppColors.catalogOperational,
     categoryId: 98,
+    staticLocationRootId: 27,
     locations: [
-      'Local (Root 27): Cozinha Principal',
-      'Local (Root 27): Area de Cafe',
-      'Local (Root 27): Refeitorio',
-      'Local (Root 27): Outro',
+      'Cozinha Principal',
+      'Area de Cafe',
+      'Refeitorio',
+      'Outro',
     ],
     typeOptions: [
       'Falta de Suprimentos',
@@ -118,11 +253,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.bolt,
     color: AppColors.catalogCritical,
     categoryId: 22,
+    staticLocationRootId: 70,
     locations: [
-      'Local (Root 70): Painel Principal',
-      'Local (Root 70): Area Tecnica',
-      'Local (Root 70): Escritorio X',
-      'Local (Root 70): Outro',
+      'Painel Principal',
+      'Area Tecnica',
+      'Escritorio X',
+      'Outro',
     ],
     typeOptions: [
       'Troca de Lampada',
@@ -138,11 +274,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.faucet,
     color: AppColors.catalogCritical,
     categoryId: 30,
+    staticLocationRootId: 70,
     locations: [
-      'Local (Root 70): Banheiro Social',
-      'Local (Root 70): Cozinha Industrial',
-      'Local (Root 70): Área de Serviço/Lavanderia',
-      'Local (Root 70): Outro',
+      'Banheiro Social',
+      'Cozinha Industrial',
+      'Área de Serviço/Lavanderia',
+      'Outro',
     ],
     typeOptions: [
       'Vazamento',
@@ -158,11 +295,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.leaf,
     color: AppColors.catalogOperational,
     categoryId: 37,
+    staticLocationRootId: 31,
     locations: [
-      'Local (Root 31): Area Externa Principal',
-      'Local (Root 31): Canteiro do Estacionamento',
-      'Local (Root 31): Floreira da Recepcao',
-      'Local (Root 31): Outro',
+      'Area Externa Principal',
+      'Canteiro do Estacionamento',
+      'Floreira da Recepcao',
+      'Outro',
     ],
     typeOptions: [
       'Poda de Arvore/Arbusto',
@@ -178,11 +316,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.broom,
     color: AppColors.catalogOperational,
     categoryId: 45,
+    staticLocationRootId: 27,
     locations: [
-      'Local (Root 27): Banheiro Social',
-      'Local (Root 27): Area de Copa/Cozinha',
-      'Local (Root 27): Corredor',
-      'Local (Root 27): Outro',
+      'Banheiro Social',
+      'Area de Copa/Cozinha',
+      'Corredor',
+      'Outro',
     ],
     typeOptions: [
       'Limpeza de Emergencia',
@@ -197,11 +336,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.toolbox,
     color: AppColors.catalogCritical,
     categoryId: 50,
+    staticLocationRootId: 70,
     locations: [
-      'Local (Root 70): Escritorio/Sala',
-      'Local (Root 70): Arquivo Morto/Deposito',
-      'Local (Root 70): Cozinha',
-      'Local (Root 70): Outro',
+      'Escritorio/Sala',
+      'Arquivo Morto/Deposito',
+      'Cozinha',
+      'Outro',
     ],
     typeOptions: [
       'Reparo de Movel (Gaveta, Porta)',
@@ -216,11 +356,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.envelope,
     color: AppColors.catalogOperational,
     categoryId: 128,
+    staticLocationRootId: 36,
     locations: [
-      'Local (Root 36): Protocolo',
-      'Local (Root 36): Sala de Expedicao',
-      'Local (Root 36): Recepcao Principal',
-      'Local (Root 36): Outro',
+      'Protocolo',
+      'Sala de Expedicao',
+      'Recepcao Principal',
+      'Outro',
     ],
     typeOptions: [
       'Entrega Interna',
@@ -235,11 +376,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.screwdriverWrench,
     color: AppColors.catalogCritical,
     categoryId: 81,
+    staticLocationRootId: 70,
     locations: [
-      'Local (Root 70): Parede Interna',
-      'Local (Root 70): Piso/Calcada',
-      'Local (Root 70): Alvenaria Externa',
-      'Local (Root 70): Outro',
+      'Parede Interna',
+      'Piso/Calcada',
+      'Alvenaria Externa',
+      'Outro',
     ],
     typeOptions: [
       'Reparo de Alvenaria (Tijolo/Bloco)',
@@ -254,11 +396,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.paintRoller,
     color: AppColors.catalogCritical,
     categoryId: 85,
+    staticLocationRootId: 70,
     locations: [
-      'Local (Root 70): Corredor do 2o Andar',
-      'Local (Root 70): Sala/Escritorio',
-      'Local (Root 70): Teto',
-      'Local (Root 70): Outro',
+      'Corredor do 2o Andar',
+      'Sala/Escritorio',
+      'Teto',
+      'Outro',
     ],
     typeOptions: [
       'Pintura de Parede',
@@ -273,10 +416,11 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.solidPenToSquare,
     color: AppColors.catalogCritical,
     categoryId: 144,
+    staticLocationRootId: 70,
     locations: [
-      'Local (Root 70): Sede Principal',
-      'Local (Root 70): Anexo I',
-      'Local (Root 70): Outro',
+      'Sede Principal',
+      'Anexo I',
+      'Outro',
     ],
     typeOptions: [
       'Projetos DCMPC',
@@ -297,11 +441,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.networkWired,
     color: AppColors.catalogCritical,
     categoryId: 88,
+    staticLocationRootId: 70,
     locations: [
-      'Local (Root 70): Sala de Servidores',
-      'Local (Root 70): Ponto de Rede Especifico',
-      'Local (Root 70): Escritorio/Sala',
-      'Local (Root 70): Outro',
+      'Sala de Servidores',
+      'Ponto de Rede Especifico',
+      'Escritorio/Sala',
+      'Outro',
     ],
     typeOptions: [
       'Problema de Conectividade (Cabo)',
@@ -317,11 +462,12 @@ const List<ServiceCategory> serviceCategories = [
     icon: FontAwesomeIcons.tableColumns,
     color: AppColors.catalogCritical,
     categoryId: 94,
+    staticLocationRootId: 70,
     locations: [
-      'Local (Root 70): Janela/Esquadria',
-      'Local (Root 70): Porta de Vidro',
-      'Local (Root 70): Vitrine/Divisoria',
-      'Local (Root 70): Outro',
+      'Janela/Esquadria',
+      'Porta de Vidro',
+      'Vitrine/Divisoria',
+      'Outro',
     ],
     typeOptions: [
       'Vidro Quebrado',
@@ -363,7 +509,7 @@ ServiceCategory? findServiceCategoryById(int? categoryId) {
   return null;
 }
 
-int resolveServiceCategoryId(dynamic rawCategory) {
+int? tryResolveServiceCategoryId(dynamic rawCategory) {
   if (rawCategory is int) return rawCategory;
 
   final numeric = int.tryParse(rawCategory?.toString() ?? '');
@@ -372,7 +518,18 @@ int resolveServiceCategoryId(dynamic rawCategory) {
   final service = findServiceCategoryByName(
     extractServiceCategoryLabel(rawCategory),
   );
-  return service?.categoryId ?? 1;
+  return service?.categoryId;
+}
+
+int resolveServiceCategoryId(dynamic rawCategory) {
+  final categoryId = tryResolveServiceCategoryId(rawCategory);
+  if (categoryId != null) return categoryId;
+
+  throw ArgumentError.value(
+    rawCategory,
+    'rawCategory',
+    'Categoria SIS nao encontrada no catalogo governado; abortando para evitar fallback silencioso para Ar-Condicionado.',
+  );
 }
 
 String normalizeServiceCategoryLabel(dynamic rawCategory) {

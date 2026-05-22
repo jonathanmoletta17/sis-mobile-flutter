@@ -40,11 +40,7 @@ class _ClosedTicketGlpiClient extends GlpiClient {
 
   @override
   Future<Map<String, dynamic>> getSessionContext(String sessionToken) async {
-    return {
-      'userId': 2039,
-      'username': 'tecnico',
-      'profile': 'Tecnico',
-    };
+    return {'userId': 2039, 'username': 'tecnico', 'profile': 'Tecnico'};
   }
 
   @override
@@ -53,10 +49,7 @@ class _ClosedTicketGlpiClient extends GlpiClient {
     String sessionToken,
   ) async {
     getTicketByIdCalls += 1;
-    return {
-      'id': ticketId,
-      'status': GlpiStatus.fechado.code,
-    };
+    return {'id': ticketId, 'status': GlpiStatus.fechado.code};
   }
 
   @override

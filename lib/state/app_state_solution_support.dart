@@ -23,7 +23,8 @@ class AppStateSolutionSupport {
       if (!GlpiStatusMapper.canValidateSolution(currentTicket['status'])) {
         return {
           'success': false,
-          'error': 'Só é possível validar solução quando o chamado está solucionado. Recarregue a tela.',
+          'error':
+              'Só é possível validar solução quando o chamado está solucionado. Recarregue a tela.',
         };
       }
 
@@ -44,7 +45,8 @@ class AppStateSolutionSupport {
         }
         return {
           'success': false,
-          'error': closeResult['message'] ??
+          'error':
+              closeResult['message'] ??
               closeResult['error'] ??
               'Solução aprovada, mas o chamado não foi fechado.',
         };
@@ -89,7 +91,8 @@ class AppStateSolutionSupport {
       if (!GlpiStatusMapper.canValidateSolution(currentTicket['status'])) {
         return {
           'success': false,
-          'error': 'Só é possível validar solução quando o chamado está solucionado. Recarregue a tela.',
+          'error':
+              'Só é possível validar solução quando o chamado está solucionado. Recarregue a tela.',
         };
       }
 
@@ -108,7 +111,8 @@ class AppStateSolutionSupport {
         if (reopenResult['success'] != true) {
           return {
             'success': false,
-            'error': reopenResult['message'] ??
+            'error':
+                reopenResult['message'] ??
                 reopenResult['error'] ??
                 'Solução recusada, mas o chamado não foi reaberto.',
           };
@@ -123,7 +127,8 @@ class AppStateSolutionSupport {
         if (messageResult['success'] != true) {
           return {
             'success': false,
-            'error': messageResult['error'] ??
+            'error':
+                messageResult['error'] ??
                 'Chamado reaberto, mas a justificativa não foi registrada.',
           };
         }

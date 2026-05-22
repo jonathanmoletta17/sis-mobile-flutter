@@ -50,8 +50,7 @@ class GlpiStatusMapper {
     if (normalized.contains('em andamento')) return GlpiStatus.planejado;
     if (normalized.contains('pendente')) return GlpiStatus.pendente;
     if (normalized.contains('solucionado')) return GlpiStatus.solucionado;
-    if (normalized.contains('fechado') ||
-        normalized.contains('concluido')) {
+    if (normalized.contains('fechado') || normalized.contains('concluido')) {
       return GlpiStatus.fechado;
     }
 

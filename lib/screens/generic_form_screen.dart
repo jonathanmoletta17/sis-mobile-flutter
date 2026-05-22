@@ -13,13 +13,18 @@ class GenericFormScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return FormTemplate(
       serviceName: service.name,
-      localizacaoOptions: service.locations,
+      localizacaoOptions: service.displayLocations,
+      locationOptions: service.effectiveLocationOptions,
       tipoServicoOptions: service.typeOptions,
       urgenciaOptions: service.urgencyOptions,
       includeNomePessoa: service.includeNomePessoa,
       includeUrgencia: service.includeUrgencia,
       includeLocalizacao: service.includeLocalizacao,
       includeAnexo: service.includeAnexo,
+      domainLabel: service.domainLabel,
+      assignmentGroupLabel: service.assignmentGroupLabel,
+      uiSchemaSource: service.uiSchemaSource,
+      runtimeFormStatus: service.runtimeFormStatus,
       extraFieldsBuilder: service.hasExtraField
           ? (BuildContext _, Function(String?) onChanged) {
               return CustomDropdownField(

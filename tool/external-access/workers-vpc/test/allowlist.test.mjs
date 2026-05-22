@@ -27,8 +27,51 @@ test('SIS worker answers browser CORS preflight for JSON login', async () => {
   assert.match(response.headers.get('Access-Control-Allow-Methods'), /POST/);
 });
 
+test('SIS worker serves mobile metadata catalog read-only without VPC binding', async () => {
+  const response = await __test.fetch(
+    new Request('https://example.test/metadata/mobile/sis/catalog', {method: 'GET'}),
+    {},
+  );
+  const body = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(body.consumer_id, 'sis-mobile-flutter');
+  assert.equal(body.services.length, 15);
+  assert.equal(response.headers.get('Cache-Control'), 'private, max-age=300');
+  assert.ok(response.headers.get('ETag'));
+  assert.ok(response.headers.get('X-GLPI-Snapshot-Hash'));
+  assert.equal(response.headers.get('X-Consumer-Id'), 'sis-mobile-flutter');
+});
+
+test('SIS worker returns 304 for metadata catalog ETag match', async () => {
+  const first = await __test.fetch(
+    new Request('https://example.test/metadata/mobile/sis/catalog', {method: 'GET'}),
+    {},
+  );
+  const etag = first.headers.get('ETag');
+  const second = await __test.fetch(
+    new Request('https://example.test/metadata/mobile/sis/catalog', {
+      method: 'GET',
+      headers: {'If-None-Match': etag},
+    }),
+    {},
+  );
+
+  assert.equal(second.status, 304);
+  assert.equal(second.headers.get('ETag'), etag);
+});
+
+test('SIS worker blocks metadata catalog mutations', async () => {
+  const response = await __test.fetch(
+    new Request('https://example.test/metadata/mobile/sis/catalog', {method: 'POST'}),
+    {},
+  );
+
+  assert.equal(response.status, 405);
+});
 test('SIS worker allows login, session close and read-only ticket endpoints', () => {
   assert.equal(__test.isAllowedRequest('POST', '/initSession'), true);
+  assert.equal(__test.isAllowedRequest('GET', '/initSession'), true);
   assert.equal(__test.isAllowedRequest('GET', '/killSession'), true);
   assert.equal(__test.isAllowedRequest('GET', '/getFullSession'), true);
   assert.equal(__test.isAllowedRequest('GET', '/ITILCategory'), true);

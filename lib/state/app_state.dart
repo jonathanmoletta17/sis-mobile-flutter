@@ -123,7 +123,18 @@ class AppState extends ChangeNotifier {
   }
 
   bool _isSessionInvalidError(Object error) {
-    return error.toString().contains('SESSION_INVALID_OR_EXPIRED');
+    final detail = error.toString();
+    return detail.contains('SESSION_INVALID_OR_EXPIRED') &&
+        !detail.contains('ERROR_RIGHT_MISSING') &&
+        !detail.contains('GLPI_PERMISSION_DENIED');
+  }
+
+  bool _isPermissionDeniedError(Object error) {
+    final detail = error.toString();
+    return detail.contains('GLPI_PERMISSION_DENIED') ||
+        detail.contains('ERROR_RIGHT_MISSING') ||
+        detail.contains('permissão') ||
+        detail.contains('permissao');
   }
 
   Future<void> _clearLocalSessionData() async {
@@ -400,6 +411,14 @@ class AppState extends ChangeNotifier {
       if (_isSessionInvalidError(e)) {
         await _handleSessionInvalid(e);
       }
+      if (_isPermissionDeniedError(e)) {
+        return {
+          'success': false,
+          'permissionDenied': true,
+          'message':
+              'Seu perfil GLPI não tem permissão para alterar este chamado.',
+        };
+      }
       return {
         'success': false,
         'message': 'Falha ao confirmar o status atual do chamado.',
@@ -416,6 +435,14 @@ class AppState extends ChangeNotifier {
       final err = result['error_message']?.toString() ?? '';
       if (_isSessionInvalidError(err)) {
         await _handleSessionInvalid(err);
+      }
+      if (_isPermissionDeniedError(err)) {
+        return {
+          'success': false,
+          'permissionDenied': true,
+          'message':
+              'Seu perfil GLPI não tem permissão para alterar este chamado.',
+        };
       }
       return {
         'success': false,

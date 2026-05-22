@@ -34,8 +34,19 @@ class GlpiClientSupport {
   }
 
   static Exception authException(http.Response response) {
+    final apiMessage = extractApiErrorMessage(response.body);
+    final body = apiMessage ?? response.body;
+
+    if (body.contains('ERROR_RIGHT_MISSING') ||
+        body.contains('permissão') ||
+        body.contains('permissao')) {
+      return Exception(
+        'GLPI_PERMISSION_DENIED: ${response.statusCode} - $body',
+      );
+    }
+
     return Exception(
-      'SESSION_INVALID_OR_EXPIRED: ${response.statusCode} - ${response.body}',
+      'SESSION_INVALID_OR_EXPIRED: ${response.statusCode} - $body',
     );
   }
 
@@ -100,13 +111,25 @@ class GlpiClientSupport {
     }
 
     return GlpiAuthFailure(
-      userMessage: 'Falha ao autenticar. $detail',
+      userMessage:
+          'Falha ao autenticar. Verifique os dados informados e tente novamente.',
       detail: detail,
     );
   }
 
   static bool isSessionInvalidException(Object error) {
-    return error.toString().contains('SESSION_INVALID_OR_EXPIRED');
+    final detail = error.toString();
+    return detail.contains('SESSION_INVALID_OR_EXPIRED') &&
+        !detail.contains('ERROR_RIGHT_MISSING') &&
+        !detail.contains('GLPI_PERMISSION_DENIED');
+  }
+
+  static bool isPermissionDeniedException(Object error) {
+    final detail = error.toString();
+    return detail.contains('GLPI_PERMISSION_DENIED') ||
+        detail.contains('ERROR_RIGHT_MISSING') ||
+        detail.contains('permissão') ||
+        detail.contains('permissao');
   }
 
   static String? extractEntityIdFromBody(String body) {

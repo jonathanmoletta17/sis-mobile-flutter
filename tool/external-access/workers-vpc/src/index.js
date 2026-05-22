@@ -1,8 +1,11 @@
+import {MOBILE_METADATA_CATALOG} from './metadata_catalog.js';
+
 const GLPI_ORIGIN = 'http://cau.ppiratini.intra.rs.gov.br';
 const GLPI_API_PREFIX = '/sis/apirest.php';
+const MOBILE_METADATA_PATH = '/metadata/mobile/sis/catalog';
 
 const READ_ONLY_ITEM_PATTERN =
-  /^\/(?:search\/Ticket|Ticket(?:\/\d+(?:\/(?:TicketFollowup|ITILSolution|Ticket_User|Document_Item|Document))?)?|Document(?:\/\d+)?|Document_Item|ITILFollowup\/\d+\/Document_Item|ITILSolution\/\d+\/Document_Item|User(?:\/\d+)?|Entity|Location|RequestType|ITILCategory|listSearchOptions\/Ticket|getFullSession|getActiveProfile|getMyProfiles|getMyEntities)(?:$|[/?])/;
+  /^\/(?:initSession|search\/Ticket|Ticket(?:\/\d+(?:\/(?:TicketFollowup|ITILSolution|Ticket_User|Document_Item|Document))?)?|Document(?:\/\d+)?|Document_Item|ITILFollowup\/\d+\/Document_Item|ITILSolution\/\d+\/Document_Item|User(?:\/\d+)?|Entity|Location|RequestType|ITILCategory|listSearchOptions\/Ticket|getFullSession|getActiveProfile|getMyProfiles|getMyEntities)(?:$|[/?])/;
 
 const POST_ALLOWLIST = new Set([
   '/initSession',
@@ -29,6 +32,10 @@ const worker = {
         status: 200,
         headers: {'Content-Type': 'text/plain; charset=utf-8'},
       }));
+    }
+
+    if (incoming.pathname === MOBILE_METADATA_PATH) {
+      return metadataCatalogResponse(request);
     }
 
     if (!env.GLPI) {
@@ -90,7 +97,46 @@ export const __test = {
   fetch: (...args) => worker.fetch(...args),
   isAllowedRequest,
   normalizeGlpiPath,
+  metadataCatalogResponse,
 };
+
+function metadataCatalogResponse(request) {
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return jsonError(405, 'Metadata catalog is read-only.');
+  }
+
+  const etag = quotedEtag(MOBILE_METADATA_CATALOG.etag);
+  if (request.headers.get('If-None-Match') === etag) {
+    return withCors(new Response(null, {
+      status: 304,
+      headers: metadataHeaders(etag),
+    }));
+  }
+
+  const body = JSON.stringify(MOBILE_METADATA_CATALOG);
+  return withCors(new Response(request.method === 'HEAD' ? null : body, {
+    status: 200,
+    headers: {
+      ...metadataHeaders(etag),
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+  }));
+}
+
+function metadataHeaders(etag) {
+  return {
+    'Cache-Control': 'private, max-age=300',
+    'ETag': etag,
+    'X-GLPI-Snapshot-Hash': MOBILE_METADATA_CATALOG.source_snapshot_hash || '',
+    'X-Consumer-Id': MOBILE_METADATA_CATALOG.consumer_id || '',
+  };
+}
+
+function quotedEtag(value) {
+  const raw = String(value || '');
+  if (raw.startsWith('"') && raw.endsWith('"')) return raw;
+  return `"${raw}"`;
+}
 
 function hasRequestBody(method) {
   return method !== 'GET' && method !== 'HEAD';
@@ -113,7 +159,7 @@ function withCors(response) {
     'Access-Control-Allow-Headers',
     'Accept, Authorization, Content-Type, App-Token, Session-Token',
   );
-  headers.set('Access-Control-Expose-Headers', 'Content-Range, Accept-Range');
+  headers.set('Access-Control-Expose-Headers', 'Content-Range, Accept-Range, ETag, X-GLPI-Snapshot-Hash, X-Consumer-Id');
   headers.set('Vary', 'Origin');
   return new Response(response.body, {
     status: response.status,

@@ -41,10 +41,13 @@ class DticGlpiClient {
 
   Future<String> authenticate(String username, String password) async {
     final response = await http
-        .post(
+        .get(
           _uri('/initSession'),
-          headers: _headers(),
-          body: jsonEncode({'login': username, 'password': password}),
+          headers: {
+            ..._headers(),
+            'Authorization':
+                'Basic ${base64Encode(utf8.encode('$username:$password'))}',
+          },
         )
         .timeout(DticConfig.requestTimeout);
 

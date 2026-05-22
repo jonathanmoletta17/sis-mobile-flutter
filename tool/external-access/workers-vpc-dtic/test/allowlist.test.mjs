@@ -45,8 +45,9 @@ test('DTIC worker answers browser CORS preflight for JSON login', async () => {
   assert.match(response.headers.get('Access-Control-Allow-Methods'), /POST/);
 });
 
-test('DTIC worker always allows login and read-only ticket endpoints', () => {
+test('DTIC worker always allows login and read-only ticket/catalog endpoints', () => {
   assert.equal(__test.isAllowedRequest('POST', '/initSession', ticketActionsOff), true);
+  assert.equal(__test.isAllowedRequest('GET', '/initSession', ticketActionsOff), true);
   assert.equal(__test.isAllowedRequest('GET', '/Ticket/123', ticketActionsOff), true);
   assert.equal(
     __test.isAllowedRequest('GET', '/Ticket/123/TicketFollowup', ticketActionsOff),
@@ -60,6 +61,8 @@ test('DTIC worker always allows login and read-only ticket endpoints', () => {
     __test.isAllowedRequest('GET', '/ITILSolution/789/Document_Item', ticketActionsOff),
     true,
   );
+  assert.equal(__test.isAllowedRequest('GET', '/Profile', ticketActionsOff), true);
+  assert.equal(__test.isAllowedRequest('GET', '/PluginFormcreatorForm_Profile', ticketActionsOff), true);
 });
 
 test('DTIC worker blocks ticket writes by default', () => {

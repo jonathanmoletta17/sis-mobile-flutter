@@ -2,7 +2,7 @@ const GLPI_ORIGIN = 'http://10.72.30.39';
 const GLPI_API_PREFIX = '/glpi/apirest.php';
 
 const READ_ONLY_ITEM_PATTERN =
-  /^\/(?:search\/Ticket|Ticket(?:\/\d+(?:\/(?:TicketFollowup|ITILSolution|Ticket_User|Document))?)?|Document(?:\/\d+)?|Document_Item|ITILFollowup\/\d+\/Document_Item|ITILSolution\/\d+\/Document_Item|User(?:\/\d+)?|Entity|Location|RequestType|ITILCategory|PluginFormcreator(?:Form|Category|Section|Question|TargetTicket|QuestionDependency|Condition)(?:\/\d+)?|listSearchOptions\/Ticket|getFullSession|getActiveProfile|getMyProfiles|getMyEntities)(?:$|[/?])/;
+  /^\/(?:initSession|search\/Ticket|Ticket(?:\/\d+(?:\/(?:TicketFollowup|ITILSolution|Ticket_User|Document))?)?|Document(?:\/\d+)?|Document_Item|ITILFollowup\/\d+\/Document_Item|ITILSolution\/\d+\/Document_Item|User(?:\/\d+)?|Profile(?:\/\d+)?|Entity|Location|RequestType|ITILCategory|PluginFormcreator(?:Form|Form_Profile|Category|Section|Question|TargetTicket|QuestionDependency|Condition)(?:\/\d+)?|listSearchOptions\/Ticket|getFullSession|getActiveProfile|getMyProfiles|getMyEntities)(?:$|[/?])/;
 
 const POST_ALLOWLIST = new Set(['/initSession']);
 const GET_ALLOWLIST = new Set(['/killSession']);

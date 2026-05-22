@@ -5,8 +5,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../data/service_data.dart';
 import '../state/app_state.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 import '../widgets/anexar_arquivo_widget.dart';
 import '../widgets/custom_dropdown_field.dart';
@@ -17,18 +19,24 @@ import '../widgets/ui/sis_section_header.dart';
 class FormTemplate extends StatefulWidget {
   final String serviceName;
   final List<String> localizacaoOptions;
+  final List<LocationOption> locationOptions;
   final List<String> tipoServicoOptions;
   final List<String> urgenciaOptions;
   final bool includeNomePessoa;
   final bool includeUrgencia;
   final bool includeLocalizacao;
   final bool includeAnexo;
+  final String domainLabel;
+  final String? assignmentGroupLabel;
+  final String uiSchemaSource;
+  final String? runtimeFormStatus;
   final Widget Function(BuildContext, Function(String?))? extraFieldsBuilder;
 
   const FormTemplate({
     super.key,
     required this.serviceName,
     required this.localizacaoOptions,
+    this.locationOptions = const [],
     required this.tipoServicoOptions,
     this.urgenciaOptions = const [
       '3 - Média (Padrão)',
@@ -39,6 +47,10 @@ class FormTemplate extends StatefulWidget {
     this.includeUrgencia = true,
     this.includeLocalizacao = true,
     this.includeAnexo = true,
+    this.domainLabel = 'Catálogo estático',
+    this.assignmentGroupLabel,
+    this.uiSchemaSource = 'static_bootstrap',
+    this.runtimeFormStatus,
     this.extraFieldsBuilder,
   });
 
@@ -64,6 +76,20 @@ class _FormTemplateState extends State<FormTemplate> {
   final List<String> _anexoNames = [];
   final List<Uint8List> _anexoBytesList = [];
   final List<String?> _anexoMimeTypes = [];
+
+  dynamic _selectedLocationPayload() {
+    if (!widget.includeLocalizacao) return 'Não Aplicável';
+    final selected = _localizacao;
+    if (selected == null || selected.trim().isEmpty) return 'Não Informado';
+
+    for (final option in widget.locationOptions) {
+      if (option.label == selected || option.fullLabel == selected) {
+        return option.toPayload();
+      }
+    }
+
+    return selected;
+  }
 
   @override
   void dispose() {
@@ -154,9 +180,7 @@ class _FormTemplateState extends State<FormTemplate> {
             _atendimentoPara == 'Para outra Pessoa' && widget.includeNomePessoa
             ? _nomePessoaController.text
             : null,
-        'localizacao': widget.includeLocalizacao
-            ? (_localizacao ?? 'Não Informado')
-            : 'Não Aplicável',
+        'localizacao': _selectedLocationPayload(),
         'telefone': _telefoneController.text,
         'urgencia': widget.includeUrgencia
             ? (_urgencia ?? '3 - Média (Padrão)')
@@ -222,6 +246,19 @@ class _FormTemplateState extends State<FormTemplate> {
                 title: 'Dados Gerais',
                 subtitle:
                     'Informações de contexto e identificação do solicitante.',
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Consumer<AppState>(
+                builder: (context, appState, _) => _GovernedFormContextBanner(
+                  domainLabel: widget.domainLabel,
+                  assignmentGroupLabel: widget.assignmentGroupLabel,
+                  uiSchemaSource: widget.uiSchemaSource,
+                  runtimeFormStatus: widget.runtimeFormStatus,
+                  username: appState.loggedUsername,
+                  activeProfile: appState.activeProfile,
+                  activeEntityName: appState.activeEntityName,
+                  selectedTicketEntityName: appState.selectedTicketEntityName,
+                ),
               ),
               const SizedBox(height: AppSpacing.md),
               CustomDropdownField(
@@ -309,6 +346,72 @@ class _FormTemplateState extends State<FormTemplate> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _GovernedFormContextBanner extends StatelessWidget {
+  final String domainLabel;
+  final String? assignmentGroupLabel;
+  final String uiSchemaSource;
+  final String? runtimeFormStatus;
+  final String? username;
+  final String? activeProfile;
+  final String? activeEntityName;
+  final String? selectedTicketEntityName;
+
+  const _GovernedFormContextBanner({
+    required this.domainLabel,
+    required this.assignmentGroupLabel,
+    required this.uiSchemaSource,
+    required this.runtimeFormStatus,
+    required this.username,
+    required this.activeProfile,
+    required this.activeEntityName,
+    required this.selectedTicketEntityName,
+  });
+
+  String get _schemaLabel {
+    if (uiSchemaSource == 'formcreator_runtime_metadata') {
+      return 'Campos vindos do FormCreator';
+    }
+    return 'Campos de bootstrap local';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = <String>[
+      'Domínio: $domainLabel',
+      if (assignmentGroupLabel != null) 'Fila prevista: $assignmentGroupLabel',
+      if (activeProfile != null) 'Perfil ativo: $activeProfile',
+      if (activeEntityName != null) 'Entidade ativa: $activeEntityName',
+      if (selectedTicketEntityName != null)
+        'Entidade do ticket: $selectedTicketEntityName',
+      _schemaLabel,
+      if (runtimeFormStatus != null) 'FormCreator: $runtimeFormStatus',
+      if (username != null) 'Logado como: $username',
+    ];
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.sm),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceMuted,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Wrap(
+        spacing: AppSpacing.sm,
+        runSpacing: AppSpacing.xs,
+        children: rows.map((row) {
+          return Text(
+            row,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: AppColors.textMuted,
+              fontWeight: FontWeight.w600,
+            ),
+          );
+        }).toList(),
       ),
     );
   }

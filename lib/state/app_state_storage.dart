@@ -35,8 +35,7 @@ class AppStateStorage {
   static const String _activeEntityNameKey = 'activeEntityName';
   static const String _defaultEntityIdKey = 'defaultEntityId';
   static const String _selectedTicketEntityIdKey = 'selectedTicketEntityId';
-  static const String _selectedTicketEntityNameKey =
-      'selectedTicketEntityName';
+  static const String _selectedTicketEntityNameKey = 'selectedTicketEntityName';
   static const String _ticketReadPrefix = 'ticket_read_';
 
   static Future<List<GlpiTicket>> loadPendingTickets() async {

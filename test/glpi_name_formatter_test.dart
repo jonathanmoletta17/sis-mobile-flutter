@@ -14,9 +14,19 @@ void main() {
       expect(name, 'Jonathan Moletta');
     });
 
-    test('does not expose numeric GLPI id as a bare display name', () {
-      expect(GlpiNameFormatter.getFriendlyName('2039'), 'Usuario 2039');
-      expect(GlpiNameFormatter.formatNameFromMap({'id': 2039}), 'Usuario 2039');
+    test('does not expose numeric GLPI id in display fallbacks', () {
+      expect(
+        GlpiNameFormatter.getFriendlyName('2039'),
+        'Usuário não identificado',
+      );
+      expect(
+        GlpiNameFormatter.formatNameFromMap({'id': 2039}),
+        'Usuário não identificado',
+      );
+      expect(
+        GlpiNameFormatter.fallbackUserLabel(2040, prefix: 'Tecnico'),
+        'Técnico não identificado',
+      );
     });
 
     test('extracts ids from numeric and fallback display labels', () {

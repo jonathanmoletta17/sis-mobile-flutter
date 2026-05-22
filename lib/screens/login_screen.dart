@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       final message = e is GlpiAuthFailure
           ? e.userMessage
-          : 'Erro ao autenticar: $e';
+          : 'Erro ao autenticar. Verifique os dados informados e tente novamente.';
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(message)));

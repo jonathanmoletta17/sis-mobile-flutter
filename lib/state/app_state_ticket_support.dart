@@ -1,6 +1,13 @@
 import '../data/service_data.dart';
+import '../models/glpi_identity.dart';
 import '../models/glpi_status.dart';
 import '../models/glpi_ticket.dart';
+import '../models/operational_role.dart';
+import '../models/ticket_domain.dart';
+import '../models/ticket_queue_type.dart';
+import '../policy/permission_service.dart';
+import '../policy/ticket_permission_decision.dart';
+import '../policy/ticket_queue_filter.dart';
 import '../utils/glpi_name_formatter.dart';
 
 class AppStateTicketSupport {
@@ -126,6 +133,20 @@ class AppStateTicketSupport {
         profile.contains('solicitante');
   }
 
+  static bool isTechnicianProfile(String? activeProfile) {
+    final profile = normalizeIdentity(activeProfile);
+    if (profile.isEmpty) return false;
+    if (isRequesterProfile(profile)) return false;
+
+    return profile.contains('tecnico') ||
+        profile.contains('técnico') ||
+        profile.contains('super-admin') ||
+        profile.contains('super admin') ||
+        profile == 'admin' ||
+        profile.contains('administrador') ||
+        profile.contains('supervisor');
+  }
+
   static bool canOpenConversation(Map<String, dynamic> ticket) {
     final id = ticket['id']?.toString() ?? '';
     if (id.contains('OFFLINE')) return false;
@@ -147,7 +168,7 @@ class AppStateTicketSupport {
     required int? loggedUserId,
   }) {
     if (!canSendCommonInteraction(ticket['status'])) return false;
-    if (isRequesterProfile(activeProfile)) return false;
+    if (!isTechnicianProfile(activeProfile)) return false;
 
     return !isLoggedUserRequester(
       ticket,
@@ -163,7 +184,7 @@ class AppStateTicketSupport {
     required int? loggedUserId,
   }) {
     if (!canSendCommonInteraction(ticket['status'])) return false;
-    if (isRequesterProfile(activeProfile)) return false;
+    if (!isTechnicianProfile(activeProfile)) return false;
 
     return !isLoggedUserRequester(
       ticket,
@@ -231,5 +252,71 @@ class AppStateTicketSupport {
         ..['status'] = 'Pendente (Offline)'
         ..['serviceName'] = ticket.serviceName;
     }).toList();
+  }
+
+  static TicketPermissionDecision evaluateTicketPermissions(
+    Map<String, dynamic> ticket, {
+    required OperationalRole role,
+    required TicketDomain ticketDomain,
+    required int? loggedUserId,
+    List<GlpiGroupRef> assignedGroups = const [],
+    List<GlpiGroupRef> observerGroups = const [],
+  }) {
+    return PermissionService.evaluate(
+      role: role,
+      ticketDomain: ticketDomain,
+      loggedUserId: loggedUserId,
+      requesterUserId: _extractRequesterUserId(ticket),
+      status: ticket['status'],
+      assignedGroups: assignedGroups,
+      observerGroups: observerGroups,
+    );
+  }
+
+  static List<TicketQueueType> resolveTicketQueues(
+    Map<String, dynamic> ticket, {
+    required OperationalRole role,
+    required TicketDomain ticketDomain,
+    required int? loggedUserId,
+    List<GlpiGroupRef> assignedGroups = const [],
+    List<GlpiGroupRef> observerGroups = const [],
+    bool assignedToLoggedUser = false,
+  }) {
+    return TicketQueueFilter.resolveQueues(
+      role: role,
+      ticketDomain: ticketDomain,
+      loggedUserId: loggedUserId,
+      requesterUserId: _extractRequesterUserId(ticket),
+      status: ticket['status'],
+      assignedGroups: assignedGroups,
+      observerGroups: observerGroups,
+      assignedToLoggedUser: assignedToLoggedUser,
+    );
+  }
+
+  static int? _extractRequesterUserId(Map<String, dynamic> ticket) {
+    final candidates = [
+      ticket['requester_user_id'],
+      ticket['users_id_recipient_id'],
+      ticket['Users_id_recipient_id'],
+      ticket['users_id_recipient'],
+      ticket['Users_id_recipient'],
+    ];
+
+    for (final candidate in candidates) {
+      final id = int.tryParse(GlpiNameFormatter.extractNumericId(candidate) ?? '');
+      if (id != null) return id;
+      final parsed = int.tryParse(candidate?.toString().trim() ?? '');
+      if (parsed != null) return parsed;
+      if (candidate is Map) {
+        for (final key in ['id', 'value', 'name', 'completename']) {
+          final nestedId = int.tryParse(GlpiNameFormatter.extractNumericId(candidate[key]) ?? '');
+          if (nestedId != null) return nestedId;
+          final nestedParsed = int.tryParse(candidate[key]?.toString().trim() ?? '');
+          if (nestedParsed != null) return nestedParsed;
+        }
+      }
+    }
+    return null;
   }
 }

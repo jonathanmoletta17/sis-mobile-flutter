@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../data/service_data.dart';
+import '../catalog/service_catalog_provider.dart';
 import '../models/glpi_status.dart';
 import '../state/app_state.dart';
 import '../theme/app_colors.dart';
@@ -52,7 +52,8 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
   void initState() {
     super.initState();
     _categoryOptions =
-        ['Todos'] + serviceCategories.map((s) => s.name).toList();
+        ['Todos'] +
+        serviceCatalogRepository.services.map((s) => s.name).toList();
     _loadInitialData();
   }
 

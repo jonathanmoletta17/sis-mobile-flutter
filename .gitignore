@@ -57,6 +57,7 @@ app.*.map.json
 .env.*.prod
 tool/external-access/pass-through/.env.host
 tool/external-access/**/.wrangler/
+/.wrangler/
 
 # Android signing artifacts
 android/key.properties

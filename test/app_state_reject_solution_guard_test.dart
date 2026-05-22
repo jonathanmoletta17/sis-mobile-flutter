@@ -14,7 +14,10 @@ void main() {
         final appState = AppState(api);
         await pumpEventQueue();
 
-        final authenticated = await appState.authenticate('solicitante', 'senha');
+        final authenticated = await appState.authenticate(
+          'solicitante',
+          'senha',
+        );
         expect(authenticated, isTrue);
 
         final result = await appState.rejectSolution(
@@ -62,7 +65,10 @@ void main() {
         final appState = AppState(api);
         await pumpEventQueue();
 
-        final authenticated = await appState.authenticate('solicitante', 'senha');
+        final authenticated = await appState.authenticate(
+          'solicitante',
+          'senha',
+        );
         expect(authenticated, isTrue);
 
         final result = await appState.rejectSolution(
@@ -77,27 +83,33 @@ void main() {
       },
     );
 
-    test('reports failure when rejected solution does not reopen ticket', () async {
-      SharedPreferences.setMockInitialValues({});
-      final api = _SolvedTicketGlpiClient(reopenSucceeds: false);
-      final appState = AppState(api);
-      await pumpEventQueue();
+    test(
+      'reports failure when rejected solution does not reopen ticket',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final api = _SolvedTicketGlpiClient(reopenSucceeds: false);
+        final appState = AppState(api);
+        await pumpEventQueue();
 
-      final authenticated = await appState.authenticate('solicitante', 'senha');
-      expect(authenticated, isTrue);
+        final authenticated = await appState.authenticate(
+          'solicitante',
+          'senha',
+        );
+        expect(authenticated, isTrue);
 
-      final result = await appState.rejectSolution(
-        '8595',
-        '123',
-        'Ainda falta concluir o atendimento.',
-      );
+        final result = await appState.rejectSolution(
+          '8595',
+          '123',
+          'Ainda falta concluir o atendimento.',
+        );
 
-      expect(result['success'], isFalse);
-      expect(result['error'], contains('Falha ao reabrir'));
-      expect(api.updateSolutionStatusCalls, 1);
-      expect(api.updateTicketStatusCalls, 1);
-      expect(api.addTicketMessageCalls, 0);
-    });
+        expect(result['success'], isFalse);
+        expect(result['error'], contains('Falha ao reabrir'));
+        expect(api.updateSolutionStatusCalls, 1);
+        expect(api.updateTicketStatusCalls, 1);
+        expect(api.addTicketMessageCalls, 0);
+      },
+    );
   });
 }
 
@@ -125,10 +137,7 @@ class _OpenTicketGlpiClient extends GlpiClient {
     String sessionToken,
   ) async {
     getTicketByIdCalls += 1;
-    return {
-      'id': ticketId,
-      'status': GlpiStatus.novo.code,
-    };
+    return {'id': ticketId, 'status': GlpiStatus.novo.code};
   }
 
   @override
@@ -175,10 +184,7 @@ class _SolvedTicketGlpiClient extends GlpiClient {
     String sessionToken,
   ) async {
     getTicketByIdCalls += 1;
-    return {
-      'id': ticketId,
-      'status': _status.code,
-    };
+    return {'id': ticketId, 'status': _status.code};
   }
 
   @override
@@ -230,11 +236,7 @@ class _ClosedTicketGlpiClient extends GlpiClient {
 
   @override
   Future<Map<String, dynamic>> getSessionContext(String sessionToken) async {
-    return {
-      'userId': 2039,
-      'username': 'tecnico',
-      'profile': 'Tecnico',
-    };
+    return {'userId': 2039, 'username': 'tecnico', 'profile': 'Tecnico'};
   }
 
   @override
@@ -243,10 +245,7 @@ class _ClosedTicketGlpiClient extends GlpiClient {
     String sessionToken,
   ) async {
     getTicketByIdCalls += 1;
-    return {
-      'id': ticketId,
-      'status': GlpiStatus.fechado.code,
-    };
+    return {'id': ticketId, 'status': GlpiStatus.fechado.code};
   }
 
   @override

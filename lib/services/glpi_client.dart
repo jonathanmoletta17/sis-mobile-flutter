@@ -21,6 +21,7 @@ import 'glpi_ticket_support.dart';
 /// - ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦ Upload de anexo e vÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­nculo ao Ticket (quando disponÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­vel)
 class GlpiClient {
   String? _sessionToken;
+  final Map<String, String> _userDisplayNameCache = <String, String>{};
 
   /// Obter status da sessÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o
   bool get isAuthenticated => _sessionToken != null;
@@ -34,6 +35,7 @@ class GlpiClient {
   /// Limpa o token local do cliente.
   void clearSession() {
     _sessionToken = null;
+    _userDisplayNameCache.clear();
   }
 
   Map<String, String> get _headers => {
@@ -88,18 +90,23 @@ class GlpiClient {
 
     try {
       final response = await http
-          .post(
+          .get(
             url,
-            headers: _headers,
-            body: jsonEncode({'login': username, 'password': password}),
+            headers: {
+              ..._headers,
+              'Authorization':
+                  'Basic ${base64Encode(utf8.encode('$username:$password'))}',
+            },
           )
           .timeout(GlpiConfig.requestTimeout);
 
       _logResponse('AUTH', response);
 
       if (response.statusCode != 200) {
-        throw Exception(
-          'Falha na autenticaÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o (Status: ${response.statusCode}) - ${response.body}',
+        throw GlpiClientSupport.mapAuthenticationFailure(
+          Exception('AUTH_HTTP_${response.statusCode}'),
+          statusCode: response.statusCode,
+          body: response.body,
         );
       }
 
@@ -109,9 +116,7 @@ class GlpiClient {
         'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦ SessÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o iniciada com sucesso',
       );
     } catch (e) {
-      _debugLog(
-        'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ Erro ao autenticar: $e',
-      );
+      _debugLog('Falha durante autenticacao GLPI: $e');
       rethrow;
     }
   }
@@ -140,9 +145,10 @@ class GlpiClient {
       await initSessionWithCredentials(username, password);
       return _sessionToken;
     } catch (e) {
-      _debugLog(
-        'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ Erro ao autenticar: $e',
-      );
+      _debugLog('Falha durante autenticacao GLPI: $e');
+      if (e is GlpiAuthFailure) {
+        rethrow;
+      }
       throw GlpiClientSupport.mapAuthenticationFailure(e);
     }
   }
@@ -464,6 +470,9 @@ class GlpiClient {
     String userId,
     Map<String, String> headers,
   ) async {
+    final cached = _userDisplayNameCache[userId];
+    if (cached != null && cached.trim().isNotEmpty) return cached;
+
     try {
       final userUri = Uri.parse(
         '${GlpiConfig.baseUrl}/User/$userId?expand_dropdowns=true',
@@ -481,7 +490,12 @@ class GlpiClient {
       final userMap = (jsonDecode(userResp.body) as Map)
           .cast<String, dynamic>();
       final displayName = GlpiNameFormatter.formatNameFromMap(userMap).trim();
-      return displayName.isEmpty ? null : displayName;
+      if (displayName.isEmpty ||
+          GlpiNameFormatter.extractNumericId(displayName) != null) {
+        return null;
+      }
+      _userDisplayNameCache[userId] = displayName;
+      return displayName;
     } catch (e) {
       if (_isSessionInvalidException(e)) rethrow;
       return null;

@@ -2,11 +2,11 @@ import 'dart:io';
 
 class FileValidator {
   // 10 MB (Ajuste conforme a configuração do seu PHP/GLPI 'upload_max_filesize')
-  static const int maxSizeInBytes = 10 * 1024 * 1024; 
-  
+  static const int maxSizeInBytes = 10 * 1024 * 1024;
+
   static const List<String> allowedExtensions = [
     'jpg', 'jpeg', 'png', 'gif', 'webp', // Imagens
-    'pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'csv' // Documentos
+    'pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'csv', // Documentos
   ];
 
   static String? validate(File file) {
@@ -37,11 +37,11 @@ class FileValidator {
   /// Verifica se o arquivo é uma imagem
   static bool isImage(String fileName) {
     final ext = fileName.toLowerCase();
-    return ext.endsWith('.jpg') || 
-           ext.endsWith('.jpeg') || 
-           ext.endsWith('.png') || 
-           ext.endsWith('.gif') || 
-           ext.endsWith('.webp');
+    return ext.endsWith('.jpg') ||
+        ext.endsWith('.jpeg') ||
+        ext.endsWith('.png') ||
+        ext.endsWith('.gif') ||
+        ext.endsWith('.webp');
   }
 
   /// Obtém um ícone emoji apropriado para o tipo de arquivo

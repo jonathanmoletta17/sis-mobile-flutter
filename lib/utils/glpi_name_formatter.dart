@@ -36,11 +36,19 @@ class GlpiNameFormatter {
   static String fallbackUserLabel(dynamic value, {String prefix = 'Usuario'}) {
     final numericId = extractNumericId(value);
     if (numericId != null && numericId.isNotEmpty) {
-      return '$prefix $numericId';
+      return _unresolvedLabel(prefix);
     }
 
     final cleaned = _sanitize(value?.toString());
     return cleaned.isEmpty ? '$prefix Desconhecido' : '$prefix $cleaned';
+  }
+
+  static String _unresolvedLabel(String prefix) {
+    final normalized = prefix.trim().toLowerCase();
+    if (normalized == 'tecnico' || normalized == 'técnico') {
+      return 'Técnico não identificado';
+    }
+    return 'Usuário não identificado';
   }
 
   /// ----------------------------------------------------------

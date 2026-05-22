@@ -7,14 +7,14 @@ void main() {
       'parses app payload into readable fields and hides machine markers',
       () {
         final summary = TicketFormSummary.parse('''
-Ar condicionado nao liga na sala de reuniao.
+&lt;div&gt;Ar condicionado &amp;ccedil;&amp;atilde;o nao liga na sala de reuniao.&lt;/div&gt;
 
 -- FORMULARIO DO APP
 --------------------------------
 Servico: Ar-Condicionado
 Atendimento para: Para mim
 Telefone: 51999999999
-Localizacao: PIRATINI > 2o Andar
+Localizacao: &lt;strong&gt;PIRATINI &amp;gt; 2o Andar&lt;/strong&gt;
 Urgencia: 3
 Tipo: Manutencao
 Anexo: 6df4a4cc-768b-43de-95c6-6fe5f6f33a91.jpg
@@ -22,7 +22,7 @@ Anexo: 6df4a4cc-768b-43de-95c6-6fe5f6f33a91.jpg
 
         expect(
           summary.description,
-          'Ar condicionado nao liga na sala de reuniao.',
+          'Ar condicionado ção nao liga na sala de reuniao.',
         );
         expect(summary.fields.map((field) => field.label), [
           'Serviço',

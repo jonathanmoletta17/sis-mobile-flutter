@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../data/service_data.dart';
+import '../catalog/service_catalog_provider.dart';
 import '../state/app_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
@@ -295,9 +295,11 @@ class ServiceCatalogScreen extends StatelessWidget {
                   mainAxisSpacing: AppSpacing.md,
                   childAspectRatio: crossAxisCount == 1 ? 2.25 : 0.98,
                 ),
-                itemCount: serviceCategories.length,
+                itemCount: serviceCatalogRepository.services.length,
                 itemBuilder: (context, index) {
-                  return ServiceCard(service: serviceCategories[index]);
+                  return ServiceCard(
+                    service: serviceCatalogRepository.services[index],
+                  );
                 },
               ),
             ],

@@ -14,7 +14,10 @@ void main() {
         final appState = AppState(api);
         await pumpEventQueue();
 
-        final authenticated = await appState.authenticate('solicitante', 'senha');
+        final authenticated = await appState.authenticate(
+          'solicitante',
+          'senha',
+        );
         expect(authenticated, isTrue);
 
         final result = await appState.approveSolution('8595', '123');
@@ -54,7 +57,10 @@ void main() {
         final appState = AppState(api);
         await pumpEventQueue();
 
-        final authenticated = await appState.authenticate('solicitante', 'senha');
+        final authenticated = await appState.authenticate(
+          'solicitante',
+          'senha',
+        );
         expect(authenticated, isTrue);
 
         final result = await appState.approveSolution('8595', '123');
@@ -65,22 +71,28 @@ void main() {
       },
     );
 
-    test('reports failure when approved solution does not close ticket', () async {
-      SharedPreferences.setMockInitialValues({});
-      final api = _SolvedTicketGlpiClient(closeSucceeds: false);
-      final appState = AppState(api);
-      await pumpEventQueue();
+    test(
+      'reports failure when approved solution does not close ticket',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final api = _SolvedTicketGlpiClient(closeSucceeds: false);
+        final appState = AppState(api);
+        await pumpEventQueue();
 
-      final authenticated = await appState.authenticate('solicitante', 'senha');
-      expect(authenticated, isTrue);
+        final authenticated = await appState.authenticate(
+          'solicitante',
+          'senha',
+        );
+        expect(authenticated, isTrue);
 
-      final result = await appState.approveSolution('8595', '123');
+        final result = await appState.approveSolution('8595', '123');
 
-      expect(result['success'], isFalse);
-      expect(result['error'], contains('Falha ao fechar'));
-      expect(api.updateSolutionStatusCalls, 1);
-      expect(api.updateTicketStatusCalls, 1);
-    });
+        expect(result['success'], isFalse);
+        expect(result['error'], contains('Falha ao fechar'));
+        expect(api.updateSolutionStatusCalls, 1);
+        expect(api.updateTicketStatusCalls, 1);
+      },
+    );
   });
 }
 
@@ -108,10 +120,7 @@ class _OpenTicketGlpiClient extends GlpiClient {
     String sessionToken,
   ) async {
     getTicketByIdCalls += 1;
-    return {
-      'id': ticketId,
-      'status': GlpiStatus.novo.code,
-    };
+    return {'id': ticketId, 'status': GlpiStatus.novo.code};
   }
 
   @override
@@ -155,10 +164,7 @@ class _SolvedTicketGlpiClient extends GlpiClient {
     String sessionToken,
   ) async {
     getTicketByIdCalls += 1;
-    return {
-      'id': ticketId,
-      'status': GlpiStatus.solucionado.code,
-    };
+    return {'id': ticketId, 'status': GlpiStatus.solucionado.code};
   }
 
   @override
@@ -197,11 +203,7 @@ class _ClosedTicketGlpiClient extends GlpiClient {
 
   @override
   Future<Map<String, dynamic>> getSessionContext(String sessionToken) async {
-    return {
-      'userId': 2039,
-      'username': 'tecnico',
-      'profile': 'Tecnico',
-    };
+    return {'userId': 2039, 'username': 'tecnico', 'profile': 'Tecnico'};
   }
 
   @override
@@ -210,10 +212,7 @@ class _ClosedTicketGlpiClient extends GlpiClient {
     String sessionToken,
   ) async {
     getTicketByIdCalls += 1;
-    return {
-      'id': ticketId,
-      'status': GlpiStatus.fechado.code,
-    };
+    return {'id': ticketId, 'status': GlpiStatus.fechado.code};
   }
 
   @override

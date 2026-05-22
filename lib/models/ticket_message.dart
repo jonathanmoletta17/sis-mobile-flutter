@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:html/parser.dart' as html_parser;
 
 import '../utils/glpi_name_formatter.dart';
+import '../utils/glpi_text_formatter.dart';
 
 class TicketMessage {
   final String id;
@@ -75,57 +76,7 @@ class TicketMessage {
   }
 
   static String _decodeHtml(String? htmlText) {
-    if (htmlText == null || htmlText.isEmpty) return '';
-
-    try {
-      String decoded = htmlText
-          .replaceAll('&lt;', '<')
-          .replaceAll('&gt;', '>')
-          .replaceAll('&amp;', '&')
-          .replaceAll('&quot;', '"')
-          .replaceAll('&#39;', "'")
-          .replaceAll('&apos;', "'")
-          .replaceAll('&nbsp;', ' ')
-          .replaceAll('&copy;', '©')
-          .replaceAll('&reg;', '®');
-
-      decoded = decoded.replaceAllMapped(RegExp(r'&#(\d+);'), (match) {
-        try {
-          final codePoint = int.parse(match.group(1)!);
-          return String.fromCharCode(codePoint);
-        } catch (_) {
-          return match.group(0) ?? '';
-        }
-      });
-
-      decoded = decoded.replaceAllMapped(RegExp(r'&#x([0-9a-fA-F]+);'), (
-        match,
-      ) {
-        try {
-          final codePoint = int.parse(match.group(1)!, radix: 16);
-          return String.fromCharCode(codePoint);
-        } catch (_) {
-          return match.group(0) ?? '';
-        }
-      });
-
-      if (decoded.contains('<') && decoded.contains('>')) {
-        try {
-          final document = html_parser.parse(decoded);
-          document.querySelectorAll('script, style').forEach((e) => e.remove());
-          final text = document.body?.text ?? decoded;
-          return text.replaceAll(RegExp(r'\s+'), ' ').trim();
-        } catch (e) {
-          debugPrint('Erro ao fazer parse HTML: $e');
-          return decoded.replaceAll(RegExp(r'\s+'), ' ').trim();
-        }
-      }
-
-      return decoded.replaceAll(RegExp(r'\s+'), ' ').trim();
-    } catch (e) {
-      debugPrint('Erro ao decodificar HTML: $e');
-      return htmlText;
-    }
+    return GlpiTextFormatter.toPlainText(htmlText);
   }
 
   static List<String> _extractImageUrls(String? htmlText) {

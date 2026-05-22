@@ -64,25 +64,27 @@ void main() {
       expect(api.updateSolutionStatusCalls, 0);
     });
 
-    test('sendTicketMessageWithAttachments aborts before adding message',
-        () async {
-      SharedPreferences.setMockInitialValues({});
-      final api = _ClosedTicketGlpiClient();
-      final appState = AppState(api);
-      await pumpEventQueue();
+    test(
+      'sendTicketMessageWithAttachments aborts before adding message',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final api = _ClosedTicketGlpiClient();
+        final appState = AppState(api);
+        await pumpEventQueue();
 
-      final authenticated = await appState.authenticate('tecnico', 'senha');
-      expect(authenticated, isTrue);
+        final authenticated = await appState.authenticate('tecnico', 'senha');
+        expect(authenticated, isTrue);
 
-      final result = await appState.sendTicketMessageWithAttachments(
-        ticketId: '8595',
-        messageContent: 'Teste de mensagem',
-      );
+        final result = await appState.sendTicketMessageWithAttachments(
+          ticketId: '8595',
+          messageContent: 'Teste de mensagem',
+        );
 
-      expect(result['success'], isFalse);
-      expect(api.getTicketByIdCalls, 1);
-      expect(api.addTicketMessageCalls, 0);
-    });
+        expect(result['success'], isFalse);
+        expect(api.getTicketByIdCalls, 1);
+        expect(api.addTicketMessageCalls, 0);
+      },
+    );
 
     test('uploadAndLinkImage aborts before uploading attachment', () async {
       final tempDir = await Directory.systemTemp.createTemp(
@@ -127,11 +129,7 @@ class _ClosedTicketGlpiClient extends GlpiClient {
 
   @override
   Future<Map<String, dynamic>> getSessionContext(String sessionToken) async {
-    return {
-      'userId': 2039,
-      'username': 'tecnico',
-      'profile': 'Tecnico',
-    };
+    return {'userId': 2039, 'username': 'tecnico', 'profile': 'Tecnico'};
   }
 
   @override
@@ -140,10 +138,7 @@ class _ClosedTicketGlpiClient extends GlpiClient {
     String sessionToken,
   ) async {
     getTicketByIdCalls += 1;
-    return {
-      'id': ticketId,
-      'status': GlpiStatus.fechado.code,
-    };
+    return {'id': ticketId, 'status': GlpiStatus.fechado.code};
   }
 
   @override

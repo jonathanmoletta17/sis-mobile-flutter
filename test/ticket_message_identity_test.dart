@@ -22,30 +22,36 @@ void main() {
       expect(message.sender, 'Jonathan Moletta');
     });
 
-    test('uses readable fallback when followup author is a numeric id', () {
-      final message = TicketMessage.fromMap({
-        'id': 52,
-        'tickets_id': 8595,
-        'content': 'Acompanhamento registrado.',
-        'users_id': '2039',
-        'date_creation': '2026-04-28 10:31:00',
-      });
+    test(
+      'uses non-identifying fallback when followup author is a numeric id',
+      () {
+        final message = TicketMessage.fromMap({
+          'id': 52,
+          'tickets_id': 8595,
+          'content': 'Acompanhamento registrado.',
+          'users_id': '2039',
+          'date_creation': '2026-04-28 10:31:00',
+        });
 
-      expect(message.senderUserId, '2039');
-      expect(message.sender, 'Usuario 2039');
-    });
+        expect(message.senderUserId, '2039');
+        expect(message.sender, 'Usuário não identificado');
+      },
+    );
 
-    test('uses readable fallback when document uploader is a numeric id', () {
-      final message = TicketMessage.fromDocumentMap({
-        'id': 88,
-        'items_id': 8595,
-        'name': 'foto.jpg',
-        'users_id': '2039',
-        'date_creation': '2026-04-28 10:32:00',
-      });
+    test(
+      'uses non-identifying fallback when document uploader is a numeric id',
+      () {
+        final message = TicketMessage.fromDocumentMap({
+          'id': 88,
+          'items_id': 8595,
+          'name': 'foto.jpg',
+          'users_id': '2039',
+          'date_creation': '2026-04-28 10:32:00',
+        });
 
-      expect(message.sender, 'Usuario 2039');
-    });
+        expect(message.sender, 'Usuário não identificado');
+      },
+    );
 
     test('uses hydrated document uploader name and preserves user id', () {
       final message = TicketMessage.fromDocumentMap({
@@ -73,7 +79,7 @@ void main() {
       });
 
       expect(message.senderUserId, '2039');
-      expect(message.sender, 'Tecnico 2039');
+      expect(message.sender, 'Técnico não identificado');
     });
 
     test('uses technician fallback when solution author map lacks names', () {
@@ -87,7 +93,7 @@ void main() {
       });
 
       expect(message.senderUserId, '2039');
-      expect(message.sender, 'Tecnico 2039');
+      expect(message.sender, 'Técnico não identificado');
     });
   });
 }

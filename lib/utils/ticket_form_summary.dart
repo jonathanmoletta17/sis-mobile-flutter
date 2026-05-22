@@ -1,3 +1,5 @@
+import 'glpi_text_formatter.dart';
+
 class TicketFormSummaryField {
   const TicketFormSummaryField({required this.label, required this.value});
 
@@ -14,8 +16,9 @@ class TicketFormSummary {
   bool get isEmpty => description.trim().isEmpty && fields.isEmpty;
 
   static TicketFormSummary parse(String rawValue) {
-    final decoded = _decodeEntities(
+    final decoded = GlpiTextFormatter.toPlainText(
       rawValue,
+      preserveLineBreaks: true,
     ).replaceAll('\r\n', '\n').replaceAll('\r', '\n');
     final lines = decoded
         .split('\n')
@@ -133,33 +136,6 @@ class TicketFormSummary {
       default:
         return 'Media';
     }
-  }
-
-  static String _decodeEntities(String input) {
-    var decoded = input
-        .replaceAll('&lt;', '<')
-        .replaceAll('&gt;', '>')
-        .replaceAll('&amp;', '&')
-        .replaceAll('&quot;', '"')
-        .replaceAll('&#39;', "'")
-        .replaceAll('&apos;', "'")
-        .replaceAll('&nbsp;', ' ');
-
-    decoded = decoded.replaceAllMapped(RegExp(r'&#(\d+);'), (m) {
-      final codePoint = int.tryParse(m.group(1) ?? '');
-      return codePoint == null
-          ? (m.group(0) ?? '')
-          : String.fromCharCode(codePoint);
-    });
-
-    decoded = decoded.replaceAllMapped(RegExp(r'&#x([0-9a-fA-F]+);'), (m) {
-      final codePoint = int.tryParse(m.group(1) ?? '', radix: 16);
-      return codePoint == null
-          ? (m.group(0) ?? '')
-          : String.fromCharCode(codePoint);
-    });
-
-    return decoded;
   }
 
   static String _normalize(String value) {

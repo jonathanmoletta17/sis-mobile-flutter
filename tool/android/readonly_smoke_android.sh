@@ -101,9 +101,12 @@ for apk in "$SIS_APK" "$DTIC_APK"; do
   sha256sum "$apk" | tee -a "$OUT_DIR/apk-sha256.txt"
   unzip -tq "$apk"
   "$AAPT" dump badging "$apk" | grep -E "^package:|^sdkVersion:|^targetSdkVersion:|^application-label:'" | head -8 | tee -a "$OUT_DIR/apk-badging.txt"
-  unzip -p "$apk" assets/flutter_assets/.env 2>/dev/null \
-    | grep -E '^(GLPI_BASE_URL|SIS_GLPI_BASE_URL|DTIC_GLPI_BASE_URL|GLPI_DEBUG_LOGS|DTIC_ENABLE_FORM_SUBMISSION|DTIC_ENABLE_TICKET_ACTIONS)' \
-    | tee -a "$OUT_DIR/apk-public-env.txt" || true
+  for env_asset in assets/flutter_assets/.env assets/flutter_assets/.env.public; do
+    unzip -p "$apk" "$env_asset" 2>/dev/null \
+      | grep -E '^(GLPI_BASE_URL|SIS_GLPI_BASE_URL|SIS_METADATA_CATALOG_URL|DTIC_GLPI_BASE_URL|GLPI_DEBUG_LOGS|DTIC_ENABLE_FORM_SUBMISSION|DTIC_ENABLE_TICKET_ACTIONS)' \
+      | sed "s#^#$env_asset:#" \
+      | tee -a "$OUT_DIR/apk-public-env.txt" || true
+  done
   echo >> "$OUT_DIR/apk-badging.txt"
   echo >> "$OUT_DIR/apk-public-env.txt"
 done

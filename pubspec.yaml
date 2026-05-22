@@ -76,6 +76,8 @@ flutter:
   assets:
     - assets/images/logo.png
     - .env
+    - .env.public
+    - .env.public.dtic
   
 
 

@@ -92,6 +92,8 @@ class _WideServiceCardContent extends StatelessWidget {
                       context,
                     ).textTheme.bodySmall?.copyWith(color: AppColors.textMuted),
                   ),
+                  const SizedBox(height: AppSpacing.xs),
+                  _ServiceGovernanceBadges(service: service),
                 ],
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -150,6 +152,8 @@ class _CompactServiceCardContent extends StatelessWidget {
             context,
           ).textTheme.bodySmall?.copyWith(color: AppColors.textMuted),
         ),
+        const SizedBox(height: AppSpacing.xs),
+        _ServiceGovernanceBadges(service: service),
         const SizedBox(height: AppSpacing.md),
         Row(
           children: [
@@ -164,6 +168,43 @@ class _CompactServiceCardContent extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _ServiceGovernanceBadges extends StatelessWidget {
+  final ServiceCategory service;
+
+  const _ServiceGovernanceBadges({required this.service});
+
+  @override
+  Widget build(BuildContext context) {
+    final chips = <String>[
+      service.domainLabel,
+      if (service.assignmentGroupLabel != null) service.assignmentGroupLabel!,
+    ];
+
+    return Wrap(
+      spacing: AppSpacing.xs,
+      runSpacing: AppSpacing.xs,
+      children: chips.map((chip) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: service.color.withValues(alpha: 0.10),
+            borderRadius: BorderRadius.circular(AppRadius.pill),
+          ),
+          child: Text(
+            chip,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: AppColors.textStrong,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
