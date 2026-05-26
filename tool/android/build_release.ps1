@@ -10,8 +10,12 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..")
+$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).ProviderPath
 Set-Location $repoRoot
+
+if ($repoRoot.StartsWith("\\")) {
+    throw "Build Android via UNC/WSL nao e suportado pelo Flutter Windows. Use um mirror operacional em C:\Users\jonathan-moletta\ops\... ou execute este script a partir de um caminho Windows local. A fonte canonica continua em WSL/ext4."
+}
 
 function Test-JdkHome {
     param(
@@ -39,6 +43,7 @@ function Get-JdkCandidates {
         (Join-Path $RepoRoot "tool\android\runtime\jdk17\jdk-17.0.18+8"),
         (Join-Path $RepoRoot "tool\android\runtime\jdk17"),
         "C:\Program Files\Android\Android Studio\jbr",
+        "C:\Program Files\Microsoft\jdk-21.0.10.7-hotspot",
         "C:\Program Files\Java\latest",
         "C:\Program Files\Java\jdk-21",
         "C:\Program Files\Java\jdk-17",
@@ -88,6 +93,7 @@ $originalEnvBytes = if ($originalEnvExists) {
     $null
 }
 $temporaryEnvApplied = $false
+$temporaryEnvAssetPaths = New-Object System.Collections.Generic.List[string]
 
 function Write-Utf8NoBomFile {
     param(
@@ -109,6 +115,13 @@ function Set-TemporaryEnvFile {
     )
 
     Write-Utf8NoBomFile -Path $envPath -Content $Content
+    foreach ($assetName in @(".env.public", ".env.public.dtic")) {
+        $assetPath = Join-Path $repoRoot $assetName
+        if (-not (Test-Path $assetPath)) {
+            Write-Utf8NoBomFile -Path $assetPath -Content ""
+            $script:temporaryEnvAssetPaths.Add($assetPath) | Out-Null
+        }
+    }
     $script:temporaryEnvApplied = $true
 }
 
@@ -119,6 +132,13 @@ function Copy-TemporaryEnvFile {
     )
 
     [System.IO.File]::Copy($SourcePath, $envPath, $true)
+    foreach ($assetName in @(".env.public", ".env.public.dtic")) {
+        $assetPath = Join-Path $repoRoot $assetName
+        if (-not (Test-Path $assetPath)) {
+            Write-Utf8NoBomFile -Path $assetPath -Content ""
+            $script:temporaryEnvAssetPaths.Add($assetPath) | Out-Null
+        }
+    }
     $script:temporaryEnvApplied = $true
 }
 
@@ -182,6 +202,7 @@ if (-not $flutterCmd) {
         $(if ($env:FLUTTER_ROOT) { Join-Path $env:FLUTTER_ROOT "bin\\flutter.bat" }),
         "C:\\src\\flutter\\bin\\flutter.bat",
         "C:\\flutter\\bin\\flutter.bat",
+        "C:\\Users\\jonathan-moletta\\tools\\flutter\\bin\\flutter.bat",
         "C:\\Users\\jonathan-moletta\\flutter\\bin\\flutter.bat",
         (Join-Path $repoRoot "tools\flutter\bin\flutter.bat"),
         (Join-Path $repoRoot "..\tools\flutter\bin\flutter.bat")
@@ -238,6 +259,11 @@ try {
     Write-Host "Build concluido com sucesso para app/flavor: $flavor"
     Write-Host $artifact
 } finally {
+    foreach ($temporaryEnvAssetPath in $temporaryEnvAssetPaths) {
+        if (Test-Path $temporaryEnvAssetPath) {
+            Remove-Item -LiteralPath $temporaryEnvAssetPath -Force
+        }
+    }
     if ($temporaryEnvApplied) {
         if ($originalEnvExists) {
             [System.IO.File]::WriteAllBytes($envPath, $originalEnvBytes)
