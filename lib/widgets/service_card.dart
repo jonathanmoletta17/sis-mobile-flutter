@@ -177,12 +177,21 @@ class _ServiceGovernanceBadges extends StatelessWidget {
 
   const _ServiceGovernanceBadges({required this.service});
 
+  bool _isUsefulBadge(String label) {
+    final normalized = label.trim().toLowerCase();
+    return normalized.isNotEmpty &&
+        normalized != 'catálogo estático' &&
+        normalized != 'catalogo estatico';
+  }
+
   @override
   Widget build(BuildContext context) {
     final chips = <String>[
-      service.domainLabel,
+      if (_isUsefulBadge(service.domainLabel)) service.domainLabel,
       if (service.assignmentGroupLabel != null) service.assignmentGroupLabel!,
     ];
+
+    if (chips.isEmpty) return const SizedBox.shrink();
 
     return Wrap(
       spacing: AppSpacing.xs,

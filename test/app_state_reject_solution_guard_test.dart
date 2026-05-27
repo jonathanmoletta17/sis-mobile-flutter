@@ -84,7 +84,7 @@ void main() {
     );
 
     test(
-      'reports failure when rejected solution does not reopen ticket',
+      'rejects solution and records justification even when requester cannot reopen ticket directly',
       () async {
         SharedPreferences.setMockInitialValues({});
         final api = _SolvedTicketGlpiClient(reopenSucceeds: false);
@@ -103,11 +103,15 @@ void main() {
           'Ainda falta concluir o atendimento.',
         );
 
-        expect(result['success'], isFalse);
-        expect(result['error'], contains('Falha ao reabrir'));
+        expect(result['success'], isTrue);
+        expect(result['warning'], contains('Falha ao reabrir'));
         expect(api.updateSolutionStatusCalls, 1);
         expect(api.updateTicketStatusCalls, 1);
-        expect(api.addTicketMessageCalls, 0);
+        expect(api.addTicketMessageCalls, 1);
+        expect(
+          api.lastMessageContent,
+          contains('Ainda falta concluir o atendimento.'),
+        );
       },
     );
   });

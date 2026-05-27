@@ -69,6 +69,56 @@ test('SIS worker blocks metadata catalog mutations', async () => {
 
   assert.equal(response.status, 405);
 });
+test('SIS worker injects configured GLPI App-Token into upstream requests', async () => {
+  let upstreamAppToken = null;
+  let upstreamAppTokenParam = null;
+  const response = await __test.fetch(
+    new Request('https://example.test/sis/apirest.php/initSession?range=0-0', {
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic invalid-test-value',
+      },
+    }),
+    {
+      GLPI_APP_TOKEN: 'unit-test-app-token',
+      GLPI: {
+        fetch: async (request) => {
+          upstreamAppToken = request.headers.get('App-Token');
+          upstreamAppTokenParam = new URL(request.url).searchParams.get('app_token');
+          return new Response('["ERROR_GLPI_LOGIN","Credenciais invalidas"]', {
+            status: 401,
+            headers: {'Content-Type': 'application/json'},
+          });
+        },
+      },
+    },
+  );
+
+  assert.equal(response.status, 401);
+  assert.equal(upstreamAppToken, 'unit-test-app-token');
+  assert.equal(upstreamAppTokenParam, 'unit-test-app-token');
+});
+
+test('SIS worker fails visibly when GLPI App-Token secret is missing', async () => {
+  const response = await __test.fetch(
+    new Request('https://example.test/sis/apirest.php/initSession', {
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic invalid-test-value',
+      },
+    }),
+    {
+      GLPI: {
+        fetch: async () => new Response('should not reach upstream', {status: 599}),
+      },
+    },
+  );
+  const body = await response.json();
+
+  assert.equal(response.status, 500);
+  assert.match(body.error, /App-Token/);
+});
+
 test('SIS worker allows login, session close and read-only ticket endpoints', () => {
   assert.equal(__test.isAllowedRequest('POST', '/initSession'), true);
   assert.equal(__test.isAllowedRequest('GET', '/initSession'), true);
@@ -78,6 +128,10 @@ test('SIS worker allows login, session close and read-only ticket endpoints', ()
   assert.equal(__test.isAllowedRequest('GET', '/search/Ticket'), true);
   assert.equal(__test.isAllowedRequest('GET', '/Ticket/123'), true);
   assert.equal(__test.isAllowedRequest('GET', '/Ticket/123/TicketFollowup'), true);
+  assert.equal(__test.isAllowedRequest('GET', '/Ticket/123/Ticket_User'), true);
+  assert.equal(__test.isAllowedRequest('GET', '/Ticket/123/Group_Ticket'), true);
+  assert.equal(__test.isAllowedRequest('GET', '/User/2039'), true);
+  assert.equal(__test.isAllowedRequest('GET', '/Group/22'), true);
   assert.equal(__test.isAllowedRequest('GET', '/Ticket/123/Document_Item'), true);
   assert.equal(__test.isAllowedRequest('GET', '/Document/456'), true);
 });

@@ -260,6 +260,7 @@ class GlpiClientSupport {
 
   static Map<String, dynamic> mapSearchTicketRow(Map<String, dynamic> row) {
     final requester = row['4'] ?? row['users_id_recipient'];
+    final assignee = row['5'] ?? row['users_id_assign'];
     return {
       'id': row['2'] ?? row['id'],
       'name': row['1'] ?? row['name'],
@@ -268,6 +269,8 @@ class GlpiClientSupport {
       'itilcategories_id': row['7'] ?? row['itilcategories_id'],
       'users_id_recipient': requester,
       'Users_id_recipient': requester,
+      if (assignee != null) 'users_id_assign': assignee,
+      if (assignee != null) 'Users_id_assign': assignee,
       if (row['80'] != null) 'entities_id': row['80'],
     };
   }

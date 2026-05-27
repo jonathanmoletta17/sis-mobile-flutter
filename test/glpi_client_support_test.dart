@@ -2,6 +2,28 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sis_mobile_flutter/services/glpi_client_support.dart';
 
 void main() {
+  group('GlpiClientSupport.mapSearchTicketRow', () {
+    test(
+      'keeps requester and assigned technician display values from search rows',
+      () {
+        final mapped = GlpiClientSupport.mapSearchTicketRow({
+          '2': 9157,
+          '1': 'Chamado de teste',
+          '4': 'jonathan-moletta',
+          '5': 'anderson-cardoso',
+          '7': 'Manutenção > Elétrica > Conserto',
+          '12': 2,
+          '15': '2026-05-26 10:00:00',
+        });
+
+        expect(mapped['users_id_recipient'], 'jonathan-moletta');
+        expect(mapped['Users_id_recipient'], 'jonathan-moletta');
+        expect(mapped['users_id_assign'], 'anderson-cardoso');
+        expect(mapped['Users_id_assign'], 'anderson-cardoso');
+      },
+    );
+  });
+
   group('GlpiClientSupport.extractDocumentIdFromBody', () {
     test('returns null for empty successful direct upload body', () {
       expect(GlpiClientSupport.extractDocumentIdFromBody(''), isNull);

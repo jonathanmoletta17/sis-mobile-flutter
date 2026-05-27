@@ -240,7 +240,7 @@ class GlpiClient {
     return jsonDecode(response.body);
   }
 
-  /// Busca tickets do usuÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡rio (online)
+  /// Busca tickets do usuario (online).
   /// Prioriza filtro server-side por requerente para evitar mistura de dados
   /// quando o perfil logado tem visibilidade ampla (ex.: Super-Admin).
   Future<List<Map<String, dynamic>>> getTickets(
@@ -271,6 +271,7 @@ class GlpiClient {
           '&forcedisplay[3]=15'
           '&forcedisplay[4]=4'
           '&forcedisplay[5]=7'
+          '&forcedisplay[6]=5'
           '&sort=15'
           '&order=DESC'
           '&range=0-500',
@@ -355,6 +356,60 @@ class GlpiClient {
       );
       rethrow;
     }
+  }
+
+  /// Busca fila operacional por status, sem restringir por requerente.
+  /// O escopo continua sendo a ACL real do GLPI para a sessão ativa.
+  Future<List<Map<String, dynamic>>> getTicketsByStatus(
+    String sessionToken, {
+    required int status,
+    int rangeEnd = 500,
+  }) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+    };
+
+    final searchUri = Uri.parse(
+      '${GlpiConfig.baseUrl}/search/Ticket'
+      '?criteria[0][field]=12'
+      '&criteria[0][searchtype]=equals'
+      '&criteria[0][value]=$status'
+      '&forcedisplay[0]=2'
+      '&forcedisplay[1]=1'
+      '&forcedisplay[2]=12'
+      '&forcedisplay[3]=15'
+      '&forcedisplay[4]=4'
+      '&forcedisplay[5]=7'
+      '&forcedisplay[6]=5'
+      '&sort=15'
+      '&order=DESC'
+      '&range=0-$rangeEnd',
+    );
+
+    final response = await http
+        .get(searchUri, headers: headers)
+        .timeout(GlpiConfig.requestTimeout);
+
+    _logResponse('SEARCH_TICKETS_STATUS_$status', response);
+
+    if (response.statusCode == 200 || response.statusCode == 206) {
+      final payload = (jsonDecode(response.body) as Map).cast<String, dynamic>();
+      final rows = payload['data'] as List<dynamic>? ?? const [];
+      return rows
+          .whereType<Map>()
+          .map((row) => _mapSearchTicketRow(row.cast<String, dynamic>()))
+          .toList();
+    }
+
+    if (_isAuthError(response.statusCode)) {
+      throw _authException(response);
+    }
+
+    throw Exception(
+      'Erro ao buscar tickets por status $status: [${response.statusCode}] - ${response.body}',
+    );
   }
 
   Future<Map<String, dynamic>> getTicketById(
@@ -460,10 +515,106 @@ class GlpiClient {
           ticket['Users_id_assign'] = assigneeName;
         }
       }
+
+      await _hydrateTicketGroups(ticketId, headers, ticket);
     } catch (e) {
       if (_isSessionInvalidException(e)) rethrow;
       _debugLog('Falha ao hidratar solicitante/tecnico responsavel: $e');
     }
+  }
+
+  Future<void> _hydrateTicketGroups(
+    String ticketId,
+    Map<String, String> headers,
+    Map<String, dynamic> ticket,
+  ) async {
+    try {
+      final relationUri = Uri.parse(
+        '${GlpiConfig.baseUrl}/Ticket/$ticketId/Group_Ticket?range=0-200',
+      );
+      final relationResp = await http
+          .get(relationUri, headers: headers)
+          .timeout(GlpiConfig.requestTimeout);
+
+      if (_isAuthError(relationResp.statusCode)) {
+        throw _authException(relationResp);
+      }
+
+      if (relationResp.statusCode != 200 && relationResp.statusCode != 206) {
+        return;
+      }
+
+      final relations = jsonDecode(relationResp.body);
+      if (relations is! List) return;
+
+      dynamic assignedGroupRelation;
+      for (final relation in relations) {
+        if (relation is! Map) continue;
+        final type = relation['type']?.toString();
+        if ((type == '2' || type == null) && assignedGroupRelation == null) {
+          assignedGroupRelation = relation;
+          break;
+        }
+      }
+
+      if (assignedGroupRelation == null) return;
+
+      final groupId = assignedGroupRelation['groups_id']?.toString();
+      if (groupId == null || groupId.isEmpty) return;
+
+      final groupName =
+          await _resolveGroupDisplayName(groupId, headers) ??
+          _knownAssignmentGroupLabel(groupId);
+      ticket['assigned_group_id'] = groupId;
+      if (groupName != null && groupName.trim().isNotEmpty) {
+        ticket['assigned_group_name'] = groupName.trim();
+      }
+    } catch (e) {
+      if (_isSessionInvalidException(e)) rethrow;
+      _debugLog('Falha ao hidratar fila/grupo responsavel do ticket: $e');
+    }
+  }
+
+  Future<String?> _resolveGroupDisplayName(
+    String groupId,
+    Map<String, String> headers,
+  ) async {
+    try {
+      final groupUri = Uri.parse(
+        '${GlpiConfig.baseUrl}/Group/$groupId?expand_dropdowns=true',
+      );
+      final groupResp = await http
+          .get(groupUri, headers: headers)
+          .timeout(GlpiConfig.requestTimeout);
+
+      if (_isAuthError(groupResp.statusCode)) {
+        throw _authException(groupResp);
+      }
+
+      if (groupResp.statusCode != 200) return null;
+
+      final groupMap = (jsonDecode(groupResp.body) as Map)
+          .cast<String, dynamic>();
+      final name = groupMap['completename'] ?? groupMap['name'];
+      final text = name?.toString().trim();
+      if (text == null || text.isEmpty || text == groupId) return null;
+      return text;
+    } catch (e) {
+      if (_isSessionInvalidException(e)) rethrow;
+      return null;
+    }
+  }
+
+  String? _knownAssignmentGroupLabel(String groupId) {
+    switch (groupId) {
+      case '21':
+        return 'CC-CONSERVAÇÃO';
+      case '22':
+        return 'CC-MANUTENÇÃO';
+      case '49':
+        return 'GG-CONSERVAÇÃO';
+    }
+    return null;
   }
 
   Future<String?> _resolveUserDisplayName(

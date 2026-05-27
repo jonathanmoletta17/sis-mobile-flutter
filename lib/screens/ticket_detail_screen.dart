@@ -86,8 +86,22 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
     dynamic rawName, {
     dynamic rawId,
     required String fallbackPrefix,
+    int? loggedUserId,
+    String? loggedUsername,
   }) {
     final value = rawName?.toString().trim();
+    final id = rawId?.toString().trim();
+    final loggedName = loggedUsername?.trim();
+
+    if (id != null &&
+        id.isNotEmpty &&
+        loggedUserId != null &&
+        id == loggedUserId.toString() &&
+        loggedName != null &&
+        loggedName.isNotEmpty) {
+      return loggedName;
+    }
+
     if (value == null || value.isEmpty || value == '-') {
       if (rawId == null) return null;
       return GlpiNameFormatter.fallbackUserLabel(rawId, prefix: fallbackPrefix);
@@ -95,6 +109,12 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
 
     final numericId = GlpiNameFormatter.extractNumericId(value);
     if (numericId != null) {
+      if (loggedUserId != null &&
+          numericId == loggedUserId.toString() &&
+          loggedName != null &&
+          loggedName.isNotEmpty) {
+        return loggedName;
+      }
       return GlpiNameFormatter.fallbackUserLabel(
         numericId,
         prefix: fallbackPrefix,
@@ -582,24 +602,29 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
       (target ?? friendlyDetails).add(MapEntry(label, value));
     }
 
+    final requesterDisplayName = _displayPersonName(
+      _ticketData['Users_id_recipient'] ?? _ticketData['users_id_recipient'],
+      rawId: _ticketOwnerUserId,
+      fallbackPrefix: 'Usuario',
+      loggedUserId: appState.loggedUserId,
+      loggedUsername: appState.loggedUsername,
+    );
+    final assigneeDisplayName = _displayPersonName(
+      _ticketData['Users_id_assign'] ?? _ticketData['users_id_assign'],
+      rawId: _ticketData['assignee_user_id'],
+      fallbackPrefix: 'Tecnico',
+    );
+    final assignedGroupName = _ticketData['assigned_group_name']
+        ?.toString()
+        .trim();
+
     addDetail('Serviço Solicitado', _ticketData['serviceName']);
-    addDetail(
-      'Solicitante',
-      _displayPersonName(
-        _ticketData['Users_id_recipient'] ?? _ticketData['users_id_recipient'],
-        rawId: _ticketOwnerUserId,
-        fallbackPrefix: 'Usuario',
-      ),
-    );
-    addDetail(
-      'Técnico Responsável',
-      _displayPersonName(
-            _ticketData['Users_id_assign'] ?? _ticketData['users_id_assign'],
-            rawId: _ticketData['assignee_user_id'],
-            fallbackPrefix: 'Tecnico',
-          ) ??
-          'Não atribuído',
-    );
+    addDetail('Solicitante', requesterDisplayName);
+    if (assigneeDisplayName != null) {
+      addDetail('Técnico Responsável', assigneeDisplayName);
+    } else if (assignedGroupName != null && assignedGroupName.isNotEmpty) {
+      addDetail('Fila Responsável', assignedGroupName);
+    }
     addDetail(
       'Criado em',
       _ticketData['criado_em'] ??

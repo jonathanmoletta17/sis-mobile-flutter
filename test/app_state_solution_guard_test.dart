@@ -72,7 +72,7 @@ void main() {
     );
 
     test(
-      'reports failure when approved solution does not close ticket',
+      'approves solution even when requester cannot close ticket directly',
       () async {
         SharedPreferences.setMockInitialValues({});
         final api = _SolvedTicketGlpiClient(closeSucceeds: false);
@@ -87,8 +87,8 @@ void main() {
 
         final result = await appState.approveSolution('8595', '123');
 
-        expect(result['success'], isFalse);
-        expect(result['error'], contains('Falha ao fechar'));
+        expect(result['success'], isTrue);
+        expect(result['warning'], contains('Falha ao fechar'));
         expect(api.updateSolutionStatusCalls, 1);
         expect(api.updateTicketStatusCalls, 1);
       },

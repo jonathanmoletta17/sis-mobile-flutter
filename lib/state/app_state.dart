@@ -325,18 +325,45 @@ class AppState extends ChangeNotifier {
           _sessionToken!,
           requesterUsername: _loggedUsername,
         );
-        final filteredTickets = rawTickets
+        final personalTickets = rawTickets
             .where(_ticketBelongsToLoggedUser)
             .toList();
 
-        if (rawTickets.length != filteredTickets.length) {
+        final onlineById = <String, Map<String, dynamic>>{};
+        for (final ticket in personalTickets) {
+          final id = ticket['id']?.toString();
+          if (id == null || id.isEmpty) continue;
+          onlineById[id] = ticket;
+        }
+
+        if (rawTickets.length != personalTickets.length) {
           debugPrint(
-            'Filtrando chamados por solicitante autenticado: ${filteredTickets.length}/${rawTickets.length} permanecem em "Meus Chamados".',
+            'Filtrando chamados por solicitante autenticado: ${personalTickets.length}/${rawTickets.length} permanecem em "Meus Chamados".',
           );
         }
 
+        if (AppStateTicketSupport.isTechnicianProfile(_activeProfile)) {
+          try {
+            final newTickets = await _apiService.getTicketsByStatus(
+              _sessionToken!,
+              status: GlpiStatus.novo.code,
+            );
+            for (final ticket in newTickets) {
+              final id = ticket['id']?.toString();
+              if (id == null || id.isEmpty) continue;
+              onlineById[id] = ticket;
+            }
+          } catch (e) {
+            debugPrint('⚠️ Erro ao buscar fila operacional de Novos: $e');
+            if (_isSessionInvalidError(e)) {
+              await _handleSessionInvalid(e);
+              rethrow;
+            }
+          }
+        }
+
         onlineTickets = AppStateTicketSupport.decorateOnlineTickets(
-          filteredTickets,
+          onlineById.values.toList(),
         );
       } catch (e) {
         debugPrint('❌ Erro ao buscar tickets online: $e');

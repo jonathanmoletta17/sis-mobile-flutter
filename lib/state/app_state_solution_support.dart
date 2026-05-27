@@ -44,11 +44,11 @@ class AppStateSolutionSupport {
           return {'success': true};
         }
         return {
-          'success': false,
-          'error':
+          'success': true,
+          'warning':
               closeResult['message'] ??
               closeResult['error'] ??
-              'Solução aprovada, mas o chamado não foi fechado.',
+              'Solução aprovada, mas o chamado não foi fechado automaticamente.',
         };
       }
 
@@ -108,22 +108,25 @@ class AppStateSolutionSupport {
           'Novo',
           sessionToken,
         );
-        if (reopenResult['success'] != true) {
-          return {
-            'success': false,
-            'error':
-                reopenResult['message'] ??
-                reopenResult['error'] ??
-                'Solução recusada, mas o chamado não foi reaberto.',
-          };
-        }
+        final reopenWarning = reopenResult['success'] == true
+            ? null
+            : reopenResult['message'] ??
+                  reopenResult['error'] ??
+                  'Solução recusada, mas o chamado não foi reaberto automaticamente.';
 
-        final messageResult = await sendTicketMessageWithAttachments(
-          ticketId: ticketId,
-          messageContent:
-              '❌ Solução recusada.\n\nJustificativa do usuário:\n$justification',
-          filePaths: attachmentPaths,
-        );
+        final messageContent =
+            '❌ Solução recusada.\n\nJustificativa do usuário:\n$justification';
+        final messageResult = reopenWarning != null && attachmentPaths.isEmpty
+            ? await apiService.addTicketMessage(
+                ticketId,
+                messageContent,
+                sessionToken,
+              )
+            : await sendTicketMessageWithAttachments(
+                ticketId: ticketId,
+                messageContent: messageContent,
+                filePaths: attachmentPaths,
+              );
         if (messageResult['success'] != true) {
           return {
             'success': false,
@@ -133,7 +136,10 @@ class AppStateSolutionSupport {
           };
         }
 
-        return {'success': true};
+        return {
+          'success': true,
+          if (reopenWarning != null) 'warning': reopenWarning,
+        };
       }
 
       return {'success': false, 'error': 'Falha na API ao recusar.'};

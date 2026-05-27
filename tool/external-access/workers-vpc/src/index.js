@@ -5,7 +5,7 @@ const GLPI_API_PREFIX = '/sis/apirest.php';
 const MOBILE_METADATA_PATH = '/metadata/mobile/sis/catalog';
 
 const READ_ONLY_ITEM_PATTERN =
-  /^\/(?:initSession|search\/Ticket|Ticket(?:\/\d+(?:\/(?:TicketFollowup|ITILSolution|Ticket_User|Document_Item|Document))?)?|Document(?:\/\d+)?|Document_Item|ITILFollowup\/\d+\/Document_Item|ITILSolution\/\d+\/Document_Item|User(?:\/\d+)?|Entity|Location|RequestType|ITILCategory|listSearchOptions\/Ticket|getFullSession|getActiveProfile|getMyProfiles|getMyEntities)(?:$|[/?])/;
+  /^\/(?:initSession|search\/Ticket|Ticket(?:\/\d+(?:\/(?:TicketFollowup|ITILSolution|Ticket_User|Group_Ticket|Document_Item|Document))?)?|Document(?:\/\d+)?|Document_Item|ITILFollowup\/\d+\/Document_Item|ITILSolution\/\d+\/Document_Item|User(?:\/\d+)?|Group(?:\/\d+)?|Entity|Location|RequestType|ITILCategory|listSearchOptions\/Ticket|getFullSession|getActiveProfile|getMyProfiles|getMyEntities)(?:$|[/?])/;
 
 const POST_ALLOWLIST = new Set([
   '/initSession',
@@ -52,6 +52,14 @@ const worker = {
     const target = new URL(glpiPath + incoming.search, GLPI_ORIGIN);
     const headers = new Headers(request.headers);
     headers.delete('Host');
+    const appToken = env.GLPI_APP_TOKEN;
+    if (!appToken) {
+      return jsonError(500, 'SIS GLPI App-Token is not configured.');
+    }
+    // GLPI accepts App-Token as a header or request parameter. Keep both so
+    // Worker/VPC/header-casing quirks cannot regress the public mobile path.
+    headers.set('App-Token', appToken);
+    target.searchParams.set('app_token', appToken);
 
     const upstreamRequest = new Request(target, {
       method: request.method,

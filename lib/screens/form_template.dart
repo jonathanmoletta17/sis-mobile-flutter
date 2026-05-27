@@ -372,23 +372,29 @@ class _GovernedFormContextBanner extends StatelessWidget {
     required this.selectedTicketEntityName,
   });
 
-  String get _schemaLabel {
+  String? get _schemaLabel {
     if (uiSchemaSource == 'formcreator_runtime_metadata') {
       return 'Campos vindos do FormCreator';
     }
-    return 'Campos de bootstrap local';
+    return null;
   }
+
+  bool get _showDomainLabel =>
+      domainLabel.trim().isNotEmpty &&
+      domainLabel.trim().toLowerCase() != 'catálogo estático' &&
+      domainLabel.trim().toLowerCase() != 'catalogo estatico';
 
   @override
   Widget build(BuildContext context) {
+    final schemaLabel = _schemaLabel;
     final rows = <String>[
-      'Domínio: $domainLabel',
+      if (_showDomainLabel) 'Domínio: $domainLabel',
       if (assignmentGroupLabel != null) 'Fila prevista: $assignmentGroupLabel',
       if (activeProfile != null) 'Perfil ativo: $activeProfile',
       if (activeEntityName != null) 'Entidade ativa: $activeEntityName',
       if (selectedTicketEntityName != null)
         'Entidade do ticket: $selectedTicketEntityName',
-      _schemaLabel,
+      if (schemaLabel != null) schemaLabel,
       if (runtimeFormStatus != null) 'FormCreator: $runtimeFormStatus',
       if (username != null) 'Logado como: $username',
     ];
