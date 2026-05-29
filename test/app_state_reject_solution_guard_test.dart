@@ -27,10 +27,8 @@ void main() {
         );
 
         expect(result['success'], isTrue);
-        expect(api.updateSolutionStatusCalls, 1);
-        expect(api.lastSolutionStatus, 4);
-        expect(api.updateTicketStatusCalls, 1);
-        expect(api.lastTicketStatus, GlpiStatus.novo.label);
+        expect(api.updateTicketSolutionDecisionCalls, 1);
+        expect(api.lastApproveDecision, isFalse);
         expect(api.addTicketMessageCalls, 1);
         expect(
           api.lastMessageContent,
@@ -52,7 +50,7 @@ void main() {
 
         await appState.rejectSolution('8595', '123', 'Nao procede');
 
-        expect(api.updateSolutionStatusCalls, 0);
+        expect(api.updateTicketSolutionDecisionCalls, 0);
         expect(api.getTicketByIdCalls, 1);
       },
     );
@@ -78,16 +76,16 @@ void main() {
         );
 
         expect(result['success'], isFalse);
-        expect(api.updateSolutionStatusCalls, 0);
+        expect(api.updateTicketSolutionDecisionCalls, 0);
         expect(api.getTicketByIdCalls, 1);
       },
     );
 
     test(
-      'rejects solution and records justification even when requester cannot reopen ticket directly',
+      'rejects solution through Ticket reopening flow and records justification',
       () async {
         SharedPreferences.setMockInitialValues({});
-        final api = _SolvedTicketGlpiClient(reopenSucceeds: false);
+        final api = _SolvedTicketGlpiClient();
         final appState = AppState(api);
         await pumpEventQueue();
 
@@ -104,9 +102,9 @@ void main() {
         );
 
         expect(result['success'], isTrue);
-        expect(result['warning'], contains('Falha ao reabrir'));
-        expect(api.updateSolutionStatusCalls, 1);
-        expect(api.updateTicketStatusCalls, 1);
+        expect(result['warning'], isNull);
+        expect(api.updateTicketSolutionDecisionCalls, 1);
+        expect(api.lastApproveDecision, isFalse);
         expect(api.addTicketMessageCalls, 1);
         expect(
           api.lastMessageContent,
@@ -119,7 +117,7 @@ void main() {
 
 class _OpenTicketGlpiClient extends GlpiClient {
   int getTicketByIdCalls = 0;
-  int updateSolutionStatusCalls = 0;
+  int updateTicketSolutionDecisionCalls = 0;
 
   @override
   Future<String?> authenticate(String username, String password) async {
@@ -145,28 +143,22 @@ class _OpenTicketGlpiClient extends GlpiClient {
   }
 
   @override
-  Future<bool> updateSolutionStatus({
-    required String solutionId,
-    required int newStatus,
+  Future<Map<String, dynamic>> updateTicketSolutionDecision({
+    required String ticketId,
+    required bool approve,
     required String sessionToken,
   }) async {
-    updateSolutionStatusCalls += 1;
-    return true;
+    updateTicketSolutionDecisionCalls += 1;
+    return {'success': true};
   }
 }
 
 class _SolvedTicketGlpiClient extends GlpiClient {
-  _SolvedTicketGlpiClient({this.reopenSucceeds = true});
-
-  final bool reopenSucceeds;
   int getTicketByIdCalls = 0;
-  int updateSolutionStatusCalls = 0;
-  int updateTicketStatusCalls = 0;
+  int updateTicketSolutionDecisionCalls = 0;
   int addTicketMessageCalls = 0;
-  int? lastSolutionStatus;
-  String? lastTicketStatus;
+  bool? lastApproveDecision;
   String? lastMessageContent;
-  GlpiStatus _status = GlpiStatus.solucionado;
 
   @override
   Future<String?> authenticate(String username, String password) async {
@@ -188,32 +180,17 @@ class _SolvedTicketGlpiClient extends GlpiClient {
     String sessionToken,
   ) async {
     getTicketByIdCalls += 1;
-    return {'id': ticketId, 'status': _status.code};
+    return {'id': ticketId, 'status': GlpiStatus.solucionado.code};
   }
 
   @override
-  Future<bool> updateSolutionStatus({
-    required String solutionId,
-    required int newStatus,
+  Future<Map<String, dynamic>> updateTicketSolutionDecision({
+    required String ticketId,
+    required bool approve,
     required String sessionToken,
   }) async {
-    updateSolutionStatusCalls += 1;
-    lastSolutionStatus = newStatus;
-    return true;
-  }
-
-  @override
-  Future<Map<String, dynamic>> updateTicketStatus(
-    String ticketId,
-    String newStatus,
-    String sessionToken,
-  ) async {
-    updateTicketStatusCalls += 1;
-    lastTicketStatus = newStatus;
-    if (!reopenSucceeds) {
-      return {'success': false, 'message': 'Falha ao reabrir chamado'};
-    }
-    _status = GlpiStatus.novo;
+    updateTicketSolutionDecisionCalls += 1;
+    lastApproveDecision = approve;
     return {'success': true};
   }
 
@@ -231,7 +208,7 @@ class _SolvedTicketGlpiClient extends GlpiClient {
 
 class _ClosedTicketGlpiClient extends GlpiClient {
   int getTicketByIdCalls = 0;
-  int updateSolutionStatusCalls = 0;
+  int updateTicketSolutionDecisionCalls = 0;
 
   @override
   Future<String?> authenticate(String username, String password) async {
@@ -253,12 +230,12 @@ class _ClosedTicketGlpiClient extends GlpiClient {
   }
 
   @override
-  Future<bool> updateSolutionStatus({
-    required String solutionId,
-    required int newStatus,
+  Future<Map<String, dynamic>> updateTicketSolutionDecision({
+    required String ticketId,
+    required bool approve,
     required String sessionToken,
   }) async {
-    updateSolutionStatusCalls += 1;
-    return false;
+    updateTicketSolutionDecisionCalls += 1;
+    return {'success': false};
   }
 }

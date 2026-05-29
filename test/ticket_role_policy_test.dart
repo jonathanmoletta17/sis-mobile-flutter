@@ -89,6 +89,7 @@ void main() {
         '',
         'Self-Service',
         'Requerente',
+        'Solicitante',
         'Gabriel',
       ]) {
         expect(

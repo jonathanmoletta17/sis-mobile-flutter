@@ -24,10 +24,8 @@ void main() {
 
         expect(result['success'], isTrue);
         expect(api.getTicketByIdCalls, 1);
-        expect(api.updateSolutionStatusCalls, 1);
-        expect(api.lastSolutionStatus, 3);
-        expect(api.updateTicketStatusCalls, 1);
-        expect(api.lastTicketStatus, GlpiStatus.fechado.label);
+        expect(api.updateTicketSolutionDecisionCalls, 1);
+        expect(api.lastApproveDecision, isTrue);
       },
     );
 
@@ -44,7 +42,7 @@ void main() {
 
         await appState.approveSolution('8595', '123');
 
-        expect(api.updateSolutionStatusCalls, 0);
+        expect(api.updateTicketSolutionDecisionCalls, 0);
         expect(api.getTicketByIdCalls, 1);
       },
     );
@@ -66,16 +64,16 @@ void main() {
         final result = await appState.approveSolution('8595', '123');
 
         expect(result['success'], isFalse);
-        expect(api.updateSolutionStatusCalls, 0);
+        expect(api.updateTicketSolutionDecisionCalls, 0);
         expect(api.getTicketByIdCalls, 1);
       },
     );
 
     test(
-      'approves solution even when requester cannot close ticket directly',
+      'approves solution through Ticket acceptance flow for requester',
       () async {
         SharedPreferences.setMockInitialValues({});
-        final api = _SolvedTicketGlpiClient(closeSucceeds: false);
+        final api = _SolvedTicketGlpiClient();
         final appState = AppState(api);
         await pumpEventQueue();
 
@@ -88,9 +86,9 @@ void main() {
         final result = await appState.approveSolution('8595', '123');
 
         expect(result['success'], isTrue);
-        expect(result['warning'], contains('Falha ao fechar'));
-        expect(api.updateSolutionStatusCalls, 1);
-        expect(api.updateTicketStatusCalls, 1);
+        expect(result['warning'], isNull);
+        expect(api.updateTicketSolutionDecisionCalls, 1);
+        expect(api.lastApproveDecision, isTrue);
       },
     );
   });
@@ -98,7 +96,7 @@ void main() {
 
 class _OpenTicketGlpiClient extends GlpiClient {
   int getTicketByIdCalls = 0;
-  int updateSolutionStatusCalls = 0;
+  int updateTicketSolutionDecisionCalls = 0;
 
   @override
   Future<String?> authenticate(String username, String password) async {
@@ -124,25 +122,20 @@ class _OpenTicketGlpiClient extends GlpiClient {
   }
 
   @override
-  Future<bool> updateSolutionStatus({
-    required String solutionId,
-    required int newStatus,
+  Future<Map<String, dynamic>> updateTicketSolutionDecision({
+    required String ticketId,
+    required bool approve,
     required String sessionToken,
   }) async {
-    updateSolutionStatusCalls += 1;
-    return true;
+    updateTicketSolutionDecisionCalls += 1;
+    return {'success': true};
   }
 }
 
 class _SolvedTicketGlpiClient extends GlpiClient {
-  _SolvedTicketGlpiClient({this.closeSucceeds = true});
-
-  final bool closeSucceeds;
   int getTicketByIdCalls = 0;
-  int updateSolutionStatusCalls = 0;
-  int updateTicketStatusCalls = 0;
-  int? lastSolutionStatus;
-  String? lastTicketStatus;
+  int updateTicketSolutionDecisionCalls = 0;
+  bool? lastApproveDecision;
 
   @override
   Future<String?> authenticate(String username, String password) async {
@@ -168,33 +161,20 @@ class _SolvedTicketGlpiClient extends GlpiClient {
   }
 
   @override
-  Future<bool> updateSolutionStatus({
-    required String solutionId,
-    required int newStatus,
+  Future<Map<String, dynamic>> updateTicketSolutionDecision({
+    required String ticketId,
+    required bool approve,
     required String sessionToken,
   }) async {
-    updateSolutionStatusCalls += 1;
-    lastSolutionStatus = newStatus;
-    return true;
-  }
-
-  @override
-  Future<Map<String, dynamic>> updateTicketStatus(
-    String ticketId,
-    String newStatus,
-    String sessionToken,
-  ) async {
-    updateTicketStatusCalls += 1;
-    lastTicketStatus = newStatus;
-    return closeSucceeds
-        ? {'success': true}
-        : {'success': false, 'message': 'Falha ao fechar chamado'};
+    updateTicketSolutionDecisionCalls += 1;
+    lastApproveDecision = approve;
+    return {'success': true};
   }
 }
 
 class _ClosedTicketGlpiClient extends GlpiClient {
   int getTicketByIdCalls = 0;
-  int updateSolutionStatusCalls = 0;
+  int updateTicketSolutionDecisionCalls = 0;
 
   @override
   Future<String?> authenticate(String username, String password) async {
@@ -216,12 +196,12 @@ class _ClosedTicketGlpiClient extends GlpiClient {
   }
 
   @override
-  Future<bool> updateSolutionStatus({
-    required String solutionId,
-    required int newStatus,
+  Future<Map<String, dynamic>> updateTicketSolutionDecision({
+    required String ticketId,
+    required bool approve,
     required String sessionToken,
   }) async {
-    updateSolutionStatusCalls += 1;
-    return false;
+    updateTicketSolutionDecisionCalls += 1;
+    return {'success': false};
   }
 }

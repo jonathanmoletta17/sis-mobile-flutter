@@ -395,7 +395,8 @@ class GlpiClient {
     _logResponse('SEARCH_TICKETS_STATUS_$status', response);
 
     if (response.statusCode == 200 || response.statusCode == 206) {
-      final payload = (jsonDecode(response.body) as Map).cast<String, dynamic>();
+      final payload = (jsonDecode(response.body) as Map)
+          .cast<String, dynamic>();
       final rows = payload['data'] as List<dynamic>? ?? const [];
       return rows
           .whereType<Map>()
@@ -720,6 +721,73 @@ class GlpiClient {
       return {
         'success': false,
         'message': 'Falha ao atualizar status.',
+        'error_message': e.toString(),
+      };
+    }
+  }
+
+  /// Valida ou recusa a última solução do ticket usando o fluxo nativo do GLPI.
+  ///
+  /// No GLPI 10, solicitantes aprovam solução pelo próprio Ticket:
+  /// - aprovação: `PUT /Ticket/{id}` com `status=6` e `_accepted=1`;
+  /// - recusa: `PUT /Ticket/{id}` saindo de status solucionado para aberto.
+  ///
+  /// Atualizar `/ITILSolution/{id}` diretamente exige permissão de solução técnica
+  /// (`maySolve`) e retorna `ERROR_RIGHT_MISSING` para perfil solicitante.
+  Future<Map<String, dynamic>> updateTicketSolutionDecision({
+    required String ticketId,
+    required bool approve,
+    required String sessionToken,
+  }) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+      };
+
+      final payload = {
+        'input': {
+          'id': ticketId,
+          'status': approve ? GlpiStatus.fechado.code : GlpiStatus.novo.code,
+          if (approve) '_accepted': 1,
+        },
+      };
+
+      final uri = Uri.parse('${GlpiConfig.baseUrl}/Ticket/$ticketId');
+      final response = await http
+          .put(uri, headers: headers, body: jsonEncode(payload))
+          .timeout(GlpiConfig.requestTimeout);
+
+      _logResponse(approve ? 'APPROVE_SOLUTION' : 'REJECT_SOLUTION', response);
+
+      if (response.statusCode == 200) {
+        return {
+          'success': true,
+          'message': approve
+              ? 'Solução aprovada com sucesso.'
+              : 'Solução recusada com sucesso.',
+        };
+      }
+
+      if (_isAuthError(response.statusCode)) {
+        throw _authException(response);
+      }
+
+      return {
+        'success': false,
+        'message': approve
+            ? 'Falha ao aprovar solução.'
+            : 'Falha ao recusar solução.',
+        'error_message': '[${response.statusCode}] ${response.body}',
+      };
+    } catch (e) {
+      _debugLog('Falha ao validar solução pelo Ticket: $e');
+      return {
+        'success': false,
+        'message': approve
+            ? 'Falha ao aprovar solução.'
+            : 'Falha ao recusar solução.',
         'error_message': e.toString(),
       };
     }

@@ -28,31 +28,23 @@ class AppStateSolutionSupport {
         };
       }
 
-      final success = await apiService.updateSolutionStatus(
-        solutionId: solutionId,
-        newStatus: 3,
+      final result = await apiService.updateTicketSolutionDecision(
+        ticketId: ticketId,
+        approve: true,
         sessionToken: sessionToken,
       );
 
-      if (success) {
-        final closeResult = await apiService.updateTicketStatus(
-          ticketId,
-          'Fechado',
-          sessionToken,
-        );
-        if (closeResult['success'] == true) {
-          return {'success': true};
-        }
-        return {
-          'success': true,
-          'warning':
-              closeResult['message'] ??
-              closeResult['error'] ??
-              'Solução aprovada, mas o chamado não foi fechado automaticamente.',
-        };
+      if (result['success'] == true) {
+        return {'success': true};
       }
 
-      return {'success': false, 'error': 'Falha na API ao aprovar.'};
+      return {
+        'success': false,
+        'error':
+            result['error_message'] ??
+            result['message'] ??
+            'Falha na API ao aprovar.',
+      };
     } catch (e) {
       if (isSessionInvalidError(e)) {
         await handleSessionInvalid(e);
@@ -96,27 +88,16 @@ class AppStateSolutionSupport {
         };
       }
 
-      final success = await apiService.updateSolutionStatus(
-        solutionId: solutionId,
-        newStatus: 4,
+      final result = await apiService.updateTicketSolutionDecision(
+        ticketId: ticketId,
+        approve: false,
         sessionToken: sessionToken,
       );
 
-      if (success) {
-        final reopenResult = await apiService.updateTicketStatus(
-          ticketId,
-          'Novo',
-          sessionToken,
-        );
-        final reopenWarning = reopenResult['success'] == true
-            ? null
-            : reopenResult['message'] ??
-                  reopenResult['error'] ??
-                  'Solução recusada, mas o chamado não foi reaberto automaticamente.';
-
+      if (result['success'] == true) {
         final messageContent =
             '❌ Solução recusada.\n\nJustificativa do usuário:\n$justification';
-        final messageResult = reopenWarning != null && attachmentPaths.isEmpty
+        final messageResult = attachmentPaths.isEmpty
             ? await apiService.addTicketMessage(
                 ticketId,
                 messageContent,
@@ -132,17 +113,20 @@ class AppStateSolutionSupport {
             'success': false,
             'error':
                 messageResult['error'] ??
-                'Chamado reaberto, mas a justificativa não foi registrada.',
+                'Solução recusada, mas a justificativa não foi registrada.',
           };
         }
 
-        return {
-          'success': true,
-          if (reopenWarning != null) 'warning': reopenWarning,
-        };
+        return {'success': true};
       }
 
-      return {'success': false, 'error': 'Falha na API ao recusar.'};
+      return {
+        'success': false,
+        'error':
+            result['error_message'] ??
+            result['message'] ??
+            'Falha na API ao recusar.',
+      };
     } catch (e) {
       if (isSessionInvalidError(e)) {
         await handleSessionInvalid(e);
