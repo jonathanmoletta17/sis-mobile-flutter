@@ -102,7 +102,7 @@ void main() {
     });
 
     test(
-      'solution validation action is specific to solved status and requester role',
+      'solution validation is hidden until SIS requester API approval is governed',
       () {
         final solvedTicket = {
           'requester_user_id': 100,
@@ -124,7 +124,8 @@ void main() {
             loggedUserId: 100,
             solutionAuthorUserId: 200,
           ),
-          isTrue,
+          isFalse,
+          reason: 'SIS requester profile currently cannot approve via API; avoid rendering a button that fails at runtime.',
         );
         expect(
           AppStateTicketSupport.canValidateSolutionForTicket(

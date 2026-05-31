@@ -78,6 +78,24 @@ void main() {
       expect(decision.warnings, contains('Requerente do ticket não recebe ações técnicas no próprio ticket'));
     });
 
+    test('solved requester ticket stays visible but solution validation is capability-blocked until GLPI path is governed', () {
+      final decision = PermissionService.evaluate(
+        role: OperationalRole.standardRequester,
+        ticketDomain: TicketDomain.maintenance,
+        loggedUserId: 10,
+        requesterUserId: 10,
+        status: 5,
+      );
+
+      expect(decision.canView, isTrue);
+      expect(decision.canOpenConversation, isTrue);
+      expect(decision.canSendFollowup, isFalse);
+      expect(decision.canAttachFile, isFalse);
+      expect(decision.canValidateSolution, isFalse);
+      expect(decision.canChangeStatus, isFalse);
+      expect(decision.canProposeSolution, isFalse);
+    });
+
     test('closed tickets keep history visible and block mutations', () {
       final decision = PermissionService.evaluate(
         role: OperationalRole.maintenanceTechnician,

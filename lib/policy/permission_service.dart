@@ -21,7 +21,6 @@ class PermissionService {
         requesterUserId != null &&
         loggedUserId == requesterUserId;
     final isOpen = _isOpenForInteraction(status);
-    final isSolved = _normalizeStatus(status) == 5;
     final isClosed = _normalizeStatus(status) == 6;
 
     if (isRequester) reasons.add('Usuário é requerente do ticket');
@@ -68,7 +67,11 @@ class PermissionService {
       canAssignToSelf: canUseTechnicalAction,
       canChangeStatus: canUseTechnicalAction,
       canProposeSolution: canUseTechnicalAction,
-      canValidateSolution: canView && isSolved && isRequester,
+      // GLPI SIS 10 currently has no API-validated requester solution
+      // approval/refusal path for the mobile profile. Keep solved-ticket
+      // history visible, but do not expose validation actions until the
+      // governed GLPI path is proven end-to-end.
+      canValidateSolution: false,
       canViewTechnicalQueue: canViewTechnicalQueue,
       canViewGgSharedQueue: isGgShared,
       reasons: reasons,
