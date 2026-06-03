@@ -208,6 +208,23 @@ class GlpiClientSupport {
     return after.difference(before).isNotEmpty;
   }
 
+  static bool verifiesDocumentUploadLink({
+    required Set<String> before,
+    required Set<String> after,
+    String? documentId,
+  }) {
+    final newLinks = after.difference(before);
+    if (newLinks.isEmpty) return false;
+
+    final normalizedDocumentId = documentId?.trim();
+    if (normalizedDocumentId == null || normalizedDocumentId.isEmpty) {
+      return true;
+    }
+
+    return newLinks.contains(normalizedDocumentId) ||
+        after.contains(normalizedDocumentId);
+  }
+
   static String? extractApiErrorMessage(String body) {
     final trimmed = body.trim();
     if (trimmed.isEmpty) return null;

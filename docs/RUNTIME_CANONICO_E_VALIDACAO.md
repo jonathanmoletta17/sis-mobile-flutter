@@ -14,8 +14,9 @@ Flutter com linhas/flavors separados.
 - Raiz canonica de codigo-fonte: `/home/jonathan/projects/work/mobile/sis-mobile-flutter`.
 - A fonte vive em WSL/ext4; caminhos Windows (`C:\Users\...`) e `/mnt/c/...` sao referencias de host, ferramenta ou historico operacional.
 - Flutter SDK e Android SDK sao dependencias de execucao/build, nao raizes de codigo-fonte.
-- O ambiente operacional e hibrido: WSL para desenvolvimento e validacoes de codigo; Windows para Android SDK, emulator, dispositivo fisico, `adb`, run Android e build Android quando o SDK esta no host.
-- Ausencia de PowerShell, Android SDK ou `ANDROID_HOME` dentro da WSL nao e falha critica por si so; e um sinal de que a etapa Android deve ser executada pela camada Windows ou por um modelo hibrido explicitamente configurado.
+- O ambiente operacional e hibrido: WSL para desenvolvimento, testes de codigo e, neste host, tambem AVD Android headless; Windows continua sendo camada de GUI/Android Studio/dispositivo fisico/build quando necessario.
+- Neste host (`CC-PC-WS1655947`), existe Android SDK Linux em `/home/jonathan/Android/Sdk` e AVDs em `/home/jonathan/.android/avd` (`hermes_sis_mobile_api35`, `sis_api35`). Portanto, Windows `emulator.exe -list-avds` vazio nao significa ausencia de emulador.
+- Ausencia de PowerShell, Android SDK ou `ANDROID_HOME` dentro da WSL nao e falha critica por si so; mas, antes de declarar blocker Android, verificar explicitamente os dois lados: WSL SDK/AVD e Windows SDK/ADB.
 
 ## Runtime suportado
 
@@ -25,7 +26,9 @@ O projeto suporta hoje um unico app Flutter com dois modos principais de execuca
   - `/opt/flutter/bin/flutter run -d web-server --web-hostname 127.0.0.1 --web-port 8083`
 - web local DTIC:
   - `/opt/flutter/bin/flutter run -t lib/main_dtic.dart -d web-server --web-hostname 127.0.0.1 --web-port 8084`
-- Android local no Windows host:
+- Android local no WSL AVD deste host:
+  - `ANDROID_HOME=/home/jonathan/Android/Sdk ANDROID_AVD_HOME=/home/jonathan/.android/avd ./tool/android/readonly_smoke_android.sh --sis-apk <apk> --skip-dtic --allow-kvm-chmod --keep-emulator`
+- Android local no Windows host, quando houver device/AVD Windows autorizado:
   - `flutter run --flavor sis -t lib/main.dart -d android`
   - `flutter run --flavor dtic -t lib/main_dtic.dart -d android`
 
@@ -72,6 +75,11 @@ Evidencia atual:
   - `/opt/flutter/bin/flutter`
 - no Windows host, `Flutter 3.41.7` esta configurado em:
   - `C:\Users\jonathan-moletta\tools\flutter`
+- Android SDK WSL esta configurado em:
+  - `/home/jonathan/Android/Sdk`
+- AVDs WSL disponiveis neste host:
+  - `/home/jonathan/.android/avd/hermes_sis_mobile_api35.avd`
+  - `/home/jonathan/.android/avd/sis_api35.avd`
 - Android SDK Windows esta configurado em:
   - `C:\Users\jonathan-moletta\Android\Sdk`
 - JDK Windows esta configurado em:
@@ -81,7 +89,8 @@ Evidencia atual:
 Implicacao operacional:
 
 - comandos WSL podem usar `/opt/flutter/bin/flutter` explicitamente quando o `PATH` nao estiver preparado
-- comandos Android devem ser executados no Windows host quando Android SDK/emulator/adb estiverem instalados no Windows
+- para smoke Android read-only neste host, preferir o AVD WSL `hermes_sis_mobile_api35`, pois ele existe e foi validado em 2026-06-02
+- comandos Android devem ser executados no Windows host apenas quando o alvo real for device fisico/AVD Windows autorizado ou build Windows
 - o script `tool/android/build_release.ps1` ja implementa fallback automatico para localizacao do Flutter Windows, mas so pode resolver caminhos que existam no host
 
 ## Modelo hibrido WSL + Windows
@@ -130,7 +139,41 @@ Esse espelho deve ser regenerado a partir da fonte WSL e excluir `.git`, caches,
   - fallback de localizacao do Flutter
   - build com endpoint alternativo usando `-GlpiBaseUrl`
   - build a partir de arquivo de ambiente alternativo usando `-EnvFile`
+  - falha imediatamente se `flutter clean`, `pub get` ou `build` retornar exit code diferente de zero, evitando reutilizacao acidental de APK stale
   - deve ser executado no Windows host quando Android SDK e Flutter Windows forem a camada Android ativa
+
+### Smoke Android no host Windows
+
+- `tool/android/windows_host_readonly_smoke.ps1`
+  - usa `adb.exe`/`aapt.exe` reais do Windows (`C:\Users\jonathan-moletta\Android\Sdk` ou PATH)
+  - valida hash/badging do APK, instala opcionalmente, abre a tela inicial e captura screenshot/logcat
+  - escopo read-only: nao digita credenciais, nao executa `initSession`, nao le/altera tickets e nao faz mutacao GLPI
+  - deve ser usado quando o emulador/dispositivo autorizado existe no host Windows, mesmo que a WSL nao enxergue Android SDK Linux
+
+### Smoke Android no AVD WSL deste host
+
+- `tool/android/readonly_smoke_android.sh`
+  - usa `/home/jonathan/Android/Sdk` e `/home/jonathan/.android/avd` por padrao
+  - aceita `--sis-apk <apk>` e `--skip-dtic` para validacao SIS-only
+  - copia o APK para o diretorio de evidencias antes de instalar, evitando falhas de install a partir de `/mnt/c`
+  - usa `adb install --no-streaming` para evitar `Broken pipe` em DrvFS/WSL
+  - espera `sys.boot_completed=1` e `init.svc.bootanim=stopped`
+  - se `/dev/kvm` nao estiver legivel/escrevivel pelo usuario, usar `--allow-kvm-chmod` somente com aprovacao; o script restaura a permissao original ao final quando ele proprio altera o modo
+  - evidencia validada em 2026-06-02: `/home/jonathan/design/docs/sis-mobile-readonly-smoke-script-20260602-rerun`
+
+### Auth read-only Android no AVD WSL
+
+- `tool/android/auth_readonly_smoke_android.sh`
+  - carrega credenciais de teste de `/home/jonathan/.hermes/secrets/sis-mobile-e2e.env` sem imprimir valores
+  - aceita `--role requester|technician`
+  - nao usa `uiautomator dump`
+  - nao captura screenshot durante digitacao de credenciais
+  - nao executa mutacao GLPI
+  - usa coordenadas calibradas para 1080x2400 e navegacao por teclado para evitar foco errado quando o teclado virtual muda o layout
+  - evidencias validadas em 2026-06-02:
+    - requester autenticado: `/home/jonathan/design/docs/sis-mobile-auth-readonly-requester-20260602-rerun2`
+    - technician autenticado e navegacao: `/home/jonathan/design/docs/sis-mobile-auth-readonly-technician-navigation-20260602`
+    - detalhe read-only do chamado 9245: `/home/jonathan/design/docs/sis-mobile-auth-readonly-technician-ticket-detail-9245-20260602`
 
 ### Acesso externo controlado
 

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
+import '../catalog/governed_service_catalog.dart';
 import '../config/glpi_config.dart';
 import '../models/glpi_status.dart';
 import '../utils/glpi_name_formatter.dart';
@@ -866,14 +867,20 @@ class GlpiClient {
       if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
     });
 
-    request.fields['uploadManifest'] = jsonEncode({
-      'input': {
-        'name': filename,
-        '_filename': [filename],
-        'items_id': itemId,
-        'itemtype': itemType,
-      },
-    });
+    request.files.add(
+      http.MultipartFile.fromString(
+        'uploadManifest',
+        jsonEncode({
+          'input': {
+            'name': filename,
+            '_filename': [filename],
+            'items_id': itemId,
+            'itemtype': itemType,
+          },
+        }),
+        contentType: MediaType('application', 'json'),
+      ),
+    );
 
     request.files.add(
       http.MultipartFile.fromBytes(
@@ -894,32 +901,26 @@ class GlpiClient {
     final response = await http.Response.fromStream(streamed);
     _logResponse('UPLOAD_ITEM_DOCUMENT', response);
 
-    if (GlpiClientSupport.isVerifiableDocumentUploadSuccess(
-      statusCode: response.statusCode,
-      body: response.body,
-    )) {
-      _debugLog(
-        'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â“ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦ Anexo direto retornou documento verificavel em $itemType/$itemId',
-      );
-      return;
-    }
-
     if (_isAuthError(response.statusCode)) {
       throw _authException(response);
     }
 
     if (response.statusCode == 200 || response.statusCode == 201) {
+      final returnedDocumentId = GlpiClientSupport.extractDocumentIdFromBody(
+        response.body,
+      );
       final linkedDocumentIdsAfter = await _getLinkedDocumentIdsForItem(
         sessionToken: sessionToken,
         itemType: itemType,
         itemId: itemId,
       );
-      if (GlpiClientSupport.hasNewDocumentLink(
+      if (GlpiClientSupport.verifiesDocumentUploadLink(
         before: linkedDocumentIdsBefore,
         after: linkedDocumentIdsAfter,
+        documentId: returnedDocumentId,
       )) {
         _debugLog(
-          'Anexo direto nao retornou ID no body, mas novo vinculo Document_Item foi confirmado em $itemType/$itemId.',
+          'Anexo direto confirmado por novo vinculo Document_Item em $itemType/$itemId.',
         );
         return;
       }
@@ -997,9 +998,15 @@ class GlpiClient {
       ),
     );
 
-    request.fields['uploadManifest'] = jsonEncode({
-      'input': {'name': filename},
-    });
+    request.files.add(
+      http.MultipartFile.fromString(
+        'uploadManifest',
+        jsonEncode({
+          'input': {'name': filename},
+        }),
+        contentType: MediaType('application', 'json'),
+      ),
+    );
 
     final streamedResponse = await request.send().timeout(
       GlpiConfig.requestTimeout,
@@ -1208,7 +1215,28 @@ class GlpiClient {
           _debugLog('Sem anexos para enviar.');
         }
 
-        return {'success': true, 'ticket_id': ticketId ?? 'SYNC'};
+        final result = <String, dynamic>{
+          'success': true,
+          'ticket_id': ticketId ?? 'SYNC',
+        };
+
+        final governedExpectation = formData['governedReadbackExpectation'];
+        if (ticketId != null &&
+            governedExpectation is GovernedReadbackExpectation) {
+          final readback = await validateGovernedTicketReadback(
+            ticketId: ticketId,
+            sessionToken: sessionToken,
+            expectation: governedExpectation,
+            requireAttachmentProof: attachments.isNotEmpty,
+          );
+          result.addAll(readback);
+          final failures = readback['governed_readback_failures'];
+          if (readback['governed_readback_ok'] != true && failures is List) {
+            result['governed_readback_warning'] = failures.join(' | ');
+          }
+        }
+
+        return result;
       }
 
       if (_isAuthError(response.statusCode)) {
@@ -1440,6 +1468,90 @@ class GlpiClient {
       if (_isSessionInvalidException(e)) rethrow;
       return {'success': false, 'error': e.toString()};
     }
+  }
+
+  Future<Map<String, dynamic>> validateGovernedTicketReadback({
+    required String ticketId,
+    required String sessionToken,
+    required GovernedReadbackExpectation expectation,
+    bool requireAttachmentProof = true,
+  }) async {
+    try {
+      final ticket = await getTicketById(ticketId, sessionToken);
+      final taskLabels = await getTicketTaskLabels(ticketId, sessionToken);
+      final documentIds = await getTicketDocumentIds(ticketId, sessionToken);
+      final result = expectation.validate(
+        ticket: ticket,
+        taskLabels: taskLabels,
+        documentIds: documentIds,
+        requireAttachmentProof: requireAttachmentProof,
+      );
+
+      return {
+        'governed_readback_ok': result.ok,
+        'governed_readback_failures': result.failures,
+        'governed_readback_ticket': ticket,
+        'governed_readback_task_labels': taskLabels,
+        'governed_readback_document_ids': documentIds.toList(growable: false),
+      };
+    } catch (e) {
+      if (_isSessionInvalidException(e)) rethrow;
+      return {
+        'governed_readback_ok': false,
+        'governed_readback_failures': ['Read-back governado não executado: $e'],
+      };
+    }
+  }
+
+  Future<List<String>> getTicketTaskLabels(
+    String ticketId,
+    String sessionToken,
+  ) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+    };
+    final uri = Uri.parse(
+      '${GlpiConfig.baseUrl}/Ticket/$ticketId/TicketTask?expand_dropdowns=true&range=0-200&sort=id&order=ASC',
+    );
+    final response = await http
+        .get(uri, headers: headers)
+        .timeout(GlpiConfig.requestTimeout);
+
+    if (_isAuthError(response.statusCode)) throw _authException(response);
+    if (response.statusCode != 200 && response.statusCode != 206) {
+      _debugLog(
+        'Falha ao buscar tarefas do ticket $ticketId para read-back: [${response.statusCode}] ${response.body}',
+      );
+      return const <String>[];
+    }
+
+    final decoded = jsonDecode(response.body);
+    if (decoded is! List) return const <String>[];
+    return decoded
+        .whereType<Map>()
+        .map((task) {
+          final label =
+              task['tasktemplates_id'] ??
+              task['name'] ??
+              task['content'] ??
+              task['id'];
+          return label?.toString().trim() ?? '';
+        })
+        .where((label) => label.isNotEmpty)
+        .toList(growable: false);
+  }
+
+  Future<Set<String>> getTicketDocumentIds(
+    String ticketId,
+    String sessionToken,
+  ) {
+    return _getLinkedDocumentIdsForItem(
+      sessionToken: sessionToken,
+      itemType: 'Ticket',
+      itemId: ticketId,
+    );
   }
 
   /// Busca documentos vinculados ao Ticket

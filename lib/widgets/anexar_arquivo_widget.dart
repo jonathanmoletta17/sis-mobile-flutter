@@ -1,5 +1,3 @@
-import 'dart:io' show File;
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,10 +6,17 @@ import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 
+typedef CameraImagePicker = Future<XFile?> Function();
+
 class AnexarArquivoWidget extends StatefulWidget {
   final ValueChanged<List<PlatformFile>> onFilesSelected;
+  final CameraImagePicker? pickImageFromCamera;
 
-  const AnexarArquivoWidget({super.key, required this.onFilesSelected});
+  const AnexarArquivoWidget({
+    super.key,
+    required this.onFilesSelected,
+    this.pickImageFromCamera,
+  });
 
   @override
   State<AnexarArquivoWidget> createState() => _AnexarArquivoWidgetState();
@@ -51,22 +56,21 @@ class _AnexarArquivoWidgetState extends State<AnexarArquivoWidget> {
   }
 
   Future<void> _tirarFoto() async {
-    final foto = await _picker.pickImage(
-      source: ImageSource.camera,
-      imageQuality: 80,
-    );
+    final foto = widget.pickImageFromCamera != null
+        ? await widget.pickImageFromCamera!()
+        : await _picker.pickImage(source: ImageSource.camera, imageQuality: 80);
 
     if (foto == null) return;
 
     try {
-      final file = File(foto.path);
-      final size = await file.length();
+      final bytes = await foto.readAsBytes();
+      if (bytes.isEmpty) return;
 
       final arquivoFoto = PlatformFile(
-        name: foto.name,
+        name: foto.name.isNotEmpty ? foto.name : 'foto.jpg',
         path: foto.path,
-        size: size,
-        bytes: null,
+        size: bytes.length,
+        bytes: bytes,
       );
 
       if (!mounted) return;

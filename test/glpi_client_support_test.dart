@@ -157,4 +157,49 @@ void main() {
       );
     });
   });
+
+  group('GlpiClientSupport.verifiesDocumentUploadLink', () {
+    test('accepts upload only when Document_Item has a new link', () {
+      expect(
+        GlpiClientSupport.verifiesDocumentUploadLink(
+          before: {'10'},
+          after: {'10', '11'},
+        ),
+        isTrue,
+      );
+    });
+
+    test('rejects returned Document id when Document_Item did not change', () {
+      expect(
+        GlpiClientSupport.verifiesDocumentUploadLink(
+          before: {'10'},
+          after: {'10'},
+          documentId: '99',
+        ),
+        isFalse,
+      );
+    });
+
+    test(
+      'requires returned Document id to be present in linked document set',
+      () {
+        expect(
+          GlpiClientSupport.verifiesDocumentUploadLink(
+            before: {'10'},
+            after: {'10', '11'},
+            documentId: '99',
+          ),
+          isFalse,
+        );
+        expect(
+          GlpiClientSupport.verifiesDocumentUploadLink(
+            before: {'10'},
+            after: {'10', '99'},
+            documentId: '99',
+          ),
+          isTrue,
+        );
+      },
+    );
+  });
 }

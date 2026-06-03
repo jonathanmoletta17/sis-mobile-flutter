@@ -288,6 +288,15 @@ class AppState extends ChangeNotifier {
             '✅ Ticket enviado com sucesso! ID: ${result['ticket_id']}',
           );
           notifyListeners();
+          final attachmentWarning = result['attachment_warning']?.toString();
+          if (attachmentWarning != null && attachmentWarning.isNotEmpty) {
+            return "⚠️ Chamado criado com ID: ${result['ticket_id']}, mas houve falha em anexo. $attachmentWarning";
+          }
+          final readbackWarning = result['governed_readback_warning']
+              ?.toString();
+          if (readbackWarning != null && readbackWarning.isNotEmpty) {
+            return "⚠️ Chamado criado com ID: ${result['ticket_id']}, mas o read-back governado encontrou divergência: $readbackWarning";
+          }
           return "✅ Chamado enviado com sucesso! ID: ${result['ticket_id']}";
         } else {
           throw Exception(result['error_message'] ?? 'Erro desconhecido');
@@ -296,6 +305,14 @@ class AppState extends ChangeNotifier {
         throw Exception('Usuário não autenticado');
       }
     } catch (e) {
+      if (_isGovernedSubmitBlocker(e)) {
+        debugPrint(
+          '⛔ Criação de chamado bloqueada pelo GLPI; não será salva offline: $e',
+        );
+        notifyListeners();
+        return '⛔ O GLPI recusou a criação deste chamado. Nada foi salvo offline para evitar sincronização impossível. Detalhe: $e';
+      }
+
       debugPrint('⚠️ Erro ao enviar online: $e. Salvando offline...');
 
       final newTicket = GlpiTicket.fromMap(stampedFormData);
@@ -305,6 +322,18 @@ class AppState extends ChangeNotifier {
       notifyListeners();
       return "⚠️ Chamado salvo localmente (offline). Será sincronizado quando houver conexão.";
     }
+  }
+
+  bool _isGovernedSubmitBlocker(Object error) {
+    final detail = error.toString();
+    return detail.contains('GLPI_PERMISSION_DENIED') ||
+        detail.contains('ERROR_RIGHT_MISSING') ||
+        detail.contains('ERROR_GLPI_ADD') ||
+        detail.contains('ERROR_GLPI_LOGIN') ||
+        detail.contains('AUTH_INVALID_CREDENTIALS') ||
+        detail.contains('Você não tem permissão') ||
+        detail.contains('permissão para executar essa ação') ||
+        detail.contains('permissao para executar essa acao');
   }
 
   bool _ticketBelongsToLoggedUser(Map<String, dynamic> ticket) {
@@ -780,8 +809,8 @@ class AppState extends ChangeNotifier {
     final entityId =
         _parseOptionalInt(stamped['entities_id']) ??
         _selectedTicketEntityId ??
-        _activeEntityId ??
-        _defaultEntityId;
+        _defaultEntityId ??
+        _activeEntityId;
 
     if (entityId != null && entityId > 0) {
       stamped['entities_id'] = entityId;
@@ -815,18 +844,19 @@ class AppState extends ChangeNotifier {
       }
     }
 
+    if (_defaultEntityId != null) {
+      final matched = _findAvailableEntity(_defaultEntityId!);
+      _selectedTicketEntityId = _defaultEntityId;
+      _selectedTicketEntityName =
+          matched?['name']?.toString() ?? preferredName ?? _activeEntityName;
+      return;
+    }
+
     if (_activeEntityId != null) {
       final matched = _findAvailableEntity(_activeEntityId!);
       _selectedTicketEntityId = _activeEntityId;
       _selectedTicketEntityName =
           matched?['name']?.toString() ?? _activeEntityName ?? preferredName;
-      return;
-    }
-
-    if (_availableEntities.isNotEmpty) {
-      final first = _availableEntities.first;
-      _selectedTicketEntityId = first['id'] as int?;
-      _selectedTicketEntityName = first['name']?.toString();
       return;
     }
 

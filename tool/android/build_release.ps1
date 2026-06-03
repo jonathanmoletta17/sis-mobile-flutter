@@ -228,21 +228,36 @@ if (-not (Test-Path $keyProps)) {
     Write-Warning "Para distribuicao oficial, configure android/key.properties (ver android/key.properties.example)."
 }
 
+function Invoke-CheckedCommand {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Exe,
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [string[]]$Arguments
+    )
+
+    & $Exe @Arguments
+    $exitCode = if ($global:LASTEXITCODE -is [int]) { $global:LASTEXITCODE } else { 0 }
+    if ($exitCode -ne 0) {
+        throw "Comando falhou com exit code ${exitCode}: $Exe $($Arguments -join ' ')"
+    }
+}
+
 try {
     if ($Clean) {
-        & $flutterCmd clean
+        Invoke-CheckedCommand $flutterCmd clean
     }
 
-    & $flutterCmd pub get
+    Invoke-CheckedCommand $flutterCmd pub get
 
     if ($Aab) {
-        & $flutterCmd build appbundle --release --flavor $flavor -t $targetFile
+        Invoke-CheckedCommand $flutterCmd build appbundle --release --flavor $flavor -t $targetFile
         $artifactCandidates = @(
             (Join-Path $repoRoot ("build\app\outputs\bundle\{0}Release\app-{0}-release.aab" -f $flavor)),
             (Join-Path $repoRoot "build\app\outputs\bundle\release\app-release.aab")
         )
     } else {
-        & $flutterCmd build apk --release --flavor $flavor -t $targetFile
+        Invoke-CheckedCommand $flutterCmd build apk --release --flavor $flavor -t $targetFile
         $artifactCandidates = @(
             (Join-Path $repoRoot ("build\app\outputs\flutter-apk\app-{0}-release.apk" -f $flavor)),
             (Join-Path $repoRoot "build\app\outputs\flutter-apk\app-release.apk")
