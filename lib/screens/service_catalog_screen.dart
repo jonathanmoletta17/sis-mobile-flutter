@@ -16,8 +16,52 @@ import 'chat_overview_screen.dart';
 import 'my_tickets_screen.dart';
 import 'offline_queue_screen.dart';
 
-class ServiceCatalogScreen extends StatelessWidget {
+class ServiceCatalogScreen extends StatefulWidget {
   const ServiceCatalogScreen({super.key});
+
+  @override
+  State<ServiceCatalogScreen> createState() => _ServiceCatalogScreenState();
+}
+
+class _ServiceCatalogScreenState extends State<ServiceCatalogScreen>
+    with WidgetsBindingObserver {
+  bool _isRefreshingCatalog = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _refreshCatalog();
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _refreshCatalog();
+    }
+  }
+
+  Future<void> _refreshCatalog() async {
+    if (_isRefreshingCatalog) return;
+    setState(() {
+      _isRefreshingCatalog = true;
+    });
+
+    await refreshServiceCatalogRepository();
+
+    if (!mounted) return;
+    setState(() {
+      _isRefreshingCatalog = false;
+    });
+  }
 
   void _openShellDestination(BuildContext context, GlpiAppSection destination) {
     switch (destination) {
@@ -41,7 +85,7 @@ class ServiceCatalogScreen extends StatelessWidget {
     if (entities.isEmpty) {
       messenger.showSnackBar(
         const SnackBar(
-          content: Text('Nenhuma entidade disponivel no perfil atual.'),
+          content: Text('Nenhuma unidade disponível no perfil atual.'),
         ),
       );
       return;
@@ -51,7 +95,7 @@ class ServiceCatalogScreen extends StatelessWidget {
       messenger.showSnackBar(
         const SnackBar(
           content: Text(
-            'Este perfil possui apenas uma entidade para chamados.',
+            'Este perfil possui apenas uma unidade configurada.',
           ),
         ),
       );
@@ -67,7 +111,7 @@ class ServiceCatalogScreen extends StatelessWidget {
             children: [
               const ListTile(
                 title: Text(
-                  'Entidade para novos chamados',
+                  'Unidade para novos chamados',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -89,7 +133,7 @@ class ServiceCatalogScreen extends StatelessWidget {
                     messenger.showSnackBar(
                       SnackBar(
                         content: Text(
-                          'Novos chamados serao abertos em ${entity['name']}.',
+                          'Novos chamados serão abertos em ${entity['name']}.',
                         ),
                       ),
                     );
@@ -106,6 +150,10 @@ class ServiceCatalogScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
     final pendingCount = appState.pendingTickets.length;
+
+    final visibleServices = serviceCatalogRepository.servicesForProfile(
+      appState.activeProfile,
+    );
 
     return SisPageScaffold(
       title: 'Serviços',
@@ -186,7 +234,7 @@ class ServiceCatalogScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      'Abra novos chamados, acompanhe pendências e acesse as conversas ativas a partir de uma única superfície.',
+                      'Abra chamados, acompanhe pendências e acesse conversas em um só lugar.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.white.withValues(alpha: 0.82),
                       ),
@@ -201,7 +249,7 @@ class ServiceCatalogScreen extends StatelessWidget {
                           label:
                               appState.selectedTicketEntityName ??
                               appState.activeEntityName ??
-                              'Entidade não definida',
+                              'Unidade não definida',
                         ),
                         _InfoPill(
                           icon: Icons.cloud_sync_outlined,
@@ -230,7 +278,7 @@ class ServiceCatalogScreen extends StatelessWidget {
                             minimumSize: const Size(0, 48),
                           ),
                           icon: const Icon(Icons.list_alt_outlined),
-                          label: const Text('Meus Chamados'),
+                          label: const Text('Meus chamados'),
                         ),
                         OutlinedButton.icon(
                           onPressed: () {
@@ -285,6 +333,11 @@ class ServiceCatalogScreen extends StatelessWidget {
                 subtitle:
                     'Escolha o serviço a partir do catálogo operacional da SIS.',
               ),
+              const SizedBox(height: AppSpacing.sm),
+              _CatalogGovernanceStatus(
+                isRefreshing: _isRefreshingCatalog,
+                onRefresh: _refreshCatalog,
+              ),
               const SizedBox(height: AppSpacing.md),
               GridView.builder(
                 shrinkWrap: true,
@@ -295,11 +348,9 @@ class ServiceCatalogScreen extends StatelessWidget {
                   mainAxisSpacing: AppSpacing.md,
                   childAspectRatio: crossAxisCount == 1 ? 2.25 : 0.98,
                 ),
-                itemCount: serviceCatalogRepository.services.length,
+                itemCount: visibleServices.length,
                 itemBuilder: (context, index) {
-                  return ServiceCard(
-                    service: serviceCatalogRepository.services[index],
-                  );
+                  return ServiceCard(service: visibleServices[index]);
                 },
               ),
             ],
@@ -308,6 +359,100 @@ class ServiceCatalogScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class _CatalogGovernanceStatus extends StatelessWidget {
+  final bool isRefreshing;
+  final Future<void> Function() onRefresh;
+
+  const _CatalogGovernanceStatus({
+    required this.isRefreshing,
+    required this.onRefresh,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final repository = serviceCatalogRepository;
+    final sourceColor = repository.isLiveRuntime
+        ? AppColors.success
+        : repository.isRuntimeBacked
+        ? AppColors.warning
+        : AppColors.textMuted;
+    final fetchedLabel = repository.fetchedAt == null
+        ? null
+        : 'Atualizado ${_formatCatalogFetchedAt(repository.fetchedAt!)}';
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.sm),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceMuted,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.account_tree_outlined, size: 20, color: sourceColor),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  repository.sourceLabel,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: AppColors.textStrong,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.xs,
+                  children: [
+                    if (fetchedLabel != null)
+                      Text(
+                        fetchedLabel,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.textMuted,
+                        ),
+                      ),
+                    if (repository.lastError != null)
+                      Text(
+                        'Catálogo desatualizado. Toque em "Atualizar catálogo".',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.warning,
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          TextButton.icon(
+            onPressed: isRefreshing ? null : onRefresh,
+            icon: isRefreshing
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.sync_outlined),
+            label: Text(isRefreshing ? 'Atualizando...' : 'Atualizar catálogo'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+String _formatCatalogFetchedAt(DateTime fetchedAt) {
+  final local = fetchedAt.toLocal();
+  String two(int value) => value.toString().padLeft(2, '0');
+  return '${two(local.day)}/${two(local.month)} ${two(local.hour)}:${two(local.minute)}';
 }
 
 class _InfoPill extends StatelessWidget {

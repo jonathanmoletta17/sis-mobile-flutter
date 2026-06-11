@@ -9,6 +9,7 @@ import '../state/app_state_ticket_support.dart';
 import '../models/glpi_status.dart';
 import '../models/ticket_message.dart';
 import '../utils/avatar_colors.dart';
+import '../utils/attachment_display.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_filex/open_filex.dart';
@@ -579,7 +580,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                   ),
                   const SizedBox(height: 16),
                   const Text(
-                    'Anexar Imagens (Opcional):',
+                    'Anexar imagens (opcional):',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -604,7 +605,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                           },
                           icon: const Icon(Icons.camera_alt, size: 14),
                           label: const Text(
-                            'Camera',
+                            'Câmera',
                             style: TextStyle(fontSize: 11),
                           ),
                         ),
@@ -670,7 +671,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                 onPressed: () async {
                   if (justificationController.text.trim().isEmpty) {
                     _showSnackBar(
-                      'A justificativa e obrigatoria!',
+                      'A justificativa é obrigatória!',
                       color: Colors.orange,
                     );
                     return;
@@ -709,7 +710,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                   }
                   setState(() => _isSending = false);
                 },
-                child: const Text('Confirmar Recusa'),
+                child: const Text('Confirmar recusa'),
               ),
             ],
           );
@@ -720,16 +721,10 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
 
   /// ConstrÃ³i o balÃ£o de mensagem para ANEXOS (Imagens ou Arquivos)
   Widget _buildAttachmentMessage(TicketMessage message) {
-    final name = message.content.toLowerCase();
-
-    // Verifica se Ã© imagem pela extensÃ£o ou mime type
-    final isImageByExt =
-        name.endsWith('.jpg') ||
-        name.endsWith('.jpeg') ||
-        name.endsWith('.png') ||
-        name.endsWith('.webp');
-    final isImageByMime = message.mimeType?.startsWith('image/') ?? false;
-    final isImage = isImageByMime || isImageByExt;
+    final isImage = AttachmentDisplay.isImageDocument(
+      filename: message.content,
+      mime: message.mimeType,
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
@@ -825,7 +820,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                             ),
                             const SizedBox(width: AppSpacing.xs),
                             Text(
-                              'Abrir Arquivo',
+                              'Abrir arquivo',
                               style: Theme.of(context).textTheme.labelLarge
                                   ?.copyWith(color: AppColors.brand),
                             ),

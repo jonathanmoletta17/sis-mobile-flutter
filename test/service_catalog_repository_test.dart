@@ -94,6 +94,81 @@ void main() {
     },
   );
 
+  test(
+    'governed v2 records populate renderable services and keep contract records',
+    () {
+      const governedRuntimeCatalogJson = '''
+{
+  "schema_version": "2.0-readonly-draft",
+  "consumer_id": "sis-mobile-flutter",
+  "instance": "sis",
+  "source_snapshot": {"sha256": "snapshot-v2"},
+  "records": [
+    {
+      "catalog_record_id": "sis:carregadores:form-2:target-3",
+      "service_id": "carregadores",
+      "service_label": "Carregadores",
+      "profile_visibility": [{"id": 9, "name": "Solicitante"}],
+      "form": {"id": 2, "name": "Carregadores"},
+      "targetticket": {
+        "id": 3,
+        "name": "Carregadores",
+        "audience": "para_mim",
+        "destination_entity": {"code": 2, "mode": "requester_context_para_mim"},
+        "category_rule": 3,
+        "category_question_id": 7,
+        "location_rule": 3,
+        "location_question_id": 8,
+        "type_rule": 1,
+        "urgency_rule": 3
+      },
+      "questions": {
+        "category": {
+          "id": 7,
+          "required": true,
+          "root_id": 55,
+          "options_sample": [
+            {"id": 5501, "label": "Transporte", "full_label": "Conservação > Carregadores > Transporte"}
+          ]
+        },
+        "location": {
+          "id": 8,
+          "required": true,
+          "root_id": 36,
+          "options_sample": [
+            {"id": 7001, "label": "CAFF", "full_label": "Locais > CAFF"}
+          ]
+        }
+      },
+      "expected_result": {
+        "domain": "Conservação",
+        "assignment_group": {"id": 21, "label": "CC-CONSERVACAO"},
+        "base_task_templates": [{"id": 1, "label": "SERVIÇO REALIZADO"}],
+        "attachment_policy": {"create_route": "POST /Ticket/{ticket_id}/Document"},
+        "readback_contract": ["GET Ticket"]
+      }
+    }
+  ]
+}
+''';
+
+      final repository = ServiceCatalogRepository.fromRuntimeCatalogJson(
+        governedRuntimeCatalogJson,
+        staticFallback: serviceCategories,
+      );
+
+      expect(repository.source, ServiceCatalogSource.runtimeCatalog);
+      expect(repository.snapshotHash, 'snapshot-v2');
+      expect(repository.governedCatalog?.records, hasLength(1));
+      final service = repository.findByName('Carregadores')!;
+      expect(service.uiSchemaSource, 'governed_v2_records');
+      expect(service.governedRecords, hasLength(1));
+      expect(service.typeOptions, ['Transporte']);
+      expect(service.locationOptions.single.id, 7001);
+      expect(service.assignmentGroupLabel, 'CC-CONSERVACAO');
+    },
+  );
+
   test('invalid runtime catalog falls back to static bootstrap explicitly', () {
     final repository = ServiceCatalogRepository.fromRuntimeCatalogJson(
       '{not-json',
@@ -117,4 +192,238 @@ void main() {
       throwsA(isA<UnknownServiceCategoryException>()),
     );
   });
+
+  test(
+    'profile projection renders GG aggregate forms instead of static individual cards',
+    () {
+      const governedRuntimeCatalogJson = '''
+{
+  "schema_version": "2.0-readonly-draft",
+  "consumer_id": "sis-mobile-flutter",
+  "instance": "sis",
+  "source_snapshot": {"sha256": "snapshot-gg"},
+  "records": [
+    {
+      "catalog_record_id": "sis:ar-condicionado:form-1:target-1",
+      "service_id": "ar-condicionado",
+      "service_label": "Ar-Condicionado",
+      "profile_visibility": [{"id": 9, "name": "Solicitante"}],
+      "form": {"id": 1, "name": "Ar-Condicionado"},
+      "targetticket": {
+        "id": 1,
+        "name": "Chamado",
+        "audience": "para_mim",
+        "destination_entity": {"code": 2, "mode": "requester_context_para_mim"},
+        "category_rule": 3,
+        "location_rule": 3
+      },
+      "questions": {},
+      "expected_result": {"readback_contract": []}
+    },
+    {
+      "catalog_record_id": "sis:manutencao:form-39:target-202",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [{"id": 12, "name": "Solicitante-GG-Conservação"}],
+      "form": {"id": 39, "name": "MANUTENÇÃO"},
+      "targetticket": {
+        "id": 202,
+        "name": "Ar Condicionado",
+        "audience": "para_mim",
+        "destination_entity": {"code": 7, "mode": "maintenance_context_para_mim"},
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 639,
+        "location_rule": 3,
+        "location_question_id": 635
+      },
+      "questions": {
+        "category": {
+          "id": 639,
+          "required": true,
+          "root_id": 1,
+          "options_sample": [
+            {"id": 1, "label": "Ar Condicionado", "full_label": "Manutenção > Ar Condicionado"},
+            {"id": 4, "label": "Instalação", "full_label": "Manutenção > Ar Condicionado > Instalação"}
+          ]
+        }
+      },
+      "expected_result": {"domain": "Manutenção", "readback_contract": []}
+    },
+    {
+      "catalog_record_id": "sis:manutencao:form-39:target-208",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [{"id": 12, "name": "Solicitante-GG-Conservação"}],
+      "form": {"id": 39, "name": "MANUTENÇÃO"},
+      "targetticket": {
+        "id": 208,
+        "name": "Pintura",
+        "audience": "para_mim",
+        "destination_entity": {"code": 7, "mode": "maintenance_context_para_mim"},
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 663,
+        "location_rule": 3,
+        "location_question_id": 635
+      },
+      "questions": {
+        "category": {
+          "id": 663,
+          "required": true,
+          "root_id": 85,
+          "options_sample": [
+            {"id": 85, "label": "Pintura", "full_label": "Manutenção > Pintura"},
+            {"id": 86, "label": "Retoque", "full_label": "Manutenção > Pintura > Retoque"}
+          ]
+        }
+      },
+      "expected_result": {"domain": "Manutenção", "readback_contract": []}
+    },
+    {
+      "catalog_record_id": "sis:conservacao:form-38:target-200",
+      "service_id": "conservacao",
+      "service_label": "CONSERVAÇÃO",
+      "profile_visibility": [{"id": 12, "name": "Solicitante-GG-Conservação"}],
+      "form": {"id": 38, "name": "CONSERVAÇÃO"},
+      "targetticket": {
+        "id": 200,
+        "name": "Limpeza",
+        "audience": "para_mim",
+        "destination_entity": {"code": 7, "mode": "maintenance_context_para_mim"},
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "location_rule": 3
+      },
+      "questions": {},
+      "expected_result": {"domain": "Conservação", "readback_contract": []}
+    }
+  ]
+}
+''';
+
+      final repository = ServiceCatalogRepository.fromRuntimeCatalogJson(
+        governedRuntimeCatalogJson,
+        staticFallback: serviceCategories,
+      );
+
+      final gg = repository.servicesForProfile('Solicitante-GG-Conservação');
+      expect(
+        gg.map((service) => service.name),
+        containsAll(['CONSERVAÇÃO', 'MANUTENÇÃO']),
+      );
+      expect(
+        gg.map((service) => service.name),
+        isNot(contains('Ar-Condicionado')),
+      );
+
+      final manutencao = gg.singleWhere(
+        (service) => service.name == 'MANUTENÇÃO',
+      );
+      expect(manutencao.governedRecords, hasLength(2));
+      expect(
+        manutencao.typeOptions,
+        containsAll([
+          'Manutenção > Ar Condicionado',
+          'Manutenção > Ar Condicionado > Instalação',
+          'Manutenção > Pintura',
+          'Manutenção > Pintura > Retoque',
+        ]),
+      );
+
+      final solicitante = repository.servicesForProfile('Solicitante');
+      expect(
+        solicitante.map((service) => service.name),
+        contains('Ar-Condicionado'),
+      );
+      expect(
+        solicitante.map((service) => service.name),
+        isNot(contains('MANUTENÇÃO')),
+      );
+    },
+  );
+
+  test(
+    'profile projection hides checklist-only services and keeps mixed generic records',
+    () {
+      const governedRuntimeCatalogJson = '''
+{
+  "schema_version": "2.0-readonly-draft",
+  "consumer_id": "sis-mobile-flutter",
+  "instance": "sis",
+  "source_snapshot": {"sha256": "snapshot-checklists"},
+  "records": [
+    {
+      "catalog_record_id": "sis:checklist-hidraulico:form-50:target-341",
+      "service_id": "checklist-hidraulico",
+      "service_label": "CHECKLIST HIDRÁULICO",
+      "requires_specialized_flow": true,
+      "profile_visibility": [{"id": 4, "name": "Super-Admin"}],
+      "form": {"id": 50, "name": "CHECKLIST HIDRÁULICO"},
+      "targetticket": {
+        "id": 341,
+        "name": "HIDRÁULICO ALA RESIDÊNCIAL",
+        "audience": "para_mim",
+        "destination_entity": {"code": 7, "mode": "maintenance_context_para_mim"},
+        "destination_entity_value": 58
+      },
+      "questions": {},
+      "expected_result": {"readback_contract": []}
+    },
+    {
+      "catalog_record_id": "sis:projeto:form-36:target-246",
+      "service_id": "projeto",
+      "service_label": "Projeto",
+      "requires_specialized_flow": false,
+      "profile_visibility": [{"id": 4, "name": "Super-Admin"}],
+      "form": {"id": 36, "name": "Projeto"},
+      "targetticket": {
+        "id": 246,
+        "name": "Chamado",
+        "audience": "para_mim",
+        "destination_entity": {"code": 7, "mode": "maintenance_context_para_mim"},
+        "destination_entity_value": 58
+      },
+      "questions": {},
+      "expected_result": {"readback_contract": []}
+    },
+    {
+      "catalog_record_id": "sis:projeto:form-99:target-999",
+      "service_id": "projeto",
+      "service_label": "Projeto",
+      "requires_specialized_flow": true,
+      "profile_visibility": [{"id": 4, "name": "Super-Admin"}],
+      "form": {"id": 99, "name": "CHECKLIST PROJETO"},
+      "targetticket": {
+        "id": 999,
+        "name": "Checklist",
+        "audience": "para_mim",
+        "destination_entity": {"code": 7, "mode": "maintenance_context_para_mim"},
+        "destination_entity_value": 58
+      },
+      "questions": {},
+      "expected_result": {"readback_contract": []}
+    }
+  ]
+}
+''';
+
+      final repository = ServiceCatalogRepository.fromRuntimeCatalogJson(
+        governedRuntimeCatalogJson,
+        staticFallback: serviceCategories,
+      );
+
+      final superAdmin = repository.servicesForProfile('Super-Admin');
+      final names = superAdmin.map((service) => service.name).toList();
+      expect(names, contains('Projeto'));
+      expect(names, isNot(contains('CHECKLIST HIDRÁULICO')));
+
+      final projeto = superAdmin.singleWhere(
+        (service) => service.name == 'Projeto',
+      );
+      expect(projeto.governedRecords, hasLength(1));
+      expect(projeto.governedRecords.single.catalogRecordId, contains('246'));
+      expect(projeto.governedRecords.single.requiresSpecializedFlow, isFalse);
+    },
+  );
 }

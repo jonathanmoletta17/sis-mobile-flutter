@@ -83,6 +83,17 @@ class GovernedServiceRecord {
   final String catalogRecordId;
   final String serviceId;
   final String serviceLabel;
+
+  /// Sub-serviço dentro do card (UX fiel ao GLPI): em forms agregados
+  /// (CONSERVAÇÃO/MANUTENÇÃO/...), cada alvo é um sub-serviço selecionável.
+  /// Em forms por-serviço, é igual ao serviço.
+  final String? subService;
+  final bool isAggregateForm;
+  final bool requiresSpecializedFlow;
+
+  /// Atores que o FormCreator aplicaria (requester/observer/assigned). O app
+  /// cria o Ticket direto via API, então deve replicá-los no payload.
+  final List<GovernedActor> actors;
   final List<GovernedProfile> profileVisibility;
   final int formId;
   final String? formName;
@@ -109,6 +120,10 @@ class GovernedServiceRecord {
     required this.serviceId,
     required this.serviceLabel,
     required this.profileVisibility,
+    this.subService,
+    this.isAggregateForm = false,
+    this.requiresSpecializedFlow = false,
+    this.actors = const [],
     required this.formId,
     required this.targetTicketId,
     required this.audience,
@@ -142,6 +157,13 @@ class GovernedServiceRecord {
       catalogRecordId: _string(map['catalog_record_id']) ?? '',
       serviceId: _string(map['service_id']) ?? '',
       serviceLabel: _string(map['service_label']) ?? '',
+      subService: _string(map['sub_service']),
+      isAggregateForm: map['is_aggregate_form'] == true,
+      requiresSpecializedFlow: map['requires_specialized_flow'] == true,
+      actors: _asList(map['actors'])
+          .whereType<Map>()
+          .map((item) => GovernedActor.fromMap(Map<String, dynamic>.from(item)))
+          .toList(growable: false),
       profileVisibility: _asList(map['profile_visibility'])
           .whereType<Map>()
           .map(
@@ -180,8 +202,9 @@ class GovernedServiceRecord {
     );
   }
 
-  GovernedReadbackExpectation toReadbackExpectation() {
+  GovernedReadbackExpectation toReadbackExpectation({int? expectedEntityId}) {
     return GovernedReadbackExpectation(
+      expectedEntityId: expectedEntityId,
       expectedGroupLabel: expectedAssignmentGroup?.label,
       expectedDomain: expectedDomain,
       expectedTaskTemplateLabels: expectedBaseTaskTemplates
@@ -190,6 +213,25 @@ class GovernedServiceRecord {
           .toList(growable: false),
       attachmentProofRoute: attachmentProofRoute,
       readbackContract: readbackContract,
+    );
+  }
+}
+
+/// Ator do FormCreator: role=requester|observer|assigned;
+/// type=author|validator|person|question_person|group|question_group.
+/// Para question_person, `value` é o id da pergunta (a resposta é o usuário).
+class GovernedActor {
+  final String role;
+  final String type;
+  final int? value;
+
+  const GovernedActor({required this.role, required this.type, this.value});
+
+  factory GovernedActor.fromMap(Map<String, dynamic> map) {
+    return GovernedActor(
+      role: _string(map['role']) ?? '',
+      type: _string(map['type']) ?? '',
+      value: _int(map['value']),
     );
   }
 }
@@ -302,6 +344,7 @@ class GovernedTaskTemplate {
 }
 
 class GovernedReadbackExpectation {
+  final int? expectedEntityId;
   final String? expectedGroupLabel;
   final String? expectedDomain;
   final List<String> expectedTaskTemplateLabels;
@@ -311,6 +354,7 @@ class GovernedReadbackExpectation {
   const GovernedReadbackExpectation({
     required this.expectedTaskTemplateLabels,
     required this.readbackContract,
+    this.expectedEntityId,
     this.expectedGroupLabel,
     this.expectedDomain,
     this.attachmentProofRoute,
@@ -323,6 +367,23 @@ class GovernedReadbackExpectation {
     bool requireAttachmentProof = true,
   }) {
     final failures = <String>[];
+
+    final expectedEntity = expectedEntityId;
+    if (expectedEntity != null && expectedEntity > 0) {
+      final entityValues = _collectStrings(ticket, const {
+        'entities_id',
+        'entity_id',
+        'entity',
+        'entity_name',
+        'entities',
+        '80',
+      });
+      if (!_containsNormalized(entityValues, expectedEntity.toString())) {
+        failures.add(
+          'Entidade esperada não confirmada no read-back: $expectedEntity',
+        );
+      }
+    }
 
     final expectedGroup = expectedGroupLabel?.trim();
     if (expectedGroup != null && expectedGroup.isNotEmpty) {

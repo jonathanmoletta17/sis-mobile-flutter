@@ -36,7 +36,7 @@ test('SIS worker serves mobile metadata catalog read-only without VPC binding', 
 
   assert.equal(response.status, 200);
   assert.equal(body.consumer_id, 'sis-mobile-flutter');
-  assert.equal(body.services.length, 15);
+  assert.equal(body.records.length, 133);
   assert.equal(response.headers.get('Cache-Control'), 'private, max-age=300');
   assert.ok(response.headers.get('ETag'));
   assert.ok(response.headers.get('X-GLPI-Snapshot-Hash'));

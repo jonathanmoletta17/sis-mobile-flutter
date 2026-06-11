@@ -149,7 +149,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
                     ),
                     const SizedBox(height: AppSpacing.md),
                     const Text(
-                      'Numero do Chamado:',
+                      'Número do Chamado:',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextFormField(
@@ -197,7 +197,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
           actionsAlignment: MainAxisAlignment.spaceBetween,
           actions: <Widget>[
             TextButton(
-              child: const Text('Limpar Tudo'),
+              child: const Text('Limpar tudo'),
               onPressed: () {
                 idController.clear();
                 setState(() {

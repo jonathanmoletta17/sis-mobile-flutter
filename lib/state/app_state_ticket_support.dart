@@ -140,6 +140,8 @@ class AppStateTicketSupport {
 
     return profile.contains('tecnico') ||
         profile.contains('técnico') ||
+        profile.contains('manutencao e conservacao') ||
+        profile.contains('manutenção e conservação') ||
         profile.contains('super-admin') ||
         profile.contains('super admin') ||
         profile == 'admin' ||
@@ -285,15 +287,21 @@ class AppStateTicketSupport {
     ];
 
     for (final candidate in candidates) {
-      final id = int.tryParse(GlpiNameFormatter.extractNumericId(candidate) ?? '');
+      final id = int.tryParse(
+        GlpiNameFormatter.extractNumericId(candidate) ?? '',
+      );
       if (id != null) return id;
       final parsed = int.tryParse(candidate?.toString().trim() ?? '');
       if (parsed != null) return parsed;
       if (candidate is Map) {
         for (final key in ['id', 'value', 'name', 'completename']) {
-          final nestedId = int.tryParse(GlpiNameFormatter.extractNumericId(candidate[key]) ?? '');
+          final nestedId = int.tryParse(
+            GlpiNameFormatter.extractNumericId(candidate[key]) ?? '',
+          );
           if (nestedId != null) return nestedId;
-          final nestedParsed = int.tryParse(candidate[key]?.toString().trim() ?? '');
+          final nestedParsed = int.tryParse(
+            candidate[key]?.toString().trim() ?? '',
+          );
           if (nestedParsed != null) return nestedParsed;
         }
       }

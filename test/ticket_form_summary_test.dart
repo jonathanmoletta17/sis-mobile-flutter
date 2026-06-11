@@ -25,7 +25,6 @@ Anexo: 6df4a4cc-768b-43de-95c6-6fe5f6f33a91.jpg
           'Ar condicionado ção nao liga na sala de reuniao.',
         );
         expect(summary.fields.map((field) => field.label), [
-          'Serviço',
           'Atendimento para',
           'Telefone',
           'Localização',

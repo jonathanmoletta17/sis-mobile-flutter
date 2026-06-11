@@ -84,7 +84,7 @@ class TicketFormSummary {
   }
 
   static bool _shouldHideLabel(String label) {
-    return label == 'Anexo' || label == 'Anexos';
+    return label == 'Serviço' || label == 'Anexo' || label == 'Anexos';
   }
 
   static String _canonicalLabel(String rawLabel) {

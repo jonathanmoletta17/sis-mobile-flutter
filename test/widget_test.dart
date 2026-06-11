@@ -6,6 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +21,10 @@ void main() {
   ) async {
     // Mock SharedPreferences antes de instanciar AppState
     SharedPreferences.setMockInitialValues({});
+    // dotenv é normalmente carregado no main(); em teste, carregamos vazio para
+    // que widgets que leem dotenv.maybeGet (ex.: LoginScreen) não lancem
+    // NotInitializedError.
+    dotenv.testLoad(mergeWith: const <String, String>{});
 
     // Build our app and trigger a frame.
     await tester.pumpWidget(

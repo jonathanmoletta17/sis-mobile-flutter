@@ -25,6 +25,7 @@ class GenericFormScreen extends StatelessWidget {
       assignmentGroupLabel: service.assignmentGroupLabel,
       uiSchemaSource: service.uiSchemaSource,
       runtimeFormStatus: service.runtimeFormStatus,
+      governedRecords: service.governedRecords,
       extraFieldsBuilder: service.hasExtraField
           ? (BuildContext _, Function(String?) onChanged) {
               return CustomDropdownField(

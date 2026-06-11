@@ -1,463 +1,546 @@
 export const MOBILE_METADATA_CATALOG = {
-  "schema_version": "0.2",
+  "schema_version": "2.0-readonly-draft",
   "consumer_id": "sis-mobile-flutter",
   "instance": "sis",
-  "source_metadata_etag": "a71c26b57fa85bc3a2fa383ae5eb93e8713c537b279ac9c60c60020edd4144a5",
-  "source_snapshot_hash": "cc9d6860df0e359d38bb2b74a05bc2d9b8821dd21e61289563e7ee49f20acbf3",
-  "services": [
+  "generated_at": "2026-06-03T05:33:58.758442+00:00",
+  "source_snapshot": {
+    "path": "/home/jonathan/.brain/glpi-governance/2026-05-29-full-map/sis-snapshot-2026-05-29.json",
+    "snapshot_hash": "fbd252e50e23660e8bdd9d86aa99dba7b08808eab52b4640d6ed7ac159a2d269",
+    "sha256": "33881ae7ba9e63520d1856d90921b34c1c635a85a785dbdf80a041a0b03f22bc"
+  },
+  "source_counts": {
+    "formcreator_forms": 41,
+    "formcreator_forms_profiles": 44,
+    "formcreator_questions": 3004,
+    "formcreator_conditions": 6582,
+    "formcreator_targettickets": 159,
+    "rule_ticket_criteria": 25,
+    "rule_ticket_actions": 26,
+    "categories": 149,
+    "locations": 422,
+    "entities": 86
+  },
+  "governance_rules": {
+    "assignment": [
+      {
+        "rule_id": 155,
+        "criteria": "itilcategories_id contains Conservação",
+        "action": "assign CC-CONSERVACÃO",
+        "group_id": 21
+      },
+      {
+        "rule_id": 156,
+        "criteria": "itilcategories_id contains Manutenção",
+        "action": "assign CC-MANUTENCAO",
+        "group_id": 22
+      }
+    ],
+    "task_templates": [
+      {
+        "rule_id": 149,
+        "criteria": "status novo + itilcategories_id contains Manutenção",
+        "append_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ]
+      },
+      {
+        "rule_ids": [
+          158,
+          159,
+          160,
+          161,
+          162,
+          163,
+          164,
+          165,
+          166,
+          167,
+          168,
+          169,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          176,
+          177
+        ],
+        "criteria": "locations_id contains mapped location patterns",
+        "append_task_templates": "map/location templates 6-21"
+      }
+    ]
+  },
+  "known_enum_semantics": {
+    "destination_entity": {
+      "1": "fixed_or_direct; validate per target",
+      "2": "Solicitante para mim / requester context",
+      "7": "Manutenção e Conservação para mim / operational context",
+      "8": "para terceiro / beneficiary question"
+    },
+    "category_rule": {
+      "3": "from category question; normal service path",
+      "1": "fixed/default",
+      "2": "atypical/legacy; validate before use"
+    },
+    "location_rule": {
+      "3": "from location question; normal service path",
+      "2": "atypical/legacy; validate before use"
+    },
+    "type_rule": {
+      "1": "fixed type in this snapshot"
+    },
+    "urgency_rule": {
+      "3": "from question",
+      "1": "fixed/default"
+    }
+  },
+  "warnings": [
     {
-      "service_id": "ar-condicionado",
-      "label": "Ar-Condicionado",
-      "category_id": 1,
-      "category_label": "Manutenção > Ar Condicionado",
-      "service_domain_label": "Manutenção",
-      "domain": "unknown",
-      "process_type": "unknown",
-      "expected_assignment_group_id": 22,
-      "expected_assignment_group_label": "CC-MANUTENCAO",
-      "location_ids_currently_sent": [
-        70
+      "record": "sis:checklist-calhas-e-pluviais:form-49:target-337",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-calhas-e-pluviais:form-49:target-337",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-hidraulico:form-50:target-341",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-hidraulico:form-50:target-341",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-hidraulico:form-50:target-342",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-hidraulico:form-50:target-342",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-hidraulico:form-50:target-343",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-hidraulico:form-50:target-343",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-hidraulico:form-50:target-344",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-hidraulico:form-50:target-344",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-hidraulico:form-50:target-350",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-hidraulico:form-50:target-350",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-362",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-362",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-363",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-363",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-364",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-364",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-365",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-365",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-366",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-366",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-367",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-367",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-368",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-iluminacao:form-52:target-368",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-pedras-portuguesas:form-51:target-359",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-pedras-portuguesas:form-51:target-359",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-refrigeracao:form-48:target-316",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-refrigeracao:form-48:target-316",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-refrigeracao:form-48:target-325",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-refrigeracao:form-48:target-325",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:checklist-refrigeracao:form-48:target-326",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:checklist-refrigeracao:form-48:target-326",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:diversos:form-18:target-40",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:diversos:form-18:target-43",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:diversos:form-18:target-44",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:elevadores:form-2:target-2",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:elevadores:form-2:target-2",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:elevadores:form-2:target-21",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:elevadores:form-2:target-21",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:elevadores:form-25:target-137",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:elevadores:form-25:target-137",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:elevadores:form-25:target-138",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:elevadores:form-25:target-138",
+      "warning": "location_rule atypical; require live validation",
+      "location_rule": 2
+    },
+    {
+      "record": "sis:manutencao:form-39:target-203",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:multiplas-demandas:form-40:target-218",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:multiplas-demandas:form-40:target-220",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    },
+    {
+      "record": "sis:projeto:form-36:target-246",
+      "warning": "category_rule not normal/fixed; require live validation",
+      "category_rule": 2
+    }
+  ],
+  "validation_evidence": [
+    {
+      "ticket_id": 9412,
+      "source": "mcp_glpi_search_tickets + get_ticket(include_tasks=True)",
+      "requesttype": "Formcreator",
+      "category": "Manutenção > Marcenaria > Conserto de Mobiliário",
+      "entity": "Origem > PIRATINI > CASA CIVIL > Secretaria-Executiva > Subchefia Juridica > Departamento de Informações Especiais",
+      "group": "CC-MANUTENCAO",
+      "location": "Locais > Casa Civil 1005 > Subsolo 1",
+      "task_templates_observed": [
+        "EQUIPE EXECUTORA",
+        "MATERIAIS UTILIZADOS",
+        "SERVIÇO REALIZADO",
+        "Mapa Casa Civil 1005- Subsolo 01"
       ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 1,
-      "candidate_forms": [
+      "notes": "FormCreator Manutenção com categoria governada e task de mapa por localização."
+    },
+    {
+      "ticket_id": 9416,
+      "source": "mcp_glpi_search_tickets + get_ticket(include_tasks=True)",
+      "requesttype": "Formcreator",
+      "category": "Manutenção > Elétrica > Troca",
+      "entity": "Origem > PIRATINI > GG > Secretaria Executiva de Gestão do Palácio Piratini > Departamento de Conservação e Memória do Patrimônio Cultural do Complexo do Palácio Piratini",
+      "group": "CC-MANUTENCAO",
+      "location": "Locais > Palacio Piratini -Ala Residencial > 1° Pavimento > ARS106",
+      "task_templates_observed": [
+        "EQUIPE EXECUTORA",
+        "MATERIAIS UTILIZADOS",
+        "SERVIÇO REALIZADO"
+      ],
+      "notes": "FormCreator Manutenção com anexo textual \"Documento anexado\" no conteúdo; anexos reais exigem Document/Document_Item."
+    },
+    {
+      "ticket_id": 9400,
+      "source": "mcp_glpi_search_tickets + get_ticket(include_tasks=True)",
+      "requesttype": "Formcreator",
+      "category": "Conservação > Limpeza > Limpeza geral",
+      "entity": "Origem > PIRATINI > CASA CIVIL > Secretaria-Executiva > Subchefia Administrativa > Divisão de Protocolo e Gerenciamento de Arquivo",
+      "group": "CC-CONSERVACÃO",
+      "location": "Limpeza > Casa Civil 1005 > Subsolo",
+      "task_templates_observed": [],
+      "notes": "FormCreator Conservação: grupo aplicado; tasks não retornadas."
+    },
+    {
+      "ticket_id": 9407,
+      "source": "mcp_glpi_search_tickets + get_ticket(include_tasks=True)",
+      "requesttype": "Helpdesk/app atual",
+      "category": "Conservação > Limpeza",
+      "entity": "Origem > PIRATINI",
+      "group": "CC-CONSERVACÃO",
+      "location": "Limpeza > Palácio Piratini",
+      "task_templates_observed": [],
+      "notes": "Criado pelo app atual com marcador FORMULARIO DO APP; aceita fila, mas não prova paridade FormCreator."
+    },
+    {
+      "ticket_id": 9422,
+      "source": "mcp_glpi_search_tickets + Document_Item by Document.id",
+      "requesttype": "synthetic Hermes/app-like",
+      "category": "Manutenção > Pintura > Outros",
+      "entity": "Origem > PIRATINI",
+      "group": "CC-MANUTENCAO",
+      "location": null,
+      "task_templates_observed": [],
+      "document_id": 7024,
+      "document_item_id": 9052,
+      "notes": "Anexo real comprovado por Document + Document_Item; requester não lê Document_Item por direito."
+    }
+  ],
+  "validations": [
+    {
+      "check": "non_empty_records",
+      "ok": true,
+      "value": 133
+    },
+    {
+      "check": "all_records_have_profile_visibility",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "check": "normal_services_have_category_question",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "check": "normal_services_have_location_question",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "check": "ticket_9412_category_group",
+      "ok": true,
+      "expected_group": "CC-MANUTENCAO",
+      "actual_group": "CC-MANUTENCAO",
+      "category": "Manutenção > Marcenaria > Conserto de Mobiliário"
+    },
+    {
+      "check": "ticket_9416_category_group",
+      "ok": true,
+      "expected_group": "CC-MANUTENCAO",
+      "actual_group": "CC-MANUTENCAO",
+      "category": "Manutenção > Elétrica > Troca"
+    },
+    {
+      "check": "ticket_9400_category_group",
+      "ok": true,
+      "expected_group": "CC-CONSERVACÃO",
+      "actual_group": "CC-CONSERVACÃO",
+      "category": "Conservação > Limpeza > Limpeza geral"
+    },
+    {
+      "check": "ticket_9407_category_group",
+      "ok": true,
+      "expected_group": "CC-CONSERVACÃO",
+      "actual_group": "CC-CONSERVACÃO",
+      "category": "Conservação > Limpeza"
+    },
+    {
+      "check": "ticket_9422_category_group",
+      "ok": true,
+      "expected_group": "CC-MANUTENCAO",
+      "actual_group": "CC-MANUTENCAO",
+      "category": "Manutenção > Pintura > Outros"
+    }
+  ],
+  "validation_ok": true,
+  "records": [
+    {
+      "catalog_record_id": "sis:ar-condicionado:form-1:target-1",
+      "service_id": "ar-condicionado",
+      "service_label": "Ar-Condicionado",
+      "profile_visibility": [
         {
-          "active": true,
-          "confidence": 0.55,
-          "id": 1,
-          "label": "Ar-Condicionado"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 21,
-          "label": "Ar-Condicionado"
+          "id": 9,
+          "name": "Solicitante"
         }
       ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 1,
-        "targetticket_id": 1,
-        "person_question": {
-          "id": 1,
-          "required": true
+      "form": {
+        "id": 1,
+        "name": "Ar-Condicionado",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          1,
+          21
+        ]
+      },
+      "targetticket": {
+        "id": 1,
+        "name": "Ar Condicionado",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
         },
-        "location_question": {
-          "id": 3,
-          "root_id": 70,
-          "source": "formcreator_question_values",
-          "option_count": 80,
-          "options": [
-            {
-              "id": 100,
-              "label": "CAFF",
-              "full_label": "Locais > CAFF"
-            },
-            {
-              "id": 71,
-              "label": "Casa Civil 1005",
-              "full_label": "Locais > Casa Civil 1005"
-            },
-            {
-              "id": 79,
-              "label": "Casa Civil 1005 > 1° Andar",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
-            },
-            {
-              "id": 282,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08"
-            },
-            {
-              "id": 283,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A"
-            },
-            {
-              "id": 285,
-              "label": "Casa Civil 1005 > 1° Andar > P1B01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B01"
-            },
-            {
-              "id": 286,
-              "label": "Casa Civil 1005 > 1° Andar > P1B02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B02"
-            },
-            {
-              "id": 287,
-              "label": "Casa Civil 1005 > 1° Andar > P1B03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B03"
-            },
-            {
-              "id": 280,
-              "label": "Casa Civil 1005 > 1° Andar > P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
-            },
-            {
-              "id": 289,
-              "label": "Casa Civil 1005 > 1° Andar > P1C02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C02"
-            },
-            {
-              "id": 292,
-              "label": "Casa Civil 1005 > 1° Andar > P1C03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C03"
-            },
-            {
-              "id": 294,
-              "label": "Casa Civil 1005 > 1° Andar > P1C04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C04"
-            },
-            {
-              "id": 288,
-              "label": "Casa Civil 1005 > 1° Andar > P1E01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E01"
-            },
-            {
-              "id": 293,
-              "label": "Casa Civil 1005 > 1° Andar > P1E02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E02"
-            },
-            {
-              "id": 276,
-              "label": "Casa Civil 1005 > 1° Andar > P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
-            },
-            {
-              "id": 278,
-              "label": "Casa Civil 1005 > 1° Andar > P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
-            },
-            {
-              "id": 277,
-              "label": "Casa Civil 1005 > 1° Andar > P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
-            },
-            {
-              "id": 279,
-              "label": "Casa Civil 1005 > 1° Andar > P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
-            },
-            {
-              "id": 290,
-              "label": "Casa Civil 1005 > 1° Andar > P1S05",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S05"
-            },
-            {
-              "id": 281,
-              "label": "Casa Civil 1005 > 1° Andar > P1S06",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S06"
-            },
-            {
-              "id": 291,
-              "label": "Casa Civil 1005 > 1° Andar > P1S07",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S07"
-            },
-            {
-              "id": 295,
-              "label": "Casa Civil 1005 > 1° Andar > P1S09",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S09"
-            },
-            {
-              "id": 80,
-              "label": "Casa Civil 1005 > 2° Andar",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
-            },
-            {
-              "id": 266,
-              "label": "Casa Civil 1005 > 2° Andar > P2B01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B01"
-            },
-            {
-              "id": 267,
-              "label": "Casa Civil 1005 > 2° Andar > P2B03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B03"
-            },
-            {
-              "id": 270,
-              "label": "Casa Civil 1005 > 2° Andar > P2C01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2C01"
-            },
-            {
-              "id": 269,
-              "label": "Casa Civil 1005 > 2° Andar > P2E01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2E01"
-            },
-            {
-              "id": 261,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01"
-            },
-            {
-              "id": 262,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A"
-            },
-            {
-              "id": 263,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B"
-            },
-            {
-              "id": 265,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02"
-            },
-            {
-              "id": 264,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A"
-            },
-            {
-              "id": 272,
-              "label": "Casa Civil 1005 > 2° Andar > P2S03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S03"
-            },
-            {
-              "id": 268,
-              "label": "Casa Civil 1005 > 2° Andar > P2S04",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S04"
-            },
-            {
-              "id": 273,
-              "label": "Casa Civil 1005 > 2° Andar > P2S05",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S05"
-            },
-            {
-              "id": 271,
-              "label": "Casa Civil 1005 > 2° Andar > P2S06",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S06"
-            },
-            {
-              "id": 274,
-              "label": "Casa Civil 1005 > 2° Andar > P2S07",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S07"
-            },
-            {
-              "id": 275,
-              "label": "Casa Civil 1005 > 2° Andar > P2S08",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S08"
-            },
-            {
-              "id": 296,
-              "label": "Casa Civil 1005 > Subsolo 1",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
-            },
-            {
-              "id": 321,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B01"
-            },
-            {
-              "id": 308,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B02"
-            },
-            {
-              "id": 307,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B03"
-            },
-            {
-              "id": 319,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C01"
-            },
-            {
-              "id": 313,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C02"
-            },
-            {
-              "id": 303,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C03"
-            },
-            {
-              "id": 306,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E01"
-            },
-            {
-              "id": 312,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E02"
-            },
-            {
-              "id": 323,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E03"
-            },
-            {
-              "id": 322,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S01"
-            },
-            {
-              "id": 318,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S02"
-            },
-            {
-              "id": 320,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S03"
-            },
-            {
-              "id": 316,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S04",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S04"
-            },
-            {
-              "id": 317,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S06",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S06"
-            },
-            {
-              "id": 310,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S07",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S07"
-            },
-            {
-              "id": 315,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S08",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S08"
-            },
-            {
-              "id": 311,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S09",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S09"
-            },
-            {
-              "id": 314,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S10",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S10"
-            },
-            {
-              "id": 309,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S11",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S11"
-            },
-            {
-              "id": 304,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S12",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S12"
-            },
-            {
-              "id": 305,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S13",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S13"
-            },
-            {
-              "id": 302,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S14",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S14"
-            },
-            {
-              "id": 297,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S15",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S15"
-            },
-            {
-              "id": 301,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S16",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S16"
-            },
-            {
-              "id": 298,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S17",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S17"
-            },
-            {
-              "id": 300,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S18",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S18"
-            },
-            {
-              "id": 299,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S19",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S19"
-            },
-            {
-              "id": 82,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
-            },
-            {
-              "id": 325,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01"
-            },
-            {
-              "id": 324,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02"
-            },
-            {
-              "id": 81,
-              "label": "Casa Civil 1005 > Torreão",
-              "full_label": "Locais > Casa Civil 1005 > Torreão"
-            },
-            {
-              "id": 260,
-              "label": "Casa Civil 1005 > Torreão > P3E01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3E01"
-            },
-            {
-              "id": 259,
-              "label": "Casa Civil 1005 > Torreão > P3S01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3S01"
-            },
-            {
-              "id": 87,
-              "label": "Defesa Civil - Andrade Neves 106",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106"
-            },
-            {
-              "id": 88,
-              "label": "Defesa Civil - Andrade Neves 106 > 11° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 11° Andar"
-            },
-            {
-              "id": 89,
-              "label": "Defesa Civil - Andrade Neves 106 > 15° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 15° Andar"
-            },
-            {
-              "id": 84,
-              "label": "Divisão de Transportes -Riachuelo 1285",
-              "full_label": "Locais > Divisão de Transportes -Riachuelo 1285"
-            },
-            {
-              "id": 83,
-              "label": "Duque de Caxias 951",
-              "full_label": "Locais > Duque de Caxias 951"
-            },
-            {
-              "id": 85,
-              "label": "Gabinete dos Prefeitos - Andradas 1234",
-              "full_label": "Locais > Gabinete dos Prefeitos - Andradas 1234"
-            },
-            {
-              "id": 72,
-              "label": "Palacio Piratini",
-              "full_label": "Locais > Palacio Piratini"
-            },
-            {
-              "id": 73,
-              "label": "Palacio Piratini - Ala Governamental",
-              "full_label": "Locais > Palacio Piratini - Ala Governamental"
-            }
-          ]
-        },
-        "type_question": {
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 7,
+        "location_rule": 3,
+        "location_question_id": 3,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
           "id": 7,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "1",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 1,
-          "source": "formcreator_question_values",
-          "option_count": 6,
-          "options": [
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 1,
+              "label": "Ar Condicionado",
+              "full_label": "Manutenção > Ar Condicionado"
+            },
             {
               "id": 2,
               "label": "Conserto",
@@ -490,106 +573,1878 @@ export const MOBILE_METADATA_CATALOG = {
             }
           ]
         },
-        "urgency_question": {
-          "id": 5
-        },
-        "description_question": {
-          "id": 8,
-          "required": true
-        },
-        "question_count": 9
+        "location": {
+          "id": 3,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
       },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
+      "expected_result": {
+        "category_root": "Manutenção > Ar Condicionado",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
       }
     },
     {
-      "service_id": "carregadores",
-      "label": "Carregadores",
-      "category_id": 55,
-      "category_label": "Conservação > Carregadores",
-      "service_domain_label": "Conservação",
-      "domain": "infraestrutura_predial",
-      "process_type": "maintenance_request",
-      "expected_assignment_group_id": 21,
-      "expected_assignment_group_label": "CC-CONSERVACÃO",
-      "location_ids_currently_sent": [
-        36
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 3,
-      "candidate_forms": [
+      "catalog_record_id": "sis:ar-condicionado:form-1:target-17",
+      "service_id": "ar-condicionado",
+      "service_label": "Ar-Condicionado",
+      "profile_visibility": [
         {
-          "active": true,
-          "confidence": 0.55,
-          "id": 3,
-          "label": "Carregadores"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 22,
-          "label": "Carregadores"
+          "id": 9,
+          "name": "Solicitante"
         }
       ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 3,
-        "targetticket_id": 3,
-        "person_question": {
-          "id": 18,
-          "required": true
+      "form": {
+        "id": 1,
+        "name": "Ar-Condicionado",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          1,
+          21
+        ]
+      },
+      "targetticket": {
+        "id": 17,
+        "name": "Ar Condicionado para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
         },
-        "location_question": {
-          "id": 20,
-          "root_id": 36,
-          "source": "formcreator_question_values",
-          "option_count": 27,
-          "options": [
+        "destination_entity_value": 2,
+        "category_rule": 3,
+        "category_question_id": 7,
+        "location_rule": 3,
+        "location_question_id": 3,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 7,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "1",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 1,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
             {
-              "id": 45,
-              "label": "Ala Residencial",
-              "full_label": "Carregadores e Mensageiros > Ala Residencial"
+              "id": 1,
+              "label": "Ar Condicionado",
+              "full_label": "Manutenção > Ar Condicionado"
             },
             {
-              "id": 52,
-              "label": "CAFF",
-              "full_label": "Carregadores e Mensageiros > CAFF"
+              "id": 2,
+              "label": "Conserto",
+              "full_label": "Manutenção > Ar Condicionado > Conserto"
             },
             {
-              "id": 53,
-              "label": "CAFF > 1° Andar - Ouvidoria",
-              "full_label": "Carregadores e Mensageiros > CAFF > 1° Andar - Ouvidoria"
+              "id": 3,
+              "label": "Desinstalação",
+              "full_label": "Manutenção > Ar Condicionado > Desinstalação"
             },
             {
-              "id": 37,
+              "id": 4,
+              "label": "Instalação",
+              "full_label": "Manutenção > Ar Condicionado > Instalação"
+            },
+            {
+              "id": 6,
+              "label": "Remanejo",
+              "full_label": "Manutenção > Ar Condicionado > Remanejo"
+            },
+            {
+              "id": 7,
+              "label": "Outras atividades",
+              "full_label": "Manutenção > Ar Condicionado > Outras atividades"
+            },
+            {
+              "id": 100,
+              "label": "Higienização",
+              "full_label": "Manutenção > Ar Condicionado > Higienização"
+            }
+          ]
+        },
+        "location": {
+          "id": 3,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
               "label": "Casa Civil 1005",
-              "full_label": "Carregadores e Mensageiros > Casa Civil 1005"
+              "full_label": "Locais > Casa Civil 1005"
             },
             {
-              "id": 38,
-              "label": "Casa Civil 1005 > 1° Andar",
-              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 1° Andar"
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 39,
-              "label": "Casa Civil 1005 > 2 ° Andar",
-              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 2 ° Andar"
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
             },
             {
-              "id": 49,
-              "label": "Casa Civil 1005 > Subsolo",
-              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > Subsolo"
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
             },
             {
-              "id": 95,
-              "label": "Casa de Canela/RS",
-              "full_label": "Carregadores e Mensageiros > Casa de Canela/RS"
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Ar Condicionado",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:ar-condicionado:form-21:target-129",
+      "service_id": "ar-condicionado",
+      "service_label": "Ar-Condicionado",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 21,
+        "name": "Ar-Condicionado",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          1,
+          21
+        ]
+      },
+      "targetticket": {
+        "id": 129,
+        "name": "Ar Condicionado",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 375,
+        "location_rule": 3,
+        "location_question_id": 372,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 375,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "1",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 1,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 1,
+              "label": "Ar Condicionado",
+              "full_label": "Manutenção > Ar Condicionado"
+            },
+            {
+              "id": 2,
+              "label": "Conserto",
+              "full_label": "Manutenção > Ar Condicionado > Conserto"
+            },
+            {
+              "id": 3,
+              "label": "Desinstalação",
+              "full_label": "Manutenção > Ar Condicionado > Desinstalação"
+            },
+            {
+              "id": 4,
+              "label": "Instalação",
+              "full_label": "Manutenção > Ar Condicionado > Instalação"
+            },
+            {
+              "id": 6,
+              "label": "Remanejo",
+              "full_label": "Manutenção > Ar Condicionado > Remanejo"
+            },
+            {
+              "id": 7,
+              "label": "Outras atividades",
+              "full_label": "Manutenção > Ar Condicionado > Outras atividades"
+            },
+            {
+              "id": 100,
+              "label": "Higienização",
+              "full_label": "Manutenção > Ar Condicionado > Higienização"
+            }
+          ]
+        },
+        "location": {
+          "id": 372,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Ar Condicionado",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:ar-condicionado:form-21:target-130",
+      "service_id": "ar-condicionado",
+      "service_label": "Ar-Condicionado",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 21,
+        "name": "Ar-Condicionado",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          1,
+          21
+        ]
+      },
+      "targetticket": {
+        "id": 130,
+        "name": "Ar Condicionado para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 371,
+        "category_rule": 3,
+        "category_question_id": 375,
+        "location_rule": 3,
+        "location_question_id": 372,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 375,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "1",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 1,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 1,
+              "label": "Ar Condicionado",
+              "full_label": "Manutenção > Ar Condicionado"
+            },
+            {
+              "id": 2,
+              "label": "Conserto",
+              "full_label": "Manutenção > Ar Condicionado > Conserto"
+            },
+            {
+              "id": 3,
+              "label": "Desinstalação",
+              "full_label": "Manutenção > Ar Condicionado > Desinstalação"
+            },
+            {
+              "id": 4,
+              "label": "Instalação",
+              "full_label": "Manutenção > Ar Condicionado > Instalação"
+            },
+            {
+              "id": 6,
+              "label": "Remanejo",
+              "full_label": "Manutenção > Ar Condicionado > Remanejo"
+            },
+            {
+              "id": 7,
+              "label": "Outras atividades",
+              "full_label": "Manutenção > Ar Condicionado > Outras atividades"
+            },
+            {
+              "id": 100,
+              "label": "Higienização",
+              "full_label": "Manutenção > Ar Condicionado > Higienização"
+            }
+          ]
+        },
+        "location": {
+          "id": 372,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Ar Condicionado",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-calhas-e-pluviais:form-49:target-337",
+      "service_id": "checklist-calhas-e-pluviais",
+      "service_label": "CHECKLIST CALHAS E PLUVIAIS",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 49,
+        "name": "CHECKLIST CALHAS E PLUVIAIS",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          49
+        ]
+      },
+      "targetticket": {
+        "id": 337,
+        "name": "CHECKLIST CALHAS E PLUVIAIS",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 149,
+        "location_rule": 2,
+        "location_question_id": 72,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 1
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 72,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-hidraulico:form-50:target-341",
+      "service_id": "checklist-hidraulico",
+      "service_label": "CHECKLIST HIDRÁULICO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 50,
+        "name": "CHECKLIST HIDRÁULICO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          50
+        ]
+      },
+      "targetticket": {
+        "id": 341,
+        "name": "HIDRÁULICO ALA RESIDÊNCIAL",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 151,
+        "location_rule": 2,
+        "location_question_id": 74,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": null
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-hidraulico:form-50:target-342",
+      "service_id": "checklist-hidraulico",
+      "service_label": "CHECKLIST HIDRÁULICO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 50,
+        "name": "CHECKLIST HIDRÁULICO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          50
+        ]
+      },
+      "targetticket": {
+        "id": 342,
+        "name": "HIDRÁULICO ALA GOVERNAMENTAL",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 151,
+        "location_rule": 2,
+        "location_question_id": 73,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 73,
+          "name": "Urgência",
+          "fieldtype": "urgency",
+          "required": false,
+          "raw_values": {}
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-hidraulico:form-50:target-343",
+      "service_id": "checklist-hidraulico",
+      "service_label": "CHECKLIST HIDRÁULICO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 50,
+        "name": "CHECKLIST HIDRÁULICO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          50
+        ]
+      },
+      "targetticket": {
+        "id": 343,
+        "name": "HIDRÁULICO GALPÃO",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 151,
+        "location_rule": 2,
+        "location_question_id": 73,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 73,
+          "name": "Urgência",
+          "fieldtype": "urgency",
+          "required": false,
+          "raw_values": {}
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-hidraulico:form-50:target-344",
+      "service_id": "checklist-hidraulico",
+      "service_label": "CHECKLIST HIDRÁULICO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 50,
+        "name": "CHECKLIST HIDRÁULICO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          50
+        ]
+      },
+      "targetticket": {
+        "id": 344,
+        "name": "HIDRÁULICO GARAGEM",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 151,
+        "location_rule": 2,
+        "location_question_id": 84,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 84,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "128",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 128,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 128,
+              "label": "Mensageria",
+              "full_label": "Conservação > Mensageria"
+            },
+            {
+              "id": 129,
+              "label": "Movimentação Documentos",
+              "full_label": "Conservação > Mensageria > Movimentação Documentos"
+            },
+            {
+              "id": 130,
+              "label": "Movimentação Insumos até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Insumos até 5Kg"
+            },
+            {
+              "id": 131,
+              "label": "Movimentação Materiais até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Materiais até 5Kg"
+            },
+            {
+              "id": 132,
+              "label": "Outras entregas e Movimentações até 5Kg",
+              "full_label": "Conservação > Mensageria > Outras entregas e Movimentações até 5Kg"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-hidraulico:form-50:target-350",
+      "service_id": "checklist-hidraulico",
+      "service_label": "CHECKLIST HIDRÁULICO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 50,
+        "name": "CHECKLIST HIDRÁULICO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          50
+        ]
+      },
+      "targetticket": {
+        "id": 350,
+        "name": "HIDRÁULICO Casa Civil 1005",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 151,
+        "location_rule": 2,
+        "location_question_id": 71,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 71,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-iluminacao:form-52:target-362",
+      "service_id": "checklist-iluminacao",
+      "service_label": "CHECKLIST ILUMINAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 52,
+        "name": "CHECKLIST ILUMINAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          52
+        ]
+      },
+      "targetticket": {
+        "id": 362,
+        "name": "ILUMINAÇÂO ALA RESIDENCIAL 3º Pavimento",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 148,
+        "location_rule": 2,
+        "location_question_id": 330,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": null
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-iluminacao:form-52:target-363",
+      "service_id": "checklist-iluminacao",
+      "service_label": "CHECKLIST ILUMINAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 52,
+        "name": "CHECKLIST ILUMINAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          52
+        ]
+      },
+      "targetticket": {
+        "id": 363,
+        "name": "ILUMINAÇÂO ALA GOVERNAMENTAL - 1º Pavimento",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 148,
+        "location_rule": 2,
+        "location_question_id": 144,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 144,
+          "name": "Assunto",
+          "fieldtype": "text",
+          "required": true,
+          "raw_values": {}
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-iluminacao:form-52:target-364",
+      "service_id": "checklist-iluminacao",
+      "service_label": "CHECKLIST ILUMINAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 52,
+        "name": "CHECKLIST ILUMINAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          52
+        ]
+      },
+      "targetticket": {
+        "id": 364,
+        "name": "ILUMINAÇÂO ALA RESIDENCIAL - 2º Pavimento",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 148,
+        "location_rule": 2,
+        "location_question_id": 328,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": null
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-iluminacao:form-52:target-365",
+      "service_id": "checklist-iluminacao",
+      "service_label": "CHECKLIST ILUMINAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 52,
+        "name": "CHECKLIST ILUMINAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          52
+        ]
+      },
+      "targetticket": {
+        "id": 365,
+        "name": "ILUMINAÇÂO ALA RESIDENCIAL 1º Pavimento",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 148,
+        "location_rule": 2,
+        "location_question_id": 329,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": null
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-iluminacao:form-52:target-366",
+      "service_id": "checklist-iluminacao",
+      "service_label": "CHECKLIST ILUMINAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 52,
+        "name": "CHECKLIST ILUMINAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          52
+        ]
+      },
+      "targetticket": {
+        "id": 366,
+        "name": "ILUMINAÇÂO ALA GOVERNAMENTAL - 2º Pavimento",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 148,
+        "location_rule": 2,
+        "location_question_id": 80,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 80,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-iluminacao:form-52:target-367",
+      "service_id": "checklist-iluminacao",
+      "service_label": "CHECKLIST ILUMINAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 52,
+        "name": "CHECKLIST ILUMINAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          52
+        ]
+      },
+      "targetticket": {
+        "id": 367,
+        "name": "ILUMINAÇÂO ALA GOVERNAMENTAL - 3º Pavimento",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 148,
+        "location_rule": 2,
+        "location_question_id": 146,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 146,
+          "name": "Assunto",
+          "fieldtype": "text",
+          "required": true,
+          "raw_values": {}
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-iluminacao:form-52:target-368",
+      "service_id": "checklist-iluminacao",
+      "service_label": "CHECKLIST ILUMINAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 52,
+        "name": "CHECKLIST ILUMINAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          52
+        ]
+      },
+      "targetticket": {
+        "id": 368,
+        "name": "ILUMINAÇÂO ALA GOVERNAMENTAL - 4º Pavimento",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 148,
+        "location_rule": 2,
+        "location_question_id": 161,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": null
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-pedras-portuguesas:form-51:target-359",
+      "service_id": "checklist-pedras-portuguesas",
+      "service_label": "CHECKLIST PEDRAS PORTUGUESAS\t",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 51,
+        "name": "CHECKLIST PEDRAS PORTUGUESAS\t",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          51
+        ]
+      },
+      "targetticket": {
+        "id": 359,
+        "name": "PEDRAS PORTUGUESAS",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 150,
+        "location_rule": 2,
+        "location_question_id": 72,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 1
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 72,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-refrigeracao:form-48:target-316",
+      "service_id": "checklist-refrigeracao",
+      "service_label": "CHECKLIST REFRIGERAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 48,
+        "name": "CHECKLIST REFRIGERAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          48
+        ]
+      },
+      "targetticket": {
+        "id": 316,
+        "name": "REFRIGERAÇÃO AR CENTRAL",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 152,
+        "location_rule": 2,
+        "location_question_id": 72,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 72,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-refrigeracao:form-48:target-325",
+      "service_id": "checklist-refrigeracao",
+      "service_label": "CHECKLIST REFRIGERAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 48,
+        "name": "CHECKLIST REFRIGERAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          48
+        ]
+      },
+      "targetticket": {
+        "id": 325,
+        "name": "REFRIGERAÇÃO 1005",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 152,
+        "location_rule": 2,
+        "location_question_id": 37,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 37,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-refrigeracao:form-48:target-326",
+      "service_id": "checklist-refrigeracao",
+      "service_label": "CHECKLIST REFRIGERAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 48,
+        "name": "CHECKLIST REFRIGERAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          48
+        ]
+      },
+      "targetticket": {
+        "id": 326,
+        "name": "REFRIGERAÇÃO 951",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 152,
+        "location_rule": 2,
+        "location_question_id": 83,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 83,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "36",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 36,
+          "option_source": "locations",
+          "options_count": 28,
+          "options_sample": [
+            {
+              "id": 36,
+              "label": "Carregadores e Mensageiros",
+              "full_label": "Carregadores e Mensageiros"
             },
             {
               "id": 19,
@@ -598,102 +2453,119 @@ export const MOBILE_METADATA_CATALOG = {
             },
             {
               "id": 20,
-              "label": "Defesa Civil - Andrade Neves > 11° Andar",
+              "label": "11° Andar",
               "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 11° Andar"
             },
             {
               "id": 22,
-              "label": "Defesa Civil - Andrade Neves > 15° Andar",
+              "label": "15° Andar",
               "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 15° Andar"
             },
             {
-              "id": 48,
-              "label": "Gabinete dos Prefeitos",
-              "full_label": "Carregadores e Mensageiros > Gabinete dos Prefeitos"
+              "id": 37,
+              "label": "Casa Civil 1005",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005"
             },
             {
-              "id": 51,
-              "label": "Garagem - Riachuelo 1285",
-              "full_label": "Carregadores e Mensageiros > Garagem - Riachuelo 1285"
+              "id": 38,
+              "label": "1° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 40,
-              "label": "Palacio Piratini",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini"
+              "id": 39,
+              "label": "2 ° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 2 ° Andar"
             },
             {
-              "id": 41,
-              "label": "Palacio Piratini > 1° andar",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > 1° andar"
-            },
-            {
-              "id": 42,
-              "label": "Palacio Piratini > 2° Andar",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > 2° Andar"
-            },
-            {
-              "id": 43,
-              "label": "Palacio Piratini > 3° Andar",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > 3° Andar"
-            },
-            {
-              "id": 44,
-              "label": "Palacio Piratini > 4° Andar",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > 4° Andar"
-            },
-            {
-              "id": 97,
-              "label": "Palacio Piratini > Galpão Criolo",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > Galpão Criolo"
-            },
-            {
-              "id": 50,
-              "label": "Palacio Piratini > Oficina Restauro",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > Oficina Restauro"
-            },
-            {
-              "id": 90,
-              "label": "Palacio Piratini > SECOM",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > SECOM"
-            },
-            {
-              "id": 94,
-              "label": "Palacio Piratini > Subsolo",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > Subsolo"
-            },
-            {
-              "id": 46,
-              "label": "Parque de exposição Assis Brasil (EXPOINTER)",
-              "full_label": "Carregadores e Mensageiros > Parque de exposição Assis Brasil (EXPOINTER)"
-            },
-            {
-              "id": 93,
-              "label": "Prédio 951  (\"Banrisul\")",
-              "full_label": "Carregadores e Mensageiros > Prédio 951  (\"Banrisul\")"
-            },
-            {
-              "id": 102,
-              "label": "Rua José do Patrocínio, 45  - Arquivo",
-              "full_label": "Carregadores e Mensageiros > Rua José do Patrocínio, 45  - Arquivo"
-            },
-            {
-              "id": 91,
-              "label": "SECOM - Riachuelo 1098",
-              "full_label": "Carregadores e Mensageiros > SECOM - Riachuelo 1098"
-            },
-            {
-              "id": 47,
-              "label": "SPH",
-              "full_label": "Carregadores e Mensageiros > SPH"
+              "id": 49,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > Subsolo"
             }
           ]
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
         },
-        "type_question": {
-          "id": 24,
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:conservacao:form-38:target-197",
+      "service_id": "conservacao",
+      "service_label": "CONSERVAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 38,
+        "name": "CONSERVAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          38
+        ]
+      },
+      "targetticket": {
+        "id": 197,
+        "name": "Carregadores",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 613,
+        "location_rule": 3,
+        "location_question_id": 573,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 613,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "55",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 55,
-          "source": "formcreator_question_values",
-          "option_count": 6,
-          "options": [
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 55,
+              "label": "Carregadores",
+              "full_label": "Conservação > Carregadores"
+            },
             {
               "id": 56,
               "label": "Movimentação de Insumos",
@@ -726,185 +2598,150 @@ export const MOBILE_METADATA_CATALOG = {
             }
           ]
         },
-        "urgency_question": {
-          "id": 22
-        },
-        "description_question": {
-          "id": 25,
-          "required": true
-        },
-        "question_count": 9
+        "location": {
+          "id": 573,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
       },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
+      "expected_result": {
+        "category_root": "Conservação > Carregadores",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
       }
     },
     {
-      "service_id": "copa",
-      "label": "Copa",
-      "category_id": 98,
-      "category_label": "Conservação > Copa",
-      "service_domain_label": "Conservação",
-      "domain": "unknown",
-      "process_type": "unknown",
-      "expected_assignment_group_id": 21,
-      "expected_assignment_group_label": "CC-CONSERVACÃO",
-      "location_ids_currently_sent": [
-        27
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 4,
-      "candidate_forms": [
+      "catalog_record_id": "sis:conservacao:form-38:target-198",
+      "service_id": "conservacao",
+      "service_label": "CONSERVAÇÃO",
+      "profile_visibility": [
         {
-          "active": true,
-          "confidence": 0.55,
           "id": 4,
-          "label": "Copa"
+          "name": "Super-Admin"
         },
         {
-          "active": true,
-          "confidence": 0.55,
-          "id": 23,
-          "label": "Copa"
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
         }
       ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 4,
-        "targetticket_id": 4,
-        "person_question": {
-          "id": 27,
-          "required": true
+      "form": {
+        "id": 38,
+        "name": "CONSERVAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          38
+        ]
+      },
+      "targetticket": {
+        "id": 198,
+        "name": "Copa",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
         },
-        "location_question": {
-          "id": 29,
-          "root_id": 27,
-          "source": "formcreator_question_values",
-          "option_count": 22,
-          "options": [
-            {
-              "id": 1,
-              "label": "Casa Civil 1005",
-              "full_label": "Limpeza > Casa Civil 1005"
-            },
-            {
-              "id": 60,
-              "label": "Casa Civil 1005 > 1° Andar",
-              "full_label": "Limpeza > Casa Civil 1005 > 1° Andar"
-            },
-            {
-              "id": 61,
-              "label": "Casa Civil 1005 > 2° Andar",
-              "full_label": "Limpeza > Casa Civil 1005 > 2° Andar"
-            },
-            {
-              "id": 62,
-              "label": "Casa Civil 1005 > Subsolo",
-              "full_label": "Limpeza > Casa Civil 1005 > Subsolo"
-            },
-            {
-              "id": 96,
-              "label": "Casa Civil 1005 > Torreão",
-              "full_label": "Limpeza > Casa Civil 1005 > Torreão"
-            },
-            {
-              "id": 28,
-              "label": "Duque de Caxias 951",
-              "full_label": "Limpeza > Duque de Caxias 951"
-            },
-            {
-              "id": 8,
-              "label": "Palácio Piratini",
-              "full_label": "Limpeza > Palácio Piratini"
-            },
-            {
-              "id": 63,
-              "label": "Palácio Piratini > 1° Andar",
-              "full_label": "Limpeza > Palácio Piratini > 1° Andar"
-            },
-            {
-              "id": 69,
-              "label": "Palácio Piratini > 1° Andar > Gabinete Casa Civil",
-              "full_label": "Limpeza > Palácio Piratini > 1° Andar > Gabinete Casa Civil"
-            },
-            {
-              "id": 68,
-              "label": "Palácio Piratini > 1° Andar > Gabinete Casa Militar",
-              "full_label": "Limpeza > Palácio Piratini > 1° Andar > Gabinete Casa Militar"
-            },
-            {
-              "id": 92,
-              "label": "Palácio Piratini > 1° Andar > Recepção",
-              "full_label": "Limpeza > Palácio Piratini > 1° Andar > Recepção"
-            },
-            {
-              "id": 64,
-              "label": "Palácio Piratini > 2° Andar",
-              "full_label": "Limpeza > Palácio Piratini > 2° Andar"
-            },
-            {
-              "id": 65,
-              "label": "Palácio Piratini > 3° Andar",
-              "full_label": "Limpeza > Palácio Piratini > 3° Andar"
-            },
-            {
-              "id": 66,
-              "label": "Palácio Piratini > 4° Andar",
-              "full_label": "Limpeza > Palácio Piratini > 4° Andar"
-            },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 617,
+        "location_rule": 3,
+        "location_question_id": 573,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 617,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "98",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 98,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
             {
               "id": 98,
-              "label": "Palácio Piratini > Galpão Criolo",
-              "full_label": "Limpeza > Palácio Piratini > Galpão Criolo"
+              "label": "Copa",
+              "full_label": "Conservação > Copa"
             },
-            {
-              "id": 67,
-              "label": "Palácio Piratini > Oficina de Restauro",
-              "full_label": "Limpeza > Palácio Piratini > Oficina de Restauro"
-            },
-            {
-              "id": 9,
-              "label": "Parque de Exposições Assis Brasil",
-              "full_label": "Limpeza > Parque de Exposições Assis Brasil"
-            },
-            {
-              "id": 10,
-              "label": "Parque de Exposições Assis Brasil > Casa Branca",
-              "full_label": "Limpeza > Parque de Exposições Assis Brasil > Casa Branca"
-            },
-            {
-              "id": 11,
-              "label": "Parque de Exposições Assis Brasil > Casa Militar",
-              "full_label": "Limpeza > Parque de Exposições Assis Brasil > Casa Militar"
-            },
-            {
-              "id": 104,
-              "label": "Rua José do Patrocínio, 45  - Arquivo",
-              "full_label": "Limpeza > Rua José do Patrocínio, 45  - Arquivo"
-            },
-            {
-              "id": 29,
-              "label": "SPH",
-              "full_label": "Limpeza > SPH"
-            },
-            {
-              "id": 30,
-              "label": "SPH > 3º Andar",
-              "full_label": "Limpeza > SPH > 3º Andar"
-            }
-          ]
-        },
-        "type_question": {
-          "id": 32,
-          "root_id": 98,
-          "source": "formcreator_question_values",
-          "option_count": 6,
-          "options": [
             {
               "id": 105,
               "label": "Agua",
@@ -937,136 +2774,25 @@ export const MOBILE_METADATA_CATALOG = {
             }
           ]
         },
-        "urgency_question": null,
-        "description_question": {
-          "id": 33,
-          "required": true
-        },
-        "question_count": 8
-      },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
-      }
-    },
-    {
-      "service_id": "elevadores",
-      "label": "Elevadores",
-      "category_id": 17,
-      "category_label": "Manutenção > Elevadores",
-      "service_domain_label": "Manutenção",
-      "domain": "infraestrutura_predial",
-      "process_type": "maintenance_request",
-      "expected_assignment_group_id": 22,
-      "expected_assignment_group_label": "CC-MANUTENCAO",
-      "location_ids_currently_sent": [],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 2,
-      "candidate_forms": [
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 2,
-          "label": "Elevadores"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 25,
-          "label": "Elevadores"
-        }
-      ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 2,
-        "targetticket_id": 2,
-        "person_question": {
-          "id": 10,
-          "required": true
-        },
-        "location_question": {
-          "id": null,
-          "root_id": null,
-          "source": "formcreator_question_values",
-          "option_count": 0,
-          "options": []
-        },
-        "type_question": {
-          "id": 17,
-          "root_id": null,
-          "source": "formcreator_question_values",
-          "option_count": 0,
-          "options": []
-        },
-        "urgency_question": {
-          "id": 13
-        },
-        "description_question": {
-          "id": 16,
-          "required": true
-        },
-        "question_count": 8
-      },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": false,
-        "type_options_are_runtime": false
-      }
-    },
-    {
-      "service_id": "eletrica",
-      "label": "Eletrica",
-      "category_id": 22,
-      "category_label": "Manutenção > Elétrica",
-      "service_domain_label": "Manutenção",
-      "domain": "unknown",
-      "process_type": "unknown",
-      "expected_assignment_group_id": 22,
-      "expected_assignment_group_label": "CC-MANUTENCAO",
-      "location_ids_currently_sent": [
-        70
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 5,
-      "candidate_forms": [
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 5,
-          "label": "Elétrica"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 24,
-          "label": "Elétrica"
-        }
-      ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 5,
-        "targetticket_id": 5,
-        "person_question": {
-          "id": 35,
-          "required": true
-        },
-        "location_question": {
-          "id": 37,
+        "location": {
+          "id": 573,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 70,
-          "source": "formcreator_question_values",
-          "option_count": 80,
-          "options": [
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
             {
-              "id": 100,
-              "label": "CAFF",
-              "full_label": "Locais > CAFF"
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
             },
             {
               "id": 71,
@@ -1075,402 +2801,2877 @@ export const MOBILE_METADATA_CATALOG = {
             },
             {
               "id": 79,
-              "label": "Casa Civil 1005 > 1° Andar",
+              "label": "1° Andar",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 282,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08"
-            },
-            {
-              "id": 283,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A"
-            },
-            {
-              "id": 285,
-              "label": "Casa Civil 1005 > 1° Andar > P1B01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B01"
-            },
-            {
-              "id": 286,
-              "label": "Casa Civil 1005 > 1° Andar > P1B02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B02"
-            },
-            {
-              "id": 287,
-              "label": "Casa Civil 1005 > 1° Andar > P1B03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B03"
-            },
-            {
-              "id": 280,
-              "label": "Casa Civil 1005 > 1° Andar > P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
-            },
-            {
-              "id": 289,
-              "label": "Casa Civil 1005 > 1° Andar > P1C02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C02"
-            },
-            {
-              "id": 292,
-              "label": "Casa Civil 1005 > 1° Andar > P1C03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C03"
-            },
-            {
-              "id": 294,
-              "label": "Casa Civil 1005 > 1° Andar > P1C04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C04"
-            },
-            {
-              "id": 288,
-              "label": "Casa Civil 1005 > 1° Andar > P1E01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E01"
-            },
-            {
-              "id": 293,
-              "label": "Casa Civil 1005 > 1° Andar > P1E02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E02"
-            },
-            {
               "id": 276,
-              "label": "Casa Civil 1005 > 1° Andar > P1S01",
+              "label": "P1S01",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
             },
             {
-              "id": 278,
-              "label": "Casa Civil 1005 > 1° Andar > P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
-            },
-            {
               "id": 277,
-              "label": "Casa Civil 1005 > 1° Andar > P1S03",
+              "label": "P1S03",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
             },
             {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
               "id": 279,
-              "label": "Casa Civil 1005 > 1° Andar > P1S04",
+              "label": "P1S04",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
             },
             {
-              "id": 290,
-              "label": "Casa Civil 1005 > 1° Andar > P1S05",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S05"
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Copa",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:conservacao:form-38:target-199",
+      "service_id": "conservacao",
+      "service_label": "CONSERVAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 38,
+        "name": "CONSERVAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          38
+        ]
+      },
+      "targetticket": {
+        "id": 199,
+        "name": "Jardinagem",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 621,
+        "location_rule": 3,
+        "location_question_id": 573,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 621,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "37",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 37,
+          "option_source": "categories",
+          "options_count": 11,
+          "options_sample": [
+            {
+              "id": 37,
+              "label": "Jardinagem",
+              "full_label": "Conservação > Jardinagem"
             },
             {
-              "id": 281,
-              "label": "Casa Civil 1005 > 1° Andar > P1S06",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S06"
+              "id": 36,
+              "label": "Plantação",
+              "full_label": "Conservação > Jardinagem > Plantação"
             },
             {
-              "id": 291,
-              "label": "Casa Civil 1005 > 1° Andar > P1S07",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S07"
+              "id": 38,
+              "label": "Poda/Corte",
+              "full_label": "Conservação > Jardinagem > Poda/Corte"
             },
             {
-              "id": 295,
-              "label": "Casa Civil 1005 > 1° Andar > P1S09",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S09"
+              "id": 39,
+              "label": "Remoção",
+              "full_label": "Conservação > Jardinagem > Remoção"
             },
             {
-              "id": 80,
-              "label": "Casa Civil 1005 > 2° Andar",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
+              "id": 40,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Jardinagem > Outras Atividades"
             },
             {
-              "id": 266,
-              "label": "Casa Civil 1005 > 2° Andar > P2B01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B01"
+              "id": 112,
+              "label": "Manutenção de folhagens internas",
+              "full_label": "Conservação > Jardinagem > Manutenção de folhagens internas"
             },
             {
-              "id": 267,
-              "label": "Casa Civil 1005 > 2° Andar > P2B03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B03"
+              "id": 113,
+              "label": "Varrição",
+              "full_label": "Conservação > Jardinagem > Varrição"
             },
             {
-              "id": 270,
-              "label": "Casa Civil 1005 > 2° Andar > P2C01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2C01"
-            },
-            {
-              "id": 269,
-              "label": "Casa Civil 1005 > 2° Andar > P2E01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2E01"
-            },
-            {
-              "id": 261,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01"
-            },
-            {
-              "id": 262,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A"
-            },
-            {
-              "id": 263,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B"
-            },
-            {
-              "id": 265,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02"
-            },
-            {
-              "id": 264,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A"
-            },
-            {
-              "id": 272,
-              "label": "Casa Civil 1005 > 2° Andar > P2S03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S03"
-            },
-            {
-              "id": 268,
-              "label": "Casa Civil 1005 > 2° Andar > P2S04",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S04"
-            },
-            {
-              "id": 273,
-              "label": "Casa Civil 1005 > 2° Andar > P2S05",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S05"
-            },
-            {
-              "id": 271,
-              "label": "Casa Civil 1005 > 2° Andar > P2S06",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S06"
-            },
-            {
-              "id": 274,
-              "label": "Casa Civil 1005 > 2° Andar > P2S07",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S07"
-            },
-            {
-              "id": 275,
-              "label": "Casa Civil 1005 > 2° Andar > P2S08",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S08"
-            },
-            {
-              "id": 296,
-              "label": "Casa Civil 1005 > Subsolo 1",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
-            },
-            {
-              "id": 321,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B01"
-            },
-            {
-              "id": 308,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B02"
-            },
-            {
-              "id": 307,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B03"
-            },
-            {
-              "id": 319,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C01"
-            },
-            {
-              "id": 313,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C02"
-            },
-            {
-              "id": 303,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C03"
-            },
-            {
-              "id": 306,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E01"
-            },
-            {
-              "id": 312,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E02"
-            },
-            {
-              "id": 323,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E03"
-            },
-            {
-              "id": 322,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S01"
-            },
-            {
-              "id": 318,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S02"
-            },
-            {
-              "id": 320,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S03"
-            },
-            {
-              "id": 316,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S04",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S04"
-            },
-            {
-              "id": 317,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S06",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S06"
-            },
-            {
-              "id": 310,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S07",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S07"
-            },
-            {
-              "id": 315,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S08",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S08"
-            },
-            {
-              "id": 311,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S09",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S09"
-            },
-            {
-              "id": 314,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S10",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S10"
-            },
-            {
-              "id": 309,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S11",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S11"
-            },
-            {
-              "id": 304,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S12",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S12"
-            },
-            {
-              "id": 305,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S13",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S13"
-            },
-            {
-              "id": 302,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S14",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S14"
-            },
-            {
-              "id": 297,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S15",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S15"
-            },
-            {
-              "id": 301,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S16",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S16"
-            },
-            {
-              "id": 298,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S17",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S17"
-            },
-            {
-              "id": 300,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S18",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S18"
-            },
-            {
-              "id": 299,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S19",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S19"
-            },
-            {
-              "id": 82,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
-            },
-            {
-              "id": 325,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01"
-            },
-            {
-              "id": 324,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02"
-            },
-            {
-              "id": 81,
-              "label": "Casa Civil 1005 > Torreão",
-              "full_label": "Locais > Casa Civil 1005 > Torreão"
-            },
-            {
-              "id": 260,
-              "label": "Casa Civil 1005 > Torreão > P3E01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3E01"
-            },
-            {
-              "id": 259,
-              "label": "Casa Civil 1005 > Torreão > P3S01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3S01"
-            },
-            {
-              "id": 87,
-              "label": "Defesa Civil - Andrade Neves 106",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106"
-            },
-            {
-              "id": 88,
-              "label": "Defesa Civil - Andrade Neves 106 > 11° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 11° Andar"
-            },
-            {
-              "id": 89,
-              "label": "Defesa Civil - Andrade Neves 106 > 15° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 15° Andar"
-            },
-            {
-              "id": 84,
-              "label": "Divisão de Transportes -Riachuelo 1285",
-              "full_label": "Locais > Divisão de Transportes -Riachuelo 1285"
-            },
-            {
-              "id": 83,
-              "label": "Duque de Caxias 951",
-              "full_label": "Locais > Duque de Caxias 951"
-            },
-            {
-              "id": 85,
-              "label": "Gabinete dos Prefeitos - Andradas 1234",
-              "full_label": "Locais > Gabinete dos Prefeitos - Andradas 1234"
-            },
-            {
-              "id": 72,
-              "label": "Palacio Piratini",
-              "full_label": "Locais > Palacio Piratini"
-            },
-            {
-              "id": 73,
-              "label": "Palacio Piratini - Ala Governamental",
-              "full_label": "Locais > Palacio Piratini - Ala Governamental"
+              "id": 114,
+              "label": "Descarte",
+              "full_label": "Conservação > Jardinagem > Descarte"
             }
           ]
         },
-        "type_question": {
-          "id": 41,
+        "location": {
+          "id": 573,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Jardinagem",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:conservacao:form-38:target-200",
+      "service_id": "conservacao",
+      "service_label": "CONSERVAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 38,
+        "name": "CONSERVAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          38
+        ]
+      },
+      "targetticket": {
+        "id": 200,
+        "name": "Limpeza",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 625,
+        "location_rule": 3,
+        "location_question_id": 573,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 625,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "45",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 45,
+          "option_source": "categories",
+          "options_count": 14,
+          "options_sample": [
+            {
+              "id": 45,
+              "label": "Limpeza",
+              "full_label": "Conservação > Limpeza"
+            },
+            {
+              "id": 46,
+              "label": "Limpeza de banheiros",
+              "full_label": "Conservação > Limpeza > Limpeza de banheiros"
+            },
+            {
+              "id": 47,
+              "label": "Limpeza geral",
+              "full_label": "Conservação > Limpeza > Limpeza geral"
+            },
+            {
+              "id": 48,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Limpeza > Outras Atividades"
+            },
+            {
+              "id": 49,
+              "label": "Recolher materiais recicláveis",
+              "full_label": "Conservação > Limpeza > Recolher materiais recicláveis"
+            },
+            {
+              "id": 118,
+              "label": "Lava a Jato",
+              "full_label": "Conservação > Limpeza > Lava a Jato"
+            },
+            {
+              "id": 119,
+              "label": "Bandeirante",
+              "full_label": "Conservação > Limpeza > Bandeirante"
+            },
+            {
+              "id": 120,
+              "label": "Janelas e Portas",
+              "full_label": "Conservação > Limpeza > Janelas e Portas"
+            }
+          ]
+        },
+        "location": {
+          "id": 573,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Limpeza",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:conservacao:form-38:target-201",
+      "service_id": "conservacao",
+      "service_label": "CONSERVAÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 38,
+        "name": "CONSERVAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          38
+        ]
+      },
+      "targetticket": {
+        "id": 201,
+        "name": "Mensageria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 629,
+        "location_rule": 3,
+        "location_question_id": 573,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 629,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "128",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 128,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 128,
+              "label": "Mensageria",
+              "full_label": "Conservação > Mensageria"
+            },
+            {
+              "id": 129,
+              "label": "Movimentação Documentos",
+              "full_label": "Conservação > Mensageria > Movimentação Documentos"
+            },
+            {
+              "id": 130,
+              "label": "Movimentação Insumos até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Insumos até 5Kg"
+            },
+            {
+              "id": 131,
+              "label": "Movimentação Materiais até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Materiais até 5Kg"
+            },
+            {
+              "id": 132,
+              "label": "Outras entregas e Movimentações até 5Kg",
+              "full_label": "Conservação > Mensageria > Outras entregas e Movimentações até 5Kg"
+            }
+          ]
+        },
+        "location": {
+          "id": 573,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Mensageria",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:carregadores:form-3:target-3",
+      "service_id": "carregadores",
+      "service_label": "Carregadores",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 3,
+        "name": "Carregadores",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          3,
+          22
+        ]
+      },
+      "targetticket": {
+        "id": 3,
+        "name": "Carregadores",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 24,
+        "location_rule": 3,
+        "location_question_id": 20,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 24,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "55",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 55,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 55,
+              "label": "Carregadores",
+              "full_label": "Conservação > Carregadores"
+            },
+            {
+              "id": 56,
+              "label": "Movimentação de Insumos",
+              "full_label": "Conservação > Carregadores > Movimentação de Insumos"
+            },
+            {
+              "id": 57,
+              "label": "Recolhimento",
+              "full_label": "Conservação > Carregadores > Recolhimento"
+            },
+            {
+              "id": 58,
+              "label": "Substituição",
+              "full_label": "Conservação > Carregadores > Substituição"
+            },
+            {
+              "id": 101,
+              "label": "Descarte",
+              "full_label": "Conservação > Carregadores > Descarte"
+            },
+            {
+              "id": 102,
+              "label": "Movimentação Equipamentos",
+              "full_label": "Conservação > Carregadores > Movimentação Equipamentos"
+            },
+            {
+              "id": 103,
+              "label": "Movimentação Mobiliário",
+              "full_label": "Conservação > Carregadores > Movimentação Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 20,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "36",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 36,
+          "option_source": "locations",
+          "options_count": 28,
+          "options_sample": [
+            {
+              "id": 36,
+              "label": "Carregadores e Mensageiros",
+              "full_label": "Carregadores e Mensageiros"
+            },
+            {
+              "id": 19,
+              "label": "Defesa Civil - Andrade Neves",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves"
+            },
+            {
+              "id": 20,
+              "label": "11° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 11° Andar"
+            },
+            {
+              "id": 22,
+              "label": "15° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 15° Andar"
+            },
+            {
+              "id": 37,
+              "label": "Casa Civil 1005",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005"
+            },
+            {
+              "id": 38,
+              "label": "1° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 39,
+              "label": "2 ° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 2 ° Andar"
+            },
+            {
+              "id": 49,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > Subsolo"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Carregadores",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:carregadores:form-3:target-18",
+      "service_id": "carregadores",
+      "service_label": "Carregadores",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 3,
+        "name": "Carregadores",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          3,
+          22
+        ]
+      },
+      "targetticket": {
+        "id": 18,
+        "name": "Carregadores para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 19,
+        "category_rule": 3,
+        "category_question_id": 24,
+        "location_rule": 3,
+        "location_question_id": 20,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 24,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "55",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 55,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 55,
+              "label": "Carregadores",
+              "full_label": "Conservação > Carregadores"
+            },
+            {
+              "id": 56,
+              "label": "Movimentação de Insumos",
+              "full_label": "Conservação > Carregadores > Movimentação de Insumos"
+            },
+            {
+              "id": 57,
+              "label": "Recolhimento",
+              "full_label": "Conservação > Carregadores > Recolhimento"
+            },
+            {
+              "id": 58,
+              "label": "Substituição",
+              "full_label": "Conservação > Carregadores > Substituição"
+            },
+            {
+              "id": 101,
+              "label": "Descarte",
+              "full_label": "Conservação > Carregadores > Descarte"
+            },
+            {
+              "id": 102,
+              "label": "Movimentação Equipamentos",
+              "full_label": "Conservação > Carregadores > Movimentação Equipamentos"
+            },
+            {
+              "id": 103,
+              "label": "Movimentação Mobiliário",
+              "full_label": "Conservação > Carregadores > Movimentação Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 20,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "36",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 36,
+          "option_source": "locations",
+          "options_count": 28,
+          "options_sample": [
+            {
+              "id": 36,
+              "label": "Carregadores e Mensageiros",
+              "full_label": "Carregadores e Mensageiros"
+            },
+            {
+              "id": 19,
+              "label": "Defesa Civil - Andrade Neves",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves"
+            },
+            {
+              "id": 20,
+              "label": "11° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 11° Andar"
+            },
+            {
+              "id": 22,
+              "label": "15° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 15° Andar"
+            },
+            {
+              "id": 37,
+              "label": "Casa Civil 1005",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005"
+            },
+            {
+              "id": 38,
+              "label": "1° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 39,
+              "label": "2 ° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 2 ° Andar"
+            },
+            {
+              "id": 49,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > Subsolo"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Carregadores",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:carregadores:form-22:target-131",
+      "service_id": "carregadores",
+      "service_label": "Carregadores",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 22,
+        "name": "Carregadores",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          3,
+          22
+        ]
+      },
+      "targetticket": {
+        "id": 131,
+        "name": "Carregadores",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 384,
+        "location_rule": 3,
+        "location_question_id": 381,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 384,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "55",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 55,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 55,
+              "label": "Carregadores",
+              "full_label": "Conservação > Carregadores"
+            },
+            {
+              "id": 56,
+              "label": "Movimentação de Insumos",
+              "full_label": "Conservação > Carregadores > Movimentação de Insumos"
+            },
+            {
+              "id": 57,
+              "label": "Recolhimento",
+              "full_label": "Conservação > Carregadores > Recolhimento"
+            },
+            {
+              "id": 58,
+              "label": "Substituição",
+              "full_label": "Conservação > Carregadores > Substituição"
+            },
+            {
+              "id": 101,
+              "label": "Descarte",
+              "full_label": "Conservação > Carregadores > Descarte"
+            },
+            {
+              "id": 102,
+              "label": "Movimentação Equipamentos",
+              "full_label": "Conservação > Carregadores > Movimentação Equipamentos"
+            },
+            {
+              "id": 103,
+              "label": "Movimentação Mobiliário",
+              "full_label": "Conservação > Carregadores > Movimentação Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 381,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "36",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 36,
+          "option_source": "locations",
+          "options_count": 28,
+          "options_sample": [
+            {
+              "id": 36,
+              "label": "Carregadores e Mensageiros",
+              "full_label": "Carregadores e Mensageiros"
+            },
+            {
+              "id": 19,
+              "label": "Defesa Civil - Andrade Neves",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves"
+            },
+            {
+              "id": 20,
+              "label": "11° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 11° Andar"
+            },
+            {
+              "id": 22,
+              "label": "15° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 15° Andar"
+            },
+            {
+              "id": 37,
+              "label": "Casa Civil 1005",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005"
+            },
+            {
+              "id": 38,
+              "label": "1° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 39,
+              "label": "2 ° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 2 ° Andar"
+            },
+            {
+              "id": 49,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > Subsolo"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Carregadores",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:carregadores:form-22:target-132",
+      "service_id": "carregadores",
+      "service_label": "Carregadores",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 22,
+        "name": "Carregadores",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          3,
+          22
+        ]
+      },
+      "targetticket": {
+        "id": 132,
+        "name": "Carregadores para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 380,
+        "category_rule": 3,
+        "category_question_id": 384,
+        "location_rule": 3,
+        "location_question_id": 381,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 384,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "55",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 55,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 55,
+              "label": "Carregadores",
+              "full_label": "Conservação > Carregadores"
+            },
+            {
+              "id": 56,
+              "label": "Movimentação de Insumos",
+              "full_label": "Conservação > Carregadores > Movimentação de Insumos"
+            },
+            {
+              "id": 57,
+              "label": "Recolhimento",
+              "full_label": "Conservação > Carregadores > Recolhimento"
+            },
+            {
+              "id": 58,
+              "label": "Substituição",
+              "full_label": "Conservação > Carregadores > Substituição"
+            },
+            {
+              "id": 101,
+              "label": "Descarte",
+              "full_label": "Conservação > Carregadores > Descarte"
+            },
+            {
+              "id": 102,
+              "label": "Movimentação Equipamentos",
+              "full_label": "Conservação > Carregadores > Movimentação Equipamentos"
+            },
+            {
+              "id": 103,
+              "label": "Movimentação Mobiliário",
+              "full_label": "Conservação > Carregadores > Movimentação Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 381,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "36",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 36,
+          "option_source": "locations",
+          "options_count": 28,
+          "options_sample": [
+            {
+              "id": 36,
+              "label": "Carregadores e Mensageiros",
+              "full_label": "Carregadores e Mensageiros"
+            },
+            {
+              "id": 19,
+              "label": "Defesa Civil - Andrade Neves",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves"
+            },
+            {
+              "id": 20,
+              "label": "11° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 11° Andar"
+            },
+            {
+              "id": 22,
+              "label": "15° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 15° Andar"
+            },
+            {
+              "id": 37,
+              "label": "Casa Civil 1005",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005"
+            },
+            {
+              "id": 38,
+              "label": "1° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 39,
+              "label": "2 ° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 2 ° Andar"
+            },
+            {
+              "id": 49,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > Subsolo"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Carregadores",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:copa:form-4:target-4",
+      "service_id": "copa",
+      "service_label": "Copa",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 4,
+        "name": "Copa",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          4,
+          23
+        ]
+      },
+      "targetticket": {
+        "id": 4,
+        "name": "Copa",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 32,
+        "location_rule": 3,
+        "location_question_id": 29,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 32,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "98",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 98,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 98,
+              "label": "Copa",
+              "full_label": "Conservação > Copa"
+            },
+            {
+              "id": 105,
+              "label": "Agua",
+              "full_label": "Conservação > Copa > Agua"
+            },
+            {
+              "id": 106,
+              "label": "Café",
+              "full_label": "Conservação > Copa > Café"
+            },
+            {
+              "id": 107,
+              "label": "Limpar louça de salas",
+              "full_label": "Conservação > Copa > Limpar louça de salas"
+            },
+            {
+              "id": 108,
+              "label": "Recolher e Limpar Louças Sala de Reunião",
+              "full_label": "Conservação > Copa > Recolher e Limpar Louças Sala de Reunião"
+            },
+            {
+              "id": 109,
+              "label": "Repor Café,Agua Sala de reunião",
+              "full_label": "Conservação > Copa > Repor Café,Agua Sala de reunião"
+            },
+            {
+              "id": 110,
+              "label": "Repor Louça de salas",
+              "full_label": "Conservação > Copa > Repor Louça de salas"
+            }
+          ]
+        },
+        "location": {
+          "id": 29,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "-3",
+            "show_tree_root": "27",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 27,
+          "option_source": "locations",
+          "options_count": 23,
+          "options_sample": [
+            {
+              "id": 27,
+              "label": "Limpeza",
+              "full_label": "Limpeza"
+            },
+            {
+              "id": 1,
+              "label": "Casa Civil 1005",
+              "full_label": "Limpeza > Casa Civil 1005"
+            },
+            {
+              "id": 60,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 61,
+              "label": "2° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 2° Andar"
+            },
+            {
+              "id": 62,
+              "label": "Subsolo",
+              "full_label": "Limpeza > Casa Civil 1005 > Subsolo"
+            },
+            {
+              "id": 96,
+              "label": "Torreão",
+              "full_label": "Limpeza > Casa Civil 1005 > Torreão"
+            },
+            {
+              "id": 8,
+              "label": "Palácio Piratini",
+              "full_label": "Limpeza > Palácio Piratini"
+            },
+            {
+              "id": 63,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Palácio Piratini > 1° Andar"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Copa",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:copa:form-4:target-19",
+      "service_id": "copa",
+      "service_label": "Copa",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 4,
+        "name": "Copa",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          4,
+          23
+        ]
+      },
+      "targetticket": {
+        "id": 19,
+        "name": "Copa Para Terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 28,
+        "category_rule": 3,
+        "category_question_id": 32,
+        "location_rule": 3,
+        "location_question_id": 29,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 32,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "98",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 98,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 98,
+              "label": "Copa",
+              "full_label": "Conservação > Copa"
+            },
+            {
+              "id": 105,
+              "label": "Agua",
+              "full_label": "Conservação > Copa > Agua"
+            },
+            {
+              "id": 106,
+              "label": "Café",
+              "full_label": "Conservação > Copa > Café"
+            },
+            {
+              "id": 107,
+              "label": "Limpar louça de salas",
+              "full_label": "Conservação > Copa > Limpar louça de salas"
+            },
+            {
+              "id": 108,
+              "label": "Recolher e Limpar Louças Sala de Reunião",
+              "full_label": "Conservação > Copa > Recolher e Limpar Louças Sala de Reunião"
+            },
+            {
+              "id": 109,
+              "label": "Repor Café,Agua Sala de reunião",
+              "full_label": "Conservação > Copa > Repor Café,Agua Sala de reunião"
+            },
+            {
+              "id": 110,
+              "label": "Repor Louça de salas",
+              "full_label": "Conservação > Copa > Repor Louça de salas"
+            }
+          ]
+        },
+        "location": {
+          "id": 29,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "-3",
+            "show_tree_root": "27",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 27,
+          "option_source": "locations",
+          "options_count": 23,
+          "options_sample": [
+            {
+              "id": 27,
+              "label": "Limpeza",
+              "full_label": "Limpeza"
+            },
+            {
+              "id": 1,
+              "label": "Casa Civil 1005",
+              "full_label": "Limpeza > Casa Civil 1005"
+            },
+            {
+              "id": 60,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 61,
+              "label": "2° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 2° Andar"
+            },
+            {
+              "id": 62,
+              "label": "Subsolo",
+              "full_label": "Limpeza > Casa Civil 1005 > Subsolo"
+            },
+            {
+              "id": 96,
+              "label": "Torreão",
+              "full_label": "Limpeza > Casa Civil 1005 > Torreão"
+            },
+            {
+              "id": 8,
+              "label": "Palácio Piratini",
+              "full_label": "Limpeza > Palácio Piratini"
+            },
+            {
+              "id": 63,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Palácio Piratini > 1° Andar"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Copa",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:copa:form-23:target-133",
+      "service_id": "copa",
+      "service_label": "Copa",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 23,
+        "name": "Copa",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          4,
+          23
+        ]
+      },
+      "targetticket": {
+        "id": 133,
+        "name": "Copa",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 392,
+        "location_rule": 3,
+        "location_question_id": 390,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 392,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "98",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 98,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 98,
+              "label": "Copa",
+              "full_label": "Conservação > Copa"
+            },
+            {
+              "id": 105,
+              "label": "Agua",
+              "full_label": "Conservação > Copa > Agua"
+            },
+            {
+              "id": 106,
+              "label": "Café",
+              "full_label": "Conservação > Copa > Café"
+            },
+            {
+              "id": 107,
+              "label": "Limpar louça de salas",
+              "full_label": "Conservação > Copa > Limpar louça de salas"
+            },
+            {
+              "id": 108,
+              "label": "Recolher e Limpar Louças Sala de Reunião",
+              "full_label": "Conservação > Copa > Recolher e Limpar Louças Sala de Reunião"
+            },
+            {
+              "id": 109,
+              "label": "Repor Café,Agua Sala de reunião",
+              "full_label": "Conservação > Copa > Repor Café,Agua Sala de reunião"
+            },
+            {
+              "id": 110,
+              "label": "Repor Louça de salas",
+              "full_label": "Conservação > Copa > Repor Louça de salas"
+            }
+          ]
+        },
+        "location": {
+          "id": 390,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "-3",
+            "show_tree_root": "27",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 27,
+          "option_source": "locations",
+          "options_count": 23,
+          "options_sample": [
+            {
+              "id": 27,
+              "label": "Limpeza",
+              "full_label": "Limpeza"
+            },
+            {
+              "id": 1,
+              "label": "Casa Civil 1005",
+              "full_label": "Limpeza > Casa Civil 1005"
+            },
+            {
+              "id": 60,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 61,
+              "label": "2° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 2° Andar"
+            },
+            {
+              "id": 62,
+              "label": "Subsolo",
+              "full_label": "Limpeza > Casa Civil 1005 > Subsolo"
+            },
+            {
+              "id": 96,
+              "label": "Torreão",
+              "full_label": "Limpeza > Casa Civil 1005 > Torreão"
+            },
+            {
+              "id": 8,
+              "label": "Palácio Piratini",
+              "full_label": "Limpeza > Palácio Piratini"
+            },
+            {
+              "id": 63,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Palácio Piratini > 1° Andar"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Copa",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:copa:form-23:target-134",
+      "service_id": "copa",
+      "service_label": "Copa",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 23,
+        "name": "Copa",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          4,
+          23
+        ]
+      },
+      "targetticket": {
+        "id": 134,
+        "name": "Copa Para Terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 389,
+        "category_rule": 3,
+        "category_question_id": 392,
+        "location_rule": 3,
+        "location_question_id": 390,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 392,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "98",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 98,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 98,
+              "label": "Copa",
+              "full_label": "Conservação > Copa"
+            },
+            {
+              "id": 105,
+              "label": "Agua",
+              "full_label": "Conservação > Copa > Agua"
+            },
+            {
+              "id": 106,
+              "label": "Café",
+              "full_label": "Conservação > Copa > Café"
+            },
+            {
+              "id": 107,
+              "label": "Limpar louça de salas",
+              "full_label": "Conservação > Copa > Limpar louça de salas"
+            },
+            {
+              "id": 108,
+              "label": "Recolher e Limpar Louças Sala de Reunião",
+              "full_label": "Conservação > Copa > Recolher e Limpar Louças Sala de Reunião"
+            },
+            {
+              "id": 109,
+              "label": "Repor Café,Agua Sala de reunião",
+              "full_label": "Conservação > Copa > Repor Café,Agua Sala de reunião"
+            },
+            {
+              "id": 110,
+              "label": "Repor Louça de salas",
+              "full_label": "Conservação > Copa > Repor Louça de salas"
+            }
+          ]
+        },
+        "location": {
+          "id": 390,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "-3",
+            "show_tree_root": "27",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 27,
+          "option_source": "locations",
+          "options_count": 23,
+          "options_sample": [
+            {
+              "id": 27,
+              "label": "Limpeza",
+              "full_label": "Limpeza"
+            },
+            {
+              "id": 1,
+              "label": "Casa Civil 1005",
+              "full_label": "Limpeza > Casa Civil 1005"
+            },
+            {
+              "id": 60,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 61,
+              "label": "2° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 2° Andar"
+            },
+            {
+              "id": 62,
+              "label": "Subsolo",
+              "full_label": "Limpeza > Casa Civil 1005 > Subsolo"
+            },
+            {
+              "id": 96,
+              "label": "Torreão",
+              "full_label": "Limpeza > Casa Civil 1005 > Torreão"
+            },
+            {
+              "id": 8,
+              "label": "Palácio Piratini",
+              "full_label": "Limpeza > Palácio Piratini"
+            },
+            {
+              "id": 63,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Palácio Piratini > 1° Andar"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Copa",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-38",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 38,
+        "name": "Ar Condicionado",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 188,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 188,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "1",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 1,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 1,
+              "label": "Ar Condicionado",
+              "full_label": "Manutenção > Ar Condicionado"
+            },
+            {
+              "id": 2,
+              "label": "Conserto",
+              "full_label": "Manutenção > Ar Condicionado > Conserto"
+            },
+            {
+              "id": 3,
+              "label": "Desinstalação",
+              "full_label": "Manutenção > Ar Condicionado > Desinstalação"
+            },
+            {
+              "id": 4,
+              "label": "Instalação",
+              "full_label": "Manutenção > Ar Condicionado > Instalação"
+            },
+            {
+              "id": 6,
+              "label": "Remanejo",
+              "full_label": "Manutenção > Ar Condicionado > Remanejo"
+            },
+            {
+              "id": 7,
+              "label": "Outras atividades",
+              "full_label": "Manutenção > Ar Condicionado > Outras atividades"
+            },
+            {
+              "id": 100,
+              "label": "Higienização",
+              "full_label": "Manutenção > Ar Condicionado > Higienização"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Ar Condicionado",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-39",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 39,
+        "name": "Ar Condicionado para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 184,
+        "category_rule": 3,
+        "category_question_id": 188,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 188,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "1",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 1,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 1,
+              "label": "Ar Condicionado",
+              "full_label": "Manutenção > Ar Condicionado"
+            },
+            {
+              "id": 2,
+              "label": "Conserto",
+              "full_label": "Manutenção > Ar Condicionado > Conserto"
+            },
+            {
+              "id": 3,
+              "label": "Desinstalação",
+              "full_label": "Manutenção > Ar Condicionado > Desinstalação"
+            },
+            {
+              "id": 4,
+              "label": "Instalação",
+              "full_label": "Manutenção > Ar Condicionado > Instalação"
+            },
+            {
+              "id": 6,
+              "label": "Remanejo",
+              "full_label": "Manutenção > Ar Condicionado > Remanejo"
+            },
+            {
+              "id": 7,
+              "label": "Outras atividades",
+              "full_label": "Manutenção > Ar Condicionado > Outras atividades"
+            },
+            {
+              "id": 100,
+              "label": "Higienização",
+              "full_label": "Manutenção > Ar Condicionado > Higienização"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Ar Condicionado",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-40",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 40,
+        "name": "Diversos",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 2,
+        "category_question_id": 0,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-41",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 41,
+        "name": "Diversos  para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 184,
+        "category_rule": 1,
+        "category_question_id": 0,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-43",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 43,
+        "name": "Elevadores",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 2,
+        "category_question_id": 146,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 146,
+          "name": "Assunto",
+          "fieldtype": "text",
+          "required": true,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-44",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 44,
+        "name": "Elevadores  para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 184,
+        "category_rule": 2,
+        "category_question_id": 146,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 1
+      },
+      "questions": {
+        "category": {
+          "id": 146,
+          "name": "Assunto",
+          "fieldtype": "text",
+          "required": true,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-45",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 45,
+        "name": "Elétrica",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 197,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 197,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "22",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 22,
-          "source": "formcreator_question_values",
-          "option_count": 7,
-          "options": [
+          "option_source": "categories",
+          "options_count": 8,
+          "options_sample": [
+            {
+              "id": 22,
+              "label": "Elétrica",
+              "full_label": "Manutenção > Elétrica"
+            },
             {
               "id": 23,
               "label": "Conserto",
@@ -1508,71 +5709,25 @@ export const MOBILE_METADATA_CATALOG = {
             }
           ]
         },
-        "urgency_question": {
-          "id": 39
-        },
-        "description_question": {
-          "id": 42,
-          "required": true
-        },
-        "question_count": 9
-      },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
-      }
-    },
-    {
-      "service_id": "hidraulica",
-      "label": "Hidraulica",
-      "category_id": 30,
-      "category_label": "Manutenção > Hidráulica",
-      "service_domain_label": "Manutenção",
-      "domain": "unknown",
-      "process_type": "unknown",
-      "expected_assignment_group_id": 22,
-      "expected_assignment_group_label": "CC-MANUTENCAO",
-      "location_ids_currently_sent": [
-        70
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 6,
-      "candidate_forms": [
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 6,
-          "label": "Hidráulica"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 26,
-          "label": "Hidráulica"
-        }
-      ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 6,
-        "targetticket_id": 6,
-        "person_question": {
-          "id": 44,
-          "required": true
-        },
-        "location_question": {
-          "id": 46,
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 70,
-          "source": "formcreator_question_values",
-          "option_count": 80,
-          "options": [
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
             {
-              "id": 100,
-              "label": "CAFF",
-              "full_label": "Locais > CAFF"
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
             },
             {
               "id": 71,
@@ -1581,402 +5736,322 @@ export const MOBILE_METADATA_CATALOG = {
             },
             {
               "id": 79,
-              "label": "Casa Civil 1005 > 1° Andar",
+              "label": "1° Andar",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 282,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08"
-            },
-            {
-              "id": 283,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A"
-            },
-            {
-              "id": 285,
-              "label": "Casa Civil 1005 > 1° Andar > P1B01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B01"
-            },
-            {
-              "id": 286,
-              "label": "Casa Civil 1005 > 1° Andar > P1B02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B02"
-            },
-            {
-              "id": 287,
-              "label": "Casa Civil 1005 > 1° Andar > P1B03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B03"
-            },
-            {
-              "id": 280,
-              "label": "Casa Civil 1005 > 1° Andar > P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
-            },
-            {
-              "id": 289,
-              "label": "Casa Civil 1005 > 1° Andar > P1C02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C02"
-            },
-            {
-              "id": 292,
-              "label": "Casa Civil 1005 > 1° Andar > P1C03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C03"
-            },
-            {
-              "id": 294,
-              "label": "Casa Civil 1005 > 1° Andar > P1C04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C04"
-            },
-            {
-              "id": 288,
-              "label": "Casa Civil 1005 > 1° Andar > P1E01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E01"
-            },
-            {
-              "id": 293,
-              "label": "Casa Civil 1005 > 1° Andar > P1E02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E02"
-            },
-            {
               "id": 276,
-              "label": "Casa Civil 1005 > 1° Andar > P1S01",
+              "label": "P1S01",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
             },
             {
-              "id": 278,
-              "label": "Casa Civil 1005 > 1° Andar > P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
-            },
-            {
               "id": 277,
-              "label": "Casa Civil 1005 > 1° Andar > P1S03",
+              "label": "P1S03",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
             },
             {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
               "id": 279,
-              "label": "Casa Civil 1005 > 1° Andar > P1S04",
+              "label": "P1S04",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
             },
             {
-              "id": 290,
-              "label": "Casa Civil 1005 > 1° Andar > P1S05",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S05"
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Elétrica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-46",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 46,
+        "name": "Elétrica para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 197,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 197,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "22",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 22,
+          "option_source": "categories",
+          "options_count": 8,
+          "options_sample": [
+            {
+              "id": 22,
+              "label": "Elétrica",
+              "full_label": "Manutenção > Elétrica"
             },
             {
-              "id": 281,
-              "label": "Casa Civil 1005 > 1° Andar > P1S06",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S06"
+              "id": 23,
+              "label": "Conserto",
+              "full_label": "Manutenção > Elétrica > Conserto"
             },
             {
-              "id": 291,
-              "label": "Casa Civil 1005 > 1° Andar > P1S07",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S07"
+              "id": 24,
+              "label": "Instalação",
+              "full_label": "Manutenção > Elétrica > Instalação"
             },
             {
-              "id": 295,
-              "label": "Casa Civil 1005 > 1° Andar > P1S09",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S09"
+              "id": 25,
+              "label": "Remoção",
+              "full_label": "Manutenção > Elétrica > Remoção"
             },
             {
-              "id": 80,
-              "label": "Casa Civil 1005 > 2° Andar",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
+              "id": 26,
+              "label": "Readequação",
+              "full_label": "Manutenção > Elétrica > Readequação"
             },
             {
-              "id": 266,
-              "label": "Casa Civil 1005 > 2° Andar > P2B01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B01"
+              "id": 27,
+              "label": "Troca",
+              "full_label": "Manutenção > Elétrica > Troca"
             },
             {
-              "id": 267,
-              "label": "Casa Civil 1005 > 2° Andar > P2B03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B03"
+              "id": 28,
+              "label": "Descarte",
+              "full_label": "Manutenção > Elétrica > Descarte"
             },
             {
-              "id": 270,
-              "label": "Casa Civil 1005 > 2° Andar > P2C01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2C01"
-            },
-            {
-              "id": 269,
-              "label": "Casa Civil 1005 > 2° Andar > P2E01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2E01"
-            },
-            {
-              "id": 261,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01"
-            },
-            {
-              "id": 262,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A"
-            },
-            {
-              "id": 263,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B"
-            },
-            {
-              "id": 265,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02"
-            },
-            {
-              "id": 264,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A"
-            },
-            {
-              "id": 272,
-              "label": "Casa Civil 1005 > 2° Andar > P2S03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S03"
-            },
-            {
-              "id": 268,
-              "label": "Casa Civil 1005 > 2° Andar > P2S04",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S04"
-            },
-            {
-              "id": 273,
-              "label": "Casa Civil 1005 > 2° Andar > P2S05",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S05"
-            },
-            {
-              "id": 271,
-              "label": "Casa Civil 1005 > 2° Andar > P2S06",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S06"
-            },
-            {
-              "id": 274,
-              "label": "Casa Civil 1005 > 2° Andar > P2S07",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S07"
-            },
-            {
-              "id": 275,
-              "label": "Casa Civil 1005 > 2° Andar > P2S08",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S08"
-            },
-            {
-              "id": 296,
-              "label": "Casa Civil 1005 > Subsolo 1",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
-            },
-            {
-              "id": 321,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B01"
-            },
-            {
-              "id": 308,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B02"
-            },
-            {
-              "id": 307,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B03"
-            },
-            {
-              "id": 319,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C01"
-            },
-            {
-              "id": 313,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C02"
-            },
-            {
-              "id": 303,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C03"
-            },
-            {
-              "id": 306,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E01"
-            },
-            {
-              "id": 312,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E02"
-            },
-            {
-              "id": 323,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E03"
-            },
-            {
-              "id": 322,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S01"
-            },
-            {
-              "id": 318,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S02"
-            },
-            {
-              "id": 320,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S03"
-            },
-            {
-              "id": 316,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S04",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S04"
-            },
-            {
-              "id": 317,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S06",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S06"
-            },
-            {
-              "id": 310,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S07",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S07"
-            },
-            {
-              "id": 315,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S08",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S08"
-            },
-            {
-              "id": 311,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S09",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S09"
-            },
-            {
-              "id": 314,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S10",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S10"
-            },
-            {
-              "id": 309,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S11",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S11"
-            },
-            {
-              "id": 304,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S12",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S12"
-            },
-            {
-              "id": 305,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S13",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S13"
-            },
-            {
-              "id": 302,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S14",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S14"
-            },
-            {
-              "id": 297,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S15",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S15"
-            },
-            {
-              "id": 301,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S16",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S16"
-            },
-            {
-              "id": 298,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S17",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S17"
-            },
-            {
-              "id": 300,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S18",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S18"
-            },
-            {
-              "id": 299,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S19",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S19"
-            },
-            {
-              "id": 82,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
-            },
-            {
-              "id": 325,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01"
-            },
-            {
-              "id": 324,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02"
-            },
-            {
-              "id": 81,
-              "label": "Casa Civil 1005 > Torreão",
-              "full_label": "Locais > Casa Civil 1005 > Torreão"
-            },
-            {
-              "id": 260,
-              "label": "Casa Civil 1005 > Torreão > P3E01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3E01"
-            },
-            {
-              "id": 259,
-              "label": "Casa Civil 1005 > Torreão > P3S01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3S01"
-            },
-            {
-              "id": 87,
-              "label": "Defesa Civil - Andrade Neves 106",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106"
-            },
-            {
-              "id": 88,
-              "label": "Defesa Civil - Andrade Neves 106 > 11° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 11° Andar"
-            },
-            {
-              "id": 89,
-              "label": "Defesa Civil - Andrade Neves 106 > 15° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 15° Andar"
-            },
-            {
-              "id": 84,
-              "label": "Divisão de Transportes -Riachuelo 1285",
-              "full_label": "Locais > Divisão de Transportes -Riachuelo 1285"
-            },
-            {
-              "id": 83,
-              "label": "Duque de Caxias 951",
-              "full_label": "Locais > Duque de Caxias 951"
-            },
-            {
-              "id": 85,
-              "label": "Gabinete dos Prefeitos - Andradas 1234",
-              "full_label": "Locais > Gabinete dos Prefeitos - Andradas 1234"
-            },
-            {
-              "id": 72,
-              "label": "Palacio Piratini",
-              "full_label": "Locais > Palacio Piratini"
-            },
-            {
-              "id": 73,
-              "label": "Palacio Piratini - Ala Governamental",
-              "full_label": "Locais > Palacio Piratini - Ala Governamental"
+              "id": 29,
+              "label": "Suporte",
+              "full_label": "Manutenção > Elétrica > Suporte"
             }
           ]
         },
-        "type_question": {
-          "id": 50,
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Elétrica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-47",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 47,
+        "name": "Hidráulica",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 201,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 201,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "30",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 30,
-          "source": "formcreator_question_values",
-          "option_count": 6,
-          "options": [
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 30,
+              "label": "Hidráulica",
+              "full_label": "Manutenção > Hidráulica"
+            },
             {
               "id": 31,
               "label": "Reparo/Conserto",
@@ -2009,125 +6084,2822 @@ export const MOBILE_METADATA_CATALOG = {
             }
           ]
         },
-        "urgency_question": {
-          "id": 48
-        },
-        "description_question": {
-          "id": 51,
-          "required": true
-        },
-        "question_count": 9
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
       },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
+      "expected_result": {
+        "category_root": "Manutenção > Hidráulica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
       }
     },
     {
-      "service_id": "jardinagem",
-      "label": "Jardinagem",
-      "category_id": 37,
-      "category_label": "Conservação > Jardinagem",
-      "service_domain_label": "Conservação",
-      "domain": "conservacao",
-      "process_type": "service_request",
-      "expected_assignment_group_id": 21,
-      "expected_assignment_group_label": "CC-CONSERVACÃO",
-      "location_ids_currently_sent": [
-        31
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 7,
-      "candidate_forms": [
+      "catalog_record_id": "sis:diversos:form-18:target-48",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
         {
-          "active": true,
-          "confidence": 0.55,
-          "id": 7,
-          "label": "Jardinagem"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 27,
-          "label": "Jardinagem"
+          "id": 11,
+          "name": "Manutenção e Conservação"
         }
       ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 7,
-        "targetticket_id": 14,
-        "person_question": {
-          "id": 53,
-          "required": true
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 48,
+        "name": "Hidráulica para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
         },
-        "location_question": {
-          "id": 55,
-          "root_id": 31,
-          "source": "formcreator_question_values",
-          "option_count": 10,
-          "options": [
+        "destination_entity_value": 184,
+        "category_rule": 3,
+        "category_question_id": 201,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 201,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "30",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 30,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
             {
-              "id": 35,
-              "label": "Ala Residencial",
-              "full_label": "Jardinagem > Ala Residencial"
+              "id": 30,
+              "label": "Hidráulica",
+              "full_label": "Manutenção > Hidráulica"
             },
             {
-              "id": 33,
-              "label": "Casa Civil 1005",
-              "full_label": "Jardinagem > Casa Civil 1005"
+              "id": 31,
+              "label": "Reparo/Conserto",
+              "full_label": "Manutenção > Hidráulica > Reparo/Conserto"
             },
             {
               "id": 32,
-              "label": "Duque de Caxias 951 (Banrisul)",
-              "full_label": "Jardinagem > Duque de Caxias 951 (Banrisul)"
+              "label": "Instalação",
+              "full_label": "Manutenção > Hidráulica > Instalação"
+            },
+            {
+              "id": 33,
+              "label": "Remoção",
+              "full_label": "Manutenção > Hidráulica > Remoção"
             },
             {
               "id": 34,
-              "label": "Palácio Piratini",
-              "full_label": "Jardinagem > Palácio Piratini"
+              "label": "Troca",
+              "full_label": "Manutenção > Hidráulica > Troca"
             },
             {
-              "id": 59,
-              "label": "Palácio Piratini > Jardim 4º Patamar",
-              "full_label": "Jardinagem > Palácio Piratini > Jardim 4º Patamar"
+              "id": 35,
+              "label": "Desentupimento",
+              "full_label": "Manutenção > Hidráulica > Desentupimento"
             },
             {
-              "id": 54,
-              "label": "Palácio Piratini > Jardim Central",
-              "full_label": "Jardinagem > Palácio Piratini > Jardim Central"
-            },
-            {
-              "id": 55,
-              "label": "Palácio Piratini > Jardim Egípcia",
-              "full_label": "Jardinagem > Palácio Piratini > Jardim Egípcia"
-            },
-            {
-              "id": 56,
-              "label": "Palácio Piratini > Jardim Galpão",
-              "full_label": "Jardinagem > Palácio Piratini > Jardim Galpão"
-            },
-            {
-              "id": 57,
-              "label": "Palácio Piratini > Jardim Particular",
-              "full_label": "Jardinagem > Palácio Piratini > Jardim Particular"
-            },
-            {
-              "id": 58,
-              "label": "Palácio Piratini > Jardim Restauro",
-              "full_label": "Jardinagem > Palácio Piratini > Jardim Restauro"
+              "id": 111,
+              "label": "Vazamento",
+              "full_label": "Manutenção > Hidráulica > Vazamento"
             }
           ]
         },
-        "type_question": {
-          "id": 58,
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Hidráulica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-49",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 49,
+        "name": "Marcenaria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 205,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 205,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "50",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 50,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 50,
+              "label": "Marcenaria",
+              "full_label": "Manutenção > Marcenaria"
+            },
+            {
+              "id": 51,
+              "label": "Confecção de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Confecção de Mobiliário"
+            },
+            {
+              "id": 52,
+              "label": "Conserto de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Conserto de Mobiliário"
+            },
+            {
+              "id": 53,
+              "label": "Remanejo de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Remanejo de Mobiliário"
+            },
+            {
+              "id": 54,
+              "label": "Outras Atividades",
+              "full_label": "Manutenção > Marcenaria > Outras Atividades"
+            },
+            {
+              "id": 127,
+              "label": "Conserto de Aberturas",
+              "full_label": "Manutenção > Marcenaria > Conserto de Aberturas"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Marcenaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-50",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 50,
+        "name": "Marcenaria para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 184,
+        "category_rule": 3,
+        "category_question_id": 205,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 205,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "50",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 50,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 50,
+              "label": "Marcenaria",
+              "full_label": "Manutenção > Marcenaria"
+            },
+            {
+              "id": 51,
+              "label": "Confecção de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Confecção de Mobiliário"
+            },
+            {
+              "id": 52,
+              "label": "Conserto de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Conserto de Mobiliário"
+            },
+            {
+              "id": 53,
+              "label": "Remanejo de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Remanejo de Mobiliário"
+            },
+            {
+              "id": 54,
+              "label": "Outras Atividades",
+              "full_label": "Manutenção > Marcenaria > Outras Atividades"
+            },
+            {
+              "id": 127,
+              "label": "Conserto de Aberturas",
+              "full_label": "Manutenção > Marcenaria > Conserto de Aberturas"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Marcenaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-51",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 51,
+        "name": "Pedreiro para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 184,
+        "category_rule": 3,
+        "category_question_id": 209,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 209,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "81",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 81,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 81,
+              "label": "Pedreiro",
+              "full_label": "Manutenção > Pedreiro"
+            },
+            {
+              "id": 82,
+              "label": "Instalação",
+              "full_label": "Manutenção > Pedreiro > Instalação"
+            },
+            {
+              "id": 83,
+              "label": "Remoção",
+              "full_label": "Manutenção > Pedreiro > Remoção"
+            },
+            {
+              "id": 84,
+              "label": "Perfuração/Escavação",
+              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
+            },
+            {
+              "id": 133,
+              "label": "Montagem/Desmontagem",
+              "full_label": "Manutenção > Pedreiro > Montagem/Desmontagem"
+            },
+            {
+              "id": 134,
+              "label": "Reparo",
+              "full_label": "Manutenção > Pedreiro > Reparo"
+            },
+            {
+              "id": 135,
+              "label": "Reparo de pedras portuguesas",
+              "full_label": "Manutenção > Pedreiro > Reparo de pedras portuguesas"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pedreiro",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-52",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 52,
+        "name": "Pedreiro",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 1,
+          "mode": "fixed_or_direct",
+          "note": "Minority mode; destination_entity_value may be final entity id."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 209,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 209,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "81",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 81,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 81,
+              "label": "Pedreiro",
+              "full_label": "Manutenção > Pedreiro"
+            },
+            {
+              "id": 82,
+              "label": "Instalação",
+              "full_label": "Manutenção > Pedreiro > Instalação"
+            },
+            {
+              "id": 83,
+              "label": "Remoção",
+              "full_label": "Manutenção > Pedreiro > Remoção"
+            },
+            {
+              "id": 84,
+              "label": "Perfuração/Escavação",
+              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
+            },
+            {
+              "id": 133,
+              "label": "Montagem/Desmontagem",
+              "full_label": "Manutenção > Pedreiro > Montagem/Desmontagem"
+            },
+            {
+              "id": 134,
+              "label": "Reparo",
+              "full_label": "Manutenção > Pedreiro > Reparo"
+            },
+            {
+              "id": 135,
+              "label": "Reparo de pedras portuguesas",
+              "full_label": "Manutenção > Pedreiro > Reparo de pedras portuguesas"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pedreiro",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-53",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 53,
+        "name": "Pintura",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 1,
+          "mode": "fixed_or_direct",
+          "note": "Minority mode; destination_entity_value may be final entity id."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 213,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 213,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "85",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 85,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 85,
+              "label": "Pintura",
+              "full_label": "Manutenção > Pintura"
+            },
+            {
+              "id": 86,
+              "label": "Parede",
+              "full_label": "Manutenção > Pintura > Parede"
+            },
+            {
+              "id": 87,
+              "label": "Outros",
+              "full_label": "Manutenção > Pintura > Outros"
+            },
+            {
+              "id": 136,
+              "label": "Aberturas",
+              "full_label": "Manutenção > Pintura > Aberturas"
+            },
+            {
+              "id": 137,
+              "label": "Forro",
+              "full_label": "Manutenção > Pintura > Forro"
+            },
+            {
+              "id": 138,
+              "label": "Mobiliário",
+              "full_label": "Manutenção > Pintura > Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pintura",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-54",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 54,
+        "name": "Pintura para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 184,
+        "category_rule": 3,
+        "category_question_id": 213,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 213,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "85",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 85,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 85,
+              "label": "Pintura",
+              "full_label": "Manutenção > Pintura"
+            },
+            {
+              "id": 86,
+              "label": "Parede",
+              "full_label": "Manutenção > Pintura > Parede"
+            },
+            {
+              "id": 87,
+              "label": "Outros",
+              "full_label": "Manutenção > Pintura > Outros"
+            },
+            {
+              "id": 136,
+              "label": "Aberturas",
+              "full_label": "Manutenção > Pintura > Aberturas"
+            },
+            {
+              "id": 137,
+              "label": "Forro",
+              "full_label": "Manutenção > Pintura > Forro"
+            },
+            {
+              "id": 138,
+              "label": "Mobiliário",
+              "full_label": "Manutenção > Pintura > Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pintura",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-55",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 55,
+        "name": "Técnico de Redes",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 1,
+          "mode": "fixed_or_direct",
+          "note": "Minority mode; destination_entity_value may be final entity id."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 217,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 217,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "88",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 88,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 88,
+              "label": "Rede Computadores",
+              "full_label": "Manutenção > Rede Computadores"
+            },
+            {
+              "id": 89,
+              "label": "Instalação de Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Instalação de Rede Lógica"
+            },
+            {
+              "id": 90,
+              "label": "Readequação Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Readequação Rede Lógica"
+            },
+            {
+              "id": 91,
+              "label": "Conserto Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Conserto Rede Lógica"
+            },
+            {
+              "id": 92,
+              "label": "Organização de Cabeamento",
+              "full_label": "Manutenção > Rede Computadores > Organização de Cabeamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Rede Computadores",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-56",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 56,
+        "name": "Técnico de Redes para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 184,
+        "category_rule": 3,
+        "category_question_id": 217,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 217,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "88",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 88,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 88,
+              "label": "Rede Computadores",
+              "full_label": "Manutenção > Rede Computadores"
+            },
+            {
+              "id": 89,
+              "label": "Instalação de Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Instalação de Rede Lógica"
+            },
+            {
+              "id": 90,
+              "label": "Readequação Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Readequação Rede Lógica"
+            },
+            {
+              "id": 91,
+              "label": "Conserto Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Conserto Rede Lógica"
+            },
+            {
+              "id": 92,
+              "label": "Organização de Cabeamento",
+              "full_label": "Manutenção > Rede Computadores > Organização de Cabeamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Rede Computadores",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-57",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 57,
+        "name": "Vidraçaria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 1,
+          "mode": "fixed_or_direct",
+          "note": "Minority mode; destination_entity_value may be final entity id."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 221,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 221,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "94",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 94,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 94,
+              "label": "Vidraçaria",
+              "full_label": "Manutenção > Vidraçaria"
+            },
+            {
+              "id": 139,
+              "label": "Vidro",
+              "full_label": "Manutenção > Vidraçaria > Vidro"
+            },
+            {
+              "id": 140,
+              "label": "Janelas",
+              "full_label": "Manutenção > Vidraçaria > Janelas"
+            },
+            {
+              "id": 141,
+              "label": "Divisórias de vidro",
+              "full_label": "Manutenção > Vidraçaria > Divisórias de vidro"
+            },
+            {
+              "id": 142,
+              "label": "Outros",
+              "full_label": "Manutenção > Vidraçaria > Outros"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Vidraçaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-58",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 58,
+        "name": "Vidraçaria para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 184,
+        "category_rule": 3,
+        "category_question_id": 221,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 221,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "94",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 94,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 94,
+              "label": "Vidraçaria",
+              "full_label": "Manutenção > Vidraçaria"
+            },
+            {
+              "id": 139,
+              "label": "Vidro",
+              "full_label": "Manutenção > Vidraçaria > Vidro"
+            },
+            {
+              "id": 140,
+              "label": "Janelas",
+              "full_label": "Manutenção > Vidraçaria > Janelas"
+            },
+            {
+              "id": 141,
+              "label": "Divisórias de vidro",
+              "full_label": "Manutenção > Vidraçaria > Divisórias de vidro"
+            },
+            {
+              "id": 142,
+              "label": "Outros",
+              "full_label": "Manutenção > Vidraçaria > Outros"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Vidraçaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-59",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 59,
+        "name": "Carregadores",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 1,
+          "mode": "fixed_or_direct",
+          "note": "Minority mode; destination_entity_value may be final entity id."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 225,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 225,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "55",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 55,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 55,
+              "label": "Carregadores",
+              "full_label": "Conservação > Carregadores"
+            },
+            {
+              "id": 56,
+              "label": "Movimentação de Insumos",
+              "full_label": "Conservação > Carregadores > Movimentação de Insumos"
+            },
+            {
+              "id": 57,
+              "label": "Recolhimento",
+              "full_label": "Conservação > Carregadores > Recolhimento"
+            },
+            {
+              "id": 58,
+              "label": "Substituição",
+              "full_label": "Conservação > Carregadores > Substituição"
+            },
+            {
+              "id": 101,
+              "label": "Descarte",
+              "full_label": "Conservação > Carregadores > Descarte"
+            },
+            {
+              "id": 102,
+              "label": "Movimentação Equipamentos",
+              "full_label": "Conservação > Carregadores > Movimentação Equipamentos"
+            },
+            {
+              "id": 103,
+              "label": "Movimentação Mobiliário",
+              "full_label": "Conservação > Carregadores > Movimentação Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Carregadores",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-60",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 60,
+        "name": "Carregadores para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 184,
+        "category_rule": 3,
+        "category_question_id": 225,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 225,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "55",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 55,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 55,
+              "label": "Carregadores",
+              "full_label": "Conservação > Carregadores"
+            },
+            {
+              "id": 56,
+              "label": "Movimentação de Insumos",
+              "full_label": "Conservação > Carregadores > Movimentação de Insumos"
+            },
+            {
+              "id": 57,
+              "label": "Recolhimento",
+              "full_label": "Conservação > Carregadores > Recolhimento"
+            },
+            {
+              "id": 58,
+              "label": "Substituição",
+              "full_label": "Conservação > Carregadores > Substituição"
+            },
+            {
+              "id": 101,
+              "label": "Descarte",
+              "full_label": "Conservação > Carregadores > Descarte"
+            },
+            {
+              "id": 102,
+              "label": "Movimentação Equipamentos",
+              "full_label": "Conservação > Carregadores > Movimentação Equipamentos"
+            },
+            {
+              "id": 103,
+              "label": "Movimentação Mobiliário",
+              "full_label": "Conservação > Carregadores > Movimentação Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Carregadores",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-61",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 61,
+        "name": "Copa",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 1,
+          "mode": "fixed_or_direct",
+          "note": "Minority mode; destination_entity_value may be final entity id."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 229,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 229,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "98",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 98,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 98,
+              "label": "Copa",
+              "full_label": "Conservação > Copa"
+            },
+            {
+              "id": 105,
+              "label": "Agua",
+              "full_label": "Conservação > Copa > Agua"
+            },
+            {
+              "id": 106,
+              "label": "Café",
+              "full_label": "Conservação > Copa > Café"
+            },
+            {
+              "id": 107,
+              "label": "Limpar louça de salas",
+              "full_label": "Conservação > Copa > Limpar louça de salas"
+            },
+            {
+              "id": 108,
+              "label": "Recolher e Limpar Louças Sala de Reunião",
+              "full_label": "Conservação > Copa > Recolher e Limpar Louças Sala de Reunião"
+            },
+            {
+              "id": 109,
+              "label": "Repor Café,Agua Sala de reunião",
+              "full_label": "Conservação > Copa > Repor Café,Agua Sala de reunião"
+            },
+            {
+              "id": 110,
+              "label": "Repor Louça de salas",
+              "full_label": "Conservação > Copa > Repor Louça de salas"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Copa",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-62",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 62,
+        "name": "Copa Para Terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 184,
+        "category_rule": 3,
+        "category_question_id": 229,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 229,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "98",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 98,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 98,
+              "label": "Copa",
+              "full_label": "Conservação > Copa"
+            },
+            {
+              "id": 105,
+              "label": "Agua",
+              "full_label": "Conservação > Copa > Agua"
+            },
+            {
+              "id": 106,
+              "label": "Café",
+              "full_label": "Conservação > Copa > Café"
+            },
+            {
+              "id": 107,
+              "label": "Limpar louça de salas",
+              "full_label": "Conservação > Copa > Limpar louça de salas"
+            },
+            {
+              "id": 108,
+              "label": "Recolher e Limpar Louças Sala de Reunião",
+              "full_label": "Conservação > Copa > Recolher e Limpar Louças Sala de Reunião"
+            },
+            {
+              "id": 109,
+              "label": "Repor Café,Agua Sala de reunião",
+              "full_label": "Conservação > Copa > Repor Café,Agua Sala de reunião"
+            },
+            {
+              "id": 110,
+              "label": "Repor Louça de salas",
+              "full_label": "Conservação > Copa > Repor Louça de salas"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Copa",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-63",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 63,
+        "name": "Jardinagem",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 1,
+          "mode": "fixed_or_direct",
+          "note": "Minority mode; destination_entity_value may be final entity id."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 233,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 233,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "37",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 37,
-          "source": "formcreator_question_values",
-          "option_count": 10,
-          "options": [
+          "option_source": "categories",
+          "options_count": 11,
+          "options_sample": [
+            {
+              "id": 37,
+              "label": "Jardinagem",
+              "full_label": "Conservação > Jardinagem"
+            },
             {
               "id": 36,
               "label": "Plantação",
@@ -2162,201 +8934,326 @@ export const MOBILE_METADATA_CATALOG = {
               "id": 114,
               "label": "Descarte",
               "full_label": "Conservação > Jardinagem > Descarte"
-            },
-            {
-              "id": 115,
-              "label": "Retirada de Inço (gramas e canteiros)",
-              "full_label": "Conservação > Jardinagem > Retirada de Inço (gramas e canteiros)"
-            },
-            {
-              "id": 116,
-              "label": "Cri-Cri",
-              "full_label": "Conservação > Jardinagem > Cri-Cri"
-            },
-            {
-              "id": 117,
-              "label": "Irrigar/Molhar",
-              "full_label": "Conservação > Jardinagem > Irrigar/Molhar"
             }
           ]
         },
-        "urgency_question": null,
-        "description_question": {
-          "id": 59,
-          "required": true
-        },
-        "question_count": 8
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
       },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
+      "expected_result": {
+        "category_root": "Conservação > Jardinagem",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
       }
     },
     {
-      "service_id": "limpeza",
-      "label": "Limpeza",
-      "category_id": 45,
-      "category_label": "Conservação > Limpeza",
-      "service_domain_label": "Conservação",
-      "domain": "conservacao",
-      "process_type": "service_request",
-      "expected_assignment_group_id": 21,
-      "expected_assignment_group_label": "CC-CONSERVACÃO",
-      "location_ids_currently_sent": [
-        27
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 8,
-      "candidate_forms": [
+      "catalog_record_id": "sis:diversos:form-18:target-64",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
         {
-          "active": true,
-          "confidence": 0.55,
-          "id": 8,
-          "label": "Limpeza"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 28,
-          "label": "Limpeza"
+          "id": 11,
+          "name": "Manutenção e Conservação"
         }
       ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 8,
-        "targetticket_id": 7,
-        "person_question": {
-          "id": 61,
-          "required": true
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 64,
+        "name": "Jardinagem Para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
         },
-        "location_question": {
-          "id": 63,
-          "root_id": 27,
-          "source": "formcreator_question_values",
-          "option_count": 22,
-          "options": [
+        "destination_entity_value": 184,
+        "category_rule": 3,
+        "category_question_id": 233,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 233,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "37",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 37,
+          "option_source": "categories",
+          "options_count": 11,
+          "options_sample": [
             {
-              "id": 1,
-              "label": "Casa Civil 1005",
-              "full_label": "Limpeza > Casa Civil 1005"
+              "id": 37,
+              "label": "Jardinagem",
+              "full_label": "Conservação > Jardinagem"
             },
             {
-              "id": 60,
-              "label": "Casa Civil 1005 > 1° Andar",
-              "full_label": "Limpeza > Casa Civil 1005 > 1° Andar"
+              "id": 36,
+              "label": "Plantação",
+              "full_label": "Conservação > Jardinagem > Plantação"
             },
             {
-              "id": 61,
-              "label": "Casa Civil 1005 > 2° Andar",
-              "full_label": "Limpeza > Casa Civil 1005 > 2° Andar"
+              "id": 38,
+              "label": "Poda/Corte",
+              "full_label": "Conservação > Jardinagem > Poda/Corte"
             },
             {
-              "id": 62,
-              "label": "Casa Civil 1005 > Subsolo",
-              "full_label": "Limpeza > Casa Civil 1005 > Subsolo"
+              "id": 39,
+              "label": "Remoção",
+              "full_label": "Conservação > Jardinagem > Remoção"
             },
             {
-              "id": 96,
-              "label": "Casa Civil 1005 > Torreão",
-              "full_label": "Limpeza > Casa Civil 1005 > Torreão"
+              "id": 40,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Jardinagem > Outras Atividades"
             },
             {
-              "id": 28,
-              "label": "Duque de Caxias 951",
-              "full_label": "Limpeza > Duque de Caxias 951"
+              "id": 112,
+              "label": "Manutenção de folhagens internas",
+              "full_label": "Conservação > Jardinagem > Manutenção de folhagens internas"
             },
             {
-              "id": 8,
-              "label": "Palácio Piratini",
-              "full_label": "Limpeza > Palácio Piratini"
+              "id": 113,
+              "label": "Varrição",
+              "full_label": "Conservação > Jardinagem > Varrição"
             },
             {
-              "id": 63,
-              "label": "Palácio Piratini > 1° Andar",
-              "full_label": "Limpeza > Palácio Piratini > 1° Andar"
-            },
-            {
-              "id": 69,
-              "label": "Palácio Piratini > 1° Andar > Gabinete Casa Civil",
-              "full_label": "Limpeza > Palácio Piratini > 1° Andar > Gabinete Casa Civil"
-            },
-            {
-              "id": 68,
-              "label": "Palácio Piratini > 1° Andar > Gabinete Casa Militar",
-              "full_label": "Limpeza > Palácio Piratini > 1° Andar > Gabinete Casa Militar"
-            },
-            {
-              "id": 92,
-              "label": "Palácio Piratini > 1° Andar > Recepção",
-              "full_label": "Limpeza > Palácio Piratini > 1° Andar > Recepção"
-            },
-            {
-              "id": 64,
-              "label": "Palácio Piratini > 2° Andar",
-              "full_label": "Limpeza > Palácio Piratini > 2° Andar"
-            },
-            {
-              "id": 65,
-              "label": "Palácio Piratini > 3° Andar",
-              "full_label": "Limpeza > Palácio Piratini > 3° Andar"
-            },
-            {
-              "id": 66,
-              "label": "Palácio Piratini > 4° Andar",
-              "full_label": "Limpeza > Palácio Piratini > 4° Andar"
-            },
-            {
-              "id": 98,
-              "label": "Palácio Piratini > Galpão Criolo",
-              "full_label": "Limpeza > Palácio Piratini > Galpão Criolo"
-            },
-            {
-              "id": 67,
-              "label": "Palácio Piratini > Oficina de Restauro",
-              "full_label": "Limpeza > Palácio Piratini > Oficina de Restauro"
-            },
-            {
-              "id": 9,
-              "label": "Parque de Exposições Assis Brasil",
-              "full_label": "Limpeza > Parque de Exposições Assis Brasil"
-            },
-            {
-              "id": 10,
-              "label": "Parque de Exposições Assis Brasil > Casa Branca",
-              "full_label": "Limpeza > Parque de Exposições Assis Brasil > Casa Branca"
-            },
-            {
-              "id": 11,
-              "label": "Parque de Exposições Assis Brasil > Casa Militar",
-              "full_label": "Limpeza > Parque de Exposições Assis Brasil > Casa Militar"
-            },
-            {
-              "id": 104,
-              "label": "Rua José do Patrocínio, 45  - Arquivo",
-              "full_label": "Limpeza > Rua José do Patrocínio, 45  - Arquivo"
-            },
-            {
-              "id": 29,
-              "label": "SPH",
-              "full_label": "Limpeza > SPH"
-            },
-            {
-              "id": 30,
-              "label": "SPH > 3º Andar",
-              "full_label": "Limpeza > SPH > 3º Andar"
+              "id": 114,
+              "label": "Descarte",
+              "full_label": "Conservação > Jardinagem > Descarte"
             }
           ]
         },
-        "type_question": {
-          "id": 66,
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Jardinagem",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-65",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 65,
+        "name": "Limpeza",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 237,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 237,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "45",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 45,
-          "source": "formcreator_question_values",
-          "option_count": 13,
-          "options": [
+          "option_source": "categories",
+          "options_count": 14,
+          "options_sample": [
+            {
+              "id": 45,
+              "label": "Limpeza",
+              "full_label": "Conservação > Limpeza"
+            },
             {
               "id": 46,
               "label": "Limpeza de banheiros",
@@ -2391,102 +9288,28 @@ export const MOBILE_METADATA_CATALOG = {
               "id": 120,
               "label": "Janelas e Portas",
               "full_label": "Conservação > Limpeza > Janelas e Portas"
-            },
-            {
-              "id": 121,
-              "label": "Recolher Lixo Orgânico",
-              "full_label": "Conservação > Limpeza > Recolher Lixo Orgânico"
-            },
-            {
-              "id": 122,
-              "label": "Reposição Papel Higiênico",
-              "full_label": "Conservação > Limpeza > Reposição Papel Higiênico"
-            },
-            {
-              "id": 123,
-              "label": "Reposição Papel Toalha",
-              "full_label": "Conservação > Limpeza > Reposição Papel Toalha"
-            },
-            {
-              "id": 124,
-              "label": "Reposição de Sabonete",
-              "full_label": "Conservação > Limpeza > Reposição de Sabonete"
-            },
-            {
-              "id": 125,
-              "label": "Varrição",
-              "full_label": "Conservação > Limpeza > Varrição"
-            },
-            {
-              "id": 126,
-              "label": "Descarte Lixo Orgânico",
-              "full_label": "Conservação > Limpeza > Descarte Lixo Orgânico"
             }
           ]
         },
-        "urgency_question": null,
-        "description_question": {
-          "id": 67,
-          "required": true
-        },
-        "question_count": 8
-      },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
-      }
-    },
-    {
-      "service_id": "marcenaria",
-      "label": "Marcenaria",
-      "category_id": 50,
-      "category_label": "Manutenção > Marcenaria",
-      "service_domain_label": "Manutenção",
-      "domain": "unknown",
-      "process_type": "unknown",
-      "expected_assignment_group_id": 22,
-      "expected_assignment_group_label": "CC-MANUTENCAO",
-      "location_ids_currently_sent": [
-        70
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 9,
-      "candidate_forms": [
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 9,
-          "label": "Marcenaria"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 29,
-          "label": "Marcenaria"
-        }
-      ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 9,
-        "targetticket_id": 8,
-        "person_question": {
-          "id": 69,
-          "required": true
-        },
-        "location_question": {
-          "id": 71,
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 70,
-          "source": "formcreator_question_values",
-          "option_count": 80,
-          "options": [
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
             {
-              "id": 100,
-              "label": "CAFF",
-              "full_label": "Locais > CAFF"
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
             },
             {
               "id": 71,
@@ -2495,402 +9318,4546 @@ export const MOBILE_METADATA_CATALOG = {
             },
             {
               "id": 79,
-              "label": "Casa Civil 1005 > 1° Andar",
+              "label": "1° Andar",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 282,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08"
-            },
-            {
-              "id": 283,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A"
-            },
-            {
-              "id": 285,
-              "label": "Casa Civil 1005 > 1° Andar > P1B01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B01"
-            },
-            {
-              "id": 286,
-              "label": "Casa Civil 1005 > 1° Andar > P1B02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B02"
-            },
-            {
-              "id": 287,
-              "label": "Casa Civil 1005 > 1° Andar > P1B03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B03"
-            },
-            {
-              "id": 280,
-              "label": "Casa Civil 1005 > 1° Andar > P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
-            },
-            {
-              "id": 289,
-              "label": "Casa Civil 1005 > 1° Andar > P1C02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C02"
-            },
-            {
-              "id": 292,
-              "label": "Casa Civil 1005 > 1° Andar > P1C03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C03"
-            },
-            {
-              "id": 294,
-              "label": "Casa Civil 1005 > 1° Andar > P1C04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C04"
-            },
-            {
-              "id": 288,
-              "label": "Casa Civil 1005 > 1° Andar > P1E01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E01"
-            },
-            {
-              "id": 293,
-              "label": "Casa Civil 1005 > 1° Andar > P1E02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E02"
-            },
-            {
               "id": 276,
-              "label": "Casa Civil 1005 > 1° Andar > P1S01",
+              "label": "P1S01",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
             },
             {
-              "id": 278,
-              "label": "Casa Civil 1005 > 1° Andar > P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
-            },
-            {
               "id": 277,
-              "label": "Casa Civil 1005 > 1° Andar > P1S03",
+              "label": "P1S03",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
             },
             {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
               "id": 279,
-              "label": "Casa Civil 1005 > 1° Andar > P1S04",
+              "label": "P1S04",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
             },
             {
-              "id": 290,
-              "label": "Casa Civil 1005 > 1° Andar > P1S05",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S05"
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Limpeza",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-66",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 66,
+        "name": "Limpeza Para Terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 184,
+        "category_rule": 3,
+        "category_question_id": 237,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 237,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "45",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 45,
+          "option_source": "categories",
+          "options_count": 14,
+          "options_sample": [
+            {
+              "id": 45,
+              "label": "Limpeza",
+              "full_label": "Conservação > Limpeza"
             },
             {
-              "id": 281,
-              "label": "Casa Civil 1005 > 1° Andar > P1S06",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S06"
+              "id": 46,
+              "label": "Limpeza de banheiros",
+              "full_label": "Conservação > Limpeza > Limpeza de banheiros"
             },
             {
-              "id": 291,
-              "label": "Casa Civil 1005 > 1° Andar > P1S07",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S07"
+              "id": 47,
+              "label": "Limpeza geral",
+              "full_label": "Conservação > Limpeza > Limpeza geral"
             },
             {
-              "id": 295,
-              "label": "Casa Civil 1005 > 1° Andar > P1S09",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S09"
+              "id": 48,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Limpeza > Outras Atividades"
             },
             {
-              "id": 80,
-              "label": "Casa Civil 1005 > 2° Andar",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
+              "id": 49,
+              "label": "Recolher materiais recicláveis",
+              "full_label": "Conservação > Limpeza > Recolher materiais recicláveis"
             },
             {
-              "id": 266,
-              "label": "Casa Civil 1005 > 2° Andar > P2B01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B01"
+              "id": 118,
+              "label": "Lava a Jato",
+              "full_label": "Conservação > Limpeza > Lava a Jato"
             },
             {
-              "id": 267,
-              "label": "Casa Civil 1005 > 2° Andar > P2B03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B03"
+              "id": 119,
+              "label": "Bandeirante",
+              "full_label": "Conservação > Limpeza > Bandeirante"
             },
             {
-              "id": 270,
-              "label": "Casa Civil 1005 > 2° Andar > P2C01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2C01"
-            },
-            {
-              "id": 269,
-              "label": "Casa Civil 1005 > 2° Andar > P2E01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2E01"
-            },
-            {
-              "id": 261,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01"
-            },
-            {
-              "id": 262,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A"
-            },
-            {
-              "id": 263,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B"
-            },
-            {
-              "id": 265,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02"
-            },
-            {
-              "id": 264,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A"
-            },
-            {
-              "id": 272,
-              "label": "Casa Civil 1005 > 2° Andar > P2S03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S03"
-            },
-            {
-              "id": 268,
-              "label": "Casa Civil 1005 > 2° Andar > P2S04",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S04"
-            },
-            {
-              "id": 273,
-              "label": "Casa Civil 1005 > 2° Andar > P2S05",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S05"
-            },
-            {
-              "id": 271,
-              "label": "Casa Civil 1005 > 2° Andar > P2S06",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S06"
-            },
-            {
-              "id": 274,
-              "label": "Casa Civil 1005 > 2° Andar > P2S07",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S07"
-            },
-            {
-              "id": 275,
-              "label": "Casa Civil 1005 > 2° Andar > P2S08",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S08"
-            },
-            {
-              "id": 296,
-              "label": "Casa Civil 1005 > Subsolo 1",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
-            },
-            {
-              "id": 321,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B01"
-            },
-            {
-              "id": 308,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B02"
-            },
-            {
-              "id": 307,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B03"
-            },
-            {
-              "id": 319,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C01"
-            },
-            {
-              "id": 313,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C02"
-            },
-            {
-              "id": 303,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C03"
-            },
-            {
-              "id": 306,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E01"
-            },
-            {
-              "id": 312,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E02"
-            },
-            {
-              "id": 323,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E03"
-            },
-            {
-              "id": 322,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S01"
-            },
-            {
-              "id": 318,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S02"
-            },
-            {
-              "id": 320,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S03"
-            },
-            {
-              "id": 316,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S04",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S04"
-            },
-            {
-              "id": 317,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S06",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S06"
-            },
-            {
-              "id": 310,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S07",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S07"
-            },
-            {
-              "id": 315,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S08",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S08"
-            },
-            {
-              "id": 311,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S09",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S09"
-            },
-            {
-              "id": 314,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S10",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S10"
-            },
-            {
-              "id": 309,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S11",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S11"
-            },
-            {
-              "id": 304,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S12",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S12"
-            },
-            {
-              "id": 305,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S13",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S13"
-            },
-            {
-              "id": 302,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S14",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S14"
-            },
-            {
-              "id": 297,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S15",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S15"
-            },
-            {
-              "id": 301,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S16",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S16"
-            },
-            {
-              "id": 298,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S17",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S17"
-            },
-            {
-              "id": 300,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S18",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S18"
-            },
-            {
-              "id": 299,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S19",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S19"
-            },
-            {
-              "id": 82,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
-            },
-            {
-              "id": 325,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01"
-            },
-            {
-              "id": 324,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02"
-            },
-            {
-              "id": 81,
-              "label": "Casa Civil 1005 > Torreão",
-              "full_label": "Locais > Casa Civil 1005 > Torreão"
-            },
-            {
-              "id": 260,
-              "label": "Casa Civil 1005 > Torreão > P3E01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3E01"
-            },
-            {
-              "id": 259,
-              "label": "Casa Civil 1005 > Torreão > P3S01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3S01"
-            },
-            {
-              "id": 87,
-              "label": "Defesa Civil - Andrade Neves 106",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106"
-            },
-            {
-              "id": 88,
-              "label": "Defesa Civil - Andrade Neves 106 > 11° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 11° Andar"
-            },
-            {
-              "id": 89,
-              "label": "Defesa Civil - Andrade Neves 106 > 15° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 15° Andar"
-            },
-            {
-              "id": 84,
-              "label": "Divisão de Transportes -Riachuelo 1285",
-              "full_label": "Locais > Divisão de Transportes -Riachuelo 1285"
-            },
-            {
-              "id": 83,
-              "label": "Duque de Caxias 951",
-              "full_label": "Locais > Duque de Caxias 951"
-            },
-            {
-              "id": 85,
-              "label": "Gabinete dos Prefeitos - Andradas 1234",
-              "full_label": "Locais > Gabinete dos Prefeitos - Andradas 1234"
-            },
-            {
-              "id": 72,
-              "label": "Palacio Piratini",
-              "full_label": "Locais > Palacio Piratini"
-            },
-            {
-              "id": 73,
-              "label": "Palacio Piratini - Ala Governamental",
-              "full_label": "Locais > Palacio Piratini - Ala Governamental"
+              "id": 120,
+              "label": "Janelas e Portas",
+              "full_label": "Conservação > Limpeza > Janelas e Portas"
             }
           ]
         },
-        "type_question": {
-          "id": 75,
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Limpeza",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-67",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 67,
+        "name": "Mensageria Para Terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 184,
+        "category_rule": 3,
+        "category_question_id": 241,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 241,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "128",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 128,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 128,
+              "label": "Mensageria",
+              "full_label": "Conservação > Mensageria"
+            },
+            {
+              "id": 129,
+              "label": "Movimentação Documentos",
+              "full_label": "Conservação > Mensageria > Movimentação Documentos"
+            },
+            {
+              "id": 130,
+              "label": "Movimentação Insumos até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Insumos até 5Kg"
+            },
+            {
+              "id": 131,
+              "label": "Movimentação Materiais até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Materiais até 5Kg"
+            },
+            {
+              "id": 132,
+              "label": "Outras entregas e Movimentações até 5Kg",
+              "full_label": "Conservação > Mensageria > Outras entregas e Movimentações até 5Kg"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Mensageria",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:diversos:form-18:target-68",
+      "service_id": "diversos",
+      "service_label": "Diversos",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 18,
+        "name": "Diversos",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          18
+        ]
+      },
+      "targetticket": {
+        "id": 68,
+        "name": "Mensageria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 241,
+        "location_rule": 3,
+        "location_question_id": 185,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 241,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "128",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 128,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 128,
+              "label": "Mensageria",
+              "full_label": "Conservação > Mensageria"
+            },
+            {
+              "id": 129,
+              "label": "Movimentação Documentos",
+              "full_label": "Conservação > Mensageria > Movimentação Documentos"
+            },
+            {
+              "id": 130,
+              "label": "Movimentação Insumos até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Insumos até 5Kg"
+            },
+            {
+              "id": 131,
+              "label": "Movimentação Materiais até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Materiais até 5Kg"
+            },
+            {
+              "id": 132,
+              "label": "Outras entregas e Movimentações até 5Kg",
+              "full_label": "Conservação > Mensageria > Outras entregas e Movimentações até 5Kg"
+            }
+          ]
+        },
+        "location": {
+          "id": 185,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Mensageria",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:elevadores:form-2:target-2",
+      "service_id": "elevadores",
+      "service_label": "Elevadores",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 2,
+        "name": "Elevadores",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          2,
+          25
+        ]
+      },
+      "targetticket": {
+        "id": 2,
+        "name": "Elevadores",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 2,
+        "category_question_id": 17,
+        "location_rule": 2,
+        "location_question_id": 72,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 1
+      },
+      "questions": {
+        "category": {
+          "id": 17,
+          "name": "Anexar Arquivo",
+          "fieldtype": "file",
+          "required": false,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 72,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:elevadores:form-2:target-21",
+      "service_id": "elevadores",
+      "service_label": "Elevadores",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 2,
+        "name": "Elevadores",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          2,
+          25
+        ]
+      },
+      "targetticket": {
+        "id": 21,
+        "name": "Elevadores  para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 11,
+        "category_rule": 2,
+        "category_question_id": 17,
+        "location_rule": 2,
+        "location_question_id": 72,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 1
+      },
+      "questions": {
+        "category": {
+          "id": 17,
+          "name": "Anexar Arquivo",
+          "fieldtype": "file",
+          "required": false,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 72,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:elevadores:form-25:target-137",
+      "service_id": "elevadores",
+      "service_label": "Elevadores",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 25,
+        "name": "Elevadores",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          2,
+          25
+        ]
+      },
+      "targetticket": {
+        "id": 137,
+        "name": "Elevadores",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 2,
+        "category_question_id": 17,
+        "location_rule": 2,
+        "location_question_id": 72,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 1
+      },
+      "questions": {
+        "category": {
+          "id": 17,
+          "name": "Anexar Arquivo",
+          "fieldtype": "file",
+          "required": false,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 72,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:elevadores:form-25:target-138",
+      "service_id": "elevadores",
+      "service_label": "Elevadores",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 25,
+        "name": "Elevadores",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          2,
+          25
+        ]
+      },
+      "targetticket": {
+        "id": 138,
+        "name": "Elevadores  para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 406,
+        "category_rule": 2,
+        "category_question_id": 17,
+        "location_rule": 2,
+        "location_question_id": 72,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 1
+      },
+      "questions": {
+        "category": {
+          "id": 17,
+          "name": "Anexar Arquivo",
+          "fieldtype": "file",
+          "required": false,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 72,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:eletrica:form-5:target-5",
+      "service_id": "eletrica",
+      "service_label": "Elétrica",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 5,
+        "name": "Elétrica",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          5,
+          24
+        ]
+      },
+      "targetticket": {
+        "id": 5,
+        "name": "Elétrica",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 41,
+        "location_rule": 3,
+        "location_question_id": 37,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 41,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "22",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 22,
+          "option_source": "categories",
+          "options_count": 8,
+          "options_sample": [
+            {
+              "id": 22,
+              "label": "Elétrica",
+              "full_label": "Manutenção > Elétrica"
+            },
+            {
+              "id": 23,
+              "label": "Conserto",
+              "full_label": "Manutenção > Elétrica > Conserto"
+            },
+            {
+              "id": 24,
+              "label": "Instalação",
+              "full_label": "Manutenção > Elétrica > Instalação"
+            },
+            {
+              "id": 25,
+              "label": "Remoção",
+              "full_label": "Manutenção > Elétrica > Remoção"
+            },
+            {
+              "id": 26,
+              "label": "Readequação",
+              "full_label": "Manutenção > Elétrica > Readequação"
+            },
+            {
+              "id": 27,
+              "label": "Troca",
+              "full_label": "Manutenção > Elétrica > Troca"
+            },
+            {
+              "id": 28,
+              "label": "Descarte",
+              "full_label": "Manutenção > Elétrica > Descarte"
+            },
+            {
+              "id": 29,
+              "label": "Suporte",
+              "full_label": "Manutenção > Elétrica > Suporte"
+            }
+          ]
+        },
+        "location": {
+          "id": 37,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Elétrica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:eletrica:form-5:target-20",
+      "service_id": "eletrica",
+      "service_label": "Elétrica",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 5,
+        "name": "Elétrica",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          5,
+          24
+        ]
+      },
+      "targetticket": {
+        "id": 20,
+        "name": "Elétrica para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 36,
+        "category_rule": 3,
+        "category_question_id": 41,
+        "location_rule": 3,
+        "location_question_id": 37,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 41,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "22",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 22,
+          "option_source": "categories",
+          "options_count": 8,
+          "options_sample": [
+            {
+              "id": 22,
+              "label": "Elétrica",
+              "full_label": "Manutenção > Elétrica"
+            },
+            {
+              "id": 23,
+              "label": "Conserto",
+              "full_label": "Manutenção > Elétrica > Conserto"
+            },
+            {
+              "id": 24,
+              "label": "Instalação",
+              "full_label": "Manutenção > Elétrica > Instalação"
+            },
+            {
+              "id": 25,
+              "label": "Remoção",
+              "full_label": "Manutenção > Elétrica > Remoção"
+            },
+            {
+              "id": 26,
+              "label": "Readequação",
+              "full_label": "Manutenção > Elétrica > Readequação"
+            },
+            {
+              "id": 27,
+              "label": "Troca",
+              "full_label": "Manutenção > Elétrica > Troca"
+            },
+            {
+              "id": 28,
+              "label": "Descarte",
+              "full_label": "Manutenção > Elétrica > Descarte"
+            },
+            {
+              "id": 29,
+              "label": "Suporte",
+              "full_label": "Manutenção > Elétrica > Suporte"
+            }
+          ]
+        },
+        "location": {
+          "id": 37,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Elétrica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:eletrica:form-24:target-135",
+      "service_id": "eletrica",
+      "service_label": "Elétrica",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 24,
+        "name": "Elétrica",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          5,
+          24
+        ]
+      },
+      "targetticket": {
+        "id": 135,
+        "name": "Elétrica",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 401,
+        "location_rule": 3,
+        "location_question_id": 398,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 401,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "22",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 22,
+          "option_source": "categories",
+          "options_count": 8,
+          "options_sample": [
+            {
+              "id": 22,
+              "label": "Elétrica",
+              "full_label": "Manutenção > Elétrica"
+            },
+            {
+              "id": 23,
+              "label": "Conserto",
+              "full_label": "Manutenção > Elétrica > Conserto"
+            },
+            {
+              "id": 24,
+              "label": "Instalação",
+              "full_label": "Manutenção > Elétrica > Instalação"
+            },
+            {
+              "id": 25,
+              "label": "Remoção",
+              "full_label": "Manutenção > Elétrica > Remoção"
+            },
+            {
+              "id": 26,
+              "label": "Readequação",
+              "full_label": "Manutenção > Elétrica > Readequação"
+            },
+            {
+              "id": 27,
+              "label": "Troca",
+              "full_label": "Manutenção > Elétrica > Troca"
+            },
+            {
+              "id": 28,
+              "label": "Descarte",
+              "full_label": "Manutenção > Elétrica > Descarte"
+            },
+            {
+              "id": 29,
+              "label": "Suporte",
+              "full_label": "Manutenção > Elétrica > Suporte"
+            }
+          ]
+        },
+        "location": {
+          "id": 398,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Elétrica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:eletrica:form-24:target-136",
+      "service_id": "eletrica",
+      "service_label": "Elétrica",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 24,
+        "name": "Elétrica",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          5,
+          24
+        ]
+      },
+      "targetticket": {
+        "id": 136,
+        "name": "Elétrica para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 397,
+        "category_rule": 3,
+        "category_question_id": 401,
+        "location_rule": 3,
+        "location_question_id": 398,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 401,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "22",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 22,
+          "option_source": "categories",
+          "options_count": 8,
+          "options_sample": [
+            {
+              "id": 22,
+              "label": "Elétrica",
+              "full_label": "Manutenção > Elétrica"
+            },
+            {
+              "id": 23,
+              "label": "Conserto",
+              "full_label": "Manutenção > Elétrica > Conserto"
+            },
+            {
+              "id": 24,
+              "label": "Instalação",
+              "full_label": "Manutenção > Elétrica > Instalação"
+            },
+            {
+              "id": 25,
+              "label": "Remoção",
+              "full_label": "Manutenção > Elétrica > Remoção"
+            },
+            {
+              "id": 26,
+              "label": "Readequação",
+              "full_label": "Manutenção > Elétrica > Readequação"
+            },
+            {
+              "id": 27,
+              "label": "Troca",
+              "full_label": "Manutenção > Elétrica > Troca"
+            },
+            {
+              "id": 28,
+              "label": "Descarte",
+              "full_label": "Manutenção > Elétrica > Descarte"
+            },
+            {
+              "id": 29,
+              "label": "Suporte",
+              "full_label": "Manutenção > Elétrica > Suporte"
+            }
+          ]
+        },
+        "location": {
+          "id": 398,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Elétrica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:hidraulica:form-6:target-6",
+      "service_id": "hidraulica",
+      "service_label": "Hidráulica",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 6,
+        "name": "Hidráulica",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          6,
+          26
+        ]
+      },
+      "targetticket": {
+        "id": 6,
+        "name": "Hidráulica",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 50,
+        "location_rule": 3,
+        "location_question_id": 46,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 50,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "30",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 30,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 30,
+              "label": "Hidráulica",
+              "full_label": "Manutenção > Hidráulica"
+            },
+            {
+              "id": 31,
+              "label": "Reparo/Conserto",
+              "full_label": "Manutenção > Hidráulica > Reparo/Conserto"
+            },
+            {
+              "id": 32,
+              "label": "Instalação",
+              "full_label": "Manutenção > Hidráulica > Instalação"
+            },
+            {
+              "id": 33,
+              "label": "Remoção",
+              "full_label": "Manutenção > Hidráulica > Remoção"
+            },
+            {
+              "id": 34,
+              "label": "Troca",
+              "full_label": "Manutenção > Hidráulica > Troca"
+            },
+            {
+              "id": 35,
+              "label": "Desentupimento",
+              "full_label": "Manutenção > Hidráulica > Desentupimento"
+            },
+            {
+              "id": 111,
+              "label": "Vazamento",
+              "full_label": "Manutenção > Hidráulica > Vazamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 46,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Hidráulica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:hidraulica:form-6:target-22",
+      "service_id": "hidraulica",
+      "service_label": "Hidráulica",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 6,
+        "name": "Hidráulica",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          6,
+          26
+        ]
+      },
+      "targetticket": {
+        "id": 22,
+        "name": "Hidráulica para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 45,
+        "category_rule": 3,
+        "category_question_id": 50,
+        "location_rule": 3,
+        "location_question_id": 46,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 50,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "30",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 30,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 30,
+              "label": "Hidráulica",
+              "full_label": "Manutenção > Hidráulica"
+            },
+            {
+              "id": 31,
+              "label": "Reparo/Conserto",
+              "full_label": "Manutenção > Hidráulica > Reparo/Conserto"
+            },
+            {
+              "id": 32,
+              "label": "Instalação",
+              "full_label": "Manutenção > Hidráulica > Instalação"
+            },
+            {
+              "id": 33,
+              "label": "Remoção",
+              "full_label": "Manutenção > Hidráulica > Remoção"
+            },
+            {
+              "id": 34,
+              "label": "Troca",
+              "full_label": "Manutenção > Hidráulica > Troca"
+            },
+            {
+              "id": 35,
+              "label": "Desentupimento",
+              "full_label": "Manutenção > Hidráulica > Desentupimento"
+            },
+            {
+              "id": 111,
+              "label": "Vazamento",
+              "full_label": "Manutenção > Hidráulica > Vazamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 46,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Hidráulica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:hidraulica:form-26:target-139",
+      "service_id": "hidraulica",
+      "service_label": "Hidráulica",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 26,
+        "name": "Hidráulica",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          6,
+          26
+        ]
+      },
+      "targetticket": {
+        "id": 139,
+        "name": "Hidráulica",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 418,
+        "location_rule": 3,
+        "location_question_id": 415,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 418,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "30",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 30,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 30,
+              "label": "Hidráulica",
+              "full_label": "Manutenção > Hidráulica"
+            },
+            {
+              "id": 31,
+              "label": "Reparo/Conserto",
+              "full_label": "Manutenção > Hidráulica > Reparo/Conserto"
+            },
+            {
+              "id": 32,
+              "label": "Instalação",
+              "full_label": "Manutenção > Hidráulica > Instalação"
+            },
+            {
+              "id": 33,
+              "label": "Remoção",
+              "full_label": "Manutenção > Hidráulica > Remoção"
+            },
+            {
+              "id": 34,
+              "label": "Troca",
+              "full_label": "Manutenção > Hidráulica > Troca"
+            },
+            {
+              "id": 35,
+              "label": "Desentupimento",
+              "full_label": "Manutenção > Hidráulica > Desentupimento"
+            },
+            {
+              "id": 111,
+              "label": "Vazamento",
+              "full_label": "Manutenção > Hidráulica > Vazamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 415,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Hidráulica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:hidraulica:form-26:target-140",
+      "service_id": "hidraulica",
+      "service_label": "Hidráulica",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 26,
+        "name": "Hidráulica",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          6,
+          26
+        ]
+      },
+      "targetticket": {
+        "id": 140,
+        "name": "Hidráulica para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 414,
+        "category_rule": 3,
+        "category_question_id": 418,
+        "location_rule": 3,
+        "location_question_id": 415,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 418,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "30",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 30,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 30,
+              "label": "Hidráulica",
+              "full_label": "Manutenção > Hidráulica"
+            },
+            {
+              "id": 31,
+              "label": "Reparo/Conserto",
+              "full_label": "Manutenção > Hidráulica > Reparo/Conserto"
+            },
+            {
+              "id": 32,
+              "label": "Instalação",
+              "full_label": "Manutenção > Hidráulica > Instalação"
+            },
+            {
+              "id": 33,
+              "label": "Remoção",
+              "full_label": "Manutenção > Hidráulica > Remoção"
+            },
+            {
+              "id": 34,
+              "label": "Troca",
+              "full_label": "Manutenção > Hidráulica > Troca"
+            },
+            {
+              "id": 35,
+              "label": "Desentupimento",
+              "full_label": "Manutenção > Hidráulica > Desentupimento"
+            },
+            {
+              "id": 111,
+              "label": "Vazamento",
+              "full_label": "Manutenção > Hidráulica > Vazamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 415,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Hidráulica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:jardinagem:form-7:target-14",
+      "service_id": "jardinagem",
+      "service_label": "Jardinagem",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 7,
+        "name": "Jardinagem",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          7,
+          27
+        ]
+      },
+      "targetticket": {
+        "id": 14,
+        "name": "Jardinagem - ##answer_55##",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 58,
+        "location_rule": 3,
+        "location_question_id": 55,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 58,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "37",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 37,
+          "option_source": "categories",
+          "options_count": 11,
+          "options_sample": [
+            {
+              "id": 37,
+              "label": "Jardinagem",
+              "full_label": "Conservação > Jardinagem"
+            },
+            {
+              "id": 36,
+              "label": "Plantação",
+              "full_label": "Conservação > Jardinagem > Plantação"
+            },
+            {
+              "id": 38,
+              "label": "Poda/Corte",
+              "full_label": "Conservação > Jardinagem > Poda/Corte"
+            },
+            {
+              "id": 39,
+              "label": "Remoção",
+              "full_label": "Conservação > Jardinagem > Remoção"
+            },
+            {
+              "id": 40,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Jardinagem > Outras Atividades"
+            },
+            {
+              "id": 112,
+              "label": "Manutenção de folhagens internas",
+              "full_label": "Conservação > Jardinagem > Manutenção de folhagens internas"
+            },
+            {
+              "id": 113,
+              "label": "Varrição",
+              "full_label": "Conservação > Jardinagem > Varrição"
+            },
+            {
+              "id": 114,
+              "label": "Descarte",
+              "full_label": "Conservação > Jardinagem > Descarte"
+            }
+          ]
+        },
+        "location": {
+          "id": 55,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "-3",
+            "show_tree_root": "31",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 31,
+          "option_source": "locations",
+          "options_count": 11,
+          "options_sample": [
+            {
+              "id": 31,
+              "label": "Jardinagem",
+              "full_label": "Jardinagem"
+            },
+            {
+              "id": 32,
+              "label": "Duque de Caxias 951 (Banrisul)",
+              "full_label": "Jardinagem > Duque de Caxias 951 (Banrisul)"
+            },
+            {
+              "id": 33,
+              "label": "Casa Civil 1005",
+              "full_label": "Jardinagem > Casa Civil 1005"
+            },
+            {
+              "id": 34,
+              "label": "Palácio Piratini",
+              "full_label": "Jardinagem > Palácio Piratini"
+            },
+            {
+              "id": 54,
+              "label": "Jardim Central",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Central"
+            },
+            {
+              "id": 55,
+              "label": "Jardim Egípcia",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Egípcia"
+            },
+            {
+              "id": 56,
+              "label": "Jardim Galpão",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Galpão"
+            },
+            {
+              "id": 57,
+              "label": "Jardim Particular",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Particular"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Jardinagem",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:jardinagem:form-7:target-23",
+      "service_id": "jardinagem",
+      "service_label": "Jardinagem",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 7,
+        "name": "Jardinagem",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          7,
+          27
+        ]
+      },
+      "targetticket": {
+        "id": 23,
+        "name": "Jardinagem - para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 54,
+        "category_rule": 3,
+        "category_question_id": 58,
+        "location_rule": 3,
+        "location_question_id": 55,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 58,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "37",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 37,
+          "option_source": "categories",
+          "options_count": 11,
+          "options_sample": [
+            {
+              "id": 37,
+              "label": "Jardinagem",
+              "full_label": "Conservação > Jardinagem"
+            },
+            {
+              "id": 36,
+              "label": "Plantação",
+              "full_label": "Conservação > Jardinagem > Plantação"
+            },
+            {
+              "id": 38,
+              "label": "Poda/Corte",
+              "full_label": "Conservação > Jardinagem > Poda/Corte"
+            },
+            {
+              "id": 39,
+              "label": "Remoção",
+              "full_label": "Conservação > Jardinagem > Remoção"
+            },
+            {
+              "id": 40,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Jardinagem > Outras Atividades"
+            },
+            {
+              "id": 112,
+              "label": "Manutenção de folhagens internas",
+              "full_label": "Conservação > Jardinagem > Manutenção de folhagens internas"
+            },
+            {
+              "id": 113,
+              "label": "Varrição",
+              "full_label": "Conservação > Jardinagem > Varrição"
+            },
+            {
+              "id": 114,
+              "label": "Descarte",
+              "full_label": "Conservação > Jardinagem > Descarte"
+            }
+          ]
+        },
+        "location": {
+          "id": 55,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "-3",
+            "show_tree_root": "31",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 31,
+          "option_source": "locations",
+          "options_count": 11,
+          "options_sample": [
+            {
+              "id": 31,
+              "label": "Jardinagem",
+              "full_label": "Jardinagem"
+            },
+            {
+              "id": 32,
+              "label": "Duque de Caxias 951 (Banrisul)",
+              "full_label": "Jardinagem > Duque de Caxias 951 (Banrisul)"
+            },
+            {
+              "id": 33,
+              "label": "Casa Civil 1005",
+              "full_label": "Jardinagem > Casa Civil 1005"
+            },
+            {
+              "id": 34,
+              "label": "Palácio Piratini",
+              "full_label": "Jardinagem > Palácio Piratini"
+            },
+            {
+              "id": 54,
+              "label": "Jardim Central",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Central"
+            },
+            {
+              "id": 55,
+              "label": "Jardim Egípcia",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Egípcia"
+            },
+            {
+              "id": 56,
+              "label": "Jardim Galpão",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Galpão"
+            },
+            {
+              "id": 57,
+              "label": "Jardim Particular",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Particular"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Jardinagem",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:jardinagem:form-27:target-141",
+      "service_id": "jardinagem",
+      "service_label": "Jardinagem",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 27,
+        "name": "Jardinagem",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          7,
+          27
+        ]
+      },
+      "targetticket": {
+        "id": 141,
+        "name": "Jardinagem - ##answer_55##",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 426,
+        "location_rule": 3,
+        "location_question_id": 424,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 426,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "37",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 37,
+          "option_source": "categories",
+          "options_count": 11,
+          "options_sample": [
+            {
+              "id": 37,
+              "label": "Jardinagem",
+              "full_label": "Conservação > Jardinagem"
+            },
+            {
+              "id": 36,
+              "label": "Plantação",
+              "full_label": "Conservação > Jardinagem > Plantação"
+            },
+            {
+              "id": 38,
+              "label": "Poda/Corte",
+              "full_label": "Conservação > Jardinagem > Poda/Corte"
+            },
+            {
+              "id": 39,
+              "label": "Remoção",
+              "full_label": "Conservação > Jardinagem > Remoção"
+            },
+            {
+              "id": 40,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Jardinagem > Outras Atividades"
+            },
+            {
+              "id": 112,
+              "label": "Manutenção de folhagens internas",
+              "full_label": "Conservação > Jardinagem > Manutenção de folhagens internas"
+            },
+            {
+              "id": 113,
+              "label": "Varrição",
+              "full_label": "Conservação > Jardinagem > Varrição"
+            },
+            {
+              "id": 114,
+              "label": "Descarte",
+              "full_label": "Conservação > Jardinagem > Descarte"
+            }
+          ]
+        },
+        "location": {
+          "id": 424,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "-3",
+            "show_tree_root": "31",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 31,
+          "option_source": "locations",
+          "options_count": 11,
+          "options_sample": [
+            {
+              "id": 31,
+              "label": "Jardinagem",
+              "full_label": "Jardinagem"
+            },
+            {
+              "id": 32,
+              "label": "Duque de Caxias 951 (Banrisul)",
+              "full_label": "Jardinagem > Duque de Caxias 951 (Banrisul)"
+            },
+            {
+              "id": 33,
+              "label": "Casa Civil 1005",
+              "full_label": "Jardinagem > Casa Civil 1005"
+            },
+            {
+              "id": 34,
+              "label": "Palácio Piratini",
+              "full_label": "Jardinagem > Palácio Piratini"
+            },
+            {
+              "id": 54,
+              "label": "Jardim Central",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Central"
+            },
+            {
+              "id": 55,
+              "label": "Jardim Egípcia",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Egípcia"
+            },
+            {
+              "id": 56,
+              "label": "Jardim Galpão",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Galpão"
+            },
+            {
+              "id": 57,
+              "label": "Jardim Particular",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Particular"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Jardinagem",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:jardinagem:form-27:target-142",
+      "service_id": "jardinagem",
+      "service_label": "Jardinagem",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 27,
+        "name": "Jardinagem",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          7,
+          27
+        ]
+      },
+      "targetticket": {
+        "id": 142,
+        "name": "Jardinagem - para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 423,
+        "category_rule": 3,
+        "category_question_id": 426,
+        "location_rule": 3,
+        "location_question_id": 424,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 426,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "37",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 37,
+          "option_source": "categories",
+          "options_count": 11,
+          "options_sample": [
+            {
+              "id": 37,
+              "label": "Jardinagem",
+              "full_label": "Conservação > Jardinagem"
+            },
+            {
+              "id": 36,
+              "label": "Plantação",
+              "full_label": "Conservação > Jardinagem > Plantação"
+            },
+            {
+              "id": 38,
+              "label": "Poda/Corte",
+              "full_label": "Conservação > Jardinagem > Poda/Corte"
+            },
+            {
+              "id": 39,
+              "label": "Remoção",
+              "full_label": "Conservação > Jardinagem > Remoção"
+            },
+            {
+              "id": 40,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Jardinagem > Outras Atividades"
+            },
+            {
+              "id": 112,
+              "label": "Manutenção de folhagens internas",
+              "full_label": "Conservação > Jardinagem > Manutenção de folhagens internas"
+            },
+            {
+              "id": 113,
+              "label": "Varrição",
+              "full_label": "Conservação > Jardinagem > Varrição"
+            },
+            {
+              "id": 114,
+              "label": "Descarte",
+              "full_label": "Conservação > Jardinagem > Descarte"
+            }
+          ]
+        },
+        "location": {
+          "id": 424,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "-3",
+            "show_tree_root": "31",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 31,
+          "option_source": "locations",
+          "options_count": 11,
+          "options_sample": [
+            {
+              "id": 31,
+              "label": "Jardinagem",
+              "full_label": "Jardinagem"
+            },
+            {
+              "id": 32,
+              "label": "Duque de Caxias 951 (Banrisul)",
+              "full_label": "Jardinagem > Duque de Caxias 951 (Banrisul)"
+            },
+            {
+              "id": 33,
+              "label": "Casa Civil 1005",
+              "full_label": "Jardinagem > Casa Civil 1005"
+            },
+            {
+              "id": 34,
+              "label": "Palácio Piratini",
+              "full_label": "Jardinagem > Palácio Piratini"
+            },
+            {
+              "id": 54,
+              "label": "Jardim Central",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Central"
+            },
+            {
+              "id": 55,
+              "label": "Jardim Egípcia",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Egípcia"
+            },
+            {
+              "id": 56,
+              "label": "Jardim Galpão",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Galpão"
+            },
+            {
+              "id": 57,
+              "label": "Jardim Particular",
+              "full_label": "Jardinagem > Palácio Piratini > Jardim Particular"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Jardinagem",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:limpeza:form-8:target-7",
+      "service_id": "limpeza",
+      "service_label": "Limpeza",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 8,
+        "name": "Limpeza",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          8,
+          28
+        ]
+      },
+      "targetticket": {
+        "id": 7,
+        "name": "Limpeza",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 66,
+        "location_rule": 3,
+        "location_question_id": 63,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 66,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "45",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 45,
+          "option_source": "categories",
+          "options_count": 14,
+          "options_sample": [
+            {
+              "id": 45,
+              "label": "Limpeza",
+              "full_label": "Conservação > Limpeza"
+            },
+            {
+              "id": 46,
+              "label": "Limpeza de banheiros",
+              "full_label": "Conservação > Limpeza > Limpeza de banheiros"
+            },
+            {
+              "id": 47,
+              "label": "Limpeza geral",
+              "full_label": "Conservação > Limpeza > Limpeza geral"
+            },
+            {
+              "id": 48,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Limpeza > Outras Atividades"
+            },
+            {
+              "id": 49,
+              "label": "Recolher materiais recicláveis",
+              "full_label": "Conservação > Limpeza > Recolher materiais recicláveis"
+            },
+            {
+              "id": 118,
+              "label": "Lava a Jato",
+              "full_label": "Conservação > Limpeza > Lava a Jato"
+            },
+            {
+              "id": 119,
+              "label": "Bandeirante",
+              "full_label": "Conservação > Limpeza > Bandeirante"
+            },
+            {
+              "id": 120,
+              "label": "Janelas e Portas",
+              "full_label": "Conservação > Limpeza > Janelas e Portas"
+            }
+          ]
+        },
+        "location": {
+          "id": 63,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "-3",
+            "show_tree_root": "27",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 27,
+          "option_source": "locations",
+          "options_count": 23,
+          "options_sample": [
+            {
+              "id": 27,
+              "label": "Limpeza",
+              "full_label": "Limpeza"
+            },
+            {
+              "id": 1,
+              "label": "Casa Civil 1005",
+              "full_label": "Limpeza > Casa Civil 1005"
+            },
+            {
+              "id": 60,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 61,
+              "label": "2° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 2° Andar"
+            },
+            {
+              "id": 62,
+              "label": "Subsolo",
+              "full_label": "Limpeza > Casa Civil 1005 > Subsolo"
+            },
+            {
+              "id": 96,
+              "label": "Torreão",
+              "full_label": "Limpeza > Casa Civil 1005 > Torreão"
+            },
+            {
+              "id": 8,
+              "label": "Palácio Piratini",
+              "full_label": "Limpeza > Palácio Piratini"
+            },
+            {
+              "id": 63,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Palácio Piratini > 1° Andar"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Limpeza",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:limpeza:form-8:target-24",
+      "service_id": "limpeza",
+      "service_label": "Limpeza",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 8,
+        "name": "Limpeza",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          8,
+          28
+        ]
+      },
+      "targetticket": {
+        "id": 24,
+        "name": "Limpezapara terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 62,
+        "category_rule": 3,
+        "category_question_id": 66,
+        "location_rule": 3,
+        "location_question_id": 63,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 66,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "45",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 45,
+          "option_source": "categories",
+          "options_count": 14,
+          "options_sample": [
+            {
+              "id": 45,
+              "label": "Limpeza",
+              "full_label": "Conservação > Limpeza"
+            },
+            {
+              "id": 46,
+              "label": "Limpeza de banheiros",
+              "full_label": "Conservação > Limpeza > Limpeza de banheiros"
+            },
+            {
+              "id": 47,
+              "label": "Limpeza geral",
+              "full_label": "Conservação > Limpeza > Limpeza geral"
+            },
+            {
+              "id": 48,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Limpeza > Outras Atividades"
+            },
+            {
+              "id": 49,
+              "label": "Recolher materiais recicláveis",
+              "full_label": "Conservação > Limpeza > Recolher materiais recicláveis"
+            },
+            {
+              "id": 118,
+              "label": "Lava a Jato",
+              "full_label": "Conservação > Limpeza > Lava a Jato"
+            },
+            {
+              "id": 119,
+              "label": "Bandeirante",
+              "full_label": "Conservação > Limpeza > Bandeirante"
+            },
+            {
+              "id": 120,
+              "label": "Janelas e Portas",
+              "full_label": "Conservação > Limpeza > Janelas e Portas"
+            }
+          ]
+        },
+        "location": {
+          "id": 63,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "-3",
+            "show_tree_root": "27",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 27,
+          "option_source": "locations",
+          "options_count": 23,
+          "options_sample": [
+            {
+              "id": 27,
+              "label": "Limpeza",
+              "full_label": "Limpeza"
+            },
+            {
+              "id": 1,
+              "label": "Casa Civil 1005",
+              "full_label": "Limpeza > Casa Civil 1005"
+            },
+            {
+              "id": 60,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 61,
+              "label": "2° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 2° Andar"
+            },
+            {
+              "id": 62,
+              "label": "Subsolo",
+              "full_label": "Limpeza > Casa Civil 1005 > Subsolo"
+            },
+            {
+              "id": 96,
+              "label": "Torreão",
+              "full_label": "Limpeza > Casa Civil 1005 > Torreão"
+            },
+            {
+              "id": 8,
+              "label": "Palácio Piratini",
+              "full_label": "Limpeza > Palácio Piratini"
+            },
+            {
+              "id": 63,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Palácio Piratini > 1° Andar"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Limpeza",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:limpeza:form-28:target-143",
+      "service_id": "limpeza",
+      "service_label": "Limpeza",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 28,
+        "name": "Limpeza",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          8,
+          28
+        ]
+      },
+      "targetticket": {
+        "id": 143,
+        "name": "Limpeza",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 434,
+        "location_rule": 3,
+        "location_question_id": 432,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 434,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "45",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 45,
+          "option_source": "categories",
+          "options_count": 14,
+          "options_sample": [
+            {
+              "id": 45,
+              "label": "Limpeza",
+              "full_label": "Conservação > Limpeza"
+            },
+            {
+              "id": 46,
+              "label": "Limpeza de banheiros",
+              "full_label": "Conservação > Limpeza > Limpeza de banheiros"
+            },
+            {
+              "id": 47,
+              "label": "Limpeza geral",
+              "full_label": "Conservação > Limpeza > Limpeza geral"
+            },
+            {
+              "id": 48,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Limpeza > Outras Atividades"
+            },
+            {
+              "id": 49,
+              "label": "Recolher materiais recicláveis",
+              "full_label": "Conservação > Limpeza > Recolher materiais recicláveis"
+            },
+            {
+              "id": 118,
+              "label": "Lava a Jato",
+              "full_label": "Conservação > Limpeza > Lava a Jato"
+            },
+            {
+              "id": 119,
+              "label": "Bandeirante",
+              "full_label": "Conservação > Limpeza > Bandeirante"
+            },
+            {
+              "id": 120,
+              "label": "Janelas e Portas",
+              "full_label": "Conservação > Limpeza > Janelas e Portas"
+            }
+          ]
+        },
+        "location": {
+          "id": 432,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "-3",
+            "show_tree_root": "27",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 27,
+          "option_source": "locations",
+          "options_count": 23,
+          "options_sample": [
+            {
+              "id": 27,
+              "label": "Limpeza",
+              "full_label": "Limpeza"
+            },
+            {
+              "id": 1,
+              "label": "Casa Civil 1005",
+              "full_label": "Limpeza > Casa Civil 1005"
+            },
+            {
+              "id": 60,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 61,
+              "label": "2° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 2° Andar"
+            },
+            {
+              "id": 62,
+              "label": "Subsolo",
+              "full_label": "Limpeza > Casa Civil 1005 > Subsolo"
+            },
+            {
+              "id": 96,
+              "label": "Torreão",
+              "full_label": "Limpeza > Casa Civil 1005 > Torreão"
+            },
+            {
+              "id": 8,
+              "label": "Palácio Piratini",
+              "full_label": "Limpeza > Palácio Piratini"
+            },
+            {
+              "id": 63,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Palácio Piratini > 1° Andar"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Limpeza",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:limpeza:form-28:target-144",
+      "service_id": "limpeza",
+      "service_label": "Limpeza",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 28,
+        "name": "Limpeza",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          8,
+          28
+        ]
+      },
+      "targetticket": {
+        "id": 144,
+        "name": "Limpezapara terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 431,
+        "category_rule": 3,
+        "category_question_id": 434,
+        "location_rule": 3,
+        "location_question_id": 432,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 434,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "45",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 45,
+          "option_source": "categories",
+          "options_count": 14,
+          "options_sample": [
+            {
+              "id": 45,
+              "label": "Limpeza",
+              "full_label": "Conservação > Limpeza"
+            },
+            {
+              "id": 46,
+              "label": "Limpeza de banheiros",
+              "full_label": "Conservação > Limpeza > Limpeza de banheiros"
+            },
+            {
+              "id": 47,
+              "label": "Limpeza geral",
+              "full_label": "Conservação > Limpeza > Limpeza geral"
+            },
+            {
+              "id": 48,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Limpeza > Outras Atividades"
+            },
+            {
+              "id": 49,
+              "label": "Recolher materiais recicláveis",
+              "full_label": "Conservação > Limpeza > Recolher materiais recicláveis"
+            },
+            {
+              "id": 118,
+              "label": "Lava a Jato",
+              "full_label": "Conservação > Limpeza > Lava a Jato"
+            },
+            {
+              "id": 119,
+              "label": "Bandeirante",
+              "full_label": "Conservação > Limpeza > Bandeirante"
+            },
+            {
+              "id": 120,
+              "label": "Janelas e Portas",
+              "full_label": "Conservação > Limpeza > Janelas e Portas"
+            }
+          ]
+        },
+        "location": {
+          "id": 432,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "-3",
+            "show_tree_root": "27",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 27,
+          "option_source": "locations",
+          "options_count": 23,
+          "options_sample": [
+            {
+              "id": 27,
+              "label": "Limpeza",
+              "full_label": "Limpeza"
+            },
+            {
+              "id": 1,
+              "label": "Casa Civil 1005",
+              "full_label": "Limpeza > Casa Civil 1005"
+            },
+            {
+              "id": 60,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 61,
+              "label": "2° Andar",
+              "full_label": "Limpeza > Casa Civil 1005 > 2° Andar"
+            },
+            {
+              "id": 62,
+              "label": "Subsolo",
+              "full_label": "Limpeza > Casa Civil 1005 > Subsolo"
+            },
+            {
+              "id": 96,
+              "label": "Torreão",
+              "full_label": "Limpeza > Casa Civil 1005 > Torreão"
+            },
+            {
+              "id": 8,
+              "label": "Palácio Piratini",
+              "full_label": "Limpeza > Palácio Piratini"
+            },
+            {
+              "id": 63,
+              "label": "1° Andar",
+              "full_label": "Limpeza > Palácio Piratini > 1° Andar"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Limpeza",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:manutencao:form-39:target-202",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 39,
+        "name": "MANUTENÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          39
+        ]
+      },
+      "targetticket": {
+        "id": 202,
+        "name": "Ar Condicionado",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 639,
+        "location_rule": 3,
+        "location_question_id": 635,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 639,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "1",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 1,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 1,
+              "label": "Ar Condicionado",
+              "full_label": "Manutenção > Ar Condicionado"
+            },
+            {
+              "id": 2,
+              "label": "Conserto",
+              "full_label": "Manutenção > Ar Condicionado > Conserto"
+            },
+            {
+              "id": 3,
+              "label": "Desinstalação",
+              "full_label": "Manutenção > Ar Condicionado > Desinstalação"
+            },
+            {
+              "id": 4,
+              "label": "Instalação",
+              "full_label": "Manutenção > Ar Condicionado > Instalação"
+            },
+            {
+              "id": 6,
+              "label": "Remanejo",
+              "full_label": "Manutenção > Ar Condicionado > Remanejo"
+            },
+            {
+              "id": 7,
+              "label": "Outras atividades",
+              "full_label": "Manutenção > Ar Condicionado > Outras atividades"
+            },
+            {
+              "id": 100,
+              "label": "Higienização",
+              "full_label": "Manutenção > Ar Condicionado > Higienização"
+            }
+          ]
+        },
+        "location": {
+          "id": 635,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Ar Condicionado",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:manutencao:form-39:target-203",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 39,
+        "name": "MANUTENÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          39
+        ]
+      },
+      "targetticket": {
+        "id": 203,
+        "name": "Elevadores",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 146,
+        "location_rule": 3,
+        "location_question_id": 635,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 146,
+          "name": "Assunto",
+          "fieldtype": "text",
+          "required": true,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 635,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:manutencao:form-39:target-204",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 39,
+        "name": "MANUTENÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          39
+        ]
+      },
+      "targetticket": {
+        "id": 204,
+        "name": "Elétrica",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 647,
+        "location_rule": 3,
+        "location_question_id": 635,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 647,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "22",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 22,
+          "option_source": "categories",
+          "options_count": 8,
+          "options_sample": [
+            {
+              "id": 22,
+              "label": "Elétrica",
+              "full_label": "Manutenção > Elétrica"
+            },
+            {
+              "id": 23,
+              "label": "Conserto",
+              "full_label": "Manutenção > Elétrica > Conserto"
+            },
+            {
+              "id": 24,
+              "label": "Instalação",
+              "full_label": "Manutenção > Elétrica > Instalação"
+            },
+            {
+              "id": 25,
+              "label": "Remoção",
+              "full_label": "Manutenção > Elétrica > Remoção"
+            },
+            {
+              "id": 26,
+              "label": "Readequação",
+              "full_label": "Manutenção > Elétrica > Readequação"
+            },
+            {
+              "id": 27,
+              "label": "Troca",
+              "full_label": "Manutenção > Elétrica > Troca"
+            },
+            {
+              "id": 28,
+              "label": "Descarte",
+              "full_label": "Manutenção > Elétrica > Descarte"
+            },
+            {
+              "id": 29,
+              "label": "Suporte",
+              "full_label": "Manutenção > Elétrica > Suporte"
+            }
+          ]
+        },
+        "location": {
+          "id": 635,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Elétrica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:manutencao:form-39:target-205",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 39,
+        "name": "MANUTENÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          39
+        ]
+      },
+      "targetticket": {
+        "id": 205,
+        "name": "Hidráulica",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 651,
+        "location_rule": 3,
+        "location_question_id": 635,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 651,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "30",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 30,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 30,
+              "label": "Hidráulica",
+              "full_label": "Manutenção > Hidráulica"
+            },
+            {
+              "id": 31,
+              "label": "Reparo/Conserto",
+              "full_label": "Manutenção > Hidráulica > Reparo/Conserto"
+            },
+            {
+              "id": 32,
+              "label": "Instalação",
+              "full_label": "Manutenção > Hidráulica > Instalação"
+            },
+            {
+              "id": 33,
+              "label": "Remoção",
+              "full_label": "Manutenção > Hidráulica > Remoção"
+            },
+            {
+              "id": 34,
+              "label": "Troca",
+              "full_label": "Manutenção > Hidráulica > Troca"
+            },
+            {
+              "id": 35,
+              "label": "Desentupimento",
+              "full_label": "Manutenção > Hidráulica > Desentupimento"
+            },
+            {
+              "id": 111,
+              "label": "Vazamento",
+              "full_label": "Manutenção > Hidráulica > Vazamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 635,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Hidráulica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:manutencao:form-39:target-206",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 39,
+        "name": "MANUTENÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          39
+        ]
+      },
+      "targetticket": {
+        "id": 206,
+        "name": "Marcenaria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 655,
+        "location_rule": 3,
+        "location_question_id": 635,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 655,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "50",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 50,
-          "source": "formcreator_question_values",
-          "option_count": 5,
-          "options": [
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 50,
+              "label": "Marcenaria",
+              "full_label": "Manutenção > Marcenaria"
+            },
             {
               "id": 51,
               "label": "Confecção de Mobiliário",
@@ -2918,297 +13885,25 @@ export const MOBILE_METADATA_CATALOG = {
             }
           ]
         },
-        "urgency_question": {
-          "id": 73
-        },
-        "description_question": {
-          "id": 76,
-          "required": true
-        },
-        "question_count": 9
-      },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
-      }
-    },
-    {
-      "service_id": "mensageria",
-      "label": "Mensageria",
-      "category_id": 128,
-      "category_label": "Conservação > Mensageria",
-      "service_domain_label": "Conservação",
-      "domain": "unknown",
-      "process_type": "unknown",
-      "expected_assignment_group_id": 21,
-      "expected_assignment_group_label": "CC-CONSERVACÃO",
-      "location_ids_currently_sent": [
-        36
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 10,
-      "candidate_forms": [
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 10,
-          "label": "Mensageria"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 30,
-          "label": "Mensageria"
-        }
-      ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 10,
-        "targetticket_id": 9,
-        "person_question": {
-          "id": 78,
-          "required": true
-        },
-        "location_question": {
-          "id": 83,
-          "root_id": 36,
-          "source": "formcreator_question_values",
-          "option_count": 27,
-          "options": [
-            {
-              "id": 45,
-              "label": "Ala Residencial",
-              "full_label": "Carregadores e Mensageiros > Ala Residencial"
-            },
-            {
-              "id": 52,
-              "label": "CAFF",
-              "full_label": "Carregadores e Mensageiros > CAFF"
-            },
-            {
-              "id": 53,
-              "label": "CAFF > 1° Andar - Ouvidoria",
-              "full_label": "Carregadores e Mensageiros > CAFF > 1° Andar - Ouvidoria"
-            },
-            {
-              "id": 37,
-              "label": "Casa Civil 1005",
-              "full_label": "Carregadores e Mensageiros > Casa Civil 1005"
-            },
-            {
-              "id": 38,
-              "label": "Casa Civil 1005 > 1° Andar",
-              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 1° Andar"
-            },
-            {
-              "id": 39,
-              "label": "Casa Civil 1005 > 2 ° Andar",
-              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 2 ° Andar"
-            },
-            {
-              "id": 49,
-              "label": "Casa Civil 1005 > Subsolo",
-              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > Subsolo"
-            },
-            {
-              "id": 95,
-              "label": "Casa de Canela/RS",
-              "full_label": "Carregadores e Mensageiros > Casa de Canela/RS"
-            },
-            {
-              "id": 19,
-              "label": "Defesa Civil - Andrade Neves",
-              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves"
-            },
-            {
-              "id": 20,
-              "label": "Defesa Civil - Andrade Neves > 11° Andar",
-              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 11° Andar"
-            },
-            {
-              "id": 22,
-              "label": "Defesa Civil - Andrade Neves > 15° Andar",
-              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 15° Andar"
-            },
-            {
-              "id": 48,
-              "label": "Gabinete dos Prefeitos",
-              "full_label": "Carregadores e Mensageiros > Gabinete dos Prefeitos"
-            },
-            {
-              "id": 51,
-              "label": "Garagem - Riachuelo 1285",
-              "full_label": "Carregadores e Mensageiros > Garagem - Riachuelo 1285"
-            },
-            {
-              "id": 40,
-              "label": "Palacio Piratini",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini"
-            },
-            {
-              "id": 41,
-              "label": "Palacio Piratini > 1° andar",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > 1° andar"
-            },
-            {
-              "id": 42,
-              "label": "Palacio Piratini > 2° Andar",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > 2° Andar"
-            },
-            {
-              "id": 43,
-              "label": "Palacio Piratini > 3° Andar",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > 3° Andar"
-            },
-            {
-              "id": 44,
-              "label": "Palacio Piratini > 4° Andar",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > 4° Andar"
-            },
-            {
-              "id": 97,
-              "label": "Palacio Piratini > Galpão Criolo",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > Galpão Criolo"
-            },
-            {
-              "id": 50,
-              "label": "Palacio Piratini > Oficina Restauro",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > Oficina Restauro"
-            },
-            {
-              "id": 90,
-              "label": "Palacio Piratini > SECOM",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > SECOM"
-            },
-            {
-              "id": 94,
-              "label": "Palacio Piratini > Subsolo",
-              "full_label": "Carregadores e Mensageiros > Palacio Piratini > Subsolo"
-            },
-            {
-              "id": 46,
-              "label": "Parque de exposição Assis Brasil (EXPOINTER)",
-              "full_label": "Carregadores e Mensageiros > Parque de exposição Assis Brasil (EXPOINTER)"
-            },
-            {
-              "id": 93,
-              "label": "Prédio 951  (\"Banrisul\")",
-              "full_label": "Carregadores e Mensageiros > Prédio 951  (\"Banrisul\")"
-            },
-            {
-              "id": 102,
-              "label": "Rua José do Patrocínio, 45  - Arquivo",
-              "full_label": "Carregadores e Mensageiros > Rua José do Patrocínio, 45  - Arquivo"
-            },
-            {
-              "id": 91,
-              "label": "SECOM - Riachuelo 1098",
-              "full_label": "Carregadores e Mensageiros > SECOM - Riachuelo 1098"
-            },
-            {
-              "id": 47,
-              "label": "SPH",
-              "full_label": "Carregadores e Mensageiros > SPH"
-            }
-          ]
-        },
-        "type_question": {
-          "id": 84,
-          "root_id": 128,
-          "source": "formcreator_question_values",
-          "option_count": 4,
-          "options": [
-            {
-              "id": 129,
-              "label": "Movimentação Documentos",
-              "full_label": "Conservação > Mensageria > Movimentação Documentos"
-            },
-            {
-              "id": 130,
-              "label": "Movimentação Insumos até 5Kg",
-              "full_label": "Conservação > Mensageria > Movimentação Insumos até 5Kg"
-            },
-            {
-              "id": 131,
-              "label": "Movimentação Materiais até 5Kg",
-              "full_label": "Conservação > Mensageria > Movimentação Materiais até 5Kg"
-            },
-            {
-              "id": 132,
-              "label": "Outras entregas e Movimentações até 5Kg",
-              "full_label": "Conservação > Mensageria > Outras entregas e Movimentações até 5Kg"
-            }
-          ]
-        },
-        "urgency_question": {
-          "id": 81
-        },
-        "description_question": {
-          "id": 85,
-          "required": true
-        },
-        "question_count": 9
-      },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
-      }
-    },
-    {
-      "service_id": "pedreiro",
-      "label": "Pedreiro",
-      "category_id": 81,
-      "category_label": "Manutenção > Pedreiro",
-      "service_domain_label": "Manutenção",
-      "domain": "unknown",
-      "process_type": "unknown",
-      "expected_assignment_group_id": 22,
-      "expected_assignment_group_label": "CC-MANUTENCAO",
-      "location_ids_currently_sent": [
-        70
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 11,
-      "candidate_forms": [
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 11,
-          "label": "Pedreiro"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 31,
-          "label": "Pedreiro"
-        }
-      ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 11,
-        "targetticket_id": 10,
-        "person_question": {
-          "id": 87,
-          "required": true
-        },
-        "location_question": {
-          "id": 89,
+        "location": {
+          "id": 635,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 70,
-          "source": "formcreator_question_values",
-          "option_count": 80,
-          "options": [
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
             {
-              "id": 100,
-              "label": "CAFF",
-              "full_label": "Locais > CAFF"
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
             },
             {
               "id": 71,
@@ -3217,402 +13912,136 @@ export const MOBILE_METADATA_CATALOG = {
             },
             {
               "id": 79,
-              "label": "Casa Civil 1005 > 1° Andar",
+              "label": "1° Andar",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 282,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08"
-            },
-            {
-              "id": 283,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A"
-            },
-            {
-              "id": 285,
-              "label": "Casa Civil 1005 > 1° Andar > P1B01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B01"
-            },
-            {
-              "id": 286,
-              "label": "Casa Civil 1005 > 1° Andar > P1B02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B02"
-            },
-            {
-              "id": 287,
-              "label": "Casa Civil 1005 > 1° Andar > P1B03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B03"
-            },
-            {
-              "id": 280,
-              "label": "Casa Civil 1005 > 1° Andar > P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
-            },
-            {
-              "id": 289,
-              "label": "Casa Civil 1005 > 1° Andar > P1C02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C02"
-            },
-            {
-              "id": 292,
-              "label": "Casa Civil 1005 > 1° Andar > P1C03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C03"
-            },
-            {
-              "id": 294,
-              "label": "Casa Civil 1005 > 1° Andar > P1C04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C04"
-            },
-            {
-              "id": 288,
-              "label": "Casa Civil 1005 > 1° Andar > P1E01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E01"
-            },
-            {
-              "id": 293,
-              "label": "Casa Civil 1005 > 1° Andar > P1E02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E02"
-            },
-            {
               "id": 276,
-              "label": "Casa Civil 1005 > 1° Andar > P1S01",
+              "label": "P1S01",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
             },
             {
-              "id": 278,
-              "label": "Casa Civil 1005 > 1° Andar > P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
-            },
-            {
               "id": 277,
-              "label": "Casa Civil 1005 > 1° Andar > P1S03",
+              "label": "P1S03",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
             },
             {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
               "id": 279,
-              "label": "Casa Civil 1005 > 1° Andar > P1S04",
+              "label": "P1S04",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
             },
             {
-              "id": 290,
-              "label": "Casa Civil 1005 > 1° Andar > P1S05",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S05"
-            },
-            {
-              "id": 281,
-              "label": "Casa Civil 1005 > 1° Andar > P1S06",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S06"
-            },
-            {
-              "id": 291,
-              "label": "Casa Civil 1005 > 1° Andar > P1S07",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S07"
-            },
-            {
-              "id": 295,
-              "label": "Casa Civil 1005 > 1° Andar > P1S09",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S09"
-            },
-            {
-              "id": 80,
-              "label": "Casa Civil 1005 > 2° Andar",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
-            },
-            {
-              "id": 266,
-              "label": "Casa Civil 1005 > 2° Andar > P2B01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B01"
-            },
-            {
-              "id": 267,
-              "label": "Casa Civil 1005 > 2° Andar > P2B03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B03"
-            },
-            {
-              "id": 270,
-              "label": "Casa Civil 1005 > 2° Andar > P2C01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2C01"
-            },
-            {
-              "id": 269,
-              "label": "Casa Civil 1005 > 2° Andar > P2E01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2E01"
-            },
-            {
-              "id": 261,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01"
-            },
-            {
-              "id": 262,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A"
-            },
-            {
-              "id": 263,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B"
-            },
-            {
-              "id": 265,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02"
-            },
-            {
-              "id": 264,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A"
-            },
-            {
-              "id": 272,
-              "label": "Casa Civil 1005 > 2° Andar > P2S03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S03"
-            },
-            {
-              "id": 268,
-              "label": "Casa Civil 1005 > 2° Andar > P2S04",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S04"
-            },
-            {
-              "id": 273,
-              "label": "Casa Civil 1005 > 2° Andar > P2S05",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S05"
-            },
-            {
-              "id": 271,
-              "label": "Casa Civil 1005 > 2° Andar > P2S06",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S06"
-            },
-            {
-              "id": 274,
-              "label": "Casa Civil 1005 > 2° Andar > P2S07",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S07"
-            },
-            {
-              "id": 275,
-              "label": "Casa Civil 1005 > 2° Andar > P2S08",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S08"
-            },
-            {
-              "id": 296,
-              "label": "Casa Civil 1005 > Subsolo 1",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
-            },
-            {
-              "id": 321,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B01"
-            },
-            {
-              "id": 308,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B02"
-            },
-            {
-              "id": 307,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B03"
-            },
-            {
-              "id": 319,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C01"
-            },
-            {
-              "id": 313,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C02"
-            },
-            {
-              "id": 303,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C03"
-            },
-            {
-              "id": 306,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E01"
-            },
-            {
-              "id": 312,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E02"
-            },
-            {
-              "id": 323,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E03"
-            },
-            {
-              "id": 322,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S01"
-            },
-            {
-              "id": 318,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S02"
-            },
-            {
-              "id": 320,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S03"
-            },
-            {
-              "id": 316,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S04",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S04"
-            },
-            {
-              "id": 317,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S06",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S06"
-            },
-            {
-              "id": 310,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S07",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S07"
-            },
-            {
-              "id": 315,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S08",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S08"
-            },
-            {
-              "id": 311,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S09",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S09"
-            },
-            {
-              "id": 314,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S10",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S10"
-            },
-            {
-              "id": 309,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S11",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S11"
-            },
-            {
-              "id": 304,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S12",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S12"
-            },
-            {
-              "id": 305,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S13",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S13"
-            },
-            {
-              "id": 302,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S14",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S14"
-            },
-            {
-              "id": 297,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S15",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S15"
-            },
-            {
-              "id": 301,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S16",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S16"
-            },
-            {
-              "id": 298,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S17",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S17"
-            },
-            {
-              "id": 300,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S18",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S18"
-            },
-            {
-              "id": 299,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S19",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S19"
-            },
-            {
-              "id": 82,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
-            },
-            {
-              "id": 325,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01"
-            },
-            {
-              "id": 324,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02"
-            },
-            {
-              "id": 81,
-              "label": "Casa Civil 1005 > Torreão",
-              "full_label": "Locais > Casa Civil 1005 > Torreão"
-            },
-            {
-              "id": 260,
-              "label": "Casa Civil 1005 > Torreão > P3E01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3E01"
-            },
-            {
-              "id": 259,
-              "label": "Casa Civil 1005 > Torreão > P3S01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3S01"
-            },
-            {
-              "id": 87,
-              "label": "Defesa Civil - Andrade Neves 106",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106"
-            },
-            {
-              "id": 88,
-              "label": "Defesa Civil - Andrade Neves 106 > 11° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 11° Andar"
-            },
-            {
-              "id": 89,
-              "label": "Defesa Civil - Andrade Neves 106 > 15° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 15° Andar"
-            },
-            {
-              "id": 84,
-              "label": "Divisão de Transportes -Riachuelo 1285",
-              "full_label": "Locais > Divisão de Transportes -Riachuelo 1285"
-            },
-            {
-              "id": 83,
-              "label": "Duque de Caxias 951",
-              "full_label": "Locais > Duque de Caxias 951"
-            },
-            {
-              "id": 85,
-              "label": "Gabinete dos Prefeitos - Andradas 1234",
-              "full_label": "Locais > Gabinete dos Prefeitos - Andradas 1234"
-            },
-            {
-              "id": 72,
-              "label": "Palacio Piratini",
-              "full_label": "Locais > Palacio Piratini"
-            },
-            {
-              "id": 73,
-              "label": "Palacio Piratini - Ala Governamental",
-              "full_label": "Locais > Palacio Piratini - Ala Governamental"
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
             }
           ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Marcenaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
         },
-        "type_question": {
-          "id": 93,
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:manutencao:form-39:target-207",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 39,
+        "name": "MANUTENÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          39
+        ]
+      },
+      "targetticket": {
+        "id": 207,
+        "name": "Pedreiro",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 659,
+        "location_rule": 3,
+        "location_question_id": 635,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 659,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "81",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 81,
-          "source": "formcreator_question_values",
-          "option_count": 6,
-          "options": [
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 81,
+              "label": "Pedreiro",
+              "full_label": "Manutenção > Pedreiro"
+            },
             {
               "id": 82,
               "label": "Instalação",
@@ -3645,71 +14074,25 @@ export const MOBILE_METADATA_CATALOG = {
             }
           ]
         },
-        "urgency_question": {
-          "id": 91
-        },
-        "description_question": {
-          "id": 94,
-          "required": true
-        },
-        "question_count": 9
-      },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
-      }
-    },
-    {
-      "service_id": "pintura",
-      "label": "Pintura",
-      "category_id": 85,
-      "category_label": "Manutenção > Pintura",
-      "service_domain_label": "Manutenção",
-      "domain": "unknown",
-      "process_type": "unknown",
-      "expected_assignment_group_id": 22,
-      "expected_assignment_group_label": "CC-MANUTENCAO",
-      "location_ids_currently_sent": [
-        70
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 12,
-      "candidate_forms": [
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 12,
-          "label": "Pintura"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 32,
-          "label": "Pintura"
-        }
-      ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 12,
-        "targetticket_id": 11,
-        "person_question": {
-          "id": 96,
-          "required": true
-        },
-        "location_question": {
-          "id": 98,
+        "location": {
+          "id": 635,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 70,
-          "source": "formcreator_question_values",
-          "option_count": 80,
-          "options": [
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
             {
-              "id": 100,
-              "label": "CAFF",
-              "full_label": "Locais > CAFF"
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
             },
             {
               "id": 71,
@@ -3718,402 +14101,136 @@ export const MOBILE_METADATA_CATALOG = {
             },
             {
               "id": 79,
-              "label": "Casa Civil 1005 > 1° Andar",
+              "label": "1° Andar",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 282,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08"
-            },
-            {
-              "id": 283,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A"
-            },
-            {
-              "id": 285,
-              "label": "Casa Civil 1005 > 1° Andar > P1B01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B01"
-            },
-            {
-              "id": 286,
-              "label": "Casa Civil 1005 > 1° Andar > P1B02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B02"
-            },
-            {
-              "id": 287,
-              "label": "Casa Civil 1005 > 1° Andar > P1B03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B03"
-            },
-            {
-              "id": 280,
-              "label": "Casa Civil 1005 > 1° Andar > P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
-            },
-            {
-              "id": 289,
-              "label": "Casa Civil 1005 > 1° Andar > P1C02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C02"
-            },
-            {
-              "id": 292,
-              "label": "Casa Civil 1005 > 1° Andar > P1C03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C03"
-            },
-            {
-              "id": 294,
-              "label": "Casa Civil 1005 > 1° Andar > P1C04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C04"
-            },
-            {
-              "id": 288,
-              "label": "Casa Civil 1005 > 1° Andar > P1E01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E01"
-            },
-            {
-              "id": 293,
-              "label": "Casa Civil 1005 > 1° Andar > P1E02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E02"
-            },
-            {
               "id": 276,
-              "label": "Casa Civil 1005 > 1° Andar > P1S01",
+              "label": "P1S01",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
             },
             {
-              "id": 278,
-              "label": "Casa Civil 1005 > 1° Andar > P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
-            },
-            {
               "id": 277,
-              "label": "Casa Civil 1005 > 1° Andar > P1S03",
+              "label": "P1S03",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
             },
             {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
               "id": 279,
-              "label": "Casa Civil 1005 > 1° Andar > P1S04",
+              "label": "P1S04",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
             },
             {
-              "id": 290,
-              "label": "Casa Civil 1005 > 1° Andar > P1S05",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S05"
-            },
-            {
-              "id": 281,
-              "label": "Casa Civil 1005 > 1° Andar > P1S06",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S06"
-            },
-            {
-              "id": 291,
-              "label": "Casa Civil 1005 > 1° Andar > P1S07",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S07"
-            },
-            {
-              "id": 295,
-              "label": "Casa Civil 1005 > 1° Andar > P1S09",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S09"
-            },
-            {
-              "id": 80,
-              "label": "Casa Civil 1005 > 2° Andar",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
-            },
-            {
-              "id": 266,
-              "label": "Casa Civil 1005 > 2° Andar > P2B01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B01"
-            },
-            {
-              "id": 267,
-              "label": "Casa Civil 1005 > 2° Andar > P2B03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B03"
-            },
-            {
-              "id": 270,
-              "label": "Casa Civil 1005 > 2° Andar > P2C01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2C01"
-            },
-            {
-              "id": 269,
-              "label": "Casa Civil 1005 > 2° Andar > P2E01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2E01"
-            },
-            {
-              "id": 261,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01"
-            },
-            {
-              "id": 262,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A"
-            },
-            {
-              "id": 263,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B"
-            },
-            {
-              "id": 265,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02"
-            },
-            {
-              "id": 264,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A"
-            },
-            {
-              "id": 272,
-              "label": "Casa Civil 1005 > 2° Andar > P2S03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S03"
-            },
-            {
-              "id": 268,
-              "label": "Casa Civil 1005 > 2° Andar > P2S04",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S04"
-            },
-            {
-              "id": 273,
-              "label": "Casa Civil 1005 > 2° Andar > P2S05",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S05"
-            },
-            {
-              "id": 271,
-              "label": "Casa Civil 1005 > 2° Andar > P2S06",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S06"
-            },
-            {
-              "id": 274,
-              "label": "Casa Civil 1005 > 2° Andar > P2S07",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S07"
-            },
-            {
-              "id": 275,
-              "label": "Casa Civil 1005 > 2° Andar > P2S08",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S08"
-            },
-            {
-              "id": 296,
-              "label": "Casa Civil 1005 > Subsolo 1",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
-            },
-            {
-              "id": 321,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B01"
-            },
-            {
-              "id": 308,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B02"
-            },
-            {
-              "id": 307,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B03"
-            },
-            {
-              "id": 319,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C01"
-            },
-            {
-              "id": 313,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C02"
-            },
-            {
-              "id": 303,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C03"
-            },
-            {
-              "id": 306,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E01"
-            },
-            {
-              "id": 312,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E02"
-            },
-            {
-              "id": 323,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E03"
-            },
-            {
-              "id": 322,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S01"
-            },
-            {
-              "id": 318,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S02"
-            },
-            {
-              "id": 320,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S03"
-            },
-            {
-              "id": 316,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S04",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S04"
-            },
-            {
-              "id": 317,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S06",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S06"
-            },
-            {
-              "id": 310,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S07",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S07"
-            },
-            {
-              "id": 315,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S08",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S08"
-            },
-            {
-              "id": 311,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S09",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S09"
-            },
-            {
-              "id": 314,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S10",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S10"
-            },
-            {
-              "id": 309,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S11",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S11"
-            },
-            {
-              "id": 304,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S12",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S12"
-            },
-            {
-              "id": 305,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S13",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S13"
-            },
-            {
-              "id": 302,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S14",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S14"
-            },
-            {
-              "id": 297,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S15",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S15"
-            },
-            {
-              "id": 301,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S16",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S16"
-            },
-            {
-              "id": 298,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S17",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S17"
-            },
-            {
-              "id": 300,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S18",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S18"
-            },
-            {
-              "id": 299,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S19",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S19"
-            },
-            {
-              "id": 82,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
-            },
-            {
-              "id": 325,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01"
-            },
-            {
-              "id": 324,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02"
-            },
-            {
-              "id": 81,
-              "label": "Casa Civil 1005 > Torreão",
-              "full_label": "Locais > Casa Civil 1005 > Torreão"
-            },
-            {
-              "id": 260,
-              "label": "Casa Civil 1005 > Torreão > P3E01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3E01"
-            },
-            {
-              "id": 259,
-              "label": "Casa Civil 1005 > Torreão > P3S01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3S01"
-            },
-            {
-              "id": 87,
-              "label": "Defesa Civil - Andrade Neves 106",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106"
-            },
-            {
-              "id": 88,
-              "label": "Defesa Civil - Andrade Neves 106 > 11° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 11° Andar"
-            },
-            {
-              "id": 89,
-              "label": "Defesa Civil - Andrade Neves 106 > 15° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 15° Andar"
-            },
-            {
-              "id": 84,
-              "label": "Divisão de Transportes -Riachuelo 1285",
-              "full_label": "Locais > Divisão de Transportes -Riachuelo 1285"
-            },
-            {
-              "id": 83,
-              "label": "Duque de Caxias 951",
-              "full_label": "Locais > Duque de Caxias 951"
-            },
-            {
-              "id": 85,
-              "label": "Gabinete dos Prefeitos - Andradas 1234",
-              "full_label": "Locais > Gabinete dos Prefeitos - Andradas 1234"
-            },
-            {
-              "id": 72,
-              "label": "Palacio Piratini",
-              "full_label": "Locais > Palacio Piratini"
-            },
-            {
-              "id": 73,
-              "label": "Palacio Piratini - Ala Governamental",
-              "full_label": "Locais > Palacio Piratini - Ala Governamental"
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
             }
           ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pedreiro",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
         },
-        "type_question": {
-          "id": 102,
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:manutencao:form-39:target-208",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 39,
+        "name": "MANUTENÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          39
+        ]
+      },
+      "targetticket": {
+        "id": 208,
+        "name": "Pintura",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 663,
+        "location_rule": 3,
+        "location_question_id": 635,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 663,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "85",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 85,
-          "source": "formcreator_question_values",
-          "option_count": 5,
-          "options": [
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 85,
+              "label": "Pintura",
+              "full_label": "Manutenção > Pintura"
+            },
             {
               "id": 86,
               "label": "Parede",
@@ -4141,68 +14258,25 @@ export const MOBILE_METADATA_CATALOG = {
             }
           ]
         },
-        "urgency_question": {
-          "id": 100
-        },
-        "description_question": {
-          "id": 103,
-          "required": true
-        },
-        "question_count": 9
-      },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
-      }
-    },
-    {
-      "service_id": "projeto",
-      "label": "Projeto",
-      "category_id": 144,
-      "category_label": "Manutenção > Projetos",
-      "service_domain_label": "Manutenção",
-      "domain": "unknown",
-      "process_type": "unknown",
-      "expected_assignment_group_id": 22,
-      "expected_assignment_group_label": "CC-MANUTENCAO",
-      "location_ids_currently_sent": [
-        70
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 15,
-      "candidate_forms": [
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 15,
-          "label": "Projeto"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 36,
-          "label": "Projeto"
-        }
-      ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 15,
-        "targetticket_id": null,
-        "person_question": null,
-        "location_question": {
-          "id": 126,
+        "location": {
+          "id": 635,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 70,
-          "source": "formcreator_question_values",
-          "option_count": 80,
-          "options": [
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
             {
-              "id": 100,
-              "label": "CAFF",
-              "full_label": "Locais > CAFF"
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
             },
             {
               "id": 71,
@@ -4211,893 +14285,136 @@ export const MOBILE_METADATA_CATALOG = {
             },
             {
               "id": 79,
-              "label": "Casa Civil 1005 > 1° Andar",
+              "label": "1° Andar",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 282,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08"
-            },
-            {
-              "id": 283,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A"
-            },
-            {
-              "id": 285,
-              "label": "Casa Civil 1005 > 1° Andar > P1B01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B01"
-            },
-            {
-              "id": 286,
-              "label": "Casa Civil 1005 > 1° Andar > P1B02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B02"
-            },
-            {
-              "id": 287,
-              "label": "Casa Civil 1005 > 1° Andar > P1B03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B03"
-            },
-            {
-              "id": 280,
-              "label": "Casa Civil 1005 > 1° Andar > P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
-            },
-            {
-              "id": 289,
-              "label": "Casa Civil 1005 > 1° Andar > P1C02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C02"
-            },
-            {
-              "id": 292,
-              "label": "Casa Civil 1005 > 1° Andar > P1C03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C03"
-            },
-            {
-              "id": 294,
-              "label": "Casa Civil 1005 > 1° Andar > P1C04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C04"
-            },
-            {
-              "id": 288,
-              "label": "Casa Civil 1005 > 1° Andar > P1E01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E01"
-            },
-            {
-              "id": 293,
-              "label": "Casa Civil 1005 > 1° Andar > P1E02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E02"
-            },
-            {
               "id": 276,
-              "label": "Casa Civil 1005 > 1° Andar > P1S01",
+              "label": "P1S01",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
             },
             {
-              "id": 278,
-              "label": "Casa Civil 1005 > 1° Andar > P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
-            },
-            {
               "id": 277,
-              "label": "Casa Civil 1005 > 1° Andar > P1S03",
+              "label": "P1S03",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
             },
             {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
               "id": 279,
-              "label": "Casa Civil 1005 > 1° Andar > P1S04",
+              "label": "P1S04",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
             },
             {
-              "id": 290,
-              "label": "Casa Civil 1005 > 1° Andar > P1S05",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S05"
-            },
-            {
-              "id": 281,
-              "label": "Casa Civil 1005 > 1° Andar > P1S06",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S06"
-            },
-            {
-              "id": 291,
-              "label": "Casa Civil 1005 > 1° Andar > P1S07",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S07"
-            },
-            {
-              "id": 295,
-              "label": "Casa Civil 1005 > 1° Andar > P1S09",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S09"
-            },
-            {
-              "id": 80,
-              "label": "Casa Civil 1005 > 2° Andar",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
-            },
-            {
-              "id": 266,
-              "label": "Casa Civil 1005 > 2° Andar > P2B01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B01"
-            },
-            {
-              "id": 267,
-              "label": "Casa Civil 1005 > 2° Andar > P2B03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B03"
-            },
-            {
-              "id": 270,
-              "label": "Casa Civil 1005 > 2° Andar > P2C01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2C01"
-            },
-            {
-              "id": 269,
-              "label": "Casa Civil 1005 > 2° Andar > P2E01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2E01"
-            },
-            {
-              "id": 261,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01"
-            },
-            {
-              "id": 262,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A"
-            },
-            {
-              "id": 263,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B"
-            },
-            {
-              "id": 265,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02"
-            },
-            {
-              "id": 264,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A"
-            },
-            {
-              "id": 272,
-              "label": "Casa Civil 1005 > 2° Andar > P2S03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S03"
-            },
-            {
-              "id": 268,
-              "label": "Casa Civil 1005 > 2° Andar > P2S04",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S04"
-            },
-            {
-              "id": 273,
-              "label": "Casa Civil 1005 > 2° Andar > P2S05",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S05"
-            },
-            {
-              "id": 271,
-              "label": "Casa Civil 1005 > 2° Andar > P2S06",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S06"
-            },
-            {
-              "id": 274,
-              "label": "Casa Civil 1005 > 2° Andar > P2S07",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S07"
-            },
-            {
-              "id": 275,
-              "label": "Casa Civil 1005 > 2° Andar > P2S08",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S08"
-            },
-            {
-              "id": 296,
-              "label": "Casa Civil 1005 > Subsolo 1",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
-            },
-            {
-              "id": 321,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B01"
-            },
-            {
-              "id": 308,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B02"
-            },
-            {
-              "id": 307,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B03"
-            },
-            {
-              "id": 319,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C01"
-            },
-            {
-              "id": 313,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C02"
-            },
-            {
-              "id": 303,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C03"
-            },
-            {
-              "id": 306,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E01"
-            },
-            {
-              "id": 312,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E02"
-            },
-            {
-              "id": 323,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E03"
-            },
-            {
-              "id": 322,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S01"
-            },
-            {
-              "id": 318,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S02"
-            },
-            {
-              "id": 320,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S03"
-            },
-            {
-              "id": 316,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S04",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S04"
-            },
-            {
-              "id": 317,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S06",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S06"
-            },
-            {
-              "id": 310,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S07",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S07"
-            },
-            {
-              "id": 315,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S08",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S08"
-            },
-            {
-              "id": 311,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S09",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S09"
-            },
-            {
-              "id": 314,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S10",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S10"
-            },
-            {
-              "id": 309,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S11",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S11"
-            },
-            {
-              "id": 304,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S12",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S12"
-            },
-            {
-              "id": 305,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S13",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S13"
-            },
-            {
-              "id": 302,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S14",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S14"
-            },
-            {
-              "id": 297,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S15",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S15"
-            },
-            {
-              "id": 301,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S16",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S16"
-            },
-            {
-              "id": 298,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S17",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S17"
-            },
-            {
-              "id": 300,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S18",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S18"
-            },
-            {
-              "id": 299,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S19",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S19"
-            },
-            {
-              "id": 82,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
-            },
-            {
-              "id": 325,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01"
-            },
-            {
-              "id": 324,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02"
-            },
-            {
-              "id": 81,
-              "label": "Casa Civil 1005 > Torreão",
-              "full_label": "Locais > Casa Civil 1005 > Torreão"
-            },
-            {
-              "id": 260,
-              "label": "Casa Civil 1005 > Torreão > P3E01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3E01"
-            },
-            {
-              "id": 259,
-              "label": "Casa Civil 1005 > Torreão > P3S01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3S01"
-            },
-            {
-              "id": 87,
-              "label": "Defesa Civil - Andrade Neves 106",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106"
-            },
-            {
-              "id": 88,
-              "label": "Defesa Civil - Andrade Neves 106 > 11° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 11° Andar"
-            },
-            {
-              "id": 89,
-              "label": "Defesa Civil - Andrade Neves 106 > 15° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 15° Andar"
-            },
-            {
-              "id": 84,
-              "label": "Divisão de Transportes -Riachuelo 1285",
-              "full_label": "Locais > Divisão de Transportes -Riachuelo 1285"
-            },
-            {
-              "id": 83,
-              "label": "Duque de Caxias 951",
-              "full_label": "Locais > Duque de Caxias 951"
-            },
-            {
-              "id": 85,
-              "label": "Gabinete dos Prefeitos - Andradas 1234",
-              "full_label": "Locais > Gabinete dos Prefeitos - Andradas 1234"
-            },
-            {
-              "id": 72,
-              "label": "Palacio Piratini",
-              "full_label": "Locais > Palacio Piratini"
-            },
-            {
-              "id": 73,
-              "label": "Palacio Piratini - Ala Governamental",
-              "full_label": "Locais > Palacio Piratini - Ala Governamental"
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
             }
           ]
-        },
-        "type_question": {
-          "id": 130,
-          "root_id": null,
-          "source": "formcreator_question_values",
-          "option_count": 4,
-          "options": [
-            {
-              "id": null,
-              "label": "Projetos DCMPC",
-              "full_label": "Projetos DCMPC"
-            },
-            {
-              "id": null,
-              "label": "Projetos Secretaria Executiva GG",
-              "full_label": "Projetos Secretaria Executiva GG"
-            },
-            {
-              "id": null,
-              "label": "Gestão de Espaços",
-              "full_label": "Gestão de Espaços"
-            },
-            {
-              "id": null,
-              "label": "Outras atividades",
-              "full_label": "Outras atividades"
-            }
-          ]
-        },
-        "urgency_question": {
-          "id": 128
-        },
-        "description_question": {
-          "id": 131,
-          "required": true
-        },
-        "question_count": 8
+        }
       },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
+      "expected_result": {
+        "category_root": "Manutenção > Pintura",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
       }
     },
     {
-      "service_id": "tecnico-de-redes",
-      "label": "Tecnico de Redes",
-      "category_id": 88,
-      "category_label": "Manutenção > Rede Computadores",
-      "service_domain_label": "Manutenção",
-      "domain": "tecnologia",
-      "process_type": "incident",
-      "expected_assignment_group_id": 22,
-      "expected_assignment_group_label": "CC-MANUTENCAO",
-      "location_ids_currently_sent": [
-        70
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 13,
-      "candidate_forms": [
+      "catalog_record_id": "sis:manutencao:form-39:target-209",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [
         {
-          "active": true,
-          "confidence": 0.55,
-          "id": 13,
-          "label": "Técnico de Redes"
+          "id": 4,
+          "name": "Super-Admin"
         },
         {
-          "active": true,
-          "confidence": 0.55,
-          "id": 34,
-          "label": "Técnico de Redes"
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
         }
       ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 13,
-        "targetticket_id": 12,
-        "person_question": {
-          "id": 105,
-          "required": true
+      "form": {
+        "id": 39,
+        "name": "MANUTENÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          39
+        ]
+      },
+      "targetticket": {
+        "id": 209,
+        "name": "Técnico de Redes",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
         },
-        "location_question": {
-          "id": 107,
-          "root_id": 70,
-          "source": "formcreator_question_values",
-          "option_count": 80,
-          "options": [
-            {
-              "id": 100,
-              "label": "CAFF",
-              "full_label": "Locais > CAFF"
-            },
-            {
-              "id": 71,
-              "label": "Casa Civil 1005",
-              "full_label": "Locais > Casa Civil 1005"
-            },
-            {
-              "id": 79,
-              "label": "Casa Civil 1005 > 1° Andar",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
-            },
-            {
-              "id": 282,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08"
-            },
-            {
-              "id": 283,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A"
-            },
-            {
-              "id": 285,
-              "label": "Casa Civil 1005 > 1° Andar > P1B01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B01"
-            },
-            {
-              "id": 286,
-              "label": "Casa Civil 1005 > 1° Andar > P1B02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B02"
-            },
-            {
-              "id": 287,
-              "label": "Casa Civil 1005 > 1° Andar > P1B03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B03"
-            },
-            {
-              "id": 280,
-              "label": "Casa Civil 1005 > 1° Andar > P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
-            },
-            {
-              "id": 289,
-              "label": "Casa Civil 1005 > 1° Andar > P1C02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C02"
-            },
-            {
-              "id": 292,
-              "label": "Casa Civil 1005 > 1° Andar > P1C03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C03"
-            },
-            {
-              "id": 294,
-              "label": "Casa Civil 1005 > 1° Andar > P1C04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C04"
-            },
-            {
-              "id": 288,
-              "label": "Casa Civil 1005 > 1° Andar > P1E01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E01"
-            },
-            {
-              "id": 293,
-              "label": "Casa Civil 1005 > 1° Andar > P1E02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E02"
-            },
-            {
-              "id": 276,
-              "label": "Casa Civil 1005 > 1° Andar > P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
-            },
-            {
-              "id": 278,
-              "label": "Casa Civil 1005 > 1° Andar > P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
-            },
-            {
-              "id": 277,
-              "label": "Casa Civil 1005 > 1° Andar > P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
-            },
-            {
-              "id": 279,
-              "label": "Casa Civil 1005 > 1° Andar > P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
-            },
-            {
-              "id": 290,
-              "label": "Casa Civil 1005 > 1° Andar > P1S05",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S05"
-            },
-            {
-              "id": 281,
-              "label": "Casa Civil 1005 > 1° Andar > P1S06",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S06"
-            },
-            {
-              "id": 291,
-              "label": "Casa Civil 1005 > 1° Andar > P1S07",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S07"
-            },
-            {
-              "id": 295,
-              "label": "Casa Civil 1005 > 1° Andar > P1S09",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S09"
-            },
-            {
-              "id": 80,
-              "label": "Casa Civil 1005 > 2° Andar",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
-            },
-            {
-              "id": 266,
-              "label": "Casa Civil 1005 > 2° Andar > P2B01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B01"
-            },
-            {
-              "id": 267,
-              "label": "Casa Civil 1005 > 2° Andar > P2B03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B03"
-            },
-            {
-              "id": 270,
-              "label": "Casa Civil 1005 > 2° Andar > P2C01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2C01"
-            },
-            {
-              "id": 269,
-              "label": "Casa Civil 1005 > 2° Andar > P2E01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2E01"
-            },
-            {
-              "id": 261,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01"
-            },
-            {
-              "id": 262,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A"
-            },
-            {
-              "id": 263,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B"
-            },
-            {
-              "id": 265,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02"
-            },
-            {
-              "id": 264,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A"
-            },
-            {
-              "id": 272,
-              "label": "Casa Civil 1005 > 2° Andar > P2S03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S03"
-            },
-            {
-              "id": 268,
-              "label": "Casa Civil 1005 > 2° Andar > P2S04",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S04"
-            },
-            {
-              "id": 273,
-              "label": "Casa Civil 1005 > 2° Andar > P2S05",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S05"
-            },
-            {
-              "id": 271,
-              "label": "Casa Civil 1005 > 2° Andar > P2S06",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S06"
-            },
-            {
-              "id": 274,
-              "label": "Casa Civil 1005 > 2° Andar > P2S07",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S07"
-            },
-            {
-              "id": 275,
-              "label": "Casa Civil 1005 > 2° Andar > P2S08",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S08"
-            },
-            {
-              "id": 296,
-              "label": "Casa Civil 1005 > Subsolo 1",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
-            },
-            {
-              "id": 321,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B01"
-            },
-            {
-              "id": 308,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B02"
-            },
-            {
-              "id": 307,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B03"
-            },
-            {
-              "id": 319,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C01"
-            },
-            {
-              "id": 313,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C02"
-            },
-            {
-              "id": 303,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C03"
-            },
-            {
-              "id": 306,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E01"
-            },
-            {
-              "id": 312,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E02"
-            },
-            {
-              "id": 323,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E03"
-            },
-            {
-              "id": 322,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S01"
-            },
-            {
-              "id": 318,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S02"
-            },
-            {
-              "id": 320,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S03"
-            },
-            {
-              "id": 316,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S04",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S04"
-            },
-            {
-              "id": 317,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S06",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S06"
-            },
-            {
-              "id": 310,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S07",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S07"
-            },
-            {
-              "id": 315,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S08",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S08"
-            },
-            {
-              "id": 311,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S09",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S09"
-            },
-            {
-              "id": 314,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S10",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S10"
-            },
-            {
-              "id": 309,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S11",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S11"
-            },
-            {
-              "id": 304,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S12",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S12"
-            },
-            {
-              "id": 305,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S13",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S13"
-            },
-            {
-              "id": 302,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S14",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S14"
-            },
-            {
-              "id": 297,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S15",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S15"
-            },
-            {
-              "id": 301,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S16",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S16"
-            },
-            {
-              "id": 298,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S17",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S17"
-            },
-            {
-              "id": 300,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S18",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S18"
-            },
-            {
-              "id": 299,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S19",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S19"
-            },
-            {
-              "id": 82,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
-            },
-            {
-              "id": 325,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01"
-            },
-            {
-              "id": 324,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02"
-            },
-            {
-              "id": 81,
-              "label": "Casa Civil 1005 > Torreão",
-              "full_label": "Locais > Casa Civil 1005 > Torreão"
-            },
-            {
-              "id": 260,
-              "label": "Casa Civil 1005 > Torreão > P3E01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3E01"
-            },
-            {
-              "id": 259,
-              "label": "Casa Civil 1005 > Torreão > P3S01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3S01"
-            },
-            {
-              "id": 87,
-              "label": "Defesa Civil - Andrade Neves 106",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106"
-            },
-            {
-              "id": 88,
-              "label": "Defesa Civil - Andrade Neves 106 > 11° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 11° Andar"
-            },
-            {
-              "id": 89,
-              "label": "Defesa Civil - Andrade Neves 106 > 15° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 15° Andar"
-            },
-            {
-              "id": 84,
-              "label": "Divisão de Transportes -Riachuelo 1285",
-              "full_label": "Locais > Divisão de Transportes -Riachuelo 1285"
-            },
-            {
-              "id": 83,
-              "label": "Duque de Caxias 951",
-              "full_label": "Locais > Duque de Caxias 951"
-            },
-            {
-              "id": 85,
-              "label": "Gabinete dos Prefeitos - Andradas 1234",
-              "full_label": "Locais > Gabinete dos Prefeitos - Andradas 1234"
-            },
-            {
-              "id": 72,
-              "label": "Palacio Piratini",
-              "full_label": "Locais > Palacio Piratini"
-            },
-            {
-              "id": 73,
-              "label": "Palacio Piratini - Ala Governamental",
-              "full_label": "Locais > Palacio Piratini - Ala Governamental"
-            }
-          ]
-        },
-        "type_question": {
-          "id": 111,
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 667,
+        "location_rule": 3,
+        "location_question_id": 635,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 667,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "88",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 88,
-          "source": "formcreator_question_values",
-          "option_count": 4,
-          "options": [
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 88,
+              "label": "Rede Computadores",
+              "full_label": "Manutenção > Rede Computadores"
+            },
             {
               "id": 89,
               "label": "Instalação de Rede Lógica",
@@ -5120,71 +14437,25 @@ export const MOBILE_METADATA_CATALOG = {
             }
           ]
         },
-        "urgency_question": {
-          "id": 109
-        },
-        "description_question": {
-          "id": 112,
-          "required": true
-        },
-        "question_count": 9
-      },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
-      }
-    },
-    {
-      "service_id": "vidracaria",
-      "label": "Vidracaria",
-      "category_id": 94,
-      "category_label": "Manutenção > Vidraçaria",
-      "service_domain_label": "Manutenção",
-      "domain": "unknown",
-      "process_type": "unknown",
-      "expected_assignment_group_id": 22,
-      "expected_assignment_group_label": "CC-MANUTENCAO",
-      "location_ids_currently_sent": [
-        70
-      ],
-      "canonical_form_status": "ambiguous",
-      "primary_form_id": 14,
-      "candidate_forms": [
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 14,
-          "label": "Vidraçaria"
-        },
-        {
-          "active": true,
-          "confidence": 0.55,
-          "id": 35,
-          "label": "Vidraçaria"
-        }
-      ],
-      "risk": "medium",
-      "sync_mode": "runtime_metadata_required",
-      "ui_schema_source": "formcreator_runtime_metadata",
-      "ui_schema": {
-        "form_id": 14,
-        "targetticket_id": 13,
-        "person_question": {
-          "id": 114,
-          "required": true
-        },
-        "location_question": {
-          "id": 116,
+        "location": {
+          "id": 635,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 70,
-          "source": "formcreator_question_values",
-          "option_count": 80,
-          "options": [
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
             {
-              "id": 100,
-              "label": "CAFF",
-              "full_label": "Locais > CAFF"
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
             },
             {
               "id": 71,
@@ -5193,402 +14464,136 @@ export const MOBILE_METADATA_CATALOG = {
             },
             {
               "id": 79,
-              "label": "Casa Civil 1005 > 1° Andar",
+              "label": "1° Andar",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 282,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08"
-            },
-            {
-              "id": 283,
-              "label": "Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A"
-            },
-            {
-              "id": 285,
-              "label": "Casa Civil 1005 > 1° Andar > P1B01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B01"
-            },
-            {
-              "id": 286,
-              "label": "Casa Civil 1005 > 1° Andar > P1B02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B02"
-            },
-            {
-              "id": 287,
-              "label": "Casa Civil 1005 > 1° Andar > P1B03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1B03"
-            },
-            {
-              "id": 280,
-              "label": "Casa Civil 1005 > 1° Andar > P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
-            },
-            {
-              "id": 289,
-              "label": "Casa Civil 1005 > 1° Andar > P1C02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C02"
-            },
-            {
-              "id": 292,
-              "label": "Casa Civil 1005 > 1° Andar > P1C03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C03"
-            },
-            {
-              "id": 294,
-              "label": "Casa Civil 1005 > 1° Andar > P1C04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C04"
-            },
-            {
-              "id": 288,
-              "label": "Casa Civil 1005 > 1° Andar > P1E01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E01"
-            },
-            {
-              "id": 293,
-              "label": "Casa Civil 1005 > 1° Andar > P1E02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1E02"
-            },
-            {
               "id": 276,
-              "label": "Casa Civil 1005 > 1° Andar > P1S01",
+              "label": "P1S01",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
             },
             {
-              "id": 278,
-              "label": "Casa Civil 1005 > 1° Andar > P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
-            },
-            {
               "id": 277,
-              "label": "Casa Civil 1005 > 1° Andar > P1S03",
+              "label": "P1S03",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
             },
             {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
               "id": 279,
-              "label": "Casa Civil 1005 > 1° Andar > P1S04",
+              "label": "P1S04",
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
             },
             {
-              "id": 290,
-              "label": "Casa Civil 1005 > 1° Andar > P1S05",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S05"
-            },
-            {
-              "id": 281,
-              "label": "Casa Civil 1005 > 1° Andar > P1S06",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S06"
-            },
-            {
-              "id": 291,
-              "label": "Casa Civil 1005 > 1° Andar > P1S07",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S07"
-            },
-            {
-              "id": 295,
-              "label": "Casa Civil 1005 > 1° Andar > P1S09",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S09"
-            },
-            {
-              "id": 80,
-              "label": "Casa Civil 1005 > 2° Andar",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
-            },
-            {
-              "id": 266,
-              "label": "Casa Civil 1005 > 2° Andar > P2B01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B01"
-            },
-            {
-              "id": 267,
-              "label": "Casa Civil 1005 > 2° Andar > P2B03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2B03"
-            },
-            {
-              "id": 270,
-              "label": "Casa Civil 1005 > 2° Andar > P2C01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2C01"
-            },
-            {
-              "id": 269,
-              "label": "Casa Civil 1005 > 2° Andar > P2E01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2E01"
-            },
-            {
-              "id": 261,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01"
-            },
-            {
-              "id": 262,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-A"
-            },
-            {
-              "id": 263,
-              "label": "Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S01 > P2S01-B"
-            },
-            {
-              "id": 265,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02"
-            },
-            {
-              "id": 264,
-              "label": "Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S02 > P2S02-A"
-            },
-            {
-              "id": 272,
-              "label": "Casa Civil 1005 > 2° Andar > P2S03",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S03"
-            },
-            {
-              "id": 268,
-              "label": "Casa Civil 1005 > 2° Andar > P2S04",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S04"
-            },
-            {
-              "id": 273,
-              "label": "Casa Civil 1005 > 2° Andar > P2S05",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S05"
-            },
-            {
-              "id": 271,
-              "label": "Casa Civil 1005 > 2° Andar > P2S06",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S06"
-            },
-            {
-              "id": 274,
-              "label": "Casa Civil 1005 > 2° Andar > P2S07",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S07"
-            },
-            {
-              "id": 275,
-              "label": "Casa Civil 1005 > 2° Andar > P2S08",
-              "full_label": "Locais > Casa Civil 1005 > 2° Andar > P2S08"
-            },
-            {
-              "id": 296,
-              "label": "Casa Civil 1005 > Subsolo 1",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
-            },
-            {
-              "id": 321,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B01"
-            },
-            {
-              "id": 308,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B02"
-            },
-            {
-              "id": 307,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1B03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1B03"
-            },
-            {
-              "id": 319,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C01"
-            },
-            {
-              "id": 313,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C02"
-            },
-            {
-              "id": 303,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1C03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1C03"
-            },
-            {
-              "id": 306,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E01"
-            },
-            {
-              "id": 312,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E02"
-            },
-            {
-              "id": 323,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1E03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1E03"
-            },
-            {
-              "id": 322,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S01"
-            },
-            {
-              "id": 318,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S02"
-            },
-            {
-              "id": 320,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S03",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S03"
-            },
-            {
-              "id": 316,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S04",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S04"
-            },
-            {
-              "id": 317,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S06",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S06"
-            },
-            {
-              "id": 310,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S07",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S07"
-            },
-            {
-              "id": 315,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S08",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S08"
-            },
-            {
-              "id": 311,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S09",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S09"
-            },
-            {
-              "id": 314,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S10",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S10"
-            },
-            {
-              "id": 309,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S11",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S11"
-            },
-            {
-              "id": 304,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S12",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S12"
-            },
-            {
-              "id": 305,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S13",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S13"
-            },
-            {
-              "id": 302,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S14",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S14"
-            },
-            {
-              "id": 297,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S15",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S15"
-            },
-            {
-              "id": 301,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S16",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S16"
-            },
-            {
-              "id": 298,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S17",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S17"
-            },
-            {
-              "id": 300,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S18",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S18"
-            },
-            {
-              "id": 299,
-              "label": "Casa Civil 1005 > Subsolo 1 > S1S19",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 1 > S1S19"
-            },
-            {
-              "id": 82,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
-            },
-            {
-              "id": 325,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S01"
-            },
-            {
-              "id": 324,
-              "label": "Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02",
-              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda > S2S02"
-            },
-            {
-              "id": 81,
-              "label": "Casa Civil 1005 > Torreão",
-              "full_label": "Locais > Casa Civil 1005 > Torreão"
-            },
-            {
-              "id": 260,
-              "label": "Casa Civil 1005 > Torreão > P3E01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3E01"
-            },
-            {
-              "id": 259,
-              "label": "Casa Civil 1005 > Torreão > P3S01",
-              "full_label": "Locais > Casa Civil 1005 > Torreão > P3S01"
-            },
-            {
-              "id": 87,
-              "label": "Defesa Civil - Andrade Neves 106",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106"
-            },
-            {
-              "id": 88,
-              "label": "Defesa Civil - Andrade Neves 106 > 11° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 11° Andar"
-            },
-            {
-              "id": 89,
-              "label": "Defesa Civil - Andrade Neves 106 > 15° Andar",
-              "full_label": "Locais > Defesa Civil - Andrade Neves 106 > 15° Andar"
-            },
-            {
-              "id": 84,
-              "label": "Divisão de Transportes -Riachuelo 1285",
-              "full_label": "Locais > Divisão de Transportes -Riachuelo 1285"
-            },
-            {
-              "id": 83,
-              "label": "Duque de Caxias 951",
-              "full_label": "Locais > Duque de Caxias 951"
-            },
-            {
-              "id": 85,
-              "label": "Gabinete dos Prefeitos - Andradas 1234",
-              "full_label": "Locais > Gabinete dos Prefeitos - Andradas 1234"
-            },
-            {
-              "id": 72,
-              "label": "Palacio Piratini",
-              "full_label": "Locais > Palacio Piratini"
-            },
-            {
-              "id": 73,
-              "label": "Palacio Piratini - Ala Governamental",
-              "full_label": "Locais > Palacio Piratini - Ala Governamental"
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
             }
           ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Rede Computadores",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
         },
-        "type_question": {
-          "id": 120,
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:manutencao:form-39:target-210",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 39,
+        "name": "MANUTENÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          39
+        ]
+      },
+      "targetticket": {
+        "id": 210,
+        "name": "Vidraçaria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 671,
+        "location_rule": 3,
+        "location_question_id": 635,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 671,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "94",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
           "root_id": 94,
-          "source": "formcreator_question_values",
-          "option_count": 4,
-          "options": [
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 94,
+              "label": "Vidraçaria",
+              "full_label": "Manutenção > Vidraçaria"
+            },
             {
               "id": 139,
               "label": "Vidro",
@@ -5611,132 +14616,7012 @@ export const MOBILE_METADATA_CATALOG = {
             }
           ]
         },
-        "urgency_question": {
-          "id": 118
-        },
-        "description_question": {
-          "id": 121,
-          "required": true
-        },
-        "question_count": 10
+        "location": {
+          "id": 635,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
       },
-      "mobile_policy": {
-        "show_domain_badge": true,
-        "show_assignment_queue": true,
-        "location_options_are_runtime": true,
-        "type_options_are_runtime": true
+      "expected_result": {
+        "category_root": "Manutenção > Vidraçaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:marcenaria:form-9:target-8",
+      "service_id": "marcenaria",
+      "service_label": "Marcenaria",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 9,
+        "name": "Marcenaria",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          9,
+          29
+        ]
+      },
+      "targetticket": {
+        "id": 8,
+        "name": "Marcenaria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 75,
+        "location_rule": 3,
+        "location_question_id": 71,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 75,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "50",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 50,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 50,
+              "label": "Marcenaria",
+              "full_label": "Manutenção > Marcenaria"
+            },
+            {
+              "id": 51,
+              "label": "Confecção de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Confecção de Mobiliário"
+            },
+            {
+              "id": 52,
+              "label": "Conserto de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Conserto de Mobiliário"
+            },
+            {
+              "id": 53,
+              "label": "Remanejo de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Remanejo de Mobiliário"
+            },
+            {
+              "id": 54,
+              "label": "Outras Atividades",
+              "full_label": "Manutenção > Marcenaria > Outras Atividades"
+            },
+            {
+              "id": 127,
+              "label": "Conserto de Aberturas",
+              "full_label": "Manutenção > Marcenaria > Conserto de Aberturas"
+            }
+          ]
+        },
+        "location": {
+          "id": 71,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Marcenaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:marcenaria:form-9:target-25",
+      "service_id": "marcenaria",
+      "service_label": "Marcenaria",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 9,
+        "name": "Marcenaria",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          9,
+          29
+        ]
+      },
+      "targetticket": {
+        "id": 25,
+        "name": "Marcenaria para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 70,
+        "category_rule": 3,
+        "category_question_id": 75,
+        "location_rule": 3,
+        "location_question_id": 71,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 75,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "50",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 50,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 50,
+              "label": "Marcenaria",
+              "full_label": "Manutenção > Marcenaria"
+            },
+            {
+              "id": 51,
+              "label": "Confecção de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Confecção de Mobiliário"
+            },
+            {
+              "id": 52,
+              "label": "Conserto de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Conserto de Mobiliário"
+            },
+            {
+              "id": 53,
+              "label": "Remanejo de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Remanejo de Mobiliário"
+            },
+            {
+              "id": 54,
+              "label": "Outras Atividades",
+              "full_label": "Manutenção > Marcenaria > Outras Atividades"
+            },
+            {
+              "id": 127,
+              "label": "Conserto de Aberturas",
+              "full_label": "Manutenção > Marcenaria > Conserto de Aberturas"
+            }
+          ]
+        },
+        "location": {
+          "id": 71,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Marcenaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:marcenaria:form-29:target-145",
+      "service_id": "marcenaria",
+      "service_label": "Marcenaria",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 29,
+        "name": "Marcenaria",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          9,
+          29
+        ]
+      },
+      "targetticket": {
+        "id": 145,
+        "name": "Marcenaria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 443,
+        "location_rule": 3,
+        "location_question_id": 440,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 443,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "50",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 50,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 50,
+              "label": "Marcenaria",
+              "full_label": "Manutenção > Marcenaria"
+            },
+            {
+              "id": 51,
+              "label": "Confecção de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Confecção de Mobiliário"
+            },
+            {
+              "id": 52,
+              "label": "Conserto de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Conserto de Mobiliário"
+            },
+            {
+              "id": 53,
+              "label": "Remanejo de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Remanejo de Mobiliário"
+            },
+            {
+              "id": 54,
+              "label": "Outras Atividades",
+              "full_label": "Manutenção > Marcenaria > Outras Atividades"
+            },
+            {
+              "id": 127,
+              "label": "Conserto de Aberturas",
+              "full_label": "Manutenção > Marcenaria > Conserto de Aberturas"
+            }
+          ]
+        },
+        "location": {
+          "id": 440,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Marcenaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:marcenaria:form-29:target-146",
+      "service_id": "marcenaria",
+      "service_label": "Marcenaria",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 29,
+        "name": "Marcenaria",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          9,
+          29
+        ]
+      },
+      "targetticket": {
+        "id": 146,
+        "name": "Marcenaria para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 439,
+        "category_rule": 3,
+        "category_question_id": 443,
+        "location_rule": 3,
+        "location_question_id": 440,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 443,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "50",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 50,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 50,
+              "label": "Marcenaria",
+              "full_label": "Manutenção > Marcenaria"
+            },
+            {
+              "id": 51,
+              "label": "Confecção de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Confecção de Mobiliário"
+            },
+            {
+              "id": 52,
+              "label": "Conserto de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Conserto de Mobiliário"
+            },
+            {
+              "id": 53,
+              "label": "Remanejo de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Remanejo de Mobiliário"
+            },
+            {
+              "id": 54,
+              "label": "Outras Atividades",
+              "full_label": "Manutenção > Marcenaria > Outras Atividades"
+            },
+            {
+              "id": 127,
+              "label": "Conserto de Aberturas",
+              "full_label": "Manutenção > Marcenaria > Conserto de Aberturas"
+            }
+          ]
+        },
+        "location": {
+          "id": 440,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Marcenaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:mensageria:form-10:target-9",
+      "service_id": "mensageria",
+      "service_label": "Mensageria",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 10,
+        "name": "Mensageria",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          10,
+          30
+        ]
+      },
+      "targetticket": {
+        "id": 9,
+        "name": "Mensageria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 84,
+        "location_rule": 3,
+        "location_question_id": 83,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 84,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "128",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 128,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 128,
+              "label": "Mensageria",
+              "full_label": "Conservação > Mensageria"
+            },
+            {
+              "id": 129,
+              "label": "Movimentação Documentos",
+              "full_label": "Conservação > Mensageria > Movimentação Documentos"
+            },
+            {
+              "id": 130,
+              "label": "Movimentação Insumos até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Insumos até 5Kg"
+            },
+            {
+              "id": 131,
+              "label": "Movimentação Materiais até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Materiais até 5Kg"
+            },
+            {
+              "id": 132,
+              "label": "Outras entregas e Movimentações até 5Kg",
+              "full_label": "Conservação > Mensageria > Outras entregas e Movimentações até 5Kg"
+            }
+          ]
+        },
+        "location": {
+          "id": 83,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "36",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 36,
+          "option_source": "locations",
+          "options_count": 28,
+          "options_sample": [
+            {
+              "id": 36,
+              "label": "Carregadores e Mensageiros",
+              "full_label": "Carregadores e Mensageiros"
+            },
+            {
+              "id": 19,
+              "label": "Defesa Civil - Andrade Neves",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves"
+            },
+            {
+              "id": 20,
+              "label": "11° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 11° Andar"
+            },
+            {
+              "id": 22,
+              "label": "15° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 15° Andar"
+            },
+            {
+              "id": 37,
+              "label": "Casa Civil 1005",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005"
+            },
+            {
+              "id": 38,
+              "label": "1° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 39,
+              "label": "2 ° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 2 ° Andar"
+            },
+            {
+              "id": 49,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > Subsolo"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Mensageria",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:mensageria:form-10:target-26",
+      "service_id": "mensageria",
+      "service_label": "Mensageria",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 10,
+        "name": "Mensageria",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          10,
+          30
+        ]
+      },
+      "targetticket": {
+        "id": 26,
+        "name": "Mensageria para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 79,
+        "category_rule": 3,
+        "category_question_id": 84,
+        "location_rule": 3,
+        "location_question_id": 83,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 84,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "128",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 128,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 128,
+              "label": "Mensageria",
+              "full_label": "Conservação > Mensageria"
+            },
+            {
+              "id": 129,
+              "label": "Movimentação Documentos",
+              "full_label": "Conservação > Mensageria > Movimentação Documentos"
+            },
+            {
+              "id": 130,
+              "label": "Movimentação Insumos até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Insumos até 5Kg"
+            },
+            {
+              "id": 131,
+              "label": "Movimentação Materiais até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Materiais até 5Kg"
+            },
+            {
+              "id": 132,
+              "label": "Outras entregas e Movimentações até 5Kg",
+              "full_label": "Conservação > Mensageria > Outras entregas e Movimentações até 5Kg"
+            }
+          ]
+        },
+        "location": {
+          "id": 83,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "36",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 36,
+          "option_source": "locations",
+          "options_count": 28,
+          "options_sample": [
+            {
+              "id": 36,
+              "label": "Carregadores e Mensageiros",
+              "full_label": "Carregadores e Mensageiros"
+            },
+            {
+              "id": 19,
+              "label": "Defesa Civil - Andrade Neves",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves"
+            },
+            {
+              "id": 20,
+              "label": "11° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 11° Andar"
+            },
+            {
+              "id": 22,
+              "label": "15° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 15° Andar"
+            },
+            {
+              "id": 37,
+              "label": "Casa Civil 1005",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005"
+            },
+            {
+              "id": 38,
+              "label": "1° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 39,
+              "label": "2 ° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 2 ° Andar"
+            },
+            {
+              "id": 49,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > Subsolo"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Mensageria",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:mensageria:form-30:target-147",
+      "service_id": "mensageria",
+      "service_label": "Mensageria",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 30,
+        "name": "Mensageria",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          10,
+          30
+        ]
+      },
+      "targetticket": {
+        "id": 147,
+        "name": "Mensageria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 452,
+        "location_rule": 3,
+        "location_question_id": 451,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 452,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "128",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 128,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 128,
+              "label": "Mensageria",
+              "full_label": "Conservação > Mensageria"
+            },
+            {
+              "id": 129,
+              "label": "Movimentação Documentos",
+              "full_label": "Conservação > Mensageria > Movimentação Documentos"
+            },
+            {
+              "id": 130,
+              "label": "Movimentação Insumos até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Insumos até 5Kg"
+            },
+            {
+              "id": 131,
+              "label": "Movimentação Materiais até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Materiais até 5Kg"
+            },
+            {
+              "id": 132,
+              "label": "Outras entregas e Movimentações até 5Kg",
+              "full_label": "Conservação > Mensageria > Outras entregas e Movimentações até 5Kg"
+            }
+          ]
+        },
+        "location": {
+          "id": 451,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "36",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 36,
+          "option_source": "locations",
+          "options_count": 28,
+          "options_sample": [
+            {
+              "id": 36,
+              "label": "Carregadores e Mensageiros",
+              "full_label": "Carregadores e Mensageiros"
+            },
+            {
+              "id": 19,
+              "label": "Defesa Civil - Andrade Neves",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves"
+            },
+            {
+              "id": 20,
+              "label": "11° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 11° Andar"
+            },
+            {
+              "id": 22,
+              "label": "15° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 15° Andar"
+            },
+            {
+              "id": 37,
+              "label": "Casa Civil 1005",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005"
+            },
+            {
+              "id": 38,
+              "label": "1° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 39,
+              "label": "2 ° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 2 ° Andar"
+            },
+            {
+              "id": 49,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > Subsolo"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Mensageria",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:mensageria:form-30:target-148",
+      "service_id": "mensageria",
+      "service_label": "Mensageria",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 30,
+        "name": "Mensageria",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          10,
+          30
+        ]
+      },
+      "targetticket": {
+        "id": 148,
+        "name": "Mensageria para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 448,
+        "category_rule": 3,
+        "category_question_id": 452,
+        "location_rule": 3,
+        "location_question_id": 451,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 452,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "128",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 128,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 128,
+              "label": "Mensageria",
+              "full_label": "Conservação > Mensageria"
+            },
+            {
+              "id": 129,
+              "label": "Movimentação Documentos",
+              "full_label": "Conservação > Mensageria > Movimentação Documentos"
+            },
+            {
+              "id": 130,
+              "label": "Movimentação Insumos até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Insumos até 5Kg"
+            },
+            {
+              "id": 131,
+              "label": "Movimentação Materiais até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Materiais até 5Kg"
+            },
+            {
+              "id": 132,
+              "label": "Outras entregas e Movimentações até 5Kg",
+              "full_label": "Conservação > Mensageria > Outras entregas e Movimentações até 5Kg"
+            }
+          ]
+        },
+        "location": {
+          "id": 451,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "36",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 36,
+          "option_source": "locations",
+          "options_count": 28,
+          "options_sample": [
+            {
+              "id": 36,
+              "label": "Carregadores e Mensageiros",
+              "full_label": "Carregadores e Mensageiros"
+            },
+            {
+              "id": 19,
+              "label": "Defesa Civil - Andrade Neves",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves"
+            },
+            {
+              "id": 20,
+              "label": "11° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 11° Andar"
+            },
+            {
+              "id": 22,
+              "label": "15° Andar",
+              "full_label": "Carregadores e Mensageiros > Defesa Civil - Andrade Neves > 15° Andar"
+            },
+            {
+              "id": 37,
+              "label": "Casa Civil 1005",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005"
+            },
+            {
+              "id": 38,
+              "label": "1° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 39,
+              "label": "2 ° Andar",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > 2 ° Andar"
+            },
+            {
+              "id": 49,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Casa Civil 1005 > Subsolo"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Mensageria",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-216",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 216,
+        "name": "Ar Condicionado",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 701,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 701,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "1",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 1,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 1,
+              "label": "Ar Condicionado",
+              "full_label": "Manutenção > Ar Condicionado"
+            },
+            {
+              "id": 2,
+              "label": "Conserto",
+              "full_label": "Manutenção > Ar Condicionado > Conserto"
+            },
+            {
+              "id": 3,
+              "label": "Desinstalação",
+              "full_label": "Manutenção > Ar Condicionado > Desinstalação"
+            },
+            {
+              "id": 4,
+              "label": "Instalação",
+              "full_label": "Manutenção > Ar Condicionado > Instalação"
+            },
+            {
+              "id": 6,
+              "label": "Remanejo",
+              "full_label": "Manutenção > Ar Condicionado > Remanejo"
+            },
+            {
+              "id": 7,
+              "label": "Outras atividades",
+              "full_label": "Manutenção > Ar Condicionado > Outras atividades"
+            },
+            {
+              "id": 100,
+              "label": "Higienização",
+              "full_label": "Manutenção > Ar Condicionado > Higienização"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Ar Condicionado",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-218",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 218,
+        "name": "Diversos",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 0,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 1
+      },
+      "questions": {
+        "category": null,
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-220",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 220,
+        "name": "Elevadores",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 146,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 146,
+          "name": "Assunto",
+          "fieldtype": "text",
+          "required": true,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-222",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 222,
+        "name": "Elétrica",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 709,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 709,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "22",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 22,
+          "option_source": "categories",
+          "options_count": 8,
+          "options_sample": [
+            {
+              "id": 22,
+              "label": "Elétrica",
+              "full_label": "Manutenção > Elétrica"
+            },
+            {
+              "id": 23,
+              "label": "Conserto",
+              "full_label": "Manutenção > Elétrica > Conserto"
+            },
+            {
+              "id": 24,
+              "label": "Instalação",
+              "full_label": "Manutenção > Elétrica > Instalação"
+            },
+            {
+              "id": 25,
+              "label": "Remoção",
+              "full_label": "Manutenção > Elétrica > Remoção"
+            },
+            {
+              "id": 26,
+              "label": "Readequação",
+              "full_label": "Manutenção > Elétrica > Readequação"
+            },
+            {
+              "id": 27,
+              "label": "Troca",
+              "full_label": "Manutenção > Elétrica > Troca"
+            },
+            {
+              "id": 28,
+              "label": "Descarte",
+              "full_label": "Manutenção > Elétrica > Descarte"
+            },
+            {
+              "id": 29,
+              "label": "Suporte",
+              "full_label": "Manutenção > Elétrica > Suporte"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Elétrica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-224",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 224,
+        "name": "Hidráulica",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 713,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 713,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "30",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 30,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 30,
+              "label": "Hidráulica",
+              "full_label": "Manutenção > Hidráulica"
+            },
+            {
+              "id": 31,
+              "label": "Reparo/Conserto",
+              "full_label": "Manutenção > Hidráulica > Reparo/Conserto"
+            },
+            {
+              "id": 32,
+              "label": "Instalação",
+              "full_label": "Manutenção > Hidráulica > Instalação"
+            },
+            {
+              "id": 33,
+              "label": "Remoção",
+              "full_label": "Manutenção > Hidráulica > Remoção"
+            },
+            {
+              "id": 34,
+              "label": "Troca",
+              "full_label": "Manutenção > Hidráulica > Troca"
+            },
+            {
+              "id": 35,
+              "label": "Desentupimento",
+              "full_label": "Manutenção > Hidráulica > Desentupimento"
+            },
+            {
+              "id": 111,
+              "label": "Vazamento",
+              "full_label": "Manutenção > Hidráulica > Vazamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Hidráulica",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-226",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 226,
+        "name": "Marcenaria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 717,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 717,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "50",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 50,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 50,
+              "label": "Marcenaria",
+              "full_label": "Manutenção > Marcenaria"
+            },
+            {
+              "id": 51,
+              "label": "Confecção de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Confecção de Mobiliário"
+            },
+            {
+              "id": 52,
+              "label": "Conserto de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Conserto de Mobiliário"
+            },
+            {
+              "id": 53,
+              "label": "Remanejo de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Remanejo de Mobiliário"
+            },
+            {
+              "id": 54,
+              "label": "Outras Atividades",
+              "full_label": "Manutenção > Marcenaria > Outras Atividades"
+            },
+            {
+              "id": 127,
+              "label": "Conserto de Aberturas",
+              "full_label": "Manutenção > Marcenaria > Conserto de Aberturas"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Marcenaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-229",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 229,
+        "name": "Pedreiro",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 721,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 721,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "81",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 81,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 81,
+              "label": "Pedreiro",
+              "full_label": "Manutenção > Pedreiro"
+            },
+            {
+              "id": 82,
+              "label": "Instalação",
+              "full_label": "Manutenção > Pedreiro > Instalação"
+            },
+            {
+              "id": 83,
+              "label": "Remoção",
+              "full_label": "Manutenção > Pedreiro > Remoção"
+            },
+            {
+              "id": 84,
+              "label": "Perfuração/Escavação",
+              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
+            },
+            {
+              "id": 133,
+              "label": "Montagem/Desmontagem",
+              "full_label": "Manutenção > Pedreiro > Montagem/Desmontagem"
+            },
+            {
+              "id": 134,
+              "label": "Reparo",
+              "full_label": "Manutenção > Pedreiro > Reparo"
+            },
+            {
+              "id": 135,
+              "label": "Reparo de pedras portuguesas",
+              "full_label": "Manutenção > Pedreiro > Reparo de pedras portuguesas"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pedreiro",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-230",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 230,
+        "name": "Pintura",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 725,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 725,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "85",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 85,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 85,
+              "label": "Pintura",
+              "full_label": "Manutenção > Pintura"
+            },
+            {
+              "id": 86,
+              "label": "Parede",
+              "full_label": "Manutenção > Pintura > Parede"
+            },
+            {
+              "id": 87,
+              "label": "Outros",
+              "full_label": "Manutenção > Pintura > Outros"
+            },
+            {
+              "id": 136,
+              "label": "Aberturas",
+              "full_label": "Manutenção > Pintura > Aberturas"
+            },
+            {
+              "id": 137,
+              "label": "Forro",
+              "full_label": "Manutenção > Pintura > Forro"
+            },
+            {
+              "id": 138,
+              "label": "Mobiliário",
+              "full_label": "Manutenção > Pintura > Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pintura",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-232",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 232,
+        "name": "Técnico de Redes",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 729,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 729,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "88",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 88,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 88,
+              "label": "Rede Computadores",
+              "full_label": "Manutenção > Rede Computadores"
+            },
+            {
+              "id": 89,
+              "label": "Instalação de Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Instalação de Rede Lógica"
+            },
+            {
+              "id": 90,
+              "label": "Readequação Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Readequação Rede Lógica"
+            },
+            {
+              "id": 91,
+              "label": "Conserto Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Conserto Rede Lógica"
+            },
+            {
+              "id": 92,
+              "label": "Organização de Cabeamento",
+              "full_label": "Manutenção > Rede Computadores > Organização de Cabeamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Rede Computadores",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-234",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 234,
+        "name": "Vidraçaria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 733,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 733,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "94",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 94,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 94,
+              "label": "Vidraçaria",
+              "full_label": "Manutenção > Vidraçaria"
+            },
+            {
+              "id": 139,
+              "label": "Vidro",
+              "full_label": "Manutenção > Vidraçaria > Vidro"
+            },
+            {
+              "id": 140,
+              "label": "Janelas",
+              "full_label": "Manutenção > Vidraçaria > Janelas"
+            },
+            {
+              "id": 141,
+              "label": "Divisórias de vidro",
+              "full_label": "Manutenção > Vidraçaria > Divisórias de vidro"
+            },
+            {
+              "id": 142,
+              "label": "Outros",
+              "full_label": "Manutenção > Vidraçaria > Outros"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Vidraçaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-236",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 236,
+        "name": "Carregadores",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 737,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 737,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "55",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 55,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 55,
+              "label": "Carregadores",
+              "full_label": "Conservação > Carregadores"
+            },
+            {
+              "id": 56,
+              "label": "Movimentação de Insumos",
+              "full_label": "Conservação > Carregadores > Movimentação de Insumos"
+            },
+            {
+              "id": 57,
+              "label": "Recolhimento",
+              "full_label": "Conservação > Carregadores > Recolhimento"
+            },
+            {
+              "id": 58,
+              "label": "Substituição",
+              "full_label": "Conservação > Carregadores > Substituição"
+            },
+            {
+              "id": 101,
+              "label": "Descarte",
+              "full_label": "Conservação > Carregadores > Descarte"
+            },
+            {
+              "id": 102,
+              "label": "Movimentação Equipamentos",
+              "full_label": "Conservação > Carregadores > Movimentação Equipamentos"
+            },
+            {
+              "id": 103,
+              "label": "Movimentação Mobiliário",
+              "full_label": "Conservação > Carregadores > Movimentação Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Carregadores",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-238",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 238,
+        "name": "Copa",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 741,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 741,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "98",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 98,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 98,
+              "label": "Copa",
+              "full_label": "Conservação > Copa"
+            },
+            {
+              "id": 105,
+              "label": "Agua",
+              "full_label": "Conservação > Copa > Agua"
+            },
+            {
+              "id": 106,
+              "label": "Café",
+              "full_label": "Conservação > Copa > Café"
+            },
+            {
+              "id": 107,
+              "label": "Limpar louça de salas",
+              "full_label": "Conservação > Copa > Limpar louça de salas"
+            },
+            {
+              "id": 108,
+              "label": "Recolher e Limpar Louças Sala de Reunião",
+              "full_label": "Conservação > Copa > Recolher e Limpar Louças Sala de Reunião"
+            },
+            {
+              "id": 109,
+              "label": "Repor Café,Agua Sala de reunião",
+              "full_label": "Conservação > Copa > Repor Café,Agua Sala de reunião"
+            },
+            {
+              "id": 110,
+              "label": "Repor Louça de salas",
+              "full_label": "Conservação > Copa > Repor Louça de salas"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Copa",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-240",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 240,
+        "name": "Jardinagem",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 745,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 745,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "37",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 37,
+          "option_source": "categories",
+          "options_count": 11,
+          "options_sample": [
+            {
+              "id": 37,
+              "label": "Jardinagem",
+              "full_label": "Conservação > Jardinagem"
+            },
+            {
+              "id": 36,
+              "label": "Plantação",
+              "full_label": "Conservação > Jardinagem > Plantação"
+            },
+            {
+              "id": 38,
+              "label": "Poda/Corte",
+              "full_label": "Conservação > Jardinagem > Poda/Corte"
+            },
+            {
+              "id": 39,
+              "label": "Remoção",
+              "full_label": "Conservação > Jardinagem > Remoção"
+            },
+            {
+              "id": 40,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Jardinagem > Outras Atividades"
+            },
+            {
+              "id": 112,
+              "label": "Manutenção de folhagens internas",
+              "full_label": "Conservação > Jardinagem > Manutenção de folhagens internas"
+            },
+            {
+              "id": 113,
+              "label": "Varrição",
+              "full_label": "Conservação > Jardinagem > Varrição"
+            },
+            {
+              "id": 114,
+              "label": "Descarte",
+              "full_label": "Conservação > Jardinagem > Descarte"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Jardinagem",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-242",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 242,
+        "name": "Limpeza",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 749,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 749,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "45",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 45,
+          "option_source": "categories",
+          "options_count": 14,
+          "options_sample": [
+            {
+              "id": 45,
+              "label": "Limpeza",
+              "full_label": "Conservação > Limpeza"
+            },
+            {
+              "id": 46,
+              "label": "Limpeza de banheiros",
+              "full_label": "Conservação > Limpeza > Limpeza de banheiros"
+            },
+            {
+              "id": 47,
+              "label": "Limpeza geral",
+              "full_label": "Conservação > Limpeza > Limpeza geral"
+            },
+            {
+              "id": 48,
+              "label": "Outras Atividades",
+              "full_label": "Conservação > Limpeza > Outras Atividades"
+            },
+            {
+              "id": 49,
+              "label": "Recolher materiais recicláveis",
+              "full_label": "Conservação > Limpeza > Recolher materiais recicláveis"
+            },
+            {
+              "id": 118,
+              "label": "Lava a Jato",
+              "full_label": "Conservação > Limpeza > Lava a Jato"
+            },
+            {
+              "id": 119,
+              "label": "Bandeirante",
+              "full_label": "Conservação > Limpeza > Bandeirante"
+            },
+            {
+              "id": 120,
+              "label": "Janelas e Portas",
+              "full_label": "Conservação > Limpeza > Janelas e Portas"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Limpeza",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:multiplas-demandas:form-40:target-245",
+      "service_id": "multiplas-demandas",
+      "service_label": "Multiplas Demandas",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 40,
+        "name": "Multiplas Demandas",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          40
+        ]
+      },
+      "targetticket": {
+        "id": 245,
+        "name": "Mensageria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 753,
+        "location_rule": 3,
+        "location_question_id": 697,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 753,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "128",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 128,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 128,
+              "label": "Mensageria",
+              "full_label": "Conservação > Mensageria"
+            },
+            {
+              "id": 129,
+              "label": "Movimentação Documentos",
+              "full_label": "Conservação > Mensageria > Movimentação Documentos"
+            },
+            {
+              "id": 130,
+              "label": "Movimentação Insumos até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Insumos até 5Kg"
+            },
+            {
+              "id": 131,
+              "label": "Movimentação Materiais até 5Kg",
+              "full_label": "Conservação > Mensageria > Movimentação Materiais até 5Kg"
+            },
+            {
+              "id": 132,
+              "label": "Outras entregas e Movimentações até 5Kg",
+              "full_label": "Conservação > Mensageria > Outras entregas e Movimentações até 5Kg"
+            }
+          ]
+        },
+        "location": {
+          "id": 697,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Conservação > Mensageria",
+        "domain": "Conservação",
+        "assignment_group": {
+          "id": 21,
+          "label": "CC-CONSERVACÃO",
+          "source_rule_id": 155
+        },
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:pedreiro:form-11:target-10",
+      "service_id": "pedreiro",
+      "service_label": "Pedreiro",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 11,
+        "name": "Pedreiro",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          11,
+          31
+        ]
+      },
+      "targetticket": {
+        "id": 10,
+        "name": "Pedreiro",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 93,
+        "location_rule": 3,
+        "location_question_id": 89,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 93,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "81",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 81,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 81,
+              "label": "Pedreiro",
+              "full_label": "Manutenção > Pedreiro"
+            },
+            {
+              "id": 82,
+              "label": "Instalação",
+              "full_label": "Manutenção > Pedreiro > Instalação"
+            },
+            {
+              "id": 83,
+              "label": "Remoção",
+              "full_label": "Manutenção > Pedreiro > Remoção"
+            },
+            {
+              "id": 84,
+              "label": "Perfuração/Escavação",
+              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
+            },
+            {
+              "id": 133,
+              "label": "Montagem/Desmontagem",
+              "full_label": "Manutenção > Pedreiro > Montagem/Desmontagem"
+            },
+            {
+              "id": 134,
+              "label": "Reparo",
+              "full_label": "Manutenção > Pedreiro > Reparo"
+            },
+            {
+              "id": 135,
+              "label": "Reparo de pedras portuguesas",
+              "full_label": "Manutenção > Pedreiro > Reparo de pedras portuguesas"
+            }
+          ]
+        },
+        "location": {
+          "id": 89,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pedreiro",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:pedreiro:form-11:target-27",
+      "service_id": "pedreiro",
+      "service_label": "Pedreiro",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 11,
+        "name": "Pedreiro",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          11,
+          31
+        ]
+      },
+      "targetticket": {
+        "id": 27,
+        "name": "Pedreiro para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 88,
+        "category_rule": 3,
+        "category_question_id": 93,
+        "location_rule": 3,
+        "location_question_id": 89,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 93,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "81",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 81,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 81,
+              "label": "Pedreiro",
+              "full_label": "Manutenção > Pedreiro"
+            },
+            {
+              "id": 82,
+              "label": "Instalação",
+              "full_label": "Manutenção > Pedreiro > Instalação"
+            },
+            {
+              "id": 83,
+              "label": "Remoção",
+              "full_label": "Manutenção > Pedreiro > Remoção"
+            },
+            {
+              "id": 84,
+              "label": "Perfuração/Escavação",
+              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
+            },
+            {
+              "id": 133,
+              "label": "Montagem/Desmontagem",
+              "full_label": "Manutenção > Pedreiro > Montagem/Desmontagem"
+            },
+            {
+              "id": 134,
+              "label": "Reparo",
+              "full_label": "Manutenção > Pedreiro > Reparo"
+            },
+            {
+              "id": 135,
+              "label": "Reparo de pedras portuguesas",
+              "full_label": "Manutenção > Pedreiro > Reparo de pedras portuguesas"
+            }
+          ]
+        },
+        "location": {
+          "id": 89,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pedreiro",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:pedreiro:form-31:target-149",
+      "service_id": "pedreiro",
+      "service_label": "Pedreiro",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 31,
+        "name": "Pedreiro",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          11,
+          31
+        ]
+      },
+      "targetticket": {
+        "id": 149,
+        "name": "Pedreiro",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 461,
+        "location_rule": 3,
+        "location_question_id": 458,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 461,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "81",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 81,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 81,
+              "label": "Pedreiro",
+              "full_label": "Manutenção > Pedreiro"
+            },
+            {
+              "id": 82,
+              "label": "Instalação",
+              "full_label": "Manutenção > Pedreiro > Instalação"
+            },
+            {
+              "id": 83,
+              "label": "Remoção",
+              "full_label": "Manutenção > Pedreiro > Remoção"
+            },
+            {
+              "id": 84,
+              "label": "Perfuração/Escavação",
+              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
+            },
+            {
+              "id": 133,
+              "label": "Montagem/Desmontagem",
+              "full_label": "Manutenção > Pedreiro > Montagem/Desmontagem"
+            },
+            {
+              "id": 134,
+              "label": "Reparo",
+              "full_label": "Manutenção > Pedreiro > Reparo"
+            },
+            {
+              "id": 135,
+              "label": "Reparo de pedras portuguesas",
+              "full_label": "Manutenção > Pedreiro > Reparo de pedras portuguesas"
+            }
+          ]
+        },
+        "location": {
+          "id": 458,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pedreiro",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:pedreiro:form-31:target-150",
+      "service_id": "pedreiro",
+      "service_label": "Pedreiro",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 31,
+        "name": "Pedreiro",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          11,
+          31
+        ]
+      },
+      "targetticket": {
+        "id": 150,
+        "name": "Pedreiro para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 457,
+        "category_rule": 3,
+        "category_question_id": 461,
+        "location_rule": 3,
+        "location_question_id": 458,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 461,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "81",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 81,
+          "option_source": "categories",
+          "options_count": 7,
+          "options_sample": [
+            {
+              "id": 81,
+              "label": "Pedreiro",
+              "full_label": "Manutenção > Pedreiro"
+            },
+            {
+              "id": 82,
+              "label": "Instalação",
+              "full_label": "Manutenção > Pedreiro > Instalação"
+            },
+            {
+              "id": 83,
+              "label": "Remoção",
+              "full_label": "Manutenção > Pedreiro > Remoção"
+            },
+            {
+              "id": 84,
+              "label": "Perfuração/Escavação",
+              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
+            },
+            {
+              "id": 133,
+              "label": "Montagem/Desmontagem",
+              "full_label": "Manutenção > Pedreiro > Montagem/Desmontagem"
+            },
+            {
+              "id": 134,
+              "label": "Reparo",
+              "full_label": "Manutenção > Pedreiro > Reparo"
+            },
+            {
+              "id": 135,
+              "label": "Reparo de pedras portuguesas",
+              "full_label": "Manutenção > Pedreiro > Reparo de pedras portuguesas"
+            }
+          ]
+        },
+        "location": {
+          "id": 458,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pedreiro",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:pintura:form-12:target-11",
+      "service_id": "pintura",
+      "service_label": "Pintura",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 12,
+        "name": "Pintura",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          12,
+          32
+        ]
+      },
+      "targetticket": {
+        "id": 11,
+        "name": "Pintura",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 102,
+        "location_rule": 3,
+        "location_question_id": 98,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 102,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "85",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 85,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 85,
+              "label": "Pintura",
+              "full_label": "Manutenção > Pintura"
+            },
+            {
+              "id": 86,
+              "label": "Parede",
+              "full_label": "Manutenção > Pintura > Parede"
+            },
+            {
+              "id": 87,
+              "label": "Outros",
+              "full_label": "Manutenção > Pintura > Outros"
+            },
+            {
+              "id": 136,
+              "label": "Aberturas",
+              "full_label": "Manutenção > Pintura > Aberturas"
+            },
+            {
+              "id": 137,
+              "label": "Forro",
+              "full_label": "Manutenção > Pintura > Forro"
+            },
+            {
+              "id": 138,
+              "label": "Mobiliário",
+              "full_label": "Manutenção > Pintura > Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 98,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pintura",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:pintura:form-12:target-28",
+      "service_id": "pintura",
+      "service_label": "Pintura",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 12,
+        "name": "Pintura",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          12,
+          32
+        ]
+      },
+      "targetticket": {
+        "id": 28,
+        "name": "Pintura para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 97,
+        "category_rule": 3,
+        "category_question_id": 102,
+        "location_rule": 3,
+        "location_question_id": 98,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 102,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "85",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 85,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 85,
+              "label": "Pintura",
+              "full_label": "Manutenção > Pintura"
+            },
+            {
+              "id": 86,
+              "label": "Parede",
+              "full_label": "Manutenção > Pintura > Parede"
+            },
+            {
+              "id": 87,
+              "label": "Outros",
+              "full_label": "Manutenção > Pintura > Outros"
+            },
+            {
+              "id": 136,
+              "label": "Aberturas",
+              "full_label": "Manutenção > Pintura > Aberturas"
+            },
+            {
+              "id": 137,
+              "label": "Forro",
+              "full_label": "Manutenção > Pintura > Forro"
+            },
+            {
+              "id": 138,
+              "label": "Mobiliário",
+              "full_label": "Manutenção > Pintura > Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 98,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pintura",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:pintura:form-32:target-151",
+      "service_id": "pintura",
+      "service_label": "Pintura",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 32,
+        "name": "Pintura",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          12,
+          32
+        ]
+      },
+      "targetticket": {
+        "id": 151,
+        "name": "Pintura",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 470,
+        "location_rule": 3,
+        "location_question_id": 467,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 470,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "85",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 85,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 85,
+              "label": "Pintura",
+              "full_label": "Manutenção > Pintura"
+            },
+            {
+              "id": 86,
+              "label": "Parede",
+              "full_label": "Manutenção > Pintura > Parede"
+            },
+            {
+              "id": 87,
+              "label": "Outros",
+              "full_label": "Manutenção > Pintura > Outros"
+            },
+            {
+              "id": 136,
+              "label": "Aberturas",
+              "full_label": "Manutenção > Pintura > Aberturas"
+            },
+            {
+              "id": 137,
+              "label": "Forro",
+              "full_label": "Manutenção > Pintura > Forro"
+            },
+            {
+              "id": 138,
+              "label": "Mobiliário",
+              "full_label": "Manutenção > Pintura > Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 467,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pintura",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:pintura:form-32:target-152",
+      "service_id": "pintura",
+      "service_label": "Pintura",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 32,
+        "name": "Pintura",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          12,
+          32
+        ]
+      },
+      "targetticket": {
+        "id": 152,
+        "name": "Pintura para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 466,
+        "category_rule": 3,
+        "category_question_id": 470,
+        "location_rule": 3,
+        "location_question_id": 467,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 470,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "85",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 85,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 85,
+              "label": "Pintura",
+              "full_label": "Manutenção > Pintura"
+            },
+            {
+              "id": 86,
+              "label": "Parede",
+              "full_label": "Manutenção > Pintura > Parede"
+            },
+            {
+              "id": 87,
+              "label": "Outros",
+              "full_label": "Manutenção > Pintura > Outros"
+            },
+            {
+              "id": 136,
+              "label": "Aberturas",
+              "full_label": "Manutenção > Pintura > Aberturas"
+            },
+            {
+              "id": 137,
+              "label": "Forro",
+              "full_label": "Manutenção > Pintura > Forro"
+            },
+            {
+              "id": 138,
+              "label": "Mobiliário",
+              "full_label": "Manutenção > Pintura > Mobiliário"
+            }
+          ]
+        },
+        "location": {
+          "id": 467,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Pintura",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:projeto:form-36:target-246",
+      "service_id": "projeto",
+      "service_label": "Projeto",
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        },
+        {
+          "id": 12,
+          "name": "Solicitante-GG-Conservação"
+        }
+      ],
+      "form": {
+        "id": 36,
+        "name": "Projeto",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          15,
+          36
+        ]
+      },
+      "targetticket": {
+        "id": 246,
+        "name": "Chamado",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 144,
+        "location_rule": 3,
+        "location_question_id": 501,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 1
+      },
+      "questions": {
+        "category": {
+          "id": 144,
+          "name": "Assunto",
+          "fieldtype": "text",
+          "required": true,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 501,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "0",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:tecnico-de-redes:form-13:target-12",
+      "service_id": "tecnico-de-redes",
+      "service_label": "Técnico de Redes",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 13,
+        "name": "Técnico de Redes",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          13,
+          34
+        ]
+      },
+      "targetticket": {
+        "id": 12,
+        "name": "Rede Computadores",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 111,
+        "location_rule": 3,
+        "location_question_id": 107,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 111,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "88",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 88,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 88,
+              "label": "Rede Computadores",
+              "full_label": "Manutenção > Rede Computadores"
+            },
+            {
+              "id": 89,
+              "label": "Instalação de Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Instalação de Rede Lógica"
+            },
+            {
+              "id": 90,
+              "label": "Readequação Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Readequação Rede Lógica"
+            },
+            {
+              "id": 91,
+              "label": "Conserto Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Conserto Rede Lógica"
+            },
+            {
+              "id": 92,
+              "label": "Organização de Cabeamento",
+              "full_label": "Manutenção > Rede Computadores > Organização de Cabeamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 107,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Rede Computadores",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:tecnico-de-redes:form-13:target-29",
+      "service_id": "tecnico-de-redes",
+      "service_label": "Técnico de Redes",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 13,
+        "name": "Técnico de Redes",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          13,
+          34
+        ]
+      },
+      "targetticket": {
+        "id": 29,
+        "name": "Rede Computadores para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 106,
+        "category_rule": 3,
+        "category_question_id": 111,
+        "location_rule": 3,
+        "location_question_id": 107,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 111,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "88",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 88,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 88,
+              "label": "Rede Computadores",
+              "full_label": "Manutenção > Rede Computadores"
+            },
+            {
+              "id": 89,
+              "label": "Instalação de Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Instalação de Rede Lógica"
+            },
+            {
+              "id": 90,
+              "label": "Readequação Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Readequação Rede Lógica"
+            },
+            {
+              "id": 91,
+              "label": "Conserto Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Conserto Rede Lógica"
+            },
+            {
+              "id": 92,
+              "label": "Organização de Cabeamento",
+              "full_label": "Manutenção > Rede Computadores > Organização de Cabeamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 107,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Rede Computadores",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:tecnico-de-redes:form-34:target-153",
+      "service_id": "tecnico-de-redes",
+      "service_label": "Técnico de Redes",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 34,
+        "name": "Técnico de Redes",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          13,
+          34
+        ]
+      },
+      "targetticket": {
+        "id": 153,
+        "name": "Rede Computadores",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 487,
+        "location_rule": 3,
+        "location_question_id": 484,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 487,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "88",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 88,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 88,
+              "label": "Rede Computadores",
+              "full_label": "Manutenção > Rede Computadores"
+            },
+            {
+              "id": 89,
+              "label": "Instalação de Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Instalação de Rede Lógica"
+            },
+            {
+              "id": 90,
+              "label": "Readequação Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Readequação Rede Lógica"
+            },
+            {
+              "id": 91,
+              "label": "Conserto Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Conserto Rede Lógica"
+            },
+            {
+              "id": 92,
+              "label": "Organização de Cabeamento",
+              "full_label": "Manutenção > Rede Computadores > Organização de Cabeamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 484,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Rede Computadores",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:tecnico-de-redes:form-34:target-154",
+      "service_id": "tecnico-de-redes",
+      "service_label": "Técnico de Redes",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 34,
+        "name": "Técnico de Redes",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          13,
+          34
+        ]
+      },
+      "targetticket": {
+        "id": 154,
+        "name": "Rede Computadores para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 483,
+        "category_rule": 3,
+        "category_question_id": 487,
+        "location_rule": 3,
+        "location_question_id": 484,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 487,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "88",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 88,
+          "option_source": "categories",
+          "options_count": 5,
+          "options_sample": [
+            {
+              "id": 88,
+              "label": "Rede Computadores",
+              "full_label": "Manutenção > Rede Computadores"
+            },
+            {
+              "id": 89,
+              "label": "Instalação de Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Instalação de Rede Lógica"
+            },
+            {
+              "id": 90,
+              "label": "Readequação Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Readequação Rede Lógica"
+            },
+            {
+              "id": 91,
+              "label": "Conserto Rede Lógica",
+              "full_label": "Manutenção > Rede Computadores > Conserto Rede Lógica"
+            },
+            {
+              "id": 92,
+              "label": "Organização de Cabeamento",
+              "full_label": "Manutenção > Rede Computadores > Organização de Cabeamento"
+            }
+          ]
+        },
+        "location": {
+          "id": 484,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Rede Computadores",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:vidracaria:form-14:target-13",
+      "service_id": "vidracaria",
+      "service_label": "Vidraçaria",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 14,
+        "name": "Vidraçaria",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          14,
+          35
+        ]
+      },
+      "targetticket": {
+        "id": 13,
+        "name": "Vidraçaria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 2,
+          "mode": "requester_context_para_mim",
+          "note": "Observed on Solicitante para-mim targets; resolve entity from requester/session context."
+        },
+        "destination_entity_value": 0,
+        "category_rule": 3,
+        "category_question_id": 120,
+        "location_rule": 3,
+        "location_question_id": 116,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 120,
+          "name": "Serviço",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "94",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 94,
+          "option_source": "locations",
+          "options_count": 1,
+          "options_sample": [
+            {
+              "id": 94,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Palacio Piratini > Subsolo"
+            }
+          ]
+        },
+        "location": {
+          "id": 116,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Vidraçaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:vidracaria:form-14:target-30",
+      "service_id": "vidracaria",
+      "service_label": "Vidraçaria",
+      "profile_visibility": [
+        {
+          "id": 9,
+          "name": "Solicitante"
+        }
+      ],
+      "form": {
+        "id": 14,
+        "name": "Vidraçaria",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          14,
+          35
+        ]
+      },
+      "targetticket": {
+        "id": 30,
+        "name": "Vidraçaria para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 115,
+        "category_rule": 3,
+        "category_question_id": 120,
+        "location_rule": 3,
+        "location_question_id": 116,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 120,
+          "name": "Serviço",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "94",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 94,
+          "option_source": "locations",
+          "options_count": 1,
+          "options_sample": [
+            {
+              "id": 94,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Palacio Piratini > Subsolo"
+            }
+          ]
+        },
+        "location": {
+          "id": 116,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Vidraçaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:vidracaria:form-35:target-155",
+      "service_id": "vidracaria",
+      "service_label": "Vidraçaria",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 35,
+        "name": "Vidraçaria",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          14,
+          35
+        ]
+      },
+      "targetticket": {
+        "id": 155,
+        "name": "Vidraçaria",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 24,
+        "category_rule": 3,
+        "category_question_id": 496,
+        "location_rule": 3,
+        "location_question_id": 493,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 496,
+          "name": "Serviço",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "94",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 94,
+          "option_source": "locations",
+          "options_count": 1,
+          "options_sample": [
+            {
+              "id": 94,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Palacio Piratini > Subsolo"
+            }
+          ]
+        },
+        "location": {
+          "id": 493,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Vidraçaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:vidracaria:form-35:target-156",
+      "service_id": "vidracaria",
+      "service_label": "Vidraçaria",
+      "profile_visibility": [
+        {
+          "id": 11,
+          "name": "Manutenção e Conservação"
+        }
+      ],
+      "form": {
+        "id": 35,
+        "name": "Vidraçaria",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          14,
+          35
+        ]
+      },
+      "targetticket": {
+        "id": 156,
+        "name": "Vidraçaria para terceiro",
+        "audience": "para_terceiro",
+        "destination_entity": {
+          "code": 8,
+          "mode": "third_party_question",
+          "note": "Observed on para-terceiro targets; value usually references beneficiary/user question, not final entity."
+        },
+        "destination_entity_value": 492,
+        "category_rule": 3,
+        "category_question_id": 496,
+        "location_rule": 3,
+        "location_question_id": 493,
+        "type_rule": 1,
+        "urgency_rule": 3,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 496,
+          "name": "Serviço",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "94",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 94,
+          "option_source": "locations",
+          "options_count": 1,
+          "options_sample": [
+            {
+              "id": 94,
+              "label": "Subsolo",
+              "full_label": "Carregadores e Mensageiros > Palacio Piratini > Subsolo"
+            }
+          ]
+        },
+        "location": {
+          "id": 493,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "option_source": "locations",
+          "options_count": 359,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 276,
+              "label": "P1S01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+            },
+            {
+              "id": 277,
+              "label": "P1S03",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+            },
+            {
+              "id": 278,
+              "label": "P1S02",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+            },
+            {
+              "id": 279,
+              "label": "P1S04",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+            },
+            {
+              "id": 280,
+              "label": "P1C01",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+            }
+          ]
+        }
+      },
+      "expected_result": {
+        "category_root": "Manutenção > Vidraçaria",
+        "domain": "Manutenção",
+        "assignment_group": {
+          "id": 22,
+          "label": "CC-MANUTENCAO",
+          "source_rule_id": 156
+        },
+        "base_task_templates": [
+          {
+            "id": 1,
+            "label": "EQUIPE EXECUTORA"
+          },
+          {
+            "id": 3,
+            "label": "MATERIAIS UTILIZADOS"
+          },
+          {
+            "id": 2,
+            "label": "SERVIÇO REALIZADO"
+          }
+        ],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
       }
     }
   ],
-  "checklists": {
-    "status": "present",
-    "forms": [
-      {
-        "form_id": 44,
-        "label": "CHECKLIST TOTAL",
-        "question_count": 1237,
-        "section_count": 17,
-        "fieldtypes": [
-          "file",
-          "glpiselect",
-          "multiselect",
-          "radios",
-          "select",
-          "textarea"
-        ]
-      },
-      {
-        "form_id": 48,
-        "label": "CHECKLIST REFRIGERAÇÃO",
-        "question_count": 111,
-        "section_count": 4,
-        "fieldtypes": [
-          "file",
-          "glpiselect",
-          "multiselect",
-          "radios",
-          "select",
-          "textarea"
-        ]
-      },
-      {
-        "form_id": 49,
-        "label": "CHECKLIST CALHAS E PLUVIAIS",
-        "question_count": 67,
-        "section_count": 2,
-        "fieldtypes": [
-          "file",
-          "glpiselect",
-          "multiselect",
-          "radios",
-          "select",
-          "textarea"
-        ]
-      },
-      {
-        "form_id": 50,
-        "label": "CHECKLIST HIDRÁULICO",
-        "question_count": 235,
-        "section_count": 6,
-        "fieldtypes": [
-          "file",
-          "glpiselect",
-          "multiselect",
-          "radios",
-          "select",
-          "textarea"
-        ]
-      },
-      {
-        "form_id": 51,
-        "label": "CHECKLIST PEDRAS PORTUGUESAS\t",
-        "question_count": 20,
-        "section_count": 2,
-        "fieldtypes": [
-          "file",
-          "glpiselect",
-          "radios",
-          "select",
-          "textarea"
-        ]
-      },
-      {
-        "form_id": 52,
-        "label": "CHECKLIST ILUMINAÇÃO",
-        "question_count": 819,
-        "section_count": 8,
-        "fieldtypes": [
-          "file",
-          "glpiselect",
-          "multiselect",
-          "radios",
-          "select",
-          "textarea"
-        ]
-      }
-    ],
-    "policy": "specialized_mobile_flow_required_before_mutation"
-  },
-  "session_policy": {
-    "requester_vs_technician_source": "getFullSession.session.glpiactiveprofile + per-ticket requester/assigned fields",
-    "requester_profile_names": [
-      "Self-Service",
-      "Solicitante"
-    ],
-    "technician_profile_names": [
-      "Técnico",
-      "Tecnico",
-      "Super-Admin",
-      "Admin"
-    ],
-    "domain_source": "ITILCategory root label + RuleTicket assignment group"
-  },
-  "policy": {
-    "unknown_category_behavior": "fail_visible_and_refresh_metadata",
-    "fallback_to_static_catalog": "bootstrap_only",
-    "requires_snapshot_hash": true,
-    "requires_etag": true,
-    "checklist_mutation_behavior": "disabled_until_specialized_flow"
-  },
-  "etag": "bc2edac50814c9aef8e92047711c9349ccd1b9c61ed9caac7faaede300b10e0f"
+  "etag": "3a1efeb78d13472a100d9089359e68df22968583f602c41347fc836a8aaafbd3",
+  "source_snapshot_hash": "33881ae7ba9e63520d1856d90921b34c1c635a85a785dbdf80a041a0b03f22bc"
 };

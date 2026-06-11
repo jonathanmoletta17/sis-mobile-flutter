@@ -43,6 +43,7 @@ void main() {
       expect(repository.source, ServiceCatalogSource.runtimeCatalog);
       expect(repository.snapshotHash, 'snapshot-1');
       expect(repository.etag, 'etag-snapshot-1');
+      expect(repository.fetchedAt, isNotNull);
       expect(repository.services.map((s) => s.categoryId), [55, 144]);
 
       final prefs = await SharedPreferences.getInstance();
@@ -58,6 +59,12 @@ void main() {
         prefs.getString(GlpiMetadataClient.cacheKeyCatalogJson),
         isNotEmpty,
       );
+      expect(
+        DateTime.tryParse(
+          prefs.getString(GlpiMetadataClient.cacheKeyCatalogFetchedAt) ?? '',
+        ),
+        isNotNull,
+      );
     },
   );
 
@@ -69,6 +76,7 @@ void main() {
           snapshotHash: 'cached-snapshot',
         ),
         GlpiMetadataClient.cacheKeyCatalogEtag: 'etag-cached-snapshot',
+        GlpiMetadataClient.cacheKeyCatalogFetchedAt: '2026-05-21T10:15:00.000Z',
       });
 
       Map<String, String>? seenHeaders;
@@ -89,6 +97,10 @@ void main() {
       );
       expect(repository.source, ServiceCatalogSource.cachedRuntimeCatalog);
       expect(repository.snapshotHash, 'cached-snapshot');
+      expect(
+        repository.fetchedAt?.toIso8601String(),
+        '2026-05-21T10:15:00.000Z',
+      );
       expect(repository.services.map((s) => s.categoryId), [55, 144]);
     },
   );
@@ -175,6 +187,34 @@ void main() {
         55,
         144,
       ]);
+    },
+  );
+
+  test(
+    'provider refresh revalidates the global catalog without app rebuild',
+    () async {
+      var snapshot = 'snapshot-1';
+      final client = GlpiMetadataClient(
+        httpClient: MockClient(
+          (request) async =>
+              http.Response(runtimeCatalogJson(snapshotHash: snapshot), 200),
+        ),
+      );
+
+      await initializeServiceCatalogRepository(
+        metadataClient: client,
+        catalogUrl: 'https://metadata.example/mobile/sis/catalog',
+      );
+      expect(serviceCatalogRepository.snapshotHash, 'snapshot-1');
+
+      snapshot = 'snapshot-2';
+      final refreshed = await refreshServiceCatalogRepository(
+        metadataClient: client,
+        catalogUrl: 'https://metadata.example/mobile/sis/catalog',
+      );
+
+      expect(refreshed.source, ServiceCatalogSource.runtimeCatalog);
+      expect(serviceCatalogRepository.snapshotHash, 'snapshot-2');
     },
   );
 }

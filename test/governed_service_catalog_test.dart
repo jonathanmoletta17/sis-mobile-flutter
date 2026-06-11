@@ -136,8 +136,9 @@ void main() {
       audience: GovernedTicketAudience.paraMim,
     )!;
 
-    final expected = record.toReadbackExpectation();
+    final expected = record.toReadbackExpectation(expectedEntityId: 24);
 
+    expect(expected.expectedEntityId, 24);
     expect(expected.expectedGroupLabel, 'CC-MANUTENCAO');
     expect(expected.expectedDomain, 'Manutenção');
     expect(expected.expectedTaskTemplateLabels, contains('EQUIPE EXECUTORA'));
@@ -154,21 +155,24 @@ void main() {
         audience: GovernedTicketAudience.paraMim,
       )!;
 
-      final result = record.toReadbackExpectation().validate(
-        ticket: {
-          'id': 9157,
-          'groups': [
-            {'name': 'CC-MANUTENCAO'},
-          ],
-          'domain': 'Manutenção',
-        },
-        taskLabels: [
-          'EQUIPE EXECUTORA',
-          'MATERIAIS UTILIZADOS',
-          'SERVIÇO REALIZADO',
-        ],
-        documentIds: ['222'],
-      );
+      final result = record
+          .toReadbackExpectation(expectedEntityId: 24)
+          .validate(
+            ticket: {
+              'id': 9157,
+              'entities_id': 24,
+              'groups': [
+                {'name': 'CC-MANUTENCAO'},
+              ],
+              'domain': 'Manutenção',
+            },
+            taskLabels: [
+              'EQUIPE EXECUTORA',
+              'MATERIAIS UTILIZADOS',
+              'SERVIÇO REALIZADO',
+            ],
+            documentIds: ['222'],
+          );
 
       expect(result.ok, isTrue);
       expect(result.failures, isEmpty);
@@ -185,19 +189,26 @@ void main() {
         audience: GovernedTicketAudience.paraMim,
       )!;
 
-      final result = record.toReadbackExpectation().validate(
-        ticket: {
-          'id': 9158,
-          'groups': [
-            {'name': 'CC-CONSERVACAO'},
-          ],
-          'domain': 'Conservação',
-        },
-        taskLabels: ['EQUIPE EXECUTORA'],
-        documentIds: const [],
-      );
+      final result = record
+          .toReadbackExpectation(expectedEntityId: 24)
+          .validate(
+            ticket: {
+              'id': 9158,
+              'entities_id': 58,
+              'groups': [
+                {'name': 'CC-CONSERVACAO'},
+              ],
+              'domain': 'Conservação',
+            },
+            taskLabels: ['EQUIPE EXECUTORA'],
+            documentIds: const [],
+          );
 
       expect(result.ok, isFalse);
+      expect(
+        result.failures,
+        contains('Entidade esperada não confirmada no read-back: 24'),
+      );
       expect(
         result.failures,
         contains('Grupo esperado não confirmado no read-back: CC-MANUTENCAO'),

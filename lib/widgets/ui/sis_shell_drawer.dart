@@ -71,7 +71,7 @@ class SisShellDrawer extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      'Operação de chamados e atendimento GLPI.',
+                      'Atendimento operacional SIS',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppColors.textOnBrandMuted,
                       ),
@@ -94,7 +94,7 @@ class SisShellDrawer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Entidade dos chamados',
+                      'Unidade de atendimento',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: AppSpacing.xs),
@@ -113,7 +113,7 @@ class SisShellDrawer extends StatelessWidget {
                         await onOpenEntitySelector(context, appState);
                       },
                       icon: const Icon(Icons.account_tree_outlined),
-                      label: const Text('Trocar entidade'),
+                      label: const Text('Trocar unidade'),
                     ),
                   ],
                 ),

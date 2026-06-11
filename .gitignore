@@ -133,3 +133,9 @@ android/keystore-secrets.txt
 # JDK bundled para build Android (runtime local, não versionar)
 tool/android/runtime/jdk*/
 tool/android/runtime/*.zip
+test/lab_fixtures/
+
+# Backups/temp de lab (não versionar)
+.env.bak*
+.hermes/
+glpi_api_doc*.html

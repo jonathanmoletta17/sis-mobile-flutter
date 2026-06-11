@@ -2,6 +2,11 @@ class GlpiTicket {
   final String serviceName;
   final String atendimentoPara;
   final String? nomePessoa;
+  final int? beneficiaryUserId;
+  final String? beneficiaryUserName;
+  final int? beneficiaryEntityId;
+  final int? loggedUserId;
+  final List<Map<String, dynamic>> governedActors;
   final int? entitiesId;
   final String? entityName;
   final String localizacao;
@@ -17,6 +22,11 @@ class GlpiTicket {
     required this.serviceName,
     required this.atendimentoPara,
     this.nomePessoa,
+    this.beneficiaryUserId,
+    this.beneficiaryUserName,
+    this.beneficiaryEntityId,
+    this.loggedUserId,
+    this.governedActors = const [],
     this.entitiesId,
     this.entityName,
     required this.localizacao,
@@ -34,6 +44,11 @@ class GlpiTicket {
       'serviceName': serviceName,
       'atendimentoPara': atendimentoPara,
       'nomePessoa': nomePessoa,
+      'beneficiaryUserId': beneficiaryUserId,
+      'beneficiaryUserName': beneficiaryUserName,
+      'beneficiaryEntityId': beneficiaryEntityId,
+      'loggedUserId': loggedUserId,
+      'governedActors': governedActors,
       'entities_id': entitiesId,
       'entityName': entityName,
       'localizacao': localizacao,
@@ -52,6 +67,11 @@ class GlpiTicket {
       serviceName: map['serviceName']?.toString() ?? '',
       atendimentoPara: map['atendimentoPara']?.toString() ?? '',
       nomePessoa: map['nomePessoa'] as String?,
+      beneficiaryUserId: _parseOptionalInt(map['beneficiaryUserId']),
+      beneficiaryUserName: map['beneficiaryUserName']?.toString(),
+      beneficiaryEntityId: _parseOptionalInt(map['beneficiaryEntityId']),
+      loggedUserId: _parseOptionalInt(map['loggedUserId']),
+      governedActors: _parseActorMaps(map['governedActors']),
       entitiesId: _parseOptionalInt(map['entities_id']),
       entityName: map['entityName']?.toString(),
       localizacao: map['localizacao']?.toString() ?? '',
@@ -69,5 +89,13 @@ class GlpiTicket {
     if (value == null) return null;
     if (value is int) return value;
     return int.tryParse(value.toString());
+  }
+
+  static List<Map<String, dynamic>> _parseActorMaps(dynamic value) {
+    if (value is! List) return const [];
+    return value
+        .whereType<Map>()
+        .map((item) => Map<String, dynamic>.from(item))
+        .toList(growable: false);
   }
 }

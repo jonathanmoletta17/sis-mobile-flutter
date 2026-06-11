@@ -11,6 +11,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_status.dart';
+import '../utils/attachment_display.dart';
 import '../utils/glpi_name_formatter.dart';
 import '../utils/glpi_text_formatter.dart';
 import '../utils/ticket_form_summary.dart';
@@ -258,7 +259,13 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
 
       for (final doc in docs) {
         final mime = (doc['mime'] ?? '').toString().toLowerCase();
-        if (!mime.startsWith('image/')) continue;
+        final filename = (doc['name'] ?? '').toString();
+        if (!AttachmentDisplay.isImageDocument(
+          filename: filename,
+          mime: mime,
+        )) {
+          continue;
+        }
 
         final docId = (doc['id'] ?? '').toString();
         final downloadUrl = (doc['download_url'] ?? '').toString();
@@ -315,7 +322,10 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
         final filename = (doc['name'] ?? 'Anexo').toString();
         final mime = (doc['mime'] ?? '').toString().toLowerCase();
 
-        final isImage = mime.startsWith('image/');
+        final isImage = AttachmentDisplay.isImageDocument(
+          filename: filename,
+          mime: mime,
+        );
         final bytes = _remoteImageBytesByDocId[docId];
 
         return Padding(
@@ -886,7 +896,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                       icon: Icons.cloud_off_outlined,
                       title: 'Chamado offline',
                       message:
-                          'Anexos remotos ficam disponiveis apenas para chamados sincronizados.',
+                          'Anexos remotos ficam disponíveis apenas para chamados sincronizados.',
                     )
                   else
                     _buildRemoteAttachmentsList(),

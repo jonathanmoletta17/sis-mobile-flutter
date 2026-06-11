@@ -6,6 +6,7 @@ import 'package:http_parser/http_parser.dart';
 import '../catalog/governed_service_catalog.dart';
 import '../config/glpi_config.dart';
 import '../models/glpi_status.dart';
+import '../models/glpi_user_ref.dart';
 import '../utils/glpi_name_formatter.dart';
 import 'glpi_client_support.dart';
 import 'glpi_ticket_support.dart';
@@ -655,6 +656,160 @@ class GlpiClient {
     }
   }
 
+  Future<List<GlpiUserRef>> searchUsers(
+    String query,
+    String sessionToken,
+  ) async {
+    final text = query.trim();
+    if (text.length < 3) return const [];
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+    };
+    // O Worker SIS só repassa caminhos do allowlist; `search/User` NÃO está
+    // permitido (apenas `search/Ticket`). `GET /User?searchText[...]` passa
+    // pelo allowlist (`User` + query) e filtra "contém" no GLPI. O perfil
+    // helpdesk (Solicitante) não tem direito REST de ler User, então o Worker
+    // eleva esses GETs com uma sessão de serviço (ver workers-vpc/src/index.js,
+    // DIRECTORY_READ_PATTERN). Buscamos por login e nome real em paralelo.
+    Future<List<dynamic>> fetchBy(String field) async {
+      final uri = Uri.parse('${GlpiConfig.baseUrl}/User').replace(
+        queryParameters: {'searchText[$field]': text, 'range': '0-15'},
+      );
+      final response = await http
+          .get(uri, headers: headers)
+          .timeout(GlpiConfig.requestTimeout);
+      _logResponse('SEARCH_USER[$field]', response);
+      if (_isAuthError(response.statusCode)) {
+        throw _authException(response);
+      }
+      // 404 do GLPI em getItems vazio é tratado como "sem resultados".
+      if (response.statusCode == 404) return const [];
+      if (response.statusCode != 200 && response.statusCode != 206) {
+        throw Exception(
+          'Erro ao buscar usuários: ${response.statusCode} - ${response.body}',
+        );
+      }
+      final decoded = jsonDecode(response.body);
+      if (decoded is List) return decoded;
+      if (decoded is Map && decoded['data'] is List) {
+        return decoded['data'] as List;
+      }
+      return const [];
+    }
+
+    final results = await Future.wait([
+      fetchBy('name'),
+      fetchBy('realname'),
+    ], eagerError: false);
+
+    final users = <GlpiUserRef>[];
+    final seen = <int>{};
+    for (final rows in results) {
+      for (final row in rows) {
+        if (row is! Map) continue;
+        final user = _userFromSearchRow(Map<String, dynamic>.from(row));
+        if (user == null || !seen.add(user.id)) continue;
+        users.add(user);
+      }
+    }
+    return users;
+  }
+
+  Future<GlpiUserRef?> getUserById(int userId, String sessionToken) async {
+    if (userId <= 0) return null;
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+    };
+    final uri = Uri.parse('${GlpiConfig.baseUrl}/User/$userId');
+
+    final response = await http
+        .get(uri, headers: headers)
+        .timeout(GlpiConfig.requestTimeout);
+    _logResponse('GET_USER', response);
+
+    if (_isAuthError(response.statusCode)) {
+      throw _authException(response);
+    }
+    if (response.statusCode == 404) return null;
+    if (response.statusCode != 200) {
+      throw Exception(
+        'Erro ao buscar usuário $userId: ${response.statusCode} - ${response.body}',
+      );
+    }
+
+    final userMap = (jsonDecode(response.body) as Map).cast<String, dynamic>();
+    final displayName = GlpiNameFormatter.formatNameFromMap(userMap).trim();
+    final login = _fieldText(userMap['name'] ?? userMap['login']);
+    final realName = _fieldText(userMap['realname'] ?? userMap['real_name']);
+    return GlpiUserRef(
+      id: userId,
+      displayName: displayName.isEmpty ? 'Usuário $userId' : displayName,
+      login: login,
+      realName: realName,
+      defaultEntityId: _parseGlpiId(userMap['entities_id']),
+    );
+  }
+
+  GlpiUserRef? _userFromSearchRow(Map<String, dynamic> row) {
+    final id = _parseGlpiId(row['2'] ?? row['id'] ?? row['ID']);
+    if (id == null || id <= 0) return null;
+
+    final login = _fieldText(row['1'] ?? row['name'] ?? row['login']);
+    final realName = _fieldText(
+      row['9'] ?? row['realname'] ?? row['real_name'],
+    );
+    final displayName = _searchUserDisplayName(
+      id: id,
+      login: login,
+      realName: realName,
+    );
+
+    return GlpiUserRef(
+      id: id,
+      displayName: displayName,
+      login: login,
+      realName: realName,
+    );
+  }
+
+  String _searchUserDisplayName({
+    required int id,
+    required String? login,
+    required String? realName,
+  }) {
+    final real = realName?.trim() ?? '';
+    if (real.isNotEmpty && real != id.toString()) return real;
+
+    final username = login?.trim() ?? '';
+    if (username.isNotEmpty && username != id.toString()) return username;
+
+    return 'Usuário $id';
+  }
+
+  int? _parseGlpiId(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is Map) return _parseGlpiId(value['id'] ?? value['value']);
+    return int.tryParse(value.toString().trim());
+  }
+
+  String? _fieldText(dynamic value) {
+    if (value == null) return null;
+    if (value is Map) {
+      return _fieldText(
+        value['name'] ?? value['label'] ?? value['completename'] ?? value['id'],
+      );
+    }
+    final text = value.toString().trim();
+    return text.isEmpty || text.toLowerCase() == 'null' ? null : text;
+  }
+
   /// Atualiza status do ticket
   Future<Map<String, dynamic>> updateTicketStatus(
     String ticketId,
@@ -909,20 +1064,27 @@ class GlpiClient {
       final returnedDocumentId = GlpiClientSupport.extractDocumentIdFromBody(
         response.body,
       );
-      final linkedDocumentIdsAfter = await _getLinkedDocumentIdsForItem(
-        sessionToken: sessionToken,
-        itemType: itemType,
-        itemId: itemId,
-      );
-      if (GlpiClientSupport.verifiesDocumentUploadLink(
-        before: linkedDocumentIdsBefore,
-        after: linkedDocumentIdsAfter,
-        documentId: returnedDocumentId,
-      )) {
-        _debugLog(
-          'Anexo direto confirmado por novo vinculo Document_Item em $itemType/$itemId.',
+      for (var attempt = 0; attempt < 3; attempt++) {
+        final linkedDocumentIdsAfter = await _getLinkedDocumentIdsForItem(
+          sessionToken: sessionToken,
+          itemType: itemType,
+          itemId: itemId,
         );
-        return;
+        if (GlpiClientSupport.verifiesDocumentUploadLink(
+          before: linkedDocumentIdsBefore,
+          after: linkedDocumentIdsAfter,
+          documentId: returnedDocumentId,
+        )) {
+          _debugLog(
+            'Anexo direto confirmado por novo vinculo Document_Item em $itemType/$itemId.',
+          );
+          return;
+        }
+        if (attempt < 2) {
+          await Future<void>.delayed(
+            Duration(milliseconds: 350 * (attempt + 1)),
+          );
+        }
       }
     }
 
@@ -1570,54 +1732,14 @@ class GlpiClient {
         if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
       };
 
-      // ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦ ALTERAÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢O:
-      // Onde: busca de docs do ticket
-      // Por quÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Âª: preservar a estratÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©gia robusta da tua branch, que jÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ estava funcionando
-      // O que faz: busca via Document_Item com filtro e depois pega detalhes
-      final String baseUrl = '${GlpiConfig.baseUrl}/Document_Item';
-      final String query = [
-        'expand_dropdowns=false',
-        'range=0-200',
-        'order=DESC',
-        'sort=id',
-        'criteria[0][field]=items_id',
-        'criteria[0][searchtype]=equals',
-        'criteria[0][value]=$ticketId',
-        'criteria[1][link]=AND',
-        'criteria[1][field]=itemtype',
-        'criteria[1][searchtype]=equals',
-        'criteria[1][value]=Ticket',
-      ].join('&');
+      final docIds = await _getLinkedDocumentIdsForItem(
+        sessionToken: sessionToken,
+        itemType: 'Ticket',
+        itemId: ticketId,
+      );
+      if (docIds.isEmpty) return [];
 
-      final uriLink = Uri.parse('$baseUrl?$query');
-      final responseLink = await http
-          .get(uriLink, headers: headers)
-          .timeout(GlpiConfig.requestTimeout);
-
-      if (responseLink.statusCode != 200 && responseLink.statusCode != 206) {
-        if (_isAuthError(responseLink.statusCode)) {
-          throw _authException(responseLink);
-        }
-        _debugLog(
-          'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Erro API (${responseLink.statusCode}): ${responseLink.body}',
-        );
-        return [];
-      }
-
-      final List<dynamic> allLinks = jsonDecode(responseLink.body);
-      if (allLinks.isEmpty) return [];
-
-      final validLinks = allLinks.where((l) {
-        final linkTicketId = l['items_id'].toString();
-        final linkType = l['itemtype'].toString();
-        return linkTicketId == ticketId && linkType == 'Ticket';
-      }).toList();
-
-      if (validLinks.isEmpty) return [];
-
-      final docIds = validLinks.map((l) => l['documents_id']).toSet().toList();
-
-      return await _fetchDocumentDetails(docIds, ticketId, headers);
+      return await _fetchDocumentDetails(docIds.toList(), ticketId, headers);
     } catch (e) {
       _debugLog(
         'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ Erro ao buscar documentos do ticket: $e',

@@ -7,6 +7,12 @@ const MOBILE_METADATA_PATH = '/metadata/mobile/sis/catalog';
 const READ_ONLY_ITEM_PATTERN =
   /^\/(?:initSession|search\/Ticket|Ticket(?:\/\d+(?:\/(?:TicketFollowup|ITILSolution|Ticket_User|Group_Ticket|Document_Item|Document))?)?|Document(?:\/\d+)?|Document_Item|ITILFollowup\/\d+\/Document_Item|ITILSolution\/\d+\/Document_Item|User(?:\/\d+)?|Group(?:\/\d+)?|Entity|Location|RequestType|ITILCategory|listSearchOptions\/Ticket|getFullSession|getActiveProfile|getMyProfiles|getMyEntities)(?:$|[/?])/;
 
+// Leituras de diretório (User/Group). O perfil helpdesk (Solicitante) não tem
+// direito REST de ler User/Group — mas o formulário GLPI permite via dropdown
+// de helpdesk. Para espelhar isso, esses GETs usam uma sessão de serviço
+// elevada (token de serviço + perfil central), sem afetar a sessão do usuário.
+const DIRECTORY_READ_PATTERN = /^\/(?:User|Group)(?:\/\d+)?(?:$|[/?])/;
+
 const POST_ALLOWLIST = new Set([
   '/initSession',
   '/Ticket',
@@ -61,15 +67,36 @@ const worker = {
     headers.set('App-Token', appToken);
     target.searchParams.set('app_token', appToken);
 
-    const upstreamRequest = new Request(target, {
-      method: request.method,
-      headers,
-      body: hasRequestBody(request.method) ? request.body : undefined,
-      redirect: 'manual',
-    });
+    const sendUpstream = (sessionTokenOverride) => {
+      const upstreamHeaders = new Headers(headers);
+      if (sessionTokenOverride) {
+        upstreamHeaders.set('Session-Token', sessionTokenOverride);
+      }
+      return env.GLPI.fetch(new Request(target, {
+        method: request.method,
+        headers: upstreamHeaders,
+        body: hasRequestBody(request.method) ? request.body : undefined,
+        redirect: 'manual',
+      }));
+    };
+
+    const useServiceSession =
+      request.method === 'GET' &&
+      DIRECTORY_READ_PATTERN.test(apiPath) &&
+      Boolean(env.GLPI_SERVICE_USER_TOKEN);
 
     try {
-      return withCors(await env.GLPI.fetch(upstreamRequest));
+      if (useServiceSession) {
+        let token = await getServiceSession(env);
+        let response = await sendUpstream(token);
+        if (response.status === 401) {
+          // Sessão de serviço expirou: renova uma vez e repete (GET sem body).
+          token = await getServiceSession(env, true);
+          response = await sendUpstream(token);
+        }
+        return withCors(response);
+      }
+      return withCors(await sendUpstream());
     } catch {
       return jsonError(502, 'SIS upstream unavailable through Workers VPC.');
     }
@@ -77,6 +104,60 @@ const worker = {
 };
 
 export default worker;
+
+// Sessão de serviço elevada (best-effort cache no isolate). Usada SOMENTE nos
+// GETs de diretório (User/Group). Renova sob 401.
+let serviceSessionToken = null;
+
+async function getServiceSession(env, forceNew = false) {
+  if (!forceNew && serviceSessionToken) {
+    return serviceSessionToken;
+  }
+  serviceSessionToken = await acquireServiceSession(env);
+  return serviceSessionToken;
+}
+
+async function acquireServiceSession(env) {
+  const appToken = env.GLPI_APP_TOKEN;
+  const initTarget = new URL(`${GLPI_API_PREFIX}/initSession`, GLPI_ORIGIN);
+  initTarget.searchParams.set('app_token', appToken);
+  const initResponse = await env.GLPI.fetch(new Request(initTarget, {
+    method: 'GET',
+    headers: new Headers({
+      'App-Token': appToken,
+      Authorization: `user_token ${env.GLPI_SERVICE_USER_TOKEN}`,
+      Accept: 'application/json',
+    }),
+    redirect: 'manual',
+  }));
+  if (!initResponse.ok) {
+    throw new Error('service session initSession failed');
+  }
+  const sessionToken = (await initResponse.json())?.session_token;
+  if (!sessionToken) {
+    throw new Error('service session token missing');
+  }
+
+  // Eleva para um perfil central (default Super-Admin=4) que tem direito de
+  // ler User/Group. changeActiveProfile é uma chamada interna do Worker, fora
+  // do allowlist público.
+  const profileId = Number(env.GLPI_SERVICE_PROFILE_ID || '4');
+  const profileTarget = new URL(`${GLPI_API_PREFIX}/changeActiveProfile`, GLPI_ORIGIN);
+  profileTarget.searchParams.set('app_token', appToken);
+  await env.GLPI.fetch(new Request(profileTarget, {
+    method: 'POST',
+    headers: new Headers({
+      'App-Token': appToken,
+      'Session-Token': sessionToken,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    }),
+    body: JSON.stringify({profiles_id: profileId}),
+    redirect: 'manual',
+  }));
+
+  return sessionToken;
+}
 
 function normalizeGlpiPath(pathname) {
   if (pathname.startsWith(GLPI_API_PREFIX)) {

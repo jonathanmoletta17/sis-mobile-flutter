@@ -26,3 +26,19 @@ Future<ServiceCatalogRepository> initializeServiceCatalogRepository({
   );
   return serviceCatalogRepository;
 }
+
+/// Revalida o catálogo governado contra o endpoint configurado.
+///
+/// A tela de serviços chama isto ao abrir/retomar o app para que mudanças já
+/// publicadas pelo GLPI Governance Runtime sejam refletidas sem exigir novo
+/// build do aplicativo. Se o endpoint estiver fora, o client mantém cache ou
+/// fallback explícito, nunca troca silenciosamente para regra inventada.
+Future<ServiceCatalogRepository> refreshServiceCatalogRepository({
+  GlpiMetadataClient? metadataClient,
+  String? catalogUrl,
+}) {
+  return initializeServiceCatalogRepository(
+    metadataClient: metadataClient,
+    catalogUrl: catalogUrl,
+  );
+}

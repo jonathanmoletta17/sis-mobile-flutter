@@ -9,6 +9,8 @@ class GlpiMetadataClient {
   static const String cacheKeyCatalogEtag = 'sis_mobile_runtime_catalog_etag';
   static const String cacheKeyCatalogSnapshotHash =
       'sis_mobile_runtime_catalog_snapshot_hash';
+  static const String cacheKeyCatalogFetchedAt =
+      'sis_mobile_runtime_catalog_fetched_at';
 
   final http.Client _httpClient;
   final Future<SharedPreferences> Function() _prefsFactory;
@@ -46,14 +48,16 @@ class GlpiMetadataClient {
       }
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
+        final fetchedAt = DateTime.now().toUtc();
         final repository = ServiceCatalogRepository.fromRuntimeCatalogJson(
           response.body,
           staticFallback: staticFallback,
           etagOverride: response.headers['etag'],
+          fetchedAt: fetchedAt,
         );
 
         if (repository.source == ServiceCatalogSource.runtimeCatalog) {
-          await _saveCatalog(response.body, repository);
+          await _saveCatalog(response.body, repository, fetchedAt: fetchedAt);
           return repository;
         }
       }
@@ -92,11 +96,15 @@ class GlpiMetadataClient {
     final prefs = await _prefsFactory();
     final raw = prefs.getString(cacheKeyCatalogJson);
     if (raw == null || raw.trim().isEmpty) return null;
+    final fetchedAt = DateTime.tryParse(
+      prefs.getString(cacheKeyCatalogFetchedAt) ?? '',
+    )?.toUtc();
 
     final repository = ServiceCatalogRepository.fromRuntimeCatalogJson(
       raw,
       staticFallback: staticFallback,
       sourceOverride: ServiceCatalogSource.cachedRuntimeCatalog,
+      fetchedAt: fetchedAt,
     );
 
     if (repository.source == ServiceCatalogSource.cachedRuntimeCatalog) {
@@ -108,10 +116,15 @@ class GlpiMetadataClient {
 
   Future<void> _saveCatalog(
     String rawJson,
-    ServiceCatalogRepository repository,
-  ) async {
+    ServiceCatalogRepository repository, {
+    required DateTime fetchedAt,
+  }) async {
     final prefs = await _prefsFactory();
     await prefs.setString(cacheKeyCatalogJson, rawJson);
+    await prefs.setString(
+      cacheKeyCatalogFetchedAt,
+      fetchedAt.toIso8601String(),
+    );
     if (repository.etag != null) {
       await prefs.setString(cacheKeyCatalogEtag, repository.etag!);
     }

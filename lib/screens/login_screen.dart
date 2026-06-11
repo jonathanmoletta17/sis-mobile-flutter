@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import '../services/glpi_client_support.dart';
@@ -57,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!success) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Falha na autenticacao. Verifique usuario e senha.'),
+            content: Text('Falha na autenticação. Verifique usuário e senha.'),
           ),
         );
       }
@@ -89,6 +90,27 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  bool get _labPreviewEnabled =>
+      (dotenv.maybeGet('SIS_LAB_PREVIEW') ?? '').toLowerCase() == 'true';
+
+  void _activateLabProfile({
+    required String username,
+    required String profile,
+    required int activeEntityId,
+    required String activeEntityName,
+    int? selectedTicketEntityId,
+    String? selectedTicketEntityName,
+  }) {
+    Provider.of<AppState>(context, listen: false).activateLabPreviewSession(
+      username: username,
+      profile: profile,
+      activeEntityId: activeEntityId,
+      activeEntityName: activeEntityName,
+      selectedTicketEntityId: selectedTicketEntityId,
+      selectedTicketEntityName: selectedTicketEntityName,
+    );
+  }
+
   @override
   void dispose() {
     _userController.dispose();
@@ -103,8 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
         badge: 'GLPI SIS',
         title: 'Acesse o atendimento operacional',
         description:
-            'Entre com sua conta GLPI para consultar chamados, interagir com conversas e abrir novas solicitacoes.',
-        footer: 'Autenticacao segura via GLPI SIS',
+            'Entre com sua conta GLPI para consultar chamados, interagir com conversas e abrir novas solicitações.',
+        footer: 'Autenticação segura via GLPI SIS',
         brandMark: Image.asset(
           'assets/images/logo.png',
           height: 108,
@@ -120,13 +142,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: _userController,
                   decoration: const InputDecoration(
-                    labelText: 'Usuario GLPI',
+                    labelText: 'Usuário',
                     prefixIcon: Icon(Icons.person_outline),
                   ),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'O nome de usuario e obrigatorio';
+                      return 'O nome de usuário é obrigatório';
                     }
                     return null;
                   },
@@ -146,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'A senha e obrigatoria';
+                      return 'A senha é obrigatória';
                     }
                     return null;
                   },
@@ -165,6 +187,52 @@ class _LoginScreenState extends State<LoginScreen> {
                         )
                       : const Text('Entrar'),
                 ),
+                if (_labPreviewEnabled) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  const Divider(),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    'LAB preview: simular perfil sem criar chamado',
+                    style: Theme.of(context).textTheme.labelLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  OutlinedButton(
+                    onPressed: () => _activateLabProfile(
+                      username: 'lab-solicitante',
+                      profile: 'Solicitante',
+                      activeEntityId: 28,
+                      activeEntityName:
+                          'Origem > PIRATINI > CASA CIVIL > Secretaria-Executiva > Subchefia Administrativa > Departamento de Tecnologia e Informação',
+                    ),
+                    child: const Text('LAB · Solicitante DTIC'),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  OutlinedButton(
+                    onPressed: () => _activateLabProfile(
+                      username: 'lab-manutencao',
+                      profile: 'Manutenção e Conservação',
+                      activeEntityId: 1,
+                      activeEntityName: 'Origem > PIRATINI',
+                      selectedTicketEntityId: 1,
+                      selectedTicketEntityName: 'Origem > PIRATINI',
+                    ),
+                    child: const Text('LAB · Manutenção e Conservação'),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  OutlinedButton(
+                    onPressed: () => _activateLabProfile(
+                      username: 'lab-gg-conservacao',
+                      profile: 'Solicitante-GG-Conservação',
+                      activeEntityId: 58,
+                      activeEntityName: 'Origem > PIRATINI > GG Conservação',
+                      selectedTicketEntityId: 58,
+                      selectedTicketEntityName:
+                          'Origem > PIRATINI > GG Conservação',
+                    ),
+                    child: const Text('LAB · Solicitante-GG-Conservação'),
+                  ),
+                ],
               ],
             ),
           ),

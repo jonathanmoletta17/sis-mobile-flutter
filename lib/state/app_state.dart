@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sis_mobile_flutter/utils/html_decode_utils.dart';
 import '../services/glpi_client.dart';
 import '../models/glpi_ticket.dart';
 import '../models/glpi_status.dart';
+import '../models/glpi_user_ref.dart';
 import '../models/ticket_message.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -57,6 +59,31 @@ class AppState extends ChangeNotifier {
   AppState(this._apiService) {
     _loadState();
     _loadPendingTickets(); // CARREGA TICKETS PENDENTES AO INICIAR
+  }
+
+  void activateLabPreviewSession({
+    required String username,
+    required String profile,
+    required int activeEntityId,
+    required String activeEntityName,
+    int? selectedTicketEntityId,
+    String? selectedTicketEntityName,
+  }) {
+    _apiService.clearSession();
+    _sessionToken = null;
+    _isAuthenticated = true;
+    _loggedUsername = username;
+    _loggedUserId = 0;
+    _activeProfile = profile;
+    _activeEntityId = activeEntityId;
+    _activeEntityName = activeEntityName;
+    _defaultEntityId = selectedTicketEntityId ?? activeEntityId;
+    _selectedTicketEntityId = selectedTicketEntityId ?? activeEntityId;
+    _selectedTicketEntityName = selectedTicketEntityName ?? activeEntityName;
+    _availableEntities = [
+      {'id': _selectedTicketEntityId, 'name': _selectedTicketEntityName},
+    ];
+    notifyListeners();
   }
 
   // Método para salvar a fila de tickets pendentes no storage local
@@ -164,7 +191,9 @@ class AppState extends ChangeNotifier {
     required String entityName,
   }) async {
     _selectedTicketEntityId = entityId;
-    _selectedTicketEntityName = entityName.trim();
+    _selectedTicketEntityName = HtmlDecodeUtils.decodeHtmlEntitiesAndClean(
+      entityName,
+    );
 
     if (_sessionToken != null &&
         _loggedUsername != null &&
@@ -321,6 +350,36 @@ class AppState extends ChangeNotifier {
 
       notifyListeners();
       return "⚠️ Chamado salvo localmente (offline). Será sincronizado quando houver conexão.";
+    }
+  }
+
+  Future<List<GlpiUserRef>> searchGlpiUsers(String query) async {
+    if (!_isAuthenticated || _sessionToken == null) {
+      return const [];
+    }
+
+    try {
+      return await _apiService.searchUsers(query, _sessionToken!);
+    } catch (e) {
+      if (_isSessionInvalidError(e)) {
+        await _handleSessionInvalid(e);
+      }
+      rethrow;
+    }
+  }
+
+  Future<GlpiUserRef?> fetchGlpiUserById(int userId) async {
+    if (!_isAuthenticated || _sessionToken == null) {
+      return null;
+    }
+
+    try {
+      return await _apiService.getUserById(userId, _sessionToken!);
+    } catch (e) {
+      if (_isSessionInvalidError(e)) {
+        await _handleSessionInvalid(e);
+      }
+      rethrow;
     }
   }
 
@@ -788,7 +847,9 @@ class AppState extends ChangeNotifier {
 
     final activeEntityName = sessionContext['activeEntityName']?.toString();
     if (activeEntityName != null && activeEntityName.trim().isNotEmpty) {
-      _activeEntityName = activeEntityName.trim();
+      _activeEntityName = HtmlDecodeUtils.decodeHtmlEntitiesAndClean(
+        activeEntityName,
+      );
     }
 
     final defaultEntityId = sessionContext['defaultEntityId'] as int?;
@@ -814,6 +875,10 @@ class AppState extends ChangeNotifier {
 
     if (entityId != null && entityId > 0) {
       stamped['entities_id'] = entityId;
+    }
+
+    if (_loggedUserId != null && _loggedUserId! > 0) {
+      stamped['loggedUserId'] ??= _loggedUserId;
     }
 
     final existingEntityName = stamped['entityName']?.toString().trim();

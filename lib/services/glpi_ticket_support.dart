@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
+import '../catalog/governed_service_catalog.dart';
+import '../catalog/governed_submission_contract.dart';
 import '../data/service_data.dart';
 
 class GlpiTicketAttachment {
@@ -104,6 +106,7 @@ class GlpiTicketSupport {
   ) {
     final contactInfo = buildContactField(formData);
     final entityId = _parseOptionalInt(formData['entities_id']);
+    final governedActorFields = buildGovernedActorFields(formData);
 
     return {
       'input': {
@@ -112,16 +115,157 @@ class GlpiTicketSupport {
         'status': 1,
         'requesttypes_id': 1,
         if (entityId != null && entityId > 0) 'entities_id': entityId,
-        'itilcategories_id': getCategoryId(formData['serviceName']),
-        if (_hasGovernedLocation(formData['localizacao']))
-          'locations_id': getLocationId(formData['localizacao']),
+        'itilcategories_id':
+            _parseOptionalInt(formData['governedCategoryId']) ??
+            getCategoryId(formData['serviceName']),
+        if (_hasGovernedLocation(
+          formData['governedLocationId'] ?? formData['localizacao'],
+        ))
+          'locations_id': getLocationId(
+            formData['governedLocationId'] ?? formData['localizacao'],
+          ),
         if (formData['urgencia'] != null)
           'urgency': mapUrgency(formData['urgencia']),
         if (formData['tipo'] != null && formData['tipo'].toString().isNotEmpty)
           'type': mapType(formData['tipo']),
         if (contactInfo.isNotEmpty) 'contact': contactInfo,
+        ...governedActorFields,
       },
     };
+  }
+
+  static Map<String, dynamic> buildGovernedActorFields(
+    Map<String, dynamic> formData,
+  ) {
+    final actors = _extractGovernedActors(formData);
+    if (actors.isEmpty) return const {};
+
+    final beneficiaryUserId = _parseOptionalInt(
+      formData['beneficiaryUserId'] ?? formData['thirdPartyUserId'],
+    );
+    final loggedUserId = _parseOptionalInt(
+      formData['loggedUserId'] ?? formData['authorUserId'],
+    );
+    final hasOtherRequester = actors.any((actor) {
+      final role = actor.role.trim().toLowerCase();
+      final type = actor.type.trim().toLowerCase();
+      if (role != 'requester') return false;
+      if (type == 'author') return false;
+      return _actorCanResolve(actor, beneficiaryUserId: beneficiaryUserId);
+    });
+
+    final userRequesters = <int>[];
+    final userObservers = <int>[];
+    final userAssigned = <int>[];
+    final groupRequesters = <int>[];
+    final groupObservers = <int>[];
+    final groupAssigned = <int>[];
+
+    for (final actor in actors) {
+      final role = actor.role.trim().toLowerCase();
+      final type = actor.type.trim().toLowerCase();
+
+      if (type == 'validator' || type == 'question_group') {
+        // TODO: aplicar validadores e grupos vindos de pergunta quando o app
+        // capturar essas respostas no formulário governado.
+        continue;
+      }
+
+      if (type == 'group') {
+        final groupId = _positiveInt(actor.value);
+        if (groupId == null) continue;
+        switch (role) {
+          case 'assigned':
+            _addUnique(groupAssigned, groupId);
+            break;
+          case 'requester':
+            _addUnique(groupRequesters, groupId);
+            break;
+          case 'observer':
+            _addUnique(groupObservers, groupId);
+            break;
+        }
+        continue;
+      }
+
+      final userId = switch (type) {
+        'question_person' => beneficiaryUserId,
+        'author' =>
+          role == 'requester' && !hasOtherRequester ? null : loggedUserId,
+        'person' => _positiveInt(actor.value),
+        _ => null,
+      };
+      final normalizedUserId = _positiveInt(userId);
+      if (normalizedUserId == null) continue;
+
+      switch (role) {
+        case 'requester':
+          _addUnique(userRequesters, normalizedUserId);
+          break;
+        case 'observer':
+          _addUnique(userObservers, normalizedUserId);
+          break;
+        case 'assigned':
+          _addUnique(userAssigned, normalizedUserId);
+          break;
+      }
+    }
+
+    return {
+      if (userRequesters.isNotEmpty) '_users_id_requester': userRequesters,
+      if (userObservers.isNotEmpty) '_users_id_observer': userObservers,
+      if (userAssigned.isNotEmpty) '_users_id_assign': userAssigned,
+      if (groupAssigned.isNotEmpty) '_groups_id_assign': groupAssigned,
+      if (groupRequesters.isNotEmpty) '_groups_id_requester': groupRequesters,
+      if (groupObservers.isNotEmpty) '_groups_id_observer': groupObservers,
+    };
+  }
+
+  static List<GovernedActor> _extractGovernedActors(
+    Map<String, dynamic> formData,
+  ) {
+    final contract = formData['governedContract'];
+    if (contract is GovernedSubmissionContract) {
+      return contract.record.actors;
+    }
+
+    final record = formData['governedRecord'];
+    if (record is GovernedServiceRecord) {
+      return record.actors;
+    }
+
+    final rawActors = formData['governedActors'];
+    if (rawActors is! List) return const [];
+
+    return rawActors
+        .map((raw) {
+          if (raw is GovernedActor) return raw;
+          if (raw is Map) {
+            return GovernedActor.fromMap(Map<String, dynamic>.from(raw));
+          }
+          return null;
+        })
+        .whereType<GovernedActor>()
+        .toList(growable: false);
+  }
+
+  static bool _actorCanResolve(
+    GovernedActor actor, {
+    required int? beneficiaryUserId,
+  }) {
+    switch (actor.type.trim().toLowerCase()) {
+      case 'question_person':
+        return _positiveInt(beneficiaryUserId) != null;
+      case 'person':
+      case 'group':
+        return _positiveInt(actor.value) != null;
+      default:
+        return false;
+    }
+  }
+
+  static void _addUnique(List<int> values, int value) {
+    if (!values.contains(value)) values.add(value);
   }
 
   static MediaType? parseMimeType(String? mime) {
@@ -147,6 +291,12 @@ class GlpiTicketSupport {
     if (value == null) return null;
     if (value is int) return value;
     return int.tryParse(value.toString());
+  }
+
+  static int? _positiveInt(dynamic value) {
+    final parsed = _parseOptionalInt(value);
+    if (parsed == null || parsed <= 0) return null;
+    return parsed;
   }
 
   static void logMultipartBasics(

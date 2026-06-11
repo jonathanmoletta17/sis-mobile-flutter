@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../theme/app_colors.dart';
+import '../catalog/governed_service_catalog.dart';
 
 class LocationOption {
   final int id;
@@ -48,6 +49,7 @@ class ServiceCategory {
   final String? assignmentGroupLabel;
   final String uiSchemaSource;
   final String? runtimeFormStatus;
+  final List<GovernedServiceRecord> governedRecords;
 
   const ServiceCategory({
     required this.name,
@@ -70,6 +72,7 @@ class ServiceCategory {
     this.assignmentGroupLabel,
     this.uiSchemaSource = 'static_bootstrap',
     this.runtimeFormStatus,
+    this.governedRecords = const [],
   });
 
   bool get hasExtraField =>
@@ -123,6 +126,7 @@ class ServiceCategory {
     String? assignmentGroupLabel,
     String? uiSchemaSource,
     String? runtimeFormStatus,
+    List<GovernedServiceRecord>? governedRecords,
   }) {
     return ServiceCategory(
       name: name ?? this.name,
@@ -145,6 +149,7 @@ class ServiceCategory {
       assignmentGroupLabel: assignmentGroupLabel ?? this.assignmentGroupLabel,
       uiSchemaSource: uiSchemaSource ?? this.uiSchemaSource,
       runtimeFormStatus: runtimeFormStatus ?? this.runtimeFormStatus,
+      governedRecords: governedRecords ?? this.governedRecords,
     );
   }
 }
@@ -200,12 +205,7 @@ const List<ServiceCategory> serviceCategories = [
     color: AppColors.catalogOperational,
     categoryId: 55,
     staticLocationRootId: 36,
-    locations: [
-      'Armazem',
-      'Patio de Carga',
-      'Estoque',
-      'Outro',
-    ],
+    locations: ['Armazem', 'Patio de Carga', 'Estoque', 'Outro'],
     typeOptions: [
       'Transporte de Material Pesado',
       'Solicitação de Ajudante',
@@ -219,12 +219,7 @@ const List<ServiceCategory> serviceCategories = [
     color: AppColors.catalogOperational,
     categoryId: 98,
     staticLocationRootId: 27,
-    locations: [
-      'Cozinha Principal',
-      'Area de Cafe',
-      'Refeitorio',
-      'Outro',
-    ],
+    locations: ['Cozinha Principal', 'Area de Cafe', 'Refeitorio', 'Outro'],
     typeOptions: [
       'Falta de Suprimentos',
       'Problema com Eletrodomestico',
@@ -254,12 +249,7 @@ const List<ServiceCategory> serviceCategories = [
     color: AppColors.catalogCritical,
     categoryId: 22,
     staticLocationRootId: 70,
-    locations: [
-      'Painel Principal',
-      'Area Tecnica',
-      'Escritorio X',
-      'Outro',
-    ],
+    locations: ['Painel Principal', 'Area Tecnica', 'Escritorio X', 'Outro'],
     typeOptions: [
       'Troca de Lampada',
       'Tomada Queimada',
@@ -317,12 +307,7 @@ const List<ServiceCategory> serviceCategories = [
     color: AppColors.catalogOperational,
     categoryId: 45,
     staticLocationRootId: 27,
-    locations: [
-      'Banheiro Social',
-      'Area de Copa/Cozinha',
-      'Corredor',
-      'Outro',
-    ],
+    locations: ['Banheiro Social', 'Area de Copa/Cozinha', 'Corredor', 'Outro'],
     typeOptions: [
       'Limpeza de Emergencia',
       'Higienizacao de Sanitario',
@@ -377,12 +362,7 @@ const List<ServiceCategory> serviceCategories = [
     color: AppColors.catalogCritical,
     categoryId: 81,
     staticLocationRootId: 70,
-    locations: [
-      'Parede Interna',
-      'Piso/Calcada',
-      'Alvenaria Externa',
-      'Outro',
-    ],
+    locations: ['Parede Interna', 'Piso/Calcada', 'Alvenaria Externa', 'Outro'],
     typeOptions: [
       'Reparo de Alvenaria (Tijolo/Bloco)',
       'Assentamento de Piso ou Revestimento',
@@ -397,12 +377,7 @@ const List<ServiceCategory> serviceCategories = [
     color: AppColors.catalogCritical,
     categoryId: 85,
     staticLocationRootId: 70,
-    locations: [
-      'Corredor do 2o Andar',
-      'Sala/Escritorio',
-      'Teto',
-      'Outro',
-    ],
+    locations: ['Corredor do 2o Andar', 'Sala/Escritorio', 'Teto', 'Outro'],
     typeOptions: [
       'Pintura de Parede',
       'Reparo de Textura',
@@ -417,11 +392,7 @@ const List<ServiceCategory> serviceCategories = [
     color: AppColors.catalogCritical,
     categoryId: 144,
     staticLocationRootId: 70,
-    locations: [
-      'Sede Principal',
-      'Anexo I',
-      'Outro',
-    ],
+    locations: ['Sede Principal', 'Anexo I', 'Outro'],
     typeOptions: [
       'Projetos DCMPC',
       'Projetos Secretaria Executiva GG',
@@ -614,5 +585,42 @@ String normalizeServiceLabel(String value) {
       .replaceAll('Ã¶', 'o')
       .replaceAll('Ãº', 'u')
       .replaceAll('Ã¼', 'u')
-      .replaceAll('Ã§', 'c');
+      .replaceAll('Ã§', 'c')
+      .replaceAll(RegExp(r'\s+'), ' ');
+}
+
+ServiceCategory governedServiceTemplate(
+  String name, {
+  int categoryId = 0,
+  String? domainLabel,
+}) {
+  final normalized = normalizeServiceLabel('$name ${domainLabel ?? ''}');
+  final isConservation = normalized.contains('conservacao');
+  final isMaintenance = normalized.contains('manutencao');
+  final isProject = normalized.contains('projeto');
+  final isMultiple = normalized.contains('multiplas');
+
+  return ServiceCategory(
+    name: name,
+    icon: isProject
+        ? FontAwesomeIcons.solidPenToSquare
+        : isMultiple
+        ? FontAwesomeIcons.toolbox
+        : isConservation
+        ? FontAwesomeIcons.broom
+        : isMaintenance
+        ? FontAwesomeIcons.screwdriverWrench
+        : FontAwesomeIcons.tableColumns,
+    color: isConservation
+        ? AppColors.catalogOperational
+        : isMaintenance
+        ? AppColors.catalogCritical
+        : AppColors.brand,
+    categoryId: categoryId,
+    locations: const [],
+    typeOptions: const [],
+    aliases: const [],
+    domainLabel: domainLabel ?? 'Catálogo governado',
+    uiSchemaSource: 'governed_v2_records',
+  );
 }
