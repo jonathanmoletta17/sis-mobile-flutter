@@ -2,23 +2,23 @@ export const MOBILE_METADATA_CATALOG = {
   "schema_version": "2.0-readonly-draft",
   "consumer_id": "sis-mobile-flutter",
   "instance": "sis",
-  "generated_at": "2026-06-03T05:33:58.758442+00:00",
+  "generated_at": "2026-06-11T01:57:48.263629+00:00",
   "source_snapshot": {
-    "path": "/home/jonathan/.brain/glpi-governance/2026-05-29-full-map/sis-snapshot-2026-05-29.json",
-    "snapshot_hash": "fbd252e50e23660e8bdd9d86aa99dba7b08808eab52b4640d6ed7ac159a2d269",
-    "sha256": "33881ae7ba9e63520d1856d90921b34c1c635a85a785dbdf80a041a0b03f22bc"
+    "path": "/home/jonathan/.brain/glpi-governance/2026-06-10-api/sis-snapshot-api-2026-06-10.json",
+    "snapshot_hash": "1f58558abe482c9177997a79f174f0684704fccb06b9614670103eabb8b99537",
+    "sha256": "ad5a86f947a447e3778f7e8b4b0af8c46ee48515035b1d878c9ade1916fa66bf"
   },
   "source_counts": {
     "formcreator_forms": 41,
-    "formcreator_forms_profiles": 44,
-    "formcreator_questions": 3004,
-    "formcreator_conditions": 6582,
-    "formcreator_targettickets": 159,
-    "rule_ticket_criteria": 25,
-    "rule_ticket_actions": 26,
-    "categories": 149,
+    "formcreator_forms_profiles": 52,
+    "formcreator_questions": 6992,
+    "formcreator_conditions": 0,
+    "formcreator_targettickets": 241,
+    "rule_ticket_criteria": 262,
+    "rule_ticket_actions": 297,
+    "categories": 109,
     "locations": 422,
-    "entities": 86
+    "entities": 85
   },
   "governance_rules": {
     "assignment": [
@@ -484,6 +484,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:ar-condicionado:form-1:target-1",
       "service_id": "ar-condicionado",
       "service_label": "Ar-Condicionado",
+      "sub_service": "Ar Condicionado",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -533,6 +536,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 1,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -585,8 +589,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -604,33 +609,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 2
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Ar Condicionado",
         "domain": "Manutenção",
@@ -670,6 +692,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:ar-condicionado:form-1:target-17",
       "service_id": "ar-condicionado",
       "service_label": "Ar-Condicionado",
+      "sub_service": "Ar Condicionado",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -719,6 +744,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 1,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -771,8 +797,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -790,33 +817,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 2
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Ar Condicionado",
         "domain": "Manutenção",
@@ -856,6 +900,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:ar-condicionado:form-21:target-129",
       "service_id": "ar-condicionado",
       "service_label": "Ar-Condicionado",
+      "sub_service": "Ar Condicionado",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -905,6 +952,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 1,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -957,8 +1005,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -976,33 +1025,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 2
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Ar Condicionado",
         "domain": "Manutenção",
@@ -1042,6 +1108,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:ar-condicionado:form-21:target-130",
       "service_id": "ar-condicionado",
       "service_label": "Ar-Condicionado",
+      "sub_service": "Ar Condicionado",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -1091,6 +1160,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 1,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -1143,8 +1213,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -1162,33 +1233,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 2
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Ar Condicionado",
         "domain": "Manutenção",
@@ -1228,6 +1316,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-calhas-e-pluviais:form-49:target-337",
       "service_id": "checklist-calhas-e-pluviais",
       "service_label": "CHECKLIST CALHAS E PLUVIAIS",
+      "sub_service": "CHECKLIST CALHAS E PLUVIAIS",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -1263,7 +1354,15 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 1
       },
       "questions": {
-        "category": null,
+        "category": {
+          "id": 149,
+          "name": "Qual o nome desta pessoa?",
+          "fieldtype": "glpiselect",
+          "required": true,
+          "raw_values": {
+            "entity_restrict": "2"
+          }
+        },
         "location": {
           "id": 72,
           "name": "Telefone de Contato",
@@ -1272,6 +1371,23 @@ export const MOBILE_METADATA_CATALOG = {
           "raw_values": {}
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -1294,6 +1410,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-hidraulico:form-50:target-341",
       "service_id": "checklist-hidraulico",
       "service_label": "CHECKLIST HIDRÁULICO",
+      "sub_service": "HIDRÁULICO ALA RESIDÊNCIAL",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -1329,9 +1448,32 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
+        "category": {
+          "id": 151,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        },
         "location": null
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -1354,6 +1496,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-hidraulico:form-50:target-342",
       "service_id": "checklist-hidraulico",
       "service_label": "CHECKLIST HIDRÁULICO",
+      "sub_service": "HIDRÁULICO ALA GOVERNAMENTAL",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -1389,7 +1534,13 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
+        "category": {
+          "id": 151,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        },
         "location": {
           "id": 73,
           "name": "Urgência",
@@ -1398,6 +1549,23 @@ export const MOBILE_METADATA_CATALOG = {
           "raw_values": {}
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -1420,6 +1588,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-hidraulico:form-50:target-343",
       "service_id": "checklist-hidraulico",
       "service_label": "CHECKLIST HIDRÁULICO",
+      "sub_service": "HIDRÁULICO GALPÃO",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -1455,7 +1626,13 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
+        "category": {
+          "id": 151,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        },
         "location": {
           "id": 73,
           "name": "Urgência",
@@ -1464,6 +1641,18 @@ export const MOBILE_METADATA_CATALOG = {
           "raw_values": {}
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -1486,6 +1675,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-hidraulico:form-50:target-344",
       "service_id": "checklist-hidraulico",
       "service_label": "CHECKLIST HIDRÁULICO",
+      "sub_service": "HIDRÁULICO GARAGEM",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -1521,7 +1713,13 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
+        "category": {
+          "id": 151,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        },
         "location": {
           "id": 84,
           "name": "Tipo",
@@ -1535,6 +1733,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 128,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -1566,6 +1765,18 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -1588,6 +1799,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-hidraulico:form-50:target-350",
       "service_id": "checklist-hidraulico",
       "service_label": "CHECKLIST HIDRÁULICO",
+      "sub_service": "HIDRÁULICO Casa Civil 1005",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -1623,7 +1837,13 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
+        "category": {
+          "id": 151,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        },
         "location": {
           "id": 71,
           "name": "Localização",
@@ -1636,8 +1856,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -1655,33 +1876,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -1704,6 +1942,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-iluminacao:form-52:target-362",
       "service_id": "checklist-iluminacao",
       "service_label": "CHECKLIST ILUMINAÇÃO",
+      "sub_service": "ILUMINAÇÂO ALA RESIDENCIAL 3º Pavimento",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -1739,9 +1980,85 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
-        "location": null
+        "category": {
+          "id": 148,
+          "name": "Este atendimento é para quem?",
+          "fieldtype": "select",
+          "required": true,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 330,
+          "name": "Tipo",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_ticket_categories": "all",
+            "show_tree_depth": "0",
+            "show_tree_root": "50",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 50,
+          "tree_depth": 0,
+          "option_source": "categories",
+          "options_count": 6,
+          "options_sample": [
+            {
+              "id": 50,
+              "label": "Marcenaria",
+              "full_label": "Manutenção > Marcenaria"
+            },
+            {
+              "id": 51,
+              "label": "Confecção de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Confecção de Mobiliário"
+            },
+            {
+              "id": 52,
+              "label": "Conserto de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Conserto de Mobiliário"
+            },
+            {
+              "id": 53,
+              "label": "Remanejo de Mobiliário",
+              "full_label": "Manutenção > Marcenaria > Remanejo de Mobiliário"
+            },
+            {
+              "id": 54,
+              "label": "Outras Atividades",
+              "full_label": "Manutenção > Marcenaria > Outras Atividades"
+            },
+            {
+              "id": 127,
+              "label": "Conserto de Aberturas",
+              "full_label": "Manutenção > Marcenaria > Conserto de Aberturas"
+            }
+          ]
+        }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -1764,6 +2081,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-iluminacao:form-52:target-363",
       "service_id": "checklist-iluminacao",
       "service_label": "CHECKLIST ILUMINAÇÃO",
+      "sub_service": "ILUMINAÇÂO ALA GOVERNAMENTAL - 1º Pavimento",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -1799,7 +2119,13 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
+        "category": {
+          "id": 148,
+          "name": "Este atendimento é para quem?",
+          "fieldtype": "select",
+          "required": true,
+          "raw_values": {}
+        },
         "location": {
           "id": 144,
           "name": "Assunto",
@@ -1808,6 +2134,28 @@ export const MOBILE_METADATA_CATALOG = {
           "raw_values": {}
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -1830,6 +2178,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-iluminacao:form-52:target-364",
       "service_id": "checklist-iluminacao",
       "service_label": "CHECKLIST ILUMINAÇÃO",
+      "sub_service": "ILUMINAÇÂO ALA RESIDENCIAL - 2º Pavimento",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -1865,9 +2216,43 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
-        "location": null
+        "category": {
+          "id": 148,
+          "name": "Este atendimento é para quem?",
+          "fieldtype": "select",
+          "required": true,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 328,
+          "name": "Anexar Arquivo",
+          "fieldtype": "file",
+          "required": false,
+          "raw_values": {}
+        }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -1890,6 +2275,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-iluminacao:form-52:target-365",
       "service_id": "checklist-iluminacao",
       "service_label": "CHECKLIST ILUMINAÇÃO",
+      "sub_service": "ILUMINAÇÂO ALA RESIDENCIAL 1º Pavimento",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -1925,9 +2313,43 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
-        "location": null
+        "category": {
+          "id": 148,
+          "name": "Este atendimento é para quem?",
+          "fieldtype": "select",
+          "required": true,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 329,
+          "name": "Assunto",
+          "fieldtype": "text",
+          "required": true,
+          "raw_values": {}
+        }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -1950,6 +2372,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-iluminacao:form-52:target-366",
       "service_id": "checklist-iluminacao",
       "service_label": "CHECKLIST ILUMINAÇÃO",
+      "sub_service": "ILUMINAÇÂO ALA GOVERNAMENTAL - 2º Pavimento",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -1985,7 +2410,13 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
+        "category": {
+          "id": 148,
+          "name": "Este atendimento é para quem?",
+          "fieldtype": "select",
+          "required": true,
+          "raw_values": {}
+        },
         "location": {
           "id": 80,
           "name": "Telefone de Contato",
@@ -1994,6 +2425,28 @@ export const MOBILE_METADATA_CATALOG = {
           "raw_values": {}
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -2016,6 +2469,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-iluminacao:form-52:target-367",
       "service_id": "checklist-iluminacao",
       "service_label": "CHECKLIST ILUMINAÇÃO",
+      "sub_service": "ILUMINAÇÂO ALA GOVERNAMENTAL - 3º Pavimento",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -2051,7 +2507,13 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
+        "category": {
+          "id": 148,
+          "name": "Este atendimento é para quem?",
+          "fieldtype": "select",
+          "required": true,
+          "raw_values": {}
+        },
         "location": {
           "id": 146,
           "name": "Assunto",
@@ -2060,6 +2522,28 @@ export const MOBILE_METADATA_CATALOG = {
           "raw_values": {}
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -2082,6 +2566,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-iluminacao:form-52:target-368",
       "service_id": "checklist-iluminacao",
       "service_label": "CHECKLIST ILUMINAÇÃO",
+      "sub_service": "ILUMINAÇÂO ALA GOVERNAMENTAL - 4º Pavimento",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -2117,9 +2604,37 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
+        "category": {
+          "id": 148,
+          "name": "Este atendimento é para quem?",
+          "fieldtype": "select",
+          "required": true,
+          "raw_values": {}
+        },
         "location": null
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -2142,6 +2657,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-pedras-portuguesas:form-51:target-359",
       "service_id": "checklist-pedras-portuguesas",
       "service_label": "CHECKLIST PEDRAS PORTUGUESAS\t",
+      "sub_service": "PEDRAS PORTUGUESAS",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -2177,151 +2695,19 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 1
       },
       "questions": {
-        "category": null,
-        "location": {
-          "id": 72,
-          "name": "Telefone de Contato",
-          "fieldtype": "integer",
-          "required": true,
-          "raw_values": {}
-        }
-      },
-      "expected_result": {
-        "category_root": null,
-        "domain": null,
-        "assignment_group": null,
-        "base_task_templates": [],
-        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
-        "attachment_policy": {
-          "create_route": "POST /Ticket/{ticket_id}/Document",
-          "upload_manifest_content_type": "application/json multipart part",
-          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
-        },
-        "readback_contract": [
-          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
-          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
-          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
-        ]
-      }
-    },
-    {
-      "catalog_record_id": "sis:checklist-refrigeracao:form-48:target-316",
-      "service_id": "checklist-refrigeracao",
-      "service_label": "CHECKLIST REFRIGERAÇÃO",
-      "profile_visibility": [
-        {
-          "id": 4,
-          "name": "Super-Admin"
-        }
-      ],
-      "form": {
-        "id": 48,
-        "name": "CHECKLIST REFRIGERAÇÃO",
-        "active": true,
-        "visible": true,
-        "helpdesk_home": true,
-        "duplicate_name_form_ids": [
-          48
-        ]
-      },
-      "targetticket": {
-        "id": 316,
-        "name": "REFRIGERAÇÃO AR CENTRAL",
-        "audience": "para_mim",
-        "destination_entity": {
-          "code": 7,
-          "mode": "maintenance_context_para_mim",
-          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
-        },
-        "destination_entity_value": 58,
-        "category_rule": 2,
-        "category_question_id": 152,
-        "location_rule": 2,
-        "location_question_id": 72,
-        "type_rule": 1,
-        "urgency_rule": 1,
-        "show_rule": 2
-      },
-      "questions": {
-        "category": null,
-        "location": {
-          "id": 72,
-          "name": "Telefone de Contato",
-          "fieldtype": "integer",
-          "required": true,
-          "raw_values": {}
-        }
-      },
-      "expected_result": {
-        "category_root": null,
-        "domain": null,
-        "assignment_group": null,
-        "base_task_templates": [],
-        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
-        "attachment_policy": {
-          "create_route": "POST /Ticket/{ticket_id}/Document",
-          "upload_manifest_content_type": "application/json multipart part",
-          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
-        },
-        "readback_contract": [
-          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
-          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
-          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
-        ]
-      }
-    },
-    {
-      "catalog_record_id": "sis:checklist-refrigeracao:form-48:target-325",
-      "service_id": "checklist-refrigeracao",
-      "service_label": "CHECKLIST REFRIGERAÇÃO",
-      "profile_visibility": [
-        {
-          "id": 4,
-          "name": "Super-Admin"
-        }
-      ],
-      "form": {
-        "id": 48,
-        "name": "CHECKLIST REFRIGERAÇÃO",
-        "active": true,
-        "visible": true,
-        "helpdesk_home": true,
-        "duplicate_name_form_ids": [
-          48
-        ]
-      },
-      "targetticket": {
-        "id": 325,
-        "name": "REFRIGERAÇÃO 1005",
-        "audience": "para_mim",
-        "destination_entity": {
-          "code": 7,
-          "mode": "maintenance_context_para_mim",
-          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
-        },
-        "destination_entity_value": 58,
-        "category_rule": 2,
-        "category_question_id": 152,
-        "location_rule": 2,
-        "location_question_id": 37,
-        "type_rule": 1,
-        "urgency_rule": 1,
-        "show_rule": 2
-      },
-      "questions": {
-        "category": null,
-        "location": {
-          "id": 37,
+        "category": {
+          "id": 150,
           "name": "Localização",
           "fieldtype": "dropdown",
           "required": true,
           "raw_values": {
-            "show_tree_depth": "2",
+            "show_tree_depth": "0",
             "show_tree_root": "70",
             "selectable_tree_root": "0",
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -2366,8 +2752,272 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
             }
           ]
+        },
+        "location": {
+          "id": 72,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        }
+      ],
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-refrigeracao:form-48:target-316",
+      "service_id": "checklist-refrigeracao",
+      "service_label": "CHECKLIST REFRIGERAÇÃO",
+      "sub_service": "REFRIGERAÇÃO AR CENTRAL",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 48,
+        "name": "CHECKLIST REFRIGERAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          48
+        ]
+      },
+      "targetticket": {
+        "id": 316,
+        "name": "REFRIGERAÇÃO AR CENTRAL",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 152,
+        "location_rule": 2,
+        "location_question_id": 72,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 152,
+          "name": "Urgência",
+          "fieldtype": "urgency",
+          "required": false,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 72,
+          "name": "Telefone de Contato",
+          "fieldtype": "integer",
+          "required": true,
+          "raw_values": {}
+        }
+      },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "observer",
+          "type": "group",
+          "value": 49
+        }
+      ],
+      "expected_result": {
+        "category_root": null,
+        "domain": null,
+        "assignment_group": null,
+        "base_task_templates": [],
+        "location_map_task_rules": "Apply RuleTicket location rules 158-177 after GLPI read-back; map tasks are pattern-based, not precomputed for every option.",
+        "attachment_policy": {
+          "create_route": "POST /Ticket/{ticket_id}/Document",
+          "upload_manifest_content_type": "application/json multipart part",
+          "proof": "Document.id + Document_Item by Document.id or GLPI Web clickable attachment; ticket content text is not proof."
+        },
+        "readback_contract": [
+          "GET/SEARCH Ticket: id, entity, category, group, status, requesttype",
+          "GET Ticket include_tasks/admin-equivalent: task templates when permitted",
+          "Document_Item by Document.id/admin-equivalent when attachment uploaded"
+        ]
+      }
+    },
+    {
+      "catalog_record_id": "sis:checklist-refrigeracao:form-48:target-325",
+      "service_id": "checklist-refrigeracao",
+      "service_label": "CHECKLIST REFRIGERAÇÃO",
+      "sub_service": "REFRIGERAÇÃO 1005",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
+      "profile_visibility": [
+        {
+          "id": 4,
+          "name": "Super-Admin"
+        }
+      ],
+      "form": {
+        "id": 48,
+        "name": "CHECKLIST REFRIGERAÇÃO",
+        "active": true,
+        "visible": true,
+        "helpdesk_home": true,
+        "duplicate_name_form_ids": [
+          48
+        ]
+      },
+      "targetticket": {
+        "id": 325,
+        "name": "REFRIGERAÇÃO 1005",
+        "audience": "para_mim",
+        "destination_entity": {
+          "code": 7,
+          "mode": "maintenance_context_para_mim",
+          "note": "Observed on Manutenção e Conservação para-mim targets; departmental/operational mode."
+        },
+        "destination_entity_value": 58,
+        "category_rule": 2,
+        "category_question_id": 152,
+        "location_rule": 2,
+        "location_question_id": 37,
+        "type_rule": 1,
+        "urgency_rule": 1,
+        "show_rule": 2
+      },
+      "questions": {
+        "category": {
+          "id": 152,
+          "name": "Urgência",
+          "fieldtype": "urgency",
+          "required": false,
+          "raw_values": {}
+        },
+        "location": {
+          "id": 37,
+          "name": "Localização",
+          "fieldtype": "dropdown",
+          "required": true,
+          "raw_values": {
+            "show_tree_depth": "2",
+            "show_tree_root": "70",
+            "selectable_tree_root": "0",
+            "entity_restrict": "2"
+          },
+          "root_id": 70,
+          "tree_depth": 2,
+          "option_source": "locations",
+          "options_count": 35,
+          "options_sample": [
+            {
+              "id": 70,
+              "label": "Locais",
+              "full_label": "Locais"
+            },
+            {
+              "id": 71,
+              "label": "Casa Civil 1005",
+              "full_label": "Locais > Casa Civil 1005"
+            },
+            {
+              "id": 79,
+              "label": "1° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 1° Andar"
+            },
+            {
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
+            },
+            {
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
+            },
+            {
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
+            },
+            {
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
+            },
+            {
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
+            }
+          ]
+        }
+      },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "observer",
+          "type": "group",
+          "value": 49
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -2390,6 +3040,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:checklist-refrigeracao:form-48:target-326",
       "service_id": "checklist-refrigeracao",
       "service_label": "CHECKLIST REFRIGERAÇÃO",
+      "sub_service": "REFRIGERAÇÃO 951",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": true,
       "profile_visibility": [
         {
           "id": 4,
@@ -2425,7 +3078,13 @@ export const MOBILE_METADATA_CATALOG = {
         "show_rule": 2
       },
       "questions": {
-        "category": null,
+        "category": {
+          "id": 152,
+          "name": "Urgência",
+          "fieldtype": "urgency",
+          "required": false,
+          "raw_values": {}
+        },
         "location": {
           "id": 83,
           "name": "Localização",
@@ -2438,6 +3097,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 36,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 28,
           "options_sample": [
@@ -2484,6 +3144,23 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "observer",
+          "type": "group",
+          "value": 49
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -2506,6 +3183,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:conservacao:form-38:target-197",
       "service_id": "conservacao",
       "service_label": "CONSERVAÇÃO",
+      "sub_service": "Carregadores",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -2558,6 +3238,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 55,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -2610,6 +3291,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -2656,6 +3338,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 572
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Carregadores",
         "domain": "Conservação",
@@ -2682,6 +3391,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:conservacao:form-38:target-198",
       "service_id": "conservacao",
       "service_label": "CONSERVAÇÃO",
+      "sub_service": "Copa",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -2734,6 +3446,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 98,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -2786,6 +3499,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -2832,6 +3546,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 572
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Copa",
         "domain": "Conservação",
@@ -2858,6 +3599,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:conservacao:form-38:target-199",
       "service_id": "conservacao",
       "service_label": "CONSERVAÇÃO",
+      "sub_service": "Jardinagem",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -2910,6 +3654,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 37,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 11,
           "options_sample": [
@@ -2967,6 +3712,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -3013,6 +3759,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 572
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Jardinagem",
         "domain": "Conservação",
@@ -3039,6 +3812,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:conservacao:form-38:target-200",
       "service_id": "conservacao",
       "service_label": "CONSERVAÇÃO",
+      "sub_service": "Limpeza",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -3091,6 +3867,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 45,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 14,
           "options_sample": [
@@ -3148,6 +3925,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -3194,6 +3972,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 572
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Limpeza",
         "domain": "Conservação",
@@ -3220,6 +4025,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:conservacao:form-38:target-201",
       "service_id": "conservacao",
       "service_label": "CONSERVAÇÃO",
+      "sub_service": "Mensageria",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -3272,6 +4080,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 128,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -3314,6 +4123,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -3360,6 +4170,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 572
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Mensageria",
         "domain": "Conservação",
@@ -3386,6 +4223,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:carregadores:form-3:target-3",
       "service_id": "carregadores",
       "service_label": "Carregadores",
+      "sub_service": "Carregadores",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -3435,6 +4275,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 55,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -3487,6 +4328,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 36,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 28,
           "options_sample": [
@@ -3533,6 +4375,23 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 19
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Carregadores",
         "domain": "Conservação",
@@ -3559,6 +4418,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:carregadores:form-3:target-18",
       "service_id": "carregadores",
       "service_label": "Carregadores",
+      "sub_service": "Carregadores",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -3608,6 +4470,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 55,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -3660,6 +4523,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 36,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 28,
           "options_sample": [
@@ -3706,6 +4570,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 19
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Carregadores",
         "domain": "Conservação",
@@ -3732,6 +4618,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:carregadores:form-22:target-131",
       "service_id": "carregadores",
       "service_label": "Carregadores",
+      "sub_service": "Carregadores",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -3781,6 +4670,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 55,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -3833,6 +4723,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 36,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 28,
           "options_sample": [
@@ -3879,6 +4770,23 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 19
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Carregadores",
         "domain": "Conservação",
@@ -3905,6 +4813,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:carregadores:form-22:target-132",
       "service_id": "carregadores",
       "service_label": "Carregadores",
+      "sub_service": "Carregadores",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -3954,6 +4865,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 55,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -4006,6 +4918,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 36,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 28,
           "options_sample": [
@@ -4052,6 +4965,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 19
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Carregadores",
         "domain": "Conservação",
@@ -4078,6 +5013,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:copa:form-4:target-4",
       "service_id": "copa",
       "service_label": "Copa",
+      "sub_service": "Copa",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -4127,6 +5065,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 98,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -4179,6 +5118,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 27,
+          "tree_depth": -3,
           "option_source": "locations",
           "options_count": 23,
           "options_sample": [
@@ -4225,6 +5165,23 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 28
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Copa",
         "domain": "Conservação",
@@ -4251,6 +5208,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:copa:form-4:target-19",
       "service_id": "copa",
       "service_label": "Copa",
+      "sub_service": "Copa",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -4300,6 +5260,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 98,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -4352,6 +5313,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 27,
+          "tree_depth": -3,
           "option_source": "locations",
           "options_count": 23,
           "options_sample": [
@@ -4398,6 +5360,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 28
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Copa",
         "domain": "Conservação",
@@ -4424,6 +5408,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:copa:form-23:target-133",
       "service_id": "copa",
       "service_label": "Copa",
+      "sub_service": "Copa",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -4473,6 +5460,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 98,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -4525,6 +5513,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 27,
+          "tree_depth": -3,
           "option_source": "locations",
           "options_count": 23,
           "options_sample": [
@@ -4571,6 +5560,23 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 28
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Copa",
         "domain": "Conservação",
@@ -4597,6 +5603,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:copa:form-23:target-134",
       "service_id": "copa",
       "service_label": "Copa",
+      "sub_service": "Copa",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -4646,6 +5655,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 98,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -4698,6 +5708,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 27,
+          "tree_depth": -3,
           "option_source": "locations",
           "options_count": 23,
           "options_sample": [
@@ -4744,6 +5755,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 28
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Copa",
         "domain": "Conservação",
@@ -4770,6 +5803,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-38",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Ar Condicionado",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -4818,6 +5854,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 1,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -4870,8 +5907,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -4889,33 +5927,45 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Ar Condicionado",
         "domain": "Manutenção",
@@ -4955,6 +6005,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-39",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Ar Condicionado",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -5003,6 +6056,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 1,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -5055,8 +6109,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -5074,33 +6129,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 2
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Ar Condicionado",
         "domain": "Manutenção",
@@ -5140,6 +6217,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-40",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Diversos",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -5188,8 +6268,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -5207,33 +6288,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -5256,6 +6354,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-41",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Diversos",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -5304,8 +6405,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -5323,33 +6425,60 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 184
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -5372,6 +6501,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-43",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Elevadores",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -5426,8 +6558,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -5445,33 +6578,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -5494,6 +6644,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-44",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Elevadores",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -5548,8 +6701,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -5567,33 +6721,45 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -5616,6 +6782,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-45",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Elétrica",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -5664,6 +6833,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 22,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 8,
           "options_sample": [
@@ -5721,8 +6891,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -5740,33 +6911,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Elétrica",
         "domain": "Manutenção",
@@ -5806,6 +6994,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-46",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Elétrica",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -5854,6 +7045,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 22,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 8,
           "options_sample": [
@@ -5911,8 +7103,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -5930,33 +7123,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Elétrica",
         "domain": "Manutenção",
@@ -5996,6 +7206,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-47",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Hidráulica",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -6044,6 +7257,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 30,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -6096,8 +7310,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -6115,33 +7330,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Hidráulica",
         "domain": "Manutenção",
@@ -6181,6 +7413,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-48",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Hidráulica",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -6229,6 +7464,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 30,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -6281,8 +7517,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -6300,33 +7537,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 184
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Hidráulica",
         "domain": "Manutenção",
@@ -6366,6 +7625,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-49",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Marcenaria",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -6414,6 +7676,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 50,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -6461,8 +7724,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -6480,33 +7744,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Marcenaria",
         "domain": "Manutenção",
@@ -6546,6 +7827,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-50",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Marcenaria",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -6594,6 +7878,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 50,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -6641,8 +7926,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -6660,33 +7946,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 184
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Marcenaria",
         "domain": "Manutenção",
@@ -6726,6 +8034,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-51",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Pedreiro",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -6774,8 +8085,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 81,
+          "tree_depth": 0,
           "option_source": "categories",
-          "options_count": 7,
+          "options_count": 6,
           "options_sample": [
             {
               "id": 81,
@@ -6791,11 +8103,6 @@ export const MOBILE_METADATA_CATALOG = {
               "id": 83,
               "label": "Remoção",
               "full_label": "Manutenção > Pedreiro > Remoção"
-            },
-            {
-              "id": 84,
-              "label": "Perfuração/Escavação",
-              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
             },
             {
               "id": 133,
@@ -6826,8 +8133,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -6845,33 +8153,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 184
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pedreiro",
         "domain": "Manutenção",
@@ -6911,6 +8241,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-52",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Pedreiro",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -6959,8 +8292,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 81,
+          "tree_depth": 0,
           "option_source": "categories",
-          "options_count": 7,
+          "options_count": 6,
           "options_sample": [
             {
               "id": 81,
@@ -6976,11 +8310,6 @@ export const MOBILE_METADATA_CATALOG = {
               "id": 83,
               "label": "Remoção",
               "full_label": "Manutenção > Pedreiro > Remoção"
-            },
-            {
-              "id": 84,
-              "label": "Perfuração/Escavação",
-              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
             },
             {
               "id": 133,
@@ -7011,8 +8340,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -7030,33 +8360,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pedreiro",
         "domain": "Manutenção",
@@ -7096,6 +8443,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-53",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Pintura",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -7144,6 +8494,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 85,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -7191,8 +8542,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -7210,33 +8562,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pintura",
         "domain": "Manutenção",
@@ -7276,6 +8645,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-54",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Pintura",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -7324,6 +8696,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 85,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -7371,8 +8744,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -7390,33 +8764,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 184
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pintura",
         "domain": "Manutenção",
@@ -7456,6 +8852,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-55",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Técnico de Redes",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -7504,6 +8903,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 88,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -7546,8 +8946,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -7565,33 +8966,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Rede Computadores",
         "domain": "Manutenção",
@@ -7631,6 +9049,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-56",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Técnico de Redes",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -7679,6 +9100,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 88,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -7721,8 +9143,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -7740,33 +9163,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 184
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Rede Computadores",
         "domain": "Manutenção",
@@ -7806,6 +9251,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-57",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Vidraçaria",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -7854,6 +9302,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 94,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -7896,8 +9345,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -7915,33 +9365,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Vidraçaria",
         "domain": "Manutenção",
@@ -7981,6 +9448,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-58",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Vidraçaria",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -8029,6 +9499,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 94,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -8071,8 +9542,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -8090,33 +9562,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 184
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Vidraçaria",
         "domain": "Manutenção",
@@ -8156,6 +9650,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-59",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Carregadores",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -8204,6 +9701,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 55,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -8256,8 +9754,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -8275,33 +9774,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Carregadores",
         "domain": "Conservação",
@@ -8328,6 +9844,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-60",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Carregadores",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -8376,6 +9895,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 55,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -8428,8 +9948,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -8447,33 +9968,45 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Carregadores",
         "domain": "Conservação",
@@ -8500,6 +10033,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-61",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Copa",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -8548,6 +10084,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 98,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -8600,8 +10137,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -8619,33 +10157,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Copa",
         "domain": "Conservação",
@@ -8672,6 +10227,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-62",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Copa",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -8720,6 +10278,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 98,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -8772,8 +10331,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -8791,33 +10351,60 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 184
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Copa",
         "domain": "Conservação",
@@ -8844,6 +10431,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-63",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Jardinagem",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -8892,6 +10482,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 37,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 11,
           "options_sample": [
@@ -8949,8 +10540,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -8968,33 +10560,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Jardinagem",
         "domain": "Conservação",
@@ -9021,6 +10630,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-64",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Jardinagem",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -9069,6 +10681,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 37,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 11,
           "options_sample": [
@@ -9126,8 +10739,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -9145,33 +10759,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Jardinagem",
         "domain": "Conservação",
@@ -9198,6 +10834,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-65",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Limpeza",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -9246,6 +10885,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 45,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 14,
           "options_sample": [
@@ -9303,8 +10943,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -9322,33 +10963,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Limpeza",
         "domain": "Conservação",
@@ -9375,6 +11033,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-66",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Limpeza",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -9423,6 +11084,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 45,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 14,
           "options_sample": [
@@ -9480,8 +11142,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -9499,33 +11162,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 184
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Limpeza",
         "domain": "Conservação",
@@ -9552,6 +11237,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-67",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Mensageria",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -9600,6 +11288,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 128,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -9642,8 +11331,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -9661,33 +11351,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 184
+        },
+        {
+          "role": "observer",
+          "type": "author",
+          "value": 0
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Mensageria",
         "domain": "Conservação",
@@ -9714,6 +11426,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:diversos:form-18:target-68",
       "service_id": "diversos",
       "service_label": "Diversos",
+      "sub_service": "Mensageria",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -9762,6 +11477,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 128,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -9804,8 +11520,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -9823,33 +11540,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Mensageria",
         "domain": "Conservação",
@@ -9876,6 +11610,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:elevadores:form-2:target-2",
       "service_id": "elevadores",
       "service_label": "Elevadores",
+      "sub_service": "Elevadores",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -9927,6 +11664,23 @@ export const MOBILE_METADATA_CATALOG = {
           "raw_values": {}
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 11
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -9949,6 +11703,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:elevadores:form-2:target-21",
       "service_id": "elevadores",
       "service_label": "Elevadores",
+      "sub_service": "Elevadores",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -10000,6 +11757,28 @@ export const MOBILE_METADATA_CATALOG = {
           "raw_values": {}
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 11
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -10022,6 +11801,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:elevadores:form-25:target-137",
       "service_id": "elevadores",
       "service_label": "Elevadores",
+      "sub_service": "Elevadores",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -10073,6 +11855,23 @@ export const MOBILE_METADATA_CATALOG = {
           "raw_values": {}
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 11
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -10095,6 +11894,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:elevadores:form-25:target-138",
       "service_id": "elevadores",
       "service_label": "Elevadores",
+      "sub_service": "Elevadores",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -10146,6 +11948,28 @@ export const MOBILE_METADATA_CATALOG = {
           "raw_values": {}
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 11
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -10168,6 +11992,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:eletrica:form-5:target-5",
       "service_id": "eletrica",
       "service_label": "Elétrica",
+      "sub_service": "Elétrica",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -10217,6 +12044,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 22,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 8,
           "options_sample": [
@@ -10274,8 +12102,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -10293,33 +12122,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 36
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Elétrica",
         "domain": "Manutenção",
@@ -10359,6 +12205,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:eletrica:form-5:target-20",
       "service_id": "eletrica",
       "service_label": "Elétrica",
+      "sub_service": "Elétrica",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -10408,6 +12257,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 22,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 8,
           "options_sample": [
@@ -10465,8 +12315,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -10484,33 +12335,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 36
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Elétrica",
         "domain": "Manutenção",
@@ -10550,6 +12423,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:eletrica:form-24:target-135",
       "service_id": "eletrica",
       "service_label": "Elétrica",
+      "sub_service": "Elétrica",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -10599,6 +12475,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 22,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 8,
           "options_sample": [
@@ -10656,8 +12533,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -10675,33 +12553,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 36
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Elétrica",
         "domain": "Manutenção",
@@ -10741,6 +12636,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:eletrica:form-24:target-136",
       "service_id": "eletrica",
       "service_label": "Elétrica",
+      "sub_service": "Elétrica",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -10790,6 +12688,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 22,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 8,
           "options_sample": [
@@ -10847,8 +12746,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -10866,33 +12766,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 36
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Elétrica",
         "domain": "Manutenção",
@@ -10932,6 +12854,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:hidraulica:form-6:target-6",
       "service_id": "hidraulica",
       "service_label": "Hidráulica",
+      "sub_service": "Hidráulica",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -10981,6 +12906,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 30,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -11033,8 +12959,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -11052,33 +12979,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 45
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Hidráulica",
         "domain": "Manutenção",
@@ -11118,6 +13062,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:hidraulica:form-6:target-22",
       "service_id": "hidraulica",
       "service_label": "Hidráulica",
+      "sub_service": "Hidráulica",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -11167,6 +13114,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 30,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -11219,8 +13167,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -11238,33 +13187,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 45
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Hidráulica",
         "domain": "Manutenção",
@@ -11304,6 +13275,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:hidraulica:form-26:target-139",
       "service_id": "hidraulica",
       "service_label": "Hidráulica",
+      "sub_service": "Hidráulica",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -11353,6 +13327,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 30,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -11405,8 +13380,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -11424,33 +13400,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 45
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Hidráulica",
         "domain": "Manutenção",
@@ -11490,6 +13483,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:hidraulica:form-26:target-140",
       "service_id": "hidraulica",
       "service_label": "Hidráulica",
+      "sub_service": "Hidráulica",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -11539,6 +13535,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 30,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -11591,8 +13588,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -11610,33 +13608,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 45
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Hidráulica",
         "domain": "Manutenção",
@@ -11676,6 +13696,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:jardinagem:form-7:target-14",
       "service_id": "jardinagem",
       "service_label": "Jardinagem",
+      "sub_service": "Jardinagem",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -11725,6 +13748,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 37,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 11,
           "options_sample": [
@@ -11782,6 +13806,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 31,
+          "tree_depth": -3,
           "option_source": "locations",
           "options_count": 11,
           "options_sample": [
@@ -11828,6 +13853,23 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 54
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Jardinagem",
         "domain": "Conservação",
@@ -11854,6 +13896,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:jardinagem:form-7:target-23",
       "service_id": "jardinagem",
       "service_label": "Jardinagem",
+      "sub_service": "Jardinagem",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -11903,6 +13948,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 37,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 11,
           "options_sample": [
@@ -11960,6 +14006,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 31,
+          "tree_depth": -3,
           "option_source": "locations",
           "options_count": 11,
           "options_sample": [
@@ -12006,6 +14053,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 54
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Jardinagem",
         "domain": "Conservação",
@@ -12032,6 +14101,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:jardinagem:form-27:target-141",
       "service_id": "jardinagem",
       "service_label": "Jardinagem",
+      "sub_service": "Jardinagem",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -12081,6 +14153,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 37,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 11,
           "options_sample": [
@@ -12138,6 +14211,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 31,
+          "tree_depth": -3,
           "option_source": "locations",
           "options_count": 11,
           "options_sample": [
@@ -12184,6 +14258,23 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 54
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Jardinagem",
         "domain": "Conservação",
@@ -12210,6 +14301,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:jardinagem:form-27:target-142",
       "service_id": "jardinagem",
       "service_label": "Jardinagem",
+      "sub_service": "Jardinagem",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -12259,6 +14353,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 37,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 11,
           "options_sample": [
@@ -12316,6 +14411,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 31,
+          "tree_depth": -3,
           "option_source": "locations",
           "options_count": 11,
           "options_sample": [
@@ -12362,6 +14458,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 54
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Jardinagem",
         "domain": "Conservação",
@@ -12388,6 +14506,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:limpeza:form-8:target-7",
       "service_id": "limpeza",
       "service_label": "Limpeza",
+      "sub_service": "Limpeza",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -12437,6 +14558,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 45,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 14,
           "options_sample": [
@@ -12494,6 +14616,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 27,
+          "tree_depth": -3,
           "option_source": "locations",
           "options_count": 23,
           "options_sample": [
@@ -12540,6 +14663,23 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 62
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Limpeza",
         "domain": "Conservação",
@@ -12566,6 +14706,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:limpeza:form-8:target-24",
       "service_id": "limpeza",
       "service_label": "Limpeza",
+      "sub_service": "Limpeza",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -12615,6 +14758,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 45,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 14,
           "options_sample": [
@@ -12672,6 +14816,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 27,
+          "tree_depth": -3,
           "option_source": "locations",
           "options_count": 23,
           "options_sample": [
@@ -12718,6 +14863,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 62
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Limpeza",
         "domain": "Conservação",
@@ -12744,6 +14911,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:limpeza:form-28:target-143",
       "service_id": "limpeza",
       "service_label": "Limpeza",
+      "sub_service": "Limpeza",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -12793,6 +14963,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 45,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 14,
           "options_sample": [
@@ -12850,6 +15021,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 27,
+          "tree_depth": -3,
           "option_source": "locations",
           "options_count": 23,
           "options_sample": [
@@ -12896,6 +15068,23 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 62
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Limpeza",
         "domain": "Conservação",
@@ -12922,6 +15111,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:limpeza:form-28:target-144",
       "service_id": "limpeza",
       "service_label": "Limpeza",
+      "sub_service": "Limpeza",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -12971,6 +15163,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 45,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 14,
           "options_sample": [
@@ -13028,6 +15221,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 27,
+          "tree_depth": -3,
           "option_source": "locations",
           "options_count": 23,
           "options_sample": [
@@ -13074,6 +15268,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 62
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Limpeza",
         "domain": "Conservação",
@@ -13100,6 +15316,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:manutencao:form-39:target-202",
       "service_id": "manutencao",
       "service_label": "MANUTENÇÃO",
+      "sub_service": "Ar Condicionado",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -13152,6 +15371,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 1,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -13204,6 +15424,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -13250,6 +15471,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 634
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Ar Condicionado",
         "domain": "Manutenção",
@@ -13289,6 +15532,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:manutencao:form-39:target-203",
       "service_id": "manutencao",
       "service_label": "MANUTENÇÃO",
+      "sub_service": "Elevadores",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -13347,6 +15593,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -13393,6 +15640,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 634
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -13415,6 +15689,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:manutencao:form-39:target-204",
       "service_id": "manutencao",
       "service_label": "MANUTENÇÃO",
+      "sub_service": "Elétrica",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -13467,6 +15744,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 22,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 8,
           "options_sample": [
@@ -13524,6 +15802,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -13570,6 +15849,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 634
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Elétrica",
         "domain": "Manutenção",
@@ -13609,6 +15915,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:manutencao:form-39:target-205",
       "service_id": "manutencao",
       "service_label": "MANUTENÇÃO",
+      "sub_service": "Hidráulica",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -13661,6 +15970,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 30,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -13713,6 +16023,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -13759,6 +16070,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 634
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Hidráulica",
         "domain": "Manutenção",
@@ -13798,6 +16136,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:manutencao:form-39:target-206",
       "service_id": "manutencao",
       "service_label": "MANUTENÇÃO",
+      "sub_service": "Marcenaria",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -13850,6 +16191,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 50,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -13897,6 +16239,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -13943,6 +16286,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 634
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Marcenaria",
         "domain": "Manutenção",
@@ -13982,6 +16352,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:manutencao:form-39:target-207",
       "service_id": "manutencao",
       "service_label": "MANUTENÇÃO",
+      "sub_service": "Pedreiro",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -14034,8 +16407,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 81,
+          "tree_depth": 0,
           "option_source": "categories",
-          "options_count": 7,
+          "options_count": 6,
           "options_sample": [
             {
               "id": 81,
@@ -14051,11 +16425,6 @@ export const MOBILE_METADATA_CATALOG = {
               "id": 83,
               "label": "Remoção",
               "full_label": "Manutenção > Pedreiro > Remoção"
-            },
-            {
-              "id": 84,
-              "label": "Perfuração/Escavação",
-              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
             },
             {
               "id": 133,
@@ -14086,6 +16455,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -14132,6 +16502,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 634
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pedreiro",
         "domain": "Manutenção",
@@ -14171,6 +16568,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:manutencao:form-39:target-208",
       "service_id": "manutencao",
       "service_label": "MANUTENÇÃO",
+      "sub_service": "Pintura",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -14223,6 +16623,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 85,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -14270,6 +16671,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -14316,6 +16718,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 634
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pintura",
         "domain": "Manutenção",
@@ -14355,6 +16784,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:manutencao:form-39:target-209",
       "service_id": "manutencao",
       "service_label": "MANUTENÇÃO",
+      "sub_service": "Técnico de Redes",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -14407,6 +16839,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 88,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -14449,6 +16882,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -14495,6 +16929,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 634
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Rede Computadores",
         "domain": "Manutenção",
@@ -14534,6 +16995,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:manutencao:form-39:target-210",
       "service_id": "manutencao",
       "service_label": "MANUTENÇÃO",
+      "sub_service": "Vidraçaria",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -14586,6 +17050,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 94,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -14628,6 +17093,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -14674,6 +17140,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 634
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Vidraçaria",
         "domain": "Manutenção",
@@ -14713,6 +17206,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:marcenaria:form-9:target-8",
       "service_id": "marcenaria",
       "service_label": "Marcenaria",
+      "sub_service": "Marcenaria",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -14762,6 +17258,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 50,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -14809,8 +17306,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -14828,33 +17326,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 70
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Marcenaria",
         "domain": "Manutenção",
@@ -14894,6 +17409,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:marcenaria:form-9:target-25",
       "service_id": "marcenaria",
       "service_label": "Marcenaria",
+      "sub_service": "Marcenaria",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -14943,6 +17461,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 50,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -14990,8 +17509,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -15009,33 +17529,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Marcenaria",
         "domain": "Manutenção",
@@ -15075,6 +17612,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:marcenaria:form-29:target-145",
       "service_id": "marcenaria",
       "service_label": "Marcenaria",
+      "sub_service": "Marcenaria",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -15124,6 +17664,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 50,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -15171,8 +17712,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -15190,33 +17732,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 70
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Marcenaria",
         "domain": "Manutenção",
@@ -15256,6 +17815,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:marcenaria:form-29:target-146",
       "service_id": "marcenaria",
       "service_label": "Marcenaria",
+      "sub_service": "Marcenaria",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -15305,6 +17867,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 50,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -15352,8 +17915,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -15371,33 +17935,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Marcenaria",
         "domain": "Manutenção",
@@ -15437,6 +18018,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:mensageria:form-10:target-9",
       "service_id": "mensageria",
       "service_label": "Mensageria",
+      "sub_service": "Mensageria",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -15486,6 +18070,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 128,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -15528,6 +18113,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 36,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 28,
           "options_sample": [
@@ -15574,6 +18160,23 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 79
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Mensageria",
         "domain": "Conservação",
@@ -15600,6 +18203,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:mensageria:form-10:target-26",
       "service_id": "mensageria",
       "service_label": "Mensageria",
+      "sub_service": "Mensageria",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -15649,6 +18255,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 128,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -15691,6 +18298,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 36,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 28,
           "options_sample": [
@@ -15737,6 +18345,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 79
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Mensageria",
         "domain": "Conservação",
@@ -15763,6 +18393,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:mensageria:form-30:target-147",
       "service_id": "mensageria",
       "service_label": "Mensageria",
+      "sub_service": "Mensageria",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -15812,6 +18445,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 128,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -15854,6 +18488,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 36,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 28,
           "options_sample": [
@@ -15900,6 +18535,23 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 79
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Mensageria",
         "domain": "Conservação",
@@ -15926,6 +18578,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:mensageria:form-30:target-148",
       "service_id": "mensageria",
       "service_label": "Mensageria",
+      "sub_service": "Mensageria",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -15975,6 +18630,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 128,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -16017,6 +18673,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 36,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 28,
           "options_sample": [
@@ -16063,6 +18720,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 79
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Mensageria",
         "domain": "Conservação",
@@ -16089,6 +18768,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-216",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Ar Condicionado",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -16141,6 +18823,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 1,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -16193,6 +18876,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -16239,6 +18923,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Ar Condicionado",
         "domain": "Manutenção",
@@ -16278,6 +18984,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-218",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Diversos",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -16330,6 +19039,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -16376,6 +19086,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -16398,6 +19135,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-220",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Elevadores",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -16456,6 +19196,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -16502,6 +19243,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -16524,6 +19292,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-222",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Elétrica",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -16576,6 +19347,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 22,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 8,
           "options_sample": [
@@ -16633,6 +19405,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -16679,6 +19452,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Elétrica",
         "domain": "Manutenção",
@@ -16718,6 +19518,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-224",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Hidráulica",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -16770,6 +19573,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 30,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -16822,6 +19626,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -16868,6 +19673,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Hidráulica",
         "domain": "Manutenção",
@@ -16907,6 +19739,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-226",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Marcenaria",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -16959,6 +19794,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 50,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -17006,6 +19842,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -17052,6 +19889,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Marcenaria",
         "domain": "Manutenção",
@@ -17091,6 +19955,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-229",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Pedreiro",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -17143,8 +20010,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 81,
+          "tree_depth": 0,
           "option_source": "categories",
-          "options_count": 7,
+          "options_count": 6,
           "options_sample": [
             {
               "id": 81,
@@ -17160,11 +20028,6 @@ export const MOBILE_METADATA_CATALOG = {
               "id": 83,
               "label": "Remoção",
               "full_label": "Manutenção > Pedreiro > Remoção"
-            },
-            {
-              "id": 84,
-              "label": "Perfuração/Escavação",
-              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
             },
             {
               "id": 133,
@@ -17195,6 +20058,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -17241,6 +20105,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pedreiro",
         "domain": "Manutenção",
@@ -17280,6 +20171,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-230",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Pintura",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -17332,6 +20226,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 85,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -17379,6 +20274,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -17425,6 +20321,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pintura",
         "domain": "Manutenção",
@@ -17464,6 +20387,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-232",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Técnico de Redes",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -17516,6 +20442,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 88,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -17558,6 +20485,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -17604,6 +20532,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Rede Computadores",
         "domain": "Manutenção",
@@ -17643,6 +20598,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-234",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Vidraçaria",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -17695,6 +20653,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 94,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -17737,6 +20696,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -17783,6 +20743,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Vidraçaria",
         "domain": "Manutenção",
@@ -17822,6 +20809,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-236",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Carregadores",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -17874,6 +20864,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 55,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -17926,6 +20917,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -17972,6 +20964,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Carregadores",
         "domain": "Conservação",
@@ -17998,6 +21017,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-238",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Copa",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -18050,6 +21072,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 98,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 7,
           "options_sample": [
@@ -18102,6 +21125,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -18148,6 +21172,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Copa",
         "domain": "Conservação",
@@ -18174,6 +21225,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-240",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Jardinagem",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -18226,6 +21280,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 37,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 11,
           "options_sample": [
@@ -18283,6 +21338,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -18329,6 +21385,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Jardinagem",
         "domain": "Conservação",
@@ -18355,6 +21438,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-242",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Limpeza",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -18407,6 +21493,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 45,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 14,
           "options_sample": [
@@ -18464,6 +21551,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -18510,6 +21598,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Limpeza",
         "domain": "Conservação",
@@ -18536,6 +21651,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:multiplas-demandas:form-40:target-245",
       "service_id": "multiplas-demandas",
       "service_label": "Multiplas Demandas",
+      "sub_service": "Mensageria",
+      "is_aggregate_form": true,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -18588,6 +21706,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 128,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -18630,6 +21749,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -18676,6 +21796,33 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 21
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 696
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        }
+      ],
       "expected_result": {
         "category_root": "Conservação > Mensageria",
         "domain": "Conservação",
@@ -18702,6 +21849,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:pedreiro:form-11:target-10",
       "service_id": "pedreiro",
       "service_label": "Pedreiro",
+      "sub_service": "Pedreiro",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -18751,8 +21901,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 81,
+          "tree_depth": 0,
           "option_source": "categories",
-          "options_count": 7,
+          "options_count": 6,
           "options_sample": [
             {
               "id": 81,
@@ -18768,11 +21919,6 @@ export const MOBILE_METADATA_CATALOG = {
               "id": 83,
               "label": "Remoção",
               "full_label": "Manutenção > Pedreiro > Remoção"
-            },
-            {
-              "id": 84,
-              "label": "Perfuração/Escavação",
-              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
             },
             {
               "id": 133,
@@ -18803,8 +21949,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -18822,33 +21969,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 88
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pedreiro",
         "domain": "Manutenção",
@@ -18888,6 +22052,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:pedreiro:form-11:target-27",
       "service_id": "pedreiro",
       "service_label": "Pedreiro",
+      "sub_service": "Pedreiro",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -18937,8 +22104,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 81,
+          "tree_depth": 0,
           "option_source": "categories",
-          "options_count": 7,
+          "options_count": 6,
           "options_sample": [
             {
               "id": 81,
@@ -18954,11 +22122,6 @@ export const MOBILE_METADATA_CATALOG = {
               "id": 83,
               "label": "Remoção",
               "full_label": "Manutenção > Pedreiro > Remoção"
-            },
-            {
-              "id": 84,
-              "label": "Perfuração/Escavação",
-              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
             },
             {
               "id": 133,
@@ -18989,8 +22152,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -19008,33 +22172,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 88
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pedreiro",
         "domain": "Manutenção",
@@ -19074,6 +22260,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:pedreiro:form-31:target-149",
       "service_id": "pedreiro",
       "service_label": "Pedreiro",
+      "sub_service": "Pedreiro",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -19123,8 +22312,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 81,
+          "tree_depth": 0,
           "option_source": "categories",
-          "options_count": 7,
+          "options_count": 6,
           "options_sample": [
             {
               "id": 81,
@@ -19140,11 +22330,6 @@ export const MOBILE_METADATA_CATALOG = {
               "id": 83,
               "label": "Remoção",
               "full_label": "Manutenção > Pedreiro > Remoção"
-            },
-            {
-              "id": 84,
-              "label": "Perfuração/Escavação",
-              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
             },
             {
               "id": 133,
@@ -19175,8 +22360,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -19194,33 +22380,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 88
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pedreiro",
         "domain": "Manutenção",
@@ -19260,6 +22463,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:pedreiro:form-31:target-150",
       "service_id": "pedreiro",
       "service_label": "Pedreiro",
+      "sub_service": "Pedreiro",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -19309,8 +22515,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 81,
+          "tree_depth": 0,
           "option_source": "categories",
-          "options_count": 7,
+          "options_count": 6,
           "options_sample": [
             {
               "id": 81,
@@ -19326,11 +22533,6 @@ export const MOBILE_METADATA_CATALOG = {
               "id": 83,
               "label": "Remoção",
               "full_label": "Manutenção > Pedreiro > Remoção"
-            },
-            {
-              "id": 84,
-              "label": "Perfuração/Escavação",
-              "full_label": "Manutenção > Pedreiro > Perfuração/Escavação"
             },
             {
               "id": 133,
@@ -19361,8 +22563,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -19380,33 +22583,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 88
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pedreiro",
         "domain": "Manutenção",
@@ -19446,6 +22671,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:pintura:form-12:target-11",
       "service_id": "pintura",
       "service_label": "Pintura",
+      "sub_service": "Pintura",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -19495,6 +22723,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 85,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -19542,8 +22771,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -19561,33 +22791,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 97
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pintura",
         "domain": "Manutenção",
@@ -19627,6 +22874,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:pintura:form-12:target-28",
       "service_id": "pintura",
       "service_label": "Pintura",
+      "sub_service": "Pintura",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -19676,6 +22926,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 85,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -19723,8 +22974,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -19742,33 +22994,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pintura",
         "domain": "Manutenção",
@@ -19808,6 +23077,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:pintura:form-32:target-151",
       "service_id": "pintura",
       "service_label": "Pintura",
+      "sub_service": "Pintura",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -19857,6 +23129,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 85,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -19904,8 +23177,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -19923,33 +23197,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 97
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pintura",
         "domain": "Manutenção",
@@ -19989,6 +23280,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:pintura:form-32:target-152",
       "service_id": "pintura",
       "service_label": "Pintura",
+      "sub_service": "Pintura",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -20038,6 +23332,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 85,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 6,
           "options_sample": [
@@ -20085,8 +23380,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -20104,33 +23400,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Pintura",
         "domain": "Manutenção",
@@ -20170,6 +23483,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:projeto:form-36:target-246",
       "service_id": "projeto",
       "service_label": "Projeto",
+      "sub_service": "Chamado",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 4,
@@ -20229,6 +23545,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 359,
           "options_sample": [
@@ -20275,6 +23592,28 @@ export const MOBILE_METADATA_CATALOG = {
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "group",
+          "value": 49
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        }
+      ],
       "expected_result": {
         "category_root": null,
         "domain": null,
@@ -20297,6 +23636,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:tecnico-de-redes:form-13:target-12",
       "service_id": "tecnico-de-redes",
       "service_label": "Técnico de Redes",
+      "sub_service": "Rede Computadores",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -20346,6 +23688,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 88,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -20388,8 +23731,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -20407,33 +23751,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "group",
+          "value": 12
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 106
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Rede Computadores",
         "domain": "Manutenção",
@@ -20473,6 +23839,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:tecnico-de-redes:form-13:target-29",
       "service_id": "tecnico-de-redes",
       "service_label": "Técnico de Redes",
+      "sub_service": "Rede Computadores",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -20522,6 +23891,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 88,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -20564,8 +23934,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -20583,33 +23954,60 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 106
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "observer",
+          "type": "group",
+          "value": 12
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Rede Computadores",
         "domain": "Manutenção",
@@ -20649,6 +24047,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:tecnico-de-redes:form-34:target-153",
       "service_id": "tecnico-de-redes",
       "service_label": "Técnico de Redes",
+      "sub_service": "Rede Computadores",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -20698,6 +24099,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 88,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -20740,8 +24142,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -20759,33 +24162,55 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "group",
+          "value": 12
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 106
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Rede Computadores",
         "domain": "Manutenção",
@@ -20825,6 +24250,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:tecnico-de-redes:form-34:target-154",
       "service_id": "tecnico-de-redes",
       "service_label": "Técnico de Redes",
+      "sub_service": "Rede Computadores",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -20874,6 +24302,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 88,
+          "tree_depth": 0,
           "option_source": "categories",
           "options_count": 5,
           "options_sample": [
@@ -20916,8 +24345,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -20935,33 +24365,60 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 106
+        },
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "observer",
+          "type": "group",
+          "value": 12
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Rede Computadores",
         "domain": "Manutenção",
@@ -21001,6 +24458,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:vidracaria:form-14:target-13",
       "service_id": "vidracaria",
       "service_label": "Vidraçaria",
+      "sub_service": "Vidraçaria",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -21050,6 +24510,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 94,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 1,
           "options_sample": [
@@ -21072,8 +24533,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -21091,33 +24553,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 115
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Vidraçaria",
         "domain": "Manutenção",
@@ -21157,6 +24636,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:vidracaria:form-14:target-30",
       "service_id": "vidracaria",
       "service_label": "Vidraçaria",
+      "sub_service": "Vidraçaria",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 9,
@@ -21206,6 +24688,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 94,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 1,
           "options_sample": [
@@ -21228,8 +24711,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -21247,33 +24731,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 115
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Vidraçaria",
         "domain": "Manutenção",
@@ -21313,6 +24814,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:vidracaria:form-35:target-155",
       "service_id": "vidracaria",
       "service_label": "Vidraçaria",
+      "sub_service": "Vidraçaria",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -21362,6 +24866,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 94,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 1,
           "options_sample": [
@@ -21384,8 +24889,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -21403,33 +24909,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "assigned",
+          "type": "group",
+          "value": 22
+        },
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "question_person",
+          "value": 492
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Vidraçaria",
         "domain": "Manutenção",
@@ -21469,6 +24992,9 @@ export const MOBILE_METADATA_CATALOG = {
       "catalog_record_id": "sis:vidracaria:form-35:target-156",
       "service_id": "vidracaria",
       "service_label": "Vidraçaria",
+      "sub_service": "Vidraçaria",
+      "is_aggregate_form": false,
+      "requires_specialized_flow": false,
       "profile_visibility": [
         {
           "id": 11,
@@ -21518,6 +25044,7 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 94,
+          "tree_depth": 0,
           "option_source": "locations",
           "options_count": 1,
           "options_sample": [
@@ -21540,8 +25067,9 @@ export const MOBILE_METADATA_CATALOG = {
             "entity_restrict": "2"
           },
           "root_id": 70,
+          "tree_depth": 2,
           "option_source": "locations",
-          "options_count": 359,
+          "options_count": 35,
           "options_sample": [
             {
               "id": 70,
@@ -21559,33 +25087,50 @@ export const MOBILE_METADATA_CATALOG = {
               "full_label": "Locais > Casa Civil 1005 > 1° Andar"
             },
             {
-              "id": 276,
-              "label": "P1S01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S01"
+              "id": 80,
+              "label": "2° Andar",
+              "full_label": "Locais > Casa Civil 1005 > 2° Andar"
             },
             {
-              "id": 277,
-              "label": "P1S03",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S03"
+              "id": 81,
+              "label": "Torreão",
+              "full_label": "Locais > Casa Civil 1005 > Torreão"
             },
             {
-              "id": 278,
-              "label": "P1S02",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S02"
+              "id": 82,
+              "label": "Subsolo 2 - Corpo da Guarda",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 2 - Corpo da Guarda"
             },
             {
-              "id": 279,
-              "label": "P1S04",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1S04"
+              "id": 296,
+              "label": "Subsolo 1",
+              "full_label": "Locais > Casa Civil 1005 > Subsolo 1"
             },
             {
-              "id": 280,
-              "label": "P1C01",
-              "full_label": "Locais > Casa Civil 1005 > 1° Andar > P1C01"
+              "id": 72,
+              "label": "Palacio Piratini",
+              "full_label": "Locais > Palacio Piratini"
             }
           ]
         }
       },
+      "actors": [
+        {
+          "role": "requester",
+          "type": "author",
+          "value": 0
+        },
+        {
+          "role": "observer",
+          "type": "validator",
+          "value": 0
+        },
+        {
+          "role": "requester",
+          "type": "question_person",
+          "value": 115
+        }
+      ],
       "expected_result": {
         "category_root": "Manutenção > Vidraçaria",
         "domain": "Manutenção",
@@ -21622,6 +25167,6 @@ export const MOBILE_METADATA_CATALOG = {
       }
     }
   ],
-  "etag": "3a1efeb78d13472a100d9089359e68df22968583f602c41347fc836a8aaafbd3",
-  "source_snapshot_hash": "33881ae7ba9e63520d1856d90921b34c1c635a85a785dbdf80a041a0b03f22bc"
+  "etag": "201aab807b1f9a4fd34d38e7904788f33adbd5a0d3b3dc5c8300909c953330e5",
+  "source_snapshot_hash": "ad5a86f947a447e3778f7e8b4b0af8c46ee48515035b1d878c9ade1916fa66bf"
 };
