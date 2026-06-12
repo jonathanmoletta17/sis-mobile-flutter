@@ -102,7 +102,7 @@ void main() {
     });
 
     test(
-      'solution validation is hidden until SIS requester API approval is governed',
+      'solution validation is enabled for requester on solved tickets only',
       () {
         final solvedTicket = {
           'requester_user_id': 100,
@@ -124,9 +124,8 @@ void main() {
             loggedUserId: 100,
             solutionAuthorUserId: 200,
           ),
-          isFalse,
-          reason:
-              'SIS requester profile currently cannot approve via API; avoid rendering a button that fails at runtime.',
+          isTrue,
+          reason: 'requester can approve/reject their own solved ticket',
         );
         expect(
           AppStateTicketSupport.canValidateSolutionForTicket(
@@ -136,6 +135,7 @@ void main() {
             solutionAuthorUserId: 200,
           ),
           isFalse,
+          reason: 'ticket not in solucionado status',
         );
         expect(
           AppStateTicketSupport.canValidateSolutionForTicket(
@@ -145,6 +145,7 @@ void main() {
             solutionAuthorUserId: 200,
           ),
           isFalse,
+          reason: 'ticket already closed',
         );
         expect(
           AppStateTicketSupport.canValidateSolutionForTicket(
@@ -154,7 +155,7 @@ void main() {
             solutionAuthorUserId: 200,
           ),
           isFalse,
-          reason: 'solution author must not approve/reject their own solution',
+          reason: 'non-requester cannot validate',
         );
       },
     );

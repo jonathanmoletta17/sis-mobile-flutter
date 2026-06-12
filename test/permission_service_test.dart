@@ -95,7 +95,7 @@ void main() {
     });
 
     test(
-      'solved requester ticket stays visible but solution validation is capability-blocked until GLPI path is governed',
+      'solved requester ticket exposes solution validation for the requester',
       () {
         final decision = PermissionService.evaluate(
           role: OperationalRole.standardRequester,
@@ -109,9 +109,24 @@ void main() {
         expect(decision.canOpenConversation, isTrue);
         expect(decision.canSendFollowup, isFalse);
         expect(decision.canAttachFile, isFalse);
-        expect(decision.canValidateSolution, isFalse);
+        expect(decision.canValidateSolution, isTrue);
         expect(decision.canChangeStatus, isFalse);
         expect(decision.canProposeSolution, isFalse);
+      },
+    );
+
+    test(
+      'solved ticket seen by non-requester does not expose solution validation',
+      () {
+        final decision = PermissionService.evaluate(
+          role: OperationalRole.standardRequester,
+          ticketDomain: TicketDomain.maintenance,
+          loggedUserId: 99,
+          requesterUserId: 10,
+          status: 5,
+        );
+
+        expect(decision.canValidateSolution, isFalse);
       },
     );
 

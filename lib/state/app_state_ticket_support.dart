@@ -202,13 +202,12 @@ class AppStateTicketSupport {
     String? solutionAuthorName,
     dynamic solutionAuthorUserId,
   }) {
-    // GLPI SIS 10 currently returns ERROR_GLPI_UPDATE/ERROR_RIGHT_MISSING for
-    // requester-side solution validation through both tested API shapes:
-    // PUT /Ticket/{id} with _accepted=1 and PUT /ITILSolution/{id} status=3.
-    // Until governance grants the Solicitante profile an API-valid approval
-    // path, the mobile must not render approve/reject buttons that are known to
-    // fail at runtime. Keep solved tickets visible as history/conversation.
-    return false;
+    if (!GlpiStatusMapper.canValidateSolution(ticket['status'])) return false;
+    return isLoggedUserRequester(
+      ticket,
+      loggedUsername: loggedUsername,
+      loggedUserId: loggedUserId,
+    );
   }
 
   static String normalizeServiceCategory(dynamic rawCategory) {

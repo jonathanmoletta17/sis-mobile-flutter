@@ -1,4 +1,5 @@
 import '../models/glpi_identity.dart';
+import '../models/glpi_status.dart';
 import '../models/operational_role.dart';
 import '../models/ticket_domain.dart';
 import 'ticket_permission_decision.dart';
@@ -75,11 +76,8 @@ class PermissionService {
       canAssignToSelf: canUseTechnicalAction,
       canChangeStatus: canUseTechnicalAction,
       canProposeSolution: canUseTechnicalAction,
-      // GLPI SIS 10 currently has no API-validated requester solution
-      // approval/refusal path for the mobile profile. Keep solved-ticket
-      // history visible, but do not expose validation actions until the
-      // governed GLPI path is proven end-to-end.
-      canValidateSolution: false,
+      canValidateSolution:
+          isRequester && GlpiStatusMapper.canValidateSolution(status),
       canViewTechnicalQueue: canViewTechnicalQueue,
       canViewGgSharedQueue: isGgShared,
       reasons: reasons,

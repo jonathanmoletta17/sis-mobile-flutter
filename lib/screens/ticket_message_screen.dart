@@ -372,7 +372,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
   // ==================== WIDGETS DE UI ======================
   //
   // ==========================================================
-  // CARD DE VALIDAÃ‡ÃƒO DE SOLUÃ‡ÃƒO (STORY 4)
+  // CARD DE VALIDAÇÃO DE SOLUÇÃO (STORY 4)
   // ==========================================================
 
   Widget _buildSolutionCard(TicketMessage message) {
@@ -551,7 +551,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     final TextEditingController justificationController =
         TextEditingController();
     List<String> localImagePaths =
-        []; // ðŸŸ¢ AGORA Ã‰ UMA LISTA (MÃºltiplas Imagens)
+        []; // AGORA É UMA LISTA (Múltiplas Imagens)
 
     showDialog(
       context: context,
@@ -614,7 +614,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                       Expanded(
                         child: OutlinedButton.icon(
                           onPressed: () async {
-                            // SeleÃ§Ã£o mÃºltipla da galeria
+                            // Seleção múltipla da galeria
                             final images = await _imagePicker.pickMultiImage(
                               imageQuality: 80,
                             );
@@ -690,7 +690,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                     solutionId,
                     justificationController.text.trim(),
                     attachmentPaths:
-                        localImagePaths, // ðŸŸ¢ Manda as mÃºltiplas imagens
+                        localImagePaths, // Manda as múltiplas imagens
                   );
 
                   if (!mounted) return;
@@ -719,7 +719,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     );
   }
 
-  /// ConstrÃ³i o balÃ£o de mensagem para ANEXOS (Imagens ou Arquivos)
+  /// Constrói o balão de mensagem para ANEXOS (Imagens ou Arquivos)
   Widget _buildAttachmentMessage(TicketMessage message) {
     final isImage = AttachmentDisplay.isImageDocument(
       filename: message.content,
@@ -845,7 +845,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     );
   }
 
-  /// Exibe preview de imagem em tela cheia com opÃ§Ã£o de salvar na galeria
+  /// Exibe preview de imagem em tela cheia com opção de salvar na galeria
   void _showImagePreviewBytes(Uint8List bytes) {
     showDialog(
       context: context,
@@ -856,7 +856,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
           children: [
             InteractiveViewer(child: Image.memory(bytes)),
 
-            // BotÃ£o Fechar (Canto Superior Direito)
+            // Botão Fechar (Canto Superior Direito)
             Positioned(
               top: 10,
               right: 10,
