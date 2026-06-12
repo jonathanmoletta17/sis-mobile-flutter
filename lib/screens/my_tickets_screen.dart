@@ -86,14 +86,17 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
 
   int _groupSortWeight(String key) {
     if (key == 'offline') return 0;
+    if (key == 'operational') return 1;
     if (key.startsWith('status_')) {
       final code = int.tryParse(key.replaceFirst('status_', ''));
-      if (code != null) return code;
+      if (code != null) return code + 10;
     }
     return 999;
   }
 
-  String _groupKey(dynamic rawStatus) {
+  String _groupKey(Map<String, dynamic> ticket) {
+    if (ticket['_source'] == 'operational') return 'operational';
+    final rawStatus = ticket['status'];
     if (GlpiStatusMapper.isOffline(rawStatus)) return 'offline';
     final code = GlpiStatusMapper.code(rawStatus);
     if (code != null) return 'status_$code';
@@ -103,6 +106,15 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
   bool _matchesStatusFilter(Map<String, dynamic> ticket) {
     if (_selectedStatusFilter == null) return true;
     return _statusLabel(ticket['status']) == _selectedStatusFilter;
+  }
+
+  String _operationalSubtitle(Map<String, dynamic> ticket) {
+    final requester = ticket['users_id_recipient']?.toString().trim();
+    final service = ticket['serviceName']?.toString().trim();
+    if (requester != null && requester.isNotEmpty && service != null && service.isNotEmpty) {
+      return '$requester • $service';
+    }
+    return requester ?? service ?? 'N/A';
   }
 
   void _showFilterDialog() {
@@ -320,10 +332,12 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
           final groupLabelByKey = <String, String>{};
 
           for (final ticket in filteredList) {
-            final key = _groupKey(ticket['status']);
+            final key = _groupKey(ticket);
             groupedTickets.putIfAbsent(key, () => []);
             groupedTickets[key]!.add(ticket);
-            groupLabelByKey[key] = _statusLabel(ticket['status']);
+            groupLabelByKey[key] = key == 'operational'
+                ? 'Fila Operacional'
+                : _statusLabel(ticket['status']);
           }
 
           final sortedGroupKeys = groupedTickets.keys.toList()
@@ -383,12 +397,19 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
                       final groupKey = sortedGroupKeys[index];
                       final ticketsInGroup = groupedTickets[groupKey]!;
                       final statusGroup = groupLabelByKey[groupKey] ?? groupKey;
-                      final tone = AppStatusPalette.fromGlpiStatus(
-                        ticketsInGroup.first['status'],
-                      );
+                      final isOperational = groupKey == 'operational';
+                      final tone = isOperational
+                          ? AppStatusTone.brand
+                          : AppStatusPalette.fromGlpiStatus(
+                              ticketsInGroup.first['status'],
+                            );
                       final visuals = AppStatusPalette.resolve(tone);
-                      final baseColor = visuals.surface;
-                      final badgeColor = visuals.foreground;
+                      final baseColor = isOperational
+                          ? AppColors.accentSoft
+                          : visuals.surface;
+                      final badgeColor = isOperational
+                          ? AppColors.catalogOperational
+                          : visuals.foreground;
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(
@@ -494,7 +515,9 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
                                             ),
                                       ),
                                       subtitle: Text(
-                                        'Serviço: ${ticket['serviceName'] ?? 'N/A'}',
+                                        isOperational
+                                            ? _operationalSubtitle(ticket)
+                                            : 'Serviço: ${ticket['serviceName'] ?? 'N/A'}',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall

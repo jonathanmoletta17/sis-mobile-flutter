@@ -38,6 +38,35 @@ void main() {
   );
 
   test(
+    'operational tickets are tagged with _source:operational and personal tickets are preserved',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        'sessionToken': 'test-session',
+        'loggedUsername': 'jonathan-moletta',
+        'activeProfile': 'Super-Admin',
+      });
+
+      final api = _OperationalQueueGlpiClient();
+      final appState = AppState(api);
+      await pumpEventQueue();
+
+      final tickets = await appState.fetchTickets();
+
+      // Ticket pessoal (id 9245) não deve ter _source=operational
+      final personalTicket = tickets.firstWhere(
+        (t) => t['id'].toString() == '9245',
+      );
+      expect(personalTicket['_source'], isNot('operational'));
+
+      // Ticket da fila operacional (id 9276) deve ter _source=operational
+      final operationalTicket = tickets.firstWhere(
+        (t) => t['id'].toString() == '9276',
+      );
+      expect(operationalTicket['_source'], equals('operational'));
+    },
+  );
+
+  test(
     'requester-only session does not request broad operational New queue',
     () async {
       SharedPreferences.setMockInitialValues({

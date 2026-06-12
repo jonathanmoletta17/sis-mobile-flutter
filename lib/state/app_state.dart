@@ -501,7 +501,11 @@ class AppState extends ChangeNotifier {
             for (final ticket in newTickets) {
               final id = ticket['id']?.toString();
               if (id == null || id.isEmpty) continue;
-              onlineById[id] = ticket;
+              // Tickets pessoais já presentes mantêm sua fonte (requestedByMe);
+              // tickets que só existem na fila operacional são marcados como tal.
+              if (!onlineById.containsKey(id)) {
+                onlineById[id] = {...ticket, '_source': 'operational'};
+              }
             }
           } catch (e) {
             debugPrint('⚠️ Erro ao buscar fila operacional de Novos: $e');
