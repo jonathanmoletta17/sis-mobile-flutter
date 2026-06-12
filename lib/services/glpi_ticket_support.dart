@@ -166,8 +166,10 @@ class GlpiTicketSupport {
       final type = actor.type.trim().toLowerCase();
 
       if (type == 'validator' || type == 'question_group') {
-        // TODO: aplicar validadores e grupos vindos de pergunta quando o app
-        // capturar essas respostas no formulário governado.
+        // 'validator' actors (role=observer, value=0) são artefatos do
+        // FormCreator sem equivalente direto na criação de ticket via API.
+        // 'question_group' requer a resposta de uma pergunta do formulário —
+        // não aparece no catálogo SIS fora de serviços checklist (bloqueados).
         continue;
       }
 
