@@ -168,7 +168,7 @@ class GlpiClient {
         .timeout(
           GlpiConfig.requestTimeout,
           onTimeout: () => throw Exception(
-            'Timeout ao validar sessÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o',
+            'Timeout ao validar sessão',
           ),
         );
 
@@ -180,7 +180,7 @@ class GlpiClient {
 
     if (response.statusCode != 200) {
       throw Exception(
-        'Erro ao validar sessÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o: ${response.statusCode} - ${response.body}',
+        'Erro ao validar sessão: ${response.statusCode} - ${response.body}',
       );
     }
 
@@ -312,7 +312,7 @@ class GlpiClient {
             .timeout(
               GlpiConfig.requestTimeout,
               onTimeout: () => throw Exception(
-                'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Timeout ao buscar tickets do requerente',
+                'Timeout ao buscar tickets do requerente',
               ),
             );
 
@@ -356,7 +356,7 @@ class GlpiClient {
           .timeout(
             GlpiConfig.requestTimeout,
             onTimeout: () => throw Exception(
-              'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Timeout ao buscar tickets',
+              'Timeout ao buscar tickets',
             ),
           );
 
@@ -375,7 +375,7 @@ class GlpiClient {
       }
 
       throw Exception(
-        'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ Erro ao buscar tickets: [${response.statusCode}] - ${response.body}',
+        'Erro ao buscar tickets: [${response.statusCode}] - ${response.body}',
       );
     } catch (e) {
       _debugLog(
