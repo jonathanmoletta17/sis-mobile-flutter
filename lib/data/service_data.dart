@@ -19,6 +19,12 @@ class LocationOption {
     this.sourceQuestionId,
   }) : fullLabel = fullLabel ?? label;
 
+  String get displayLabel {
+    final contextual = _stripLocationRootPrefix(fullLabel);
+    if (contextual.isNotEmpty && contextual != 'Locais') return contextual;
+    return label;
+  }
+
   Map<String, dynamic> toPayload() => {
     'id': id,
     'label': label,
@@ -60,7 +66,7 @@ class ServiceCategory {
     this.staticLocationRootId,
     this.locationOptions = const [],
     required this.typeOptions,
-    this.urgencyOptions = const ['3 - Média (Padrão)', '1 - Baixa', '5 - Alta'],
+    this.urgencyOptions = const ['Média (padrão)', 'Baixa', 'Alta'],
     this.includeNomePessoa = true,
     this.includeUrgencia = true,
     this.includeLocalizacao = true,
@@ -102,7 +108,9 @@ class ServiceCategory {
   List<String> get displayLocations {
     final options = effectiveLocationOptions;
     if (options.isNotEmpty) {
-      return List<String>.unmodifiable(options.map((option) => option.label));
+      return List<String>.unmodifiable(
+        options.map((option) => option.displayLabel),
+      );
     }
     return List<String>.unmodifiable(locations.map(_stripLegacyLocationPrefix));
   }
@@ -166,6 +174,12 @@ LocationOption? _parseLegacyLocationOption(String rawLocation) {
     label: _stripLegacyLocationPrefix(raw),
     fullLabel: raw,
   );
+}
+
+String _stripLocationRootPrefix(String rawLocation) {
+  final raw = rawLocation.trim();
+  final stripped = raw.replaceFirst(RegExp(r'^Locais\s*>\s*'), '');
+  return stripped.trim().isEmpty ? raw : stripped.trim();
 }
 
 String _stripLegacyLocationPrefix(String rawLocation) {

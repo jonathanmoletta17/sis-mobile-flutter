@@ -447,12 +447,27 @@ class GlpiTicketSupport {
 
   static int mapUrgency(dynamic urgency) {
     if (urgency is int) return urgency;
+    if (urgency is num) return urgency.toInt();
 
     final normalized = _normalizeLabel(urgency);
-    if (normalized.contains('baixa') || normalized.contains('1')) return 1;
-    if (normalized.contains('media') || normalized.contains('3')) return 3;
-    if (normalized.contains('alta') || normalized.contains('4')) return 4;
-    if (normalized.contains('urgente') || normalized.contains('5')) return 5;
+    if (normalized.isEmpty) return 3;
+
+    final withoutLegacyPrefix = normalized.replaceFirst(
+      RegExp(r'^\d+\s*-\s*'),
+      '',
+    );
+
+    if (withoutLegacyPrefix.contains('muito baixa')) return 1;
+    if (withoutLegacyPrefix.contains('baixa')) return 2;
+    if (withoutLegacyPrefix.contains('media')) return 3;
+    if (withoutLegacyPrefix.contains('muito alta') ||
+        withoutLegacyPrefix.contains('urgente')) {
+      return 5;
+    }
+    if (withoutLegacyPrefix.contains('alta')) return 4;
+
+    final numeric = int.tryParse(normalized);
+    if (numeric != null) return numeric;
     return 3;
   }
 

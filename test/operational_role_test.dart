@@ -15,40 +15,61 @@ void main() {
       expect(role.isTechnicianCapable, isFalse);
     });
 
-    test('classifies GG conservation requester as collaborative visibility, not execution', () {
-      final role = OperationalRoleResolver.resolve(
-        activeProfile: const GlpiProfileRef(id: 12, name: 'Solicitante-GG-Conservação'),
-        groups: const [GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO', isAssign: false)],
-      );
+    test(
+      'classifies GG conservation requester as collaborative visibility, not execution',
+      () {
+        final role = OperationalRoleResolver.resolve(
+          activeProfile: const GlpiProfileRef(
+            id: 12,
+            name: 'Solicitante-GG-Conservação',
+          ),
+          groups: const [
+            GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO', isAssign: false),
+          ],
+        );
 
-      expect(role, OperationalRole.ggConservationRequester);
-      expect(role.isRequesterCapable, isTrue);
-      expect(role.isTechnicianCapable, isFalse);
-      expect(role.canUseTechnicalQueues, isFalse);
-    });
+        expect(role, OperationalRole.ggConservationRequester);
+        expect(role.isRequesterCapable, isTrue);
+        expect(role.isTechnicianCapable, isFalse);
+        expect(role.canUseTechnicalQueues, isFalse);
+      },
+    );
 
-    test('classifies technical domains by assignment groups, not profile substring alone', () {
-      final profile = const GlpiProfileRef(id: 11, name: 'Manutenção e Conservação');
+    test(
+      'classifies technical domains by assignment groups, not profile substring alone',
+      () {
+        final profile = const GlpiProfileRef(
+          id: 11,
+          name: 'Manutenção e Conservação',
+        );
 
-      expect(
-        OperationalRoleResolver.resolve(
-          activeProfile: profile,
-          groups: const [GlpiGroupRef(id: 21, name: 'CC-CONSERVACÃO', isAssign: true)],
-        ),
-        OperationalRole.conservationTechnician,
-      );
-      expect(
-        OperationalRoleResolver.resolve(
-          activeProfile: profile,
-          groups: const [GlpiGroupRef(id: 22, name: 'CC-MANUTENCAO', isAssign: true)],
-        ),
-        OperationalRole.maintenanceTechnician,
-      );
-      expect(
-        OperationalRoleResolver.resolve(activeProfile: profile, groups: const []),
-        OperationalRole.ineligible,
-      );
-    });
+        expect(
+          OperationalRoleResolver.resolve(
+            activeProfile: profile,
+            groups: const [
+              GlpiGroupRef(id: 21, name: 'CC-CONSERVACÃO', isAssign: true),
+            ],
+          ),
+          OperationalRole.conservationTechnician,
+        );
+        expect(
+          OperationalRoleResolver.resolve(
+            activeProfile: profile,
+            groups: const [
+              GlpiGroupRef(id: 22, name: 'CC-MANUTENCAO', isAssign: true),
+            ],
+          ),
+          OperationalRole.maintenanceTechnician,
+        );
+        expect(
+          OperationalRoleResolver.resolve(
+            activeProfile: profile,
+            groups: const [],
+          ),
+          OperationalRole.ineligible,
+        );
+      },
+    );
 
     test('classifies admin and hybrid users explicitly', () {
       expect(
@@ -60,7 +81,10 @@ void main() {
       );
       expect(
         OperationalRoleResolver.resolve(
-          activeProfile: const GlpiProfileRef(id: 11, name: 'Manutenção e Conservação'),
+          activeProfile: const GlpiProfileRef(
+            id: 11,
+            name: 'Manutenção e Conservação',
+          ),
           groups: const [
             GlpiGroupRef(id: 21, name: 'CC-CONSERVACÃO', isAssign: true),
             GlpiGroupRef(id: 22, name: 'CC-MANUTENCAO', isAssign: true),

@@ -20,6 +20,7 @@ import '../theme/app_spacing.dart';
 import '../widgets/anexar_arquivo_widget.dart';
 import '../widgets/custom_dropdown_field.dart';
 import '../widgets/custom_text_field.dart';
+import '../widgets/searchable_select_field.dart';
 import '../widgets/ui/sis_page_scaffold.dart';
 import '../widgets/ui/sis_section_header.dart';
 
@@ -46,11 +47,7 @@ class FormTemplate extends StatefulWidget {
     required this.localizacaoOptions,
     this.locationOptions = const [],
     required this.tipoServicoOptions,
-    this.urgenciaOptions = const [
-      'Média (padrão)',
-      'Baixa',
-      'Alta',
-    ],
+    this.urgenciaOptions = const ['Média (padrão)', 'Baixa', 'Alta'],
     this.includeNomePessoa = true,
     this.includeUrgencia = true,
     this.includeLocalizacao = true,
@@ -98,7 +95,9 @@ class _FormTemplateState extends State<FormTemplate> {
     if (selected == null || selected.trim().isEmpty) return 'Não Informado';
 
     for (final option in widget.locationOptions) {
-      if (option.label == selected || option.fullLabel == selected) {
+      if (option.label == selected ||
+          option.fullLabel == selected ||
+          option.displayLabel == selected) {
         return option.toPayload();
       }
     }
@@ -396,9 +395,7 @@ class _FormTemplateState extends State<FormTemplate> {
       if (isThirdParty && _beneficiaryUser == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(
-              'Busque e selecione a pessoa antes de enviar.',
-            ),
+            content: Text('Busque e selecione a pessoa antes de enviar.'),
             backgroundColor: AppColors.danger,
           ),
         );
@@ -450,9 +447,7 @@ class _FormTemplateState extends State<FormTemplate> {
             governedCategoryId == null) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text(
-                'Selecione um tipo válido antes de enviar.',
-              ),
+              content: Text('Selecione um tipo válido antes de enviar.'),
               backgroundColor: AppColors.danger,
             ),
           );
@@ -653,7 +648,11 @@ class _FormTemplateState extends State<FormTemplate> {
     final tipoItems = subOptions.isEmpty
         ? widget.tipoServicoOptions
         : (subRecord?.categoryQuestion?.options
-                  .map((option) => option.label ?? '')
+                  .map(
+                    (option) => (option.label?.trim().isNotEmpty == true
+                        ? option.label!.trim()
+                        : option.fullLabel?.trim() ?? ''),
+                  )
                   .where((label) => label.isNotEmpty)
                   .toList(growable: false) ??
               const <String>[]);
@@ -716,11 +715,13 @@ class _FormTemplateState extends State<FormTemplate> {
                   ),
                 ),
               if (widget.includeLocalizacao)
-                CustomDropdownField(
+                SearchableSelectField(
                   label: 'Localização',
                   items: widget.localizacaoOptions,
                   isRequired: true,
                   initialValue: _localizacao,
+                  hintText: 'Buscar localização',
+                  searchLabel: 'Buscar localização',
                   onChanged: (newValue) {
                     setState(() {
                       _localizacao = newValue;
@@ -971,7 +972,7 @@ class _GlpiUserSearchFieldState extends State<_GlpiUserSearchField> {
                         (user.login != null &&
                             user.login!.trim().isNotEmpty &&
                             user.login != user.displayName)
-                        ? Text(user.login!)
+                        ? Text('Login: ${user.login!}')
                         : null,
                     onTap: () => _selectUser(user),
                   );

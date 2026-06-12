@@ -17,7 +17,8 @@ class PermissionService {
   }) {
     final reasons = <String>[];
     final warnings = <String>[];
-    final isRequester = loggedUserId != null &&
+    final isRequester =
+        loggedUserId != null &&
         requesterUserId != null &&
         loggedUserId == requesterUserId;
     final isOpen = _isOpenForInteraction(status);
@@ -25,29 +26,36 @@ class PermissionService {
 
     if (isRequester) reasons.add('Usuário é requerente do ticket');
 
-    final isGgShared = role == OperationalRole.ggConservationRequester &&
+    final isGgShared =
+        role == OperationalRole.ggConservationRequester &&
         ticketDomain == TicketDomain.ggConservationObserver &&
         observerGroups.any((group) => group.id == ggConservationGroupId);
     if (isGgShared) reasons.add('Ticket compartilhado com GG-CONSERVACAO');
 
     final technicalDomainAllowed = _roleCoversDomain(role, ticketDomain);
-    if (role.isTechnicianCapable && !technicalDomainAllowed && !role.isAdminCapable) {
+    if (role.isTechnicianCapable &&
+        !technicalDomainAllowed &&
+        !role.isAdminCapable) {
       warnings.add('Papel técnico não cobre o domínio do ticket');
     }
 
     final canViewTechnicalQueue = role.isAdminCapable || technicalDomainAllowed;
-    final canView = role.isAdminCapable ||
+    final canView =
+        role.isAdminCapable ||
         isRequester ||
         isGgShared ||
         canViewTechnicalQueue;
 
     final requesterTechnicalBlocked = isRequester && role.isTechnicianCapable;
     if (requesterTechnicalBlocked) {
-      warnings.add('Requerente do ticket não recebe ações técnicas no próprio ticket');
+      warnings.add(
+        'Requerente do ticket não recebe ações técnicas no próprio ticket',
+      );
     }
 
     final canMutateCommon = canView && isOpen && !isClosed;
-    final canUseTechnicalAction = canMutateCommon &&
+    final canUseTechnicalAction =
+        canMutateCommon &&
         (role.isAdminCapable || technicalDomainAllowed) &&
         !requesterTechnicalBlocked;
 
@@ -83,7 +91,8 @@ class PermissionService {
   static bool _roleCoversDomain(OperationalRole role, TicketDomain domain) {
     return switch ((role, domain)) {
       (OperationalRole.maintenanceTechnician, TicketDomain.maintenance) => true,
-      (OperationalRole.conservationTechnician, TicketDomain.conservation) => true,
+      (OperationalRole.conservationTechnician, TicketDomain.conservation) =>
+        true,
       (OperationalRole.hybrid, TicketDomain.maintenance) => true,
       (OperationalRole.hybrid, TicketDomain.conservation) => true,
       (OperationalRole.admin, _) => true,
@@ -109,6 +118,9 @@ class PermissionService {
 
   static bool _isOpenForInteraction(dynamic status) {
     final normalized = _normalizeStatus(status);
-    return normalized == 1 || normalized == 2 || normalized == 3 || normalized == 4;
+    return normalized == 1 ||
+        normalized == 2 ||
+        normalized == 3 ||
+        normalized == 4;
   }
 }

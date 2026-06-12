@@ -118,31 +118,34 @@ void main() {
       }
     });
 
-    test('central policy bridge resolves GG shared queue without technical actions', () {
-      final ticket = {
-        'requester_user_id': 100,
-        'status': GlpiStatus.emAtendimento.code,
-      };
+    test(
+      'central policy bridge resolves GG shared queue without technical actions',
+      () {
+        final ticket = {
+          'requester_user_id': 100,
+          'status': GlpiStatus.emAtendimento.code,
+        };
 
-      final decision = AppStateTicketSupport.evaluateTicketPermissions(
-        ticket,
-        role: OperationalRole.ggConservationRequester,
-        ticketDomain: TicketDomain.ggConservationObserver,
-        loggedUserId: 2039,
-        observerGroups: const [GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO')],
-      );
-      final queues = AppStateTicketSupport.resolveTicketQueues(
-        ticket,
-        role: OperationalRole.ggConservationRequester,
-        ticketDomain: TicketDomain.ggConservationObserver,
-        loggedUserId: 2039,
-        observerGroups: const [GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO')],
-      );
+        final decision = AppStateTicketSupport.evaluateTicketPermissions(
+          ticket,
+          role: OperationalRole.ggConservationRequester,
+          ticketDomain: TicketDomain.ggConservationObserver,
+          loggedUserId: 2039,
+          observerGroups: const [GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO')],
+        );
+        final queues = AppStateTicketSupport.resolveTicketQueues(
+          ticket,
+          role: OperationalRole.ggConservationRequester,
+          ticketDomain: TicketDomain.ggConservationObserver,
+          loggedUserId: 2039,
+          observerGroups: const [GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO')],
+        );
 
-      expect(decision.canView, isTrue);
-      expect(decision.canChangeStatus, isFalse);
-      expect(queues, contains(TicketQueueType.ggConservationShared));
-      expect(queues, isNot(contains(TicketQueueType.conservationQueue)));
-    });
+        expect(decision.canView, isTrue);
+        expect(decision.canChangeStatus, isFalse);
+        expect(queues, contains(TicketQueueType.ggConservationShared));
+        expect(queues, isNot(contains(TicketQueueType.conservationQueue)));
+      },
+    );
   });
 }

@@ -26,7 +26,8 @@ class TicketQueueFilter {
     );
 
     final queues = <TicketQueueType>[];
-    final isRequester = loggedUserId != null &&
+    final isRequester =
+        loggedUserId != null &&
         requesterUserId != null &&
         loggedUserId == requesterUserId;
 
@@ -51,9 +52,15 @@ class TicketQueueFilter {
       }
     }
 
-    if (role == OperationalRole.supervisor) queues.add(TicketQueueType.supervision);
-    if (role == OperationalRole.admin) queues.add(TicketQueueType.allAdmin);
-    if (decision.canValidateSolution) queues.add(TicketQueueType.pendingValidation);
+    if (role == OperationalRole.supervisor) {
+      queues.add(TicketQueueType.supervision);
+    }
+    if (role == OperationalRole.admin) {
+      queues.add(TicketQueueType.allAdmin);
+    }
+    if (decision.canValidateSolution) {
+      queues.add(TicketQueueType.pendingValidation);
+    }
 
     return List.unmodifiable(queues.toSet());
   }

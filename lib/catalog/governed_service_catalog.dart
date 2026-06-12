@@ -257,6 +257,7 @@ class GovernedQuestion {
   final bool required;
   final int? rootId;
   final String? optionSource;
+  final bool selectableTreeRoot;
   final List<GovernedOption> options;
 
   const GovernedQuestion({
@@ -267,6 +268,7 @@ class GovernedQuestion {
     this.required = false,
     this.rootId,
     this.optionSource,
+    this.selectableTreeRoot = true,
   });
 
   static GovernedQuestion? tryFrom(dynamic raw) {
@@ -275,6 +277,7 @@ class GovernedQuestion {
   }
 
   factory GovernedQuestion.fromMap(Map<String, dynamic> map) {
+    final rawValues = _asMap(map['raw_values']);
     return GovernedQuestion(
       id: _int(map['id']) ?? 0,
       name: _string(map['name']),
@@ -282,6 +285,7 @@ class GovernedQuestion {
       required: map['required'] == true || _int(map['required']) == 1,
       rootId: _int(map['root_id']),
       optionSource: _string(map['option_source']),
+      selectableTreeRoot: _int(rawValues['selectable_tree_root']) != 0,
       options: _asList(map['options_sample'])
           .whereType<Map>()
           .map(

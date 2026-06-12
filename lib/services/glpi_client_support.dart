@@ -275,6 +275,41 @@ class GlpiClientSupport {
     return trimmed;
   }
 
+  static Uri buildRequesterTicketSearchUri(
+    String baseUrl, {
+    int? requesterUserId,
+    String? requesterUsername,
+    int rangeEnd = 500,
+  }) {
+    final value = requesterUserId != null && requesterUserId > 0
+        ? requesterUserId.toString()
+        : requesterUsername?.trim();
+    if (value == null || value.isEmpty) {
+      throw ArgumentError('requesterUserId or requesterUsername is required');
+    }
+
+    return Uri.parse('$baseUrl/search/Ticket').replace(
+      queryParameters: {
+        'criteria[0][field]': '4',
+        'criteria[0][searchtype]':
+            requesterUserId != null && requesterUserId > 0
+            ? 'equals'
+            : 'contains',
+        'criteria[0][value]': value,
+        'forcedisplay[0]': '2',
+        'forcedisplay[1]': '1',
+        'forcedisplay[2]': '12',
+        'forcedisplay[3]': '15',
+        'forcedisplay[4]': '4',
+        'forcedisplay[5]': '7',
+        'forcedisplay[6]': '5',
+        'sort': '15',
+        'order': 'DESC',
+        'range': '0-$rangeEnd',
+      },
+    );
+  }
+
   static Map<String, dynamic> mapSearchTicketRow(Map<String, dynamic> row) {
     final requester = row['4'] ?? row['users_id_recipient'];
     final assignee = row['5'] ?? row['users_id_assign'];

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sis_mobile_flutter/catalog/governed_service_catalog.dart';
 import 'package:sis_mobile_flutter/catalog/governed_submission_contract.dart';
+import 'package:sis_mobile_flutter/data/service_data.dart';
 import 'package:sis_mobile_flutter/models/glpi_ticket.dart';
 import 'package:sis_mobile_flutter/services/glpi_ticket_support.dart';
 
@@ -199,4 +200,26 @@ void main() {
       expect(input['_groups_id_assign'], [22]);
     },
   );
+
+  test('default urgency labels are human-readable and hide GLPI ids', () {
+    expect(serviceCategories.first.urgencyOptions, [
+      'Média (padrão)',
+      'Baixa',
+      'Alta',
+    ]);
+  });
+
+  test('mapUrgency keeps GLPI 2/3/4 contract and supports legacy labels', () {
+    expect(GlpiTicketSupport.mapUrgency('Muito baixa'), 1);
+    expect(GlpiTicketSupport.mapUrgency('Baixa'), 2);
+    expect(GlpiTicketSupport.mapUrgency('Média (padrão)'), 3);
+    expect(GlpiTicketSupport.mapUrgency('Alta'), 4);
+    expect(GlpiTicketSupport.mapUrgency('Muito alta'), 5);
+    expect(GlpiTicketSupport.mapUrgency('Urgente'), 5);
+
+    expect(GlpiTicketSupport.mapUrgency('1 - Baixa'), 2);
+    expect(GlpiTicketSupport.mapUrgency('3 - Média (Padrão)'), 3);
+    expect(GlpiTicketSupport.mapUrgency('5 - Alta'), 4);
+    expect(GlpiTicketSupport.mapUrgency(5), 5);
+  });
 }

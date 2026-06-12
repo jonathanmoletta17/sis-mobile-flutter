@@ -94,9 +94,7 @@ class _ServiceCatalogScreenState extends State<ServiceCatalogScreen>
     if (entities.length == 1) {
       messenger.showSnackBar(
         const SnackBar(
-          content: Text(
-            'Este perfil possui apenas uma unidade configurada.',
-          ),
+          content: Text('Este perfil possui apenas uma unidade configurada.'),
         ),
       );
       return;

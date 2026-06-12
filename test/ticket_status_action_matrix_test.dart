@@ -125,7 +125,8 @@ void main() {
             solutionAuthorUserId: 200,
           ),
           isFalse,
-          reason: 'SIS requester profile currently cannot approve via API; avoid rendering a button that fails at runtime.',
+          reason:
+              'SIS requester profile currently cannot approve via API; avoid rendering a button that fails at runtime.',
         );
         expect(
           AppStateTicketSupport.canValidateSolutionForTicket(

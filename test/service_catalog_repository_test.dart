@@ -134,9 +134,12 @@ void main() {
         "location": {
           "id": 8,
           "required": true,
-          "root_id": 36,
+          "root_id": 70,
+          "raw_values": {"show_tree_root": "70", "selectable_tree_root": "0"},
           "options_sample": [
-            {"id": 7001, "label": "CAFF", "full_label": "Locais > CAFF"}
+            {"id": 70, "label": "Locais", "full_label": "Locais"},
+            {"id": 282, "label": "P01S08", "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08"},
+            {"id": 283, "label": "P01S08-A", "full_label": "Locais > Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A"}
           ]
         }
       },
@@ -164,7 +167,16 @@ void main() {
       expect(service.uiSchemaSource, 'governed_v2_records');
       expect(service.governedRecords, hasLength(1));
       expect(service.typeOptions, ['Transporte']);
-      expect(service.locationOptions.single.id, 7001);
+      expect(service.locationOptions.map((option) => option.id), [282, 283]);
+      expect(service.displayLocations, [
+        'Casa Civil 1005 > 1° Andar > P01S08',
+        'Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A',
+      ]);
+      expect(service.locationOptions.first.label, 'P01S08');
+      expect(
+        service.locationOptions.first.fullLabel,
+        'Locais > Casa Civil 1005 > 1° Andar > P01S08',
+      );
       expect(service.assignmentGroupLabel, 'CC-CONSERVACAO');
     },
   );
@@ -218,7 +230,7 @@ void main() {
         "location_rule": 3
       },
       "questions": {},
-      "expected_result": {"readback_contract": []}
+      "expected_result": {"domain": "Manutenção", "readback_contract": []}
     },
     {
       "catalog_record_id": "sis:manutencao:form-39:target-202",
@@ -323,12 +335,7 @@ void main() {
       expect(manutencao.governedRecords, hasLength(2));
       expect(
         manutencao.typeOptions,
-        containsAll([
-          'Manutenção > Ar Condicionado',
-          'Manutenção > Ar Condicionado > Instalação',
-          'Manutenção > Pintura',
-          'Manutenção > Pintura > Retoque',
-        ]),
+        containsAll(['Ar Condicionado', 'Instalação', 'Pintura', 'Retoque']),
       );
 
       final solicitante = repository.servicesForProfile('Solicitante');
@@ -339,6 +346,123 @@ void main() {
       expect(
         solicitante.map((service) => service.name),
         isNot(contains('MANUTENÇÃO')),
+      );
+    },
+  );
+
+  test(
+    'governed category dropdown uses clean labels and only disambiguates collisions with full label',
+    () {
+      const governedRuntimeCatalogJson = '''
+{
+  "schema_version": "2.0-readonly-draft",
+  "consumer_id": "sis-mobile-flutter",
+  "instance": "sis",
+  "records": [
+    {
+      "catalog_record_id": "sis:ar-condicionado:form-1:target-1",
+      "service_id": "ar-condicionado",
+      "service_label": "Ar-Condicionado",
+      "profile_visibility": [{"id": 9, "name": "Solicitante"}],
+      "form": {"id": 1, "name": "Ar-Condicionado"},
+      "targetticket": {
+        "id": 1,
+        "name": "Chamado",
+        "audience": "para_mim",
+        "destination_entity": {"code": 2, "mode": "requester_context_para_mim"},
+        "category_rule": 3,
+        "location_rule": 3
+      },
+      "questions": {},
+      "expected_result": {"readback_contract": []}
+    },
+    {
+      "catalog_record_id": "sis:manutencao:form-39:target-202",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [{"id": 12, "name": "Solicitante-GG-Conservação"}],
+      "form": {"id": 39, "name": "MANUTENÇÃO"},
+      "targetticket": {
+        "id": 202,
+        "name": "Ar Condicionado",
+        "audience": "para_mim",
+        "destination_entity": {"code": 7, "mode": "maintenance_context_para_mim"},
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 639,
+        "location_rule": 3,
+        "location_question_id": 635
+      },
+      "questions": {
+        "category": {
+          "id": 639,
+          "required": true,
+          "root_id": 1,
+          "options_sample": [
+            {"id": 4, "label": "Instalação", "full_label": "Manutenção > Ar Condicionado > Instalação"},
+            {"id": 86, "label": "Retoque", "full_label": "Manutenção > Pintura > Retoque"}
+          ]
+        }
+      },
+      "expected_result": {"domain": "Manutenção", "readback_contract": []}
+    },
+    {
+      "catalog_record_id": "sis:manutencao:form-39:target-208",
+      "service_id": "manutencao",
+      "service_label": "MANUTENÇÃO",
+      "profile_visibility": [{"id": 12, "name": "Solicitante-GG-Conservação"}],
+      "form": {"id": 39, "name": "MANUTENÇÃO"},
+      "targetticket": {
+        "id": 208,
+        "name": "Pintura",
+        "audience": "para_mim",
+        "destination_entity": {"code": 7, "mode": "maintenance_context_para_mim"},
+        "destination_entity_value": 58,
+        "category_rule": 3,
+        "category_question_id": 663,
+        "location_rule": 3,
+        "location_question_id": 635
+      },
+      "questions": {
+        "category": {
+          "id": 663,
+          "required": true,
+          "root_id": 85,
+          "options_sample": [
+            {"id": 401, "full_label": "Manutenção > Pintura > Retoque"},
+            {"id": 402, "label": "Instalação", "full_label": "Manutenção > Pintura > Instalação"}
+          ]
+        }
+      },
+      "expected_result": {"domain": "Manutenção", "readback_contract": []}
+    }
+  ]
+}
+''';
+
+      final repository = ServiceCatalogRepository.fromRuntimeCatalogJson(
+        governedRuntimeCatalogJson,
+        staticFallback: serviceCategories,
+      );
+
+      final service = repository
+          .servicesForProfile('Solicitante-GG-Conservação')
+          .singleWhere(
+            (service) => service.governedRecords.any(
+              (record) => record.serviceLabel == 'MANUTENÇÃO',
+            ),
+          );
+
+      expect(service.typeOptions, contains('Retoque'));
+      expect(
+        service.typeOptions,
+        contains('Manutenção > Pintura > Instalação'),
+        reason: 'labels iguais precisam de fullLabel para desambiguação',
+      );
+      expect(
+        service.typeOptions,
+        isNot(contains('Manutenção > Ar Condicionado > Retoque')),
+        reason: 'sem colisão, o dropdown não deve repetir o caminho completo',
       );
     },
   );
@@ -368,7 +492,7 @@ void main() {
         "destination_entity_value": 58
       },
       "questions": {},
-      "expected_result": {"readback_contract": []}
+      "expected_result": {"domain": "Manutenção", "readback_contract": []}
     },
     {
       "catalog_record_id": "sis:projeto:form-36:target-246",
@@ -385,7 +509,7 @@ void main() {
         "destination_entity_value": 58
       },
       "questions": {},
-      "expected_result": {"readback_contract": []}
+      "expected_result": {"domain": "Manutenção", "readback_contract": []}
     },
     {
       "catalog_record_id": "sis:projeto:form-99:target-999",
@@ -402,7 +526,7 @@ void main() {
         "destination_entity_value": 58
       },
       "questions": {},
-      "expected_result": {"readback_contract": []}
+      "expected_result": {"domain": "Manutenção", "readback_contract": []}
     }
   ]
 }

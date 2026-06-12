@@ -45,6 +45,27 @@ void main() {
     );
   });
 
+  test('location display labels keep GLPI context and room code', () {
+    const option = LocationOption(
+      id: 283,
+      label: 'P01S08-A',
+      fullLabel: 'Locais > Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A',
+      rootId: 70,
+      sourceQuestionId: 573,
+    );
+
+    expect(option.label, 'P01S08-A');
+    expect(
+      option.displayLabel,
+      'Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A',
+    );
+    expect(option.toPayload()['id'], 283);
+    expect(
+      option.toPayload()['full_label'],
+      'Locais > Casa Civil 1005 > 1° Andar > P01S08 > P01S08-A',
+    );
+  });
+
   test('exposes extra field config only for matching services', () {
     final projeto = findServiceCategoryByName('Projeto');
     final vidracaria = findServiceCategoryByName('Vidracaria');

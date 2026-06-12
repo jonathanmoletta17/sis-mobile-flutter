@@ -14,41 +14,41 @@ enum OperationalRole {
 
 extension OperationalRoleSemantics on OperationalRole {
   String get label => switch (this) {
-        OperationalRole.standardRequester => 'Solicitante padrão',
-        OperationalRole.ggConservationRequester => 'Solicitante GG Conservação',
-        OperationalRole.conservationTechnician => 'Técnico de Conservação',
-        OperationalRole.maintenanceTechnician => 'Técnico de Manutenção',
-        OperationalRole.supervisor => 'Supervisor',
-        OperationalRole.admin => 'Administrador',
-        OperationalRole.hybrid => 'Usuário híbrido',
-        OperationalRole.ineligible => 'Configuração operacional incompleta',
-        OperationalRole.unknown => 'Papel desconhecido',
-      };
+    OperationalRole.standardRequester => 'Solicitante padrão',
+    OperationalRole.ggConservationRequester => 'Solicitante GG Conservação',
+    OperationalRole.conservationTechnician => 'Técnico de Conservação',
+    OperationalRole.maintenanceTechnician => 'Técnico de Manutenção',
+    OperationalRole.supervisor => 'Supervisor',
+    OperationalRole.admin => 'Administrador',
+    OperationalRole.hybrid => 'Usuário híbrido',
+    OperationalRole.ineligible => 'Configuração operacional incompleta',
+    OperationalRole.unknown => 'Papel desconhecido',
+  };
 
   bool get isRequesterCapable => switch (this) {
-        OperationalRole.standardRequester ||
-        OperationalRole.ggConservationRequester ||
-        OperationalRole.hybrid ||
-        OperationalRole.admin => true,
-        _ => false,
-      };
+    OperationalRole.standardRequester ||
+    OperationalRole.ggConservationRequester ||
+    OperationalRole.hybrid ||
+    OperationalRole.admin => true,
+    _ => false,
+  };
 
   bool get isTechnicianCapable => switch (this) {
-        OperationalRole.conservationTechnician ||
-        OperationalRole.maintenanceTechnician ||
-        OperationalRole.hybrid ||
-        OperationalRole.admin => true,
-        _ => false,
-      };
+    OperationalRole.conservationTechnician ||
+    OperationalRole.maintenanceTechnician ||
+    OperationalRole.hybrid ||
+    OperationalRole.admin => true,
+    _ => false,
+  };
 
   bool get isAdminCapable => this == OperationalRole.admin;
 
   bool get requiresDomain => switch (this) {
-        OperationalRole.conservationTechnician ||
-        OperationalRole.maintenanceTechnician ||
-        OperationalRole.hybrid => true,
-        _ => false,
-      };
+    OperationalRole.conservationTechnician ||
+    OperationalRole.maintenanceTechnician ||
+    OperationalRole.hybrid => true,
+    _ => false,
+  };
 
   bool get canUseTechnicalQueues => isTechnicianCapable;
 }
@@ -78,7 +78,8 @@ class OperationalRoleResolver {
       return OperationalRole.supervisor;
     }
 
-    final hasTechnicalProfile = profileName == 'tecnico' ||
+    final hasTechnicalProfile =
+        profileName == 'tecnico' ||
         profileName.contains('manutencao e conservacao') ||
         profileName.contains('supervisor');
 
@@ -94,7 +95,8 @@ class OperationalRoleResolver {
       return OperationalRole.ggConservationRequester;
     }
 
-    if (profileName.contains('solicitante') || profileName.contains('self-service')) {
+    if (profileName.contains('solicitante') ||
+        profileName.contains('self-service')) {
       return OperationalRole.standardRequester;
     }
 

@@ -19,20 +19,23 @@ void main() {
       expect(queues, [TicketQueueType.requestedByMe]);
     });
 
-    test('GG conservation requester receives shared GG queue without technical queue', () {
-      final queues = TicketQueueFilter.resolveQueues(
-        role: OperationalRole.ggConservationRequester,
-        ticketDomain: TicketDomain.ggConservationObserver,
-        loggedUserId: 20,
-        requesterUserId: 99,
-        observerGroups: const [GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO')],
-        status: 2,
-      );
+    test(
+      'GG conservation requester receives shared GG queue without technical queue',
+      () {
+        final queues = TicketQueueFilter.resolveQueues(
+          role: OperationalRole.ggConservationRequester,
+          ticketDomain: TicketDomain.ggConservationObserver,
+          loggedUserId: 20,
+          requesterUserId: 99,
+          observerGroups: const [GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO')],
+          status: 2,
+        );
 
-      expect(queues, contains(TicketQueueType.ggConservationShared));
-      expect(queues, isNot(contains(TicketQueueType.conservationQueue)));
-      expect(queues, isNot(contains(TicketQueueType.maintenanceQueue)));
-    });
+        expect(queues, contains(TicketQueueType.ggConservationShared));
+        expect(queues, isNot(contains(TicketQueueType.conservationQueue)));
+        expect(queues, isNot(contains(TicketQueueType.maintenanceQueue)));
+      },
+    );
 
     test('technical users receive queues by ticket domain', () {
       expect(
@@ -57,26 +60,29 @@ void main() {
       );
     });
 
-    test('hybrid user keeps maintenance and conservation queues separated by domain', () {
-      final maintenance = TicketQueueFilter.resolveQueues(
-        role: OperationalRole.hybrid,
-        ticketDomain: TicketDomain.maintenance,
-        loggedUserId: 40,
-        requesterUserId: 99,
-        status: 2,
-      );
-      final conservation = TicketQueueFilter.resolveQueues(
-        role: OperationalRole.hybrid,
-        ticketDomain: TicketDomain.conservation,
-        loggedUserId: 40,
-        requesterUserId: 99,
-        status: 2,
-      );
+    test(
+      'hybrid user keeps maintenance and conservation queues separated by domain',
+      () {
+        final maintenance = TicketQueueFilter.resolveQueues(
+          role: OperationalRole.hybrid,
+          ticketDomain: TicketDomain.maintenance,
+          loggedUserId: 40,
+          requesterUserId: 99,
+          status: 2,
+        );
+        final conservation = TicketQueueFilter.resolveQueues(
+          role: OperationalRole.hybrid,
+          ticketDomain: TicketDomain.conservation,
+          loggedUserId: 40,
+          requesterUserId: 99,
+          status: 2,
+        );
 
-      expect(maintenance, contains(TicketQueueType.maintenanceQueue));
-      expect(maintenance, isNot(contains(TicketQueueType.conservationQueue)));
-      expect(conservation, contains(TicketQueueType.conservationQueue));
-      expect(conservation, isNot(contains(TicketQueueType.maintenanceQueue)));
-    });
+        expect(maintenance, contains(TicketQueueType.maintenanceQueue));
+        expect(maintenance, isNot(contains(TicketQueueType.conservationQueue)));
+        expect(conservation, contains(TicketQueueType.conservationQueue));
+        expect(conservation, isNot(contains(TicketQueueType.maintenanceQueue)));
+      },
+    );
   });
 }

@@ -10,17 +10,17 @@ enum TicketDomain {
 
 extension TicketDomainSemantics on TicketDomain {
   String get label => switch (this) {
-        TicketDomain.maintenance => 'Manutenção',
-        TicketDomain.conservation => 'Conservação',
-        TicketDomain.ggConservationObserver => 'GG Conservação',
-        TicketDomain.dtic => 'DTIC',
-        TicketDomain.unknown => 'Domínio desconhecido',
-      };
+    TicketDomain.maintenance => 'Manutenção',
+    TicketDomain.conservation => 'Conservação',
+    TicketDomain.ggConservationObserver => 'GG Conservação',
+    TicketDomain.dtic => 'DTIC',
+    TicketDomain.unknown => 'Domínio desconhecido',
+  };
 
   bool get isTechnicalExecution => switch (this) {
-        TicketDomain.maintenance || TicketDomain.conservation => true,
-        _ => false,
-      };
+    TicketDomain.maintenance || TicketDomain.conservation => true,
+    _ => false,
+  };
 }
 
 class TicketDomainResolver {
@@ -36,10 +36,12 @@ class TicketDomainResolver {
     final candidates = <TicketDomain>{};
     final category = normalizeGlpiText(categoryCompletename);
 
-    if (category.startsWith('manutencao') || category.contains('> manutencao')) {
+    if (category.startsWith('manutencao') ||
+        category.contains('> manutencao')) {
       candidates.add(TicketDomain.maintenance);
     }
-    if (category.startsWith('conservacao') || category.contains('> conservacao')) {
+    if (category.startsWith('conservacao') ||
+        category.contains('> conservacao')) {
       candidates.add(TicketDomain.conservation);
     }
 

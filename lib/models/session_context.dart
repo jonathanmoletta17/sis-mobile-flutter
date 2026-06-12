@@ -64,8 +64,11 @@ class SessionContext {
     }
 
     final activeEntityId = readGlpiInt(session['glpiactive_entity']);
-    final activeEntityName = session['glpiactive_entity_name']?.toString().trim();
-    final activeEntity = activeEntityId != null &&
+    final activeEntityName = session['glpiactive_entity_name']
+        ?.toString()
+        .trim();
+    final activeEntity =
+        activeEntityId != null &&
             activeEntityId > 0 &&
             activeEntityName != null &&
             activeEntityName.isNotEmpty
@@ -96,10 +99,52 @@ class SessionContext {
       defaultEntityId: readGlpiInt(session['glpidefault_entity']),
       ticketCreationEntity: ticketCreationEntity,
       availableEntities: availableEntities,
+      groups: _parseGroups(session['glpigroups']),
       metadataEtag: metadataEtag,
       snapshotHash: snapshotHash,
       warnings: warnings,
     );
+  }
+
+  static List<GlpiGroupRef> _parseGroups(dynamic rawGroups) {
+    final groups = <GlpiGroupRef>[];
+
+    void addGroup({required dynamic rawId, required dynamic rawName}) {
+      final id = readGlpiInt(rawId);
+      final name = rawName?.toString().trim();
+      if (id == null || id <= 0 || name == null || name.isEmpty) return;
+      groups.add(GlpiGroupRef(id: id, name: name));
+    }
+
+    if (rawGroups is Map) {
+      for (final entry in rawGroups.entries) {
+        final key = entry.key;
+        final value = entry.value;
+        if (value is Map) {
+          final map = Map<String, dynamic>.from(value);
+          addGroup(
+            rawId: map['id'] ?? key,
+            rawName: map['name'] ?? map['completename'] ?? value,
+          );
+        } else {
+          addGroup(rawId: key, rawName: value);
+        }
+      }
+    } else if (rawGroups is List) {
+      for (final value in rawGroups) {
+        if (value is Map) {
+          final map = Map<String, dynamic>.from(value);
+          addGroup(
+            rawId: map['id'],
+            rawName: map['name'] ?? map['completename'],
+          );
+        } else {
+          addGroup(rawId: value, rawName: 'Grupo $value');
+        }
+      }
+    }
+
+    return List<GlpiGroupRef>.unmodifiable(groups);
   }
 
   SessionContext copyWith({

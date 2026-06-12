@@ -267,10 +267,16 @@ void main() {
           activeEntity: 1,
           subService: rec.subService,
         );
-        expect(r.ok, isTrue,
-            reason: '${rec.serviceLabel}/${rec.subService}: ${r.blocker}');
-        expect(r.contract!.entityId, 58,
-            reason: '${rec.serviceLabel}/${rec.subService} != 58');
+        expect(
+          r.ok,
+          isTrue,
+          reason: '${rec.serviceLabel}/${rec.subService}: ${r.blocker}',
+        );
+        expect(
+          r.contract!.entityId,
+          58,
+          reason: '${rec.serviceLabel}/${rec.subService} != 58',
+        );
         checked++;
       }
       // ignore: avoid_print

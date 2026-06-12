@@ -8,6 +8,7 @@ import 'package:sis_mobile_flutter/screens/generic_form_screen.dart';
 import 'package:sis_mobile_flutter/services/glpi_client.dart';
 import 'package:sis_mobile_flutter/state/app_state.dart';
 import 'package:sis_mobile_flutter/widgets/custom_dropdown_field.dart';
+import 'package:sis_mobile_flutter/widgets/searchable_select_field.dart';
 
 void main() {
   const runtimeCatalogJson = '''
@@ -65,24 +66,111 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final locationDropdown = tester.widget<CustomDropdownField>(
+      final locationPicker = tester.widget<SearchableSelectField>(
         find.byWidgetPredicate(
           (widget) =>
-              widget is CustomDropdownField && widget.label == 'Localização',
+              widget is SearchableSelectField && widget.label == 'Localização',
         ),
       );
 
-      expect(locationDropdown.items, hasLength(3));
-      expect(locationDropdown.items, contains('Ala Residencial'));
-      expect(locationDropdown.items, contains('CAFF'));
+      expect(locationPicker.items, hasLength(3));
       expect(
-        locationDropdown.items.any((item) => item.contains('Root')),
+        locationPicker.items,
+        contains('Carregadores e Mensageiros > Ala Residencial'),
+      );
+      expect(
+        locationPicker.items,
+        contains('Carregadores e Mensageiros > CAFF'),
+      );
+      expect(
+        locationPicker.items.any((item) => item.contains('Root')),
         isFalse,
       );
       expect(
-        locationDropdown.items.any((item) => item.startsWith('Local (')),
+        locationPicker.items.any((item) => item.startsWith('Local (')),
         isFalse,
       );
     },
   );
+
+  testWidgets(
+    'GenericFormScreen renders Localização as searchable picker without changing other dropdowns',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final repository = ServiceCatalogRepository.fromRuntimeCatalogJson(
+        runtimeCatalogJson,
+        staticFallback: serviceCategories,
+      );
+      final service = repository.findByName('Carregadores')!;
+
+      await tester.pumpWidget(
+        ChangeNotifierProvider(
+          create: (_) => AppState(GlpiClient()),
+          child: MaterialApp(home: GenericFormScreen(service: service)),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Buscar localização'), findsOneWidget);
+      expect(find.text('Selecione uma localização'), findsOneWidget);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomDropdownField && widget.label == 'Localização',
+        ),
+        findsNothing,
+      );
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomDropdownField &&
+              widget.label == 'Tipo de serviço',
+        ),
+        findsOneWidget,
+      );
+    },
+  );
+
+  testWidgets('GenericFormScreen location picker filters and selects by text', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    final repository = ServiceCatalogRepository.fromRuntimeCatalogJson(
+      runtimeCatalogJson,
+      staticFallback: serviceCategories,
+    );
+    final service = repository.findByName('Carregadores')!;
+
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => AppState(GlpiClient()),
+        child: MaterialApp(home: GenericFormScreen(service: service)),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Buscar localização'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is TextField &&
+            widget.decoration?.labelText == 'Buscar localização',
+      ),
+      'CAFF',
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Carregadores e Mensageiros > CAFF'), findsOneWidget);
+    expect(
+      find.text('Carregadores e Mensageiros > Ala Residencial'),
+      findsNothing,
+    );
+
+    await tester.tap(find.text('Carregadores e Mensageiros > CAFF'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Carregadores e Mensageiros > CAFF'), findsOneWidget);
+  });
 }

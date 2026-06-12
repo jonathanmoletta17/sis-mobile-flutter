@@ -2,6 +2,35 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sis_mobile_flutter/services/glpi_client_support.dart';
 
 void main() {
+  group('GlpiClientSupport.buildRequesterTicketSearchUri', () {
+    test('prefers requester user id with equals search when available', () {
+      final uri = GlpiClientSupport.buildRequesterTicketSearchUri(
+        'https://sis.example/apirest.php',
+        requesterUserId: 2373,
+        requesterUsername: 'gabriel-conceicao',
+      );
+
+      expect(uri.path, '/apirest.php/search/Ticket');
+      expect(uri.queryParameters['criteria[0][field]'], '4');
+      expect(uri.queryParameters['criteria[0][searchtype]'], 'equals');
+      expect(uri.queryParameters['criteria[0][value]'], '2373');
+    });
+
+    test(
+      'falls back to requester username contains search without user id',
+      () {
+        final uri = GlpiClientSupport.buildRequesterTicketSearchUri(
+          'https://sis.example/apirest.php',
+          requesterUsername: 'gabriel-conceicao',
+        );
+
+        expect(uri.queryParameters['criteria[0][field]'], '4');
+        expect(uri.queryParameters['criteria[0][searchtype]'], 'contains');
+        expect(uri.queryParameters['criteria[0][value]'], 'gabriel-conceicao');
+      },
+    );
+  });
+
   group('GlpiClientSupport.mapSearchTicketRow', () {
     test(
       'keeps requester and assigned technician display values from search rows',

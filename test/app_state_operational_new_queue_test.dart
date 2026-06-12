@@ -21,30 +21,73 @@ void main() {
       final tickets = await appState.fetchTickets();
 
       expect(api.requesterUsername, 'jonathan-moletta');
+      expect(api.requesterUserId, 2039);
       expect(api.statusQueries, [1]);
-      expect(tickets.map((ticket) => ticket['id'].toString()), contains('9276'));
       expect(
-        tickets.firstWhere((ticket) => ticket['id'].toString() == '9276')['status'],
+        tickets.map((ticket) => ticket['id'].toString()),
+        contains('9276'),
+      );
+      expect(
+        tickets.firstWhere(
+          (ticket) => ticket['id'].toString() == '9276',
+        )['status'],
         1,
       );
     },
   );
 
-  test('requester-only session does not request broad operational New queue', () async {
-    SharedPreferences.setMockInitialValues({
-      'sessionToken': 'test-session',
-      'loggedUsername': 'gabriel-conceicao',
-      'activeProfile': 'Solicitante',
-    });
+  test(
+    'requester-only session does not request broad operational New queue',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        'sessionToken': 'test-session',
+        'loggedUsername': 'gabriel-conceicao',
+        'activeProfile': 'Solicitante',
+      });
 
-    final api = _OperationalQueueGlpiClient(profile: 'Solicitante');
-    final appState = AppState(api);
-    await pumpEventQueue();
+      final api = _OperationalQueueGlpiClient(profile: 'Solicitante');
+      final appState = AppState(api);
+      await pumpEventQueue();
 
-    await appState.fetchTickets();
+      await appState.fetchTickets();
 
-    expect(api.statusQueries, isEmpty);
-  });
+      expect(api.statusQueries, isEmpty);
+    },
+  );
+
+  test(
+    'lab preview session resets operational profile and group context',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        'sessionToken': 'test-session',
+        'loggedUsername': 'jonathan-moletta',
+        'activeProfile': 'Super-Admin',
+      });
+
+      final api = _OperationalQueueGlpiClient();
+      final appState = AppState(api);
+      await pumpEventQueue();
+
+      await appState.fetchTickets();
+      expect(api.statusQueries, [1]);
+      expect(appState.activeProfileId, 11);
+      expect(appState.groups, isNotEmpty);
+
+      api.statusQueries.clear();
+      appState.activateLabPreviewSession(
+        username: 'lab-solicitante',
+        profile: 'Solicitante',
+        activeEntityId: 28,
+        activeEntityName: 'Casa Civil',
+      );
+
+      expect(appState.activeProfileId, isNull);
+      expect(appState.groups, isEmpty);
+
+      await appState.fetchTickets();
+      expect(api.statusQueries, isEmpty);
+    },
+  );
 }
 
 class _OperationalQueueGlpiClient extends GlpiClient {
@@ -52,6 +95,7 @@ class _OperationalQueueGlpiClient extends GlpiClient {
 
   final String profile;
   String? requesterUsername;
+  int? requesterUserId;
   final List<int> statusQueries = [];
 
   @override
@@ -62,6 +106,12 @@ class _OperationalQueueGlpiClient extends GlpiClient {
           ? 'gabriel-conceicao'
           : 'jonathan-moletta',
       'profile': profile,
+      'profileId': profile == 'Solicitante' ? 12 : 11,
+      'groups': profile == 'Solicitante'
+          ? const []
+          : const [
+              {'id': 22, 'name': 'CC-MANUTENCAO'},
+            ],
       'activeEntityId': 1,
       'activeEntityName': 'Origem > PIRATINI',
       'defaultEntityId': 1,
@@ -73,8 +123,10 @@ class _OperationalQueueGlpiClient extends GlpiClient {
   Future<List<Map<String, dynamic>>> getTickets(
     String sessionToken, {
     String? requesterUsername,
+    int? requesterUserId,
   }) async {
     this.requesterUsername = requesterUsername;
+    this.requesterUserId = requesterUserId;
     return [
       {
         'id': 9245,

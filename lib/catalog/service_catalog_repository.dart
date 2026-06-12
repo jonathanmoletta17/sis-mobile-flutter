@@ -361,9 +361,17 @@ class ServiceCatalogRepository {
         .map((record) => record.locationQuestion)
         .whereType<GovernedQuestion>()
         .toList(growable: false);
+    final nonSelectableLocationRoots = locationQuestions
+        .where((question) => !question.selectableTreeRoot)
+        .map((question) => question.rootId)
+        .whereType<int>()
+        .toSet();
     final locationOptions = _mergedOptions(locationQuestions)
         .where(
-          (option) => option.id > 0 && (option.label ?? '').trim().isNotEmpty,
+          (option) =>
+              option.id > 0 &&
+              !nonSelectableLocationRoots.contains(option.id) &&
+              (option.label ?? '').trim().isNotEmpty,
         )
         .map(
           (option) => LocationOption(
@@ -380,15 +388,34 @@ class ServiceCatalogRepository {
         )
         .toList(growable: false);
 
-    final useFullCategoryLabels = records.length > 1;
+    final categoryFullLabelsByCleanLabel = <String, Set<String>>{};
+    for (final option in categoryOptions) {
+      final cleanLabel = _cleanCategoryOptionLabel(option);
+      if (cleanLabel.isEmpty) continue;
+      final normalizedCleanLabel = normalizeServiceLabel(cleanLabel);
+      final fullLabel = (option.fullLabel?.trim().isNotEmpty ?? false)
+          ? option.fullLabel!.trim()
+          : cleanLabel;
+      categoryFullLabelsByCleanLabel
+          .putIfAbsent(normalizedCleanLabel, () => <String>{})
+          .add(normalizeServiceLabel(fullLabel));
+    }
+
     final categoryLabels = categoryOptions
         .map((option) {
+          final cleanLabel = _cleanCategoryOptionLabel(option);
+          if (cleanLabel.isEmpty) return '';
+          final normalizedCleanLabel = normalizeServiceLabel(cleanLabel);
+          final hasCollision =
+              (categoryFullLabelsByCleanLabel[normalizedCleanLabel]?.length ??
+                  0) >
+              1;
           final fullLabel = option.fullLabel?.trim() ?? '';
-          final label = option.label?.trim() ?? '';
-          if (useFullCategoryLabels && fullLabel.isNotEmpty) return fullLabel;
-          return label;
+          if (hasCollision && fullLabel.isNotEmpty) return fullLabel;
+          return cleanLabel;
         })
         .where((label) => label.isNotEmpty)
+        .toSet()
         .toList(growable: false);
 
     return fallback.copyWith(
@@ -410,6 +437,14 @@ class ServiceCatalogRepository {
       uiSchemaSource: 'governed_v2_records',
       governedRecords: records,
     );
+  }
+
+  static String _cleanCategoryOptionLabel(GovernedOption option) {
+    final label = option.label?.trim() ?? '';
+    if (label.isNotEmpty) return label;
+    final fullLabel = option.fullLabel?.trim() ?? '';
+    if (fullLabel.isEmpty) return '';
+    return fullLabel.split('>').last.trim();
   }
 
   static List<GovernedOption> _mergedOptions(

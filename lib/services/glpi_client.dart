@@ -186,7 +186,9 @@ class GlpiClient {
 
     final data = jsonDecode(response.body);
     final session = data['session'] as Map<String, dynamic>? ?? {};
-    final profileName = session['glpiactiveprofile']?['name']?.toString();
+    final profile = session['glpiactiveprofile'] as Map<String, dynamic>?;
+    final profileName = profile?['name']?.toString();
+    final profileId = int.tryParse('${profile?['id'] ?? ''}');
     final userIdRaw = session['glpiID'];
     final username = session['glpiname']?.toString();
     final activeEntityIdRaw = session['glpiactive_entity'];
@@ -209,14 +211,46 @@ class GlpiClient {
         .whereType<Map<String, dynamic>>()
         .toList();
 
+    final groups = <Map<String, dynamic>>[];
+    final rawGroups = session['glpigroups'];
+    void addGroup(dynamic rawId, dynamic rawName) {
+      final id = int.tryParse('${rawId ?? ''}');
+      final name = rawName?.toString().trim();
+      if (id == null || id <= 0 || name == null || name.isEmpty) return;
+      groups.add({'id': id, 'name': name});
+    }
+
+    if (rawGroups is Map) {
+      for (final entry in rawGroups.entries) {
+        final value = entry.value;
+        if (value is Map) {
+          final map = Map<String, dynamic>.from(value);
+          addGroup(entry.key, map['name'] ?? map['completename']);
+        } else {
+          addGroup(entry.key, value);
+        }
+      }
+    } else if (rawGroups is List) {
+      for (final value in rawGroups) {
+        if (value is Map) {
+          final map = Map<String, dynamic>.from(value);
+          addGroup(map['id'], map['name'] ?? map['completename']);
+        } else {
+          addGroup(value, 'Grupo $value');
+        }
+      }
+    }
+
     return {
       'profile': profileName,
+      'profileId': profileId,
       'userId': int.tryParse('${userIdRaw ?? ''}'),
       'username': username,
       'activeEntityId': int.tryParse('${activeEntityIdRaw ?? ''}'),
       'activeEntityName': activeEntityName,
       'defaultEntityId': int.tryParse('${defaultEntityIdRaw ?? ''}'),
       'availableEntities': availableEntities,
+      'groups': groups,
     };
   }
 
@@ -248,6 +282,7 @@ class GlpiClient {
   Future<List<Map<String, dynamic>>> getTickets(
     String sessionToken, {
     String? requesterUsername,
+    int? requesterUserId,
   }) async {
     _debugLog(
       'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â½ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â« Buscando tickets...',
@@ -261,22 +296,12 @@ class GlpiClient {
       };
 
       final normalizedRequester = requesterUsername?.trim();
-      if (normalizedRequester != null && normalizedRequester.isNotEmpty) {
-        final searchUri = Uri.parse(
-          '${GlpiConfig.baseUrl}/search/Ticket'
-          '?criteria[0][field]=4'
-          '&criteria[0][searchtype]=contains'
-          '&criteria[0][value]=${Uri.encodeQueryComponent(normalizedRequester)}'
-          '&forcedisplay[0]=2'
-          '&forcedisplay[1]=1'
-          '&forcedisplay[2]=12'
-          '&forcedisplay[3]=15'
-          '&forcedisplay[4]=4'
-          '&forcedisplay[5]=7'
-          '&forcedisplay[6]=5'
-          '&sort=15'
-          '&order=DESC'
-          '&range=0-500',
+      if ((requesterUserId != null && requesterUserId > 0) ||
+          (normalizedRequester != null && normalizedRequester.isNotEmpty)) {
+        final searchUri = GlpiClientSupport.buildRequesterTicketSearchUri(
+          GlpiConfig.baseUrl,
+          requesterUserId: requesterUserId,
+          requesterUsername: normalizedRequester,
         );
         _debugLog(
           'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¤ GET: $searchUri',
@@ -675,9 +700,9 @@ class GlpiClient {
     // eleva esses GETs com uma sessão de serviço (ver workers-vpc/src/index.js,
     // DIRECTORY_READ_PATTERN). Buscamos por login e nome real em paralelo.
     Future<List<dynamic>> fetchBy(String field) async {
-      final uri = Uri.parse('${GlpiConfig.baseUrl}/User').replace(
-        queryParameters: {'searchText[$field]': text, 'range': '0-15'},
-      );
+      final uri = Uri.parse(
+        '${GlpiConfig.baseUrl}/User',
+      ).replace(queryParameters: {'searchText[$field]': text, 'range': '0-15'});
       final response = await http
           .get(uri, headers: headers)
           .timeout(GlpiConfig.requestTimeout);
@@ -710,7 +735,7 @@ class GlpiClient {
     for (final rows in results) {
       for (final row in rows) {
         if (row is! Map) continue;
-        final user = _userFromSearchRow(Map<String, dynamic>.from(row));
+        final user = GlpiUserRef.fromSearchRow(Map<String, dynamic>.from(row));
         if (user == null || !seen.add(user.id)) continue;
         users.add(user);
       }
@@ -745,51 +770,19 @@ class GlpiClient {
 
     final userMap = (jsonDecode(response.body) as Map).cast<String, dynamic>();
     final displayName = GlpiNameFormatter.formatNameFromMap(userMap).trim();
+    final firstName = _fieldText(userMap['firstname'] ?? userMap['first_name']);
     final login = _fieldText(userMap['name'] ?? userMap['login']);
     final realName = _fieldText(userMap['realname'] ?? userMap['real_name']);
     return GlpiUserRef(
       id: userId,
-      displayName: displayName.isEmpty ? 'Usuário $userId' : displayName,
+      displayName: displayName.isEmpty
+          ? 'Usuário não identificado'
+          : displayName,
       login: login,
+      firstName: firstName,
       realName: realName,
       defaultEntityId: _parseGlpiId(userMap['entities_id']),
     );
-  }
-
-  GlpiUserRef? _userFromSearchRow(Map<String, dynamic> row) {
-    final id = _parseGlpiId(row['2'] ?? row['id'] ?? row['ID']);
-    if (id == null || id <= 0) return null;
-
-    final login = _fieldText(row['1'] ?? row['name'] ?? row['login']);
-    final realName = _fieldText(
-      row['9'] ?? row['realname'] ?? row['real_name'],
-    );
-    final displayName = _searchUserDisplayName(
-      id: id,
-      login: login,
-      realName: realName,
-    );
-
-    return GlpiUserRef(
-      id: id,
-      displayName: displayName,
-      login: login,
-      realName: realName,
-    );
-  }
-
-  String _searchUserDisplayName({
-    required int id,
-    required String? login,
-    required String? realName,
-  }) {
-    final real = realName?.trim() ?? '';
-    if (real.isNotEmpty && real != id.toString()) return real;
-
-    final username = login?.trim() ?? '';
-    if (username.isNotEmpty && username != id.toString()) return username;
-
-    return 'Usuário $id';
   }
 
   int? _parseGlpiId(dynamic value) {

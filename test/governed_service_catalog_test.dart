@@ -44,6 +44,7 @@ void main() {
           "required": true,
           "root_id": 70,
           "option_source": "locations",
+          "raw_values": {"show_tree_root": "70", "selectable_tree_root": "0"},
           "options_sample": [{"id": 79, "label": "Casa Civil 1005 > 1° Andar", "full_label": "Locais > Casa Civil 1005 > 1° Andar"}]
         }
       },
@@ -99,6 +100,7 @@ void main() {
     expect(catalog.records.first.targetTicketId, 11);
     expect(catalog.records.first.categoryQuestion?.id, 102);
     expect(catalog.records.first.locationQuestion?.id, 98);
+    expect(catalog.records.first.locationQuestion?.selectableTreeRoot, isFalse);
     expect(
       catalog.records.first.expectedAssignmentGroup?.label,
       'CC-MANUTENCAO',

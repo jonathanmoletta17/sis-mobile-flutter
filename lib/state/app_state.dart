@@ -3,7 +3,9 @@ import 'package:sis_mobile_flutter/utils/html_decode_utils.dart';
 import '../services/glpi_client.dart';
 import '../models/glpi_ticket.dart';
 import '../models/glpi_status.dart';
+import '../models/glpi_identity.dart';
 import '../models/glpi_user_ref.dart';
+import '../models/operational_role.dart';
 import '../models/ticket_message.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -29,6 +31,8 @@ class AppState extends ChangeNotifier {
   String? _loggedUsername;
   int? _loggedUserId;
   String? _activeProfile;
+  int? _activeProfileId;
+  List<GlpiGroupRef> _groups = const [];
   int? _activeEntityId;
   String? _activeEntityName;
   int? _defaultEntityId;
@@ -47,6 +51,8 @@ class AppState extends ChangeNotifier {
   String? get loggedUsername => _loggedUsername;
   int? get loggedUserId => _loggedUserId;
   String? get activeProfile => _activeProfile;
+  int? get activeProfileId => _activeProfileId;
+  List<GlpiGroupRef> get groups => List.unmodifiable(_groups);
   int? get activeEntityId => _activeEntityId;
   String? get activeEntityName => _activeEntityName;
   int? get selectedTicketEntityId => _selectedTicketEntityId;
@@ -75,6 +81,8 @@ class AppState extends ChangeNotifier {
     _loggedUsername = username;
     _loggedUserId = 0;
     _activeProfile = profile;
+    _activeProfileId = null;
+    _groups = const [];
     _activeEntityId = activeEntityId;
     _activeEntityName = activeEntityName;
     _defaultEntityId = selectedTicketEntityId ?? activeEntityId;
@@ -171,6 +179,8 @@ class AppState extends ChangeNotifier {
     _loggedUsername = null;
     _loggedUserId = null;
     _activeProfile = null;
+    _activeProfileId = null;
+    _groups = const [];
     _activeEntityId = null;
     _activeEntityName = null;
     _defaultEntityId = null;
@@ -289,6 +299,8 @@ class AppState extends ChangeNotifier {
     _loggedUsername = null;
     _loggedUserId = null;
     _activeProfile = null;
+    _activeProfileId = null;
+    _groups = const [];
     _activeEntityId = null;
     _activeEntityName = null;
     _defaultEntityId = null;
@@ -403,6 +415,27 @@ class AppState extends ChangeNotifier {
     );
   }
 
+  bool _canViewOperationalNewQueue() {
+    if (_groups.isNotEmpty || _activeProfileId != null) {
+      final role = OperationalRoleResolver.resolve(
+        activeProfile:
+            _activeProfileId == null && (_activeProfile ?? '').isEmpty
+            ? null
+            : GlpiProfileRef(
+                id: _activeProfileId ?? 0,
+                name: _activeProfile ?? '',
+              ),
+        groups: _groups,
+      );
+      if (role != OperationalRole.ineligible &&
+          role != OperationalRole.unknown) {
+        return role.canUseTechnicalQueues;
+      }
+    }
+
+    return AppStateTicketSupport.isTechnicianProfile(_activeProfile);
+  }
+
   // Método para buscar a lista de tickets (online + offline)
   Future<List<Map<String, dynamic>>> fetchTickets() async {
     List<Map<String, dynamic>> onlineTickets = [];
@@ -412,6 +445,7 @@ class AppState extends ChangeNotifier {
         final rawTickets = await _apiService.getTickets(
           _sessionToken!,
           requesterUsername: _loggedUsername,
+          requesterUserId: _loggedUserId,
         );
         final personalTickets = rawTickets
             .where(_ticketBelongsToLoggedUser)
@@ -430,7 +464,7 @@ class AppState extends ChangeNotifier {
           );
         }
 
-        if (AppStateTicketSupport.isTechnicianProfile(_activeProfile)) {
+        if (_canViewOperationalNewQueue()) {
           try {
             final newTickets = await _apiService.getTicketsByStatus(
               _sessionToken!,
@@ -831,6 +865,21 @@ class AppState extends ChangeNotifier {
     if (profileFromApi != null && profileFromApi.trim().isNotEmpty) {
       _activeProfile = profileFromApi.trim();
     }
+
+    final profileId = _parseOptionalInt(sessionContext['profileId']);
+    _activeProfileId = profileId != null && profileId > 0 ? profileId : null;
+
+    _groups = (sessionContext['groups'] as List<dynamic>? ?? const [])
+        .whereType<Map>()
+        .map((group) => Map<String, dynamic>.from(group))
+        .map(
+          (group) => GlpiGroupRef(
+            id: _parseOptionalInt(group['id']) ?? 0,
+            name: group['name']?.toString().trim() ?? '',
+          ),
+        )
+        .where((group) => group.isValid)
+        .toList(growable: false);
 
     final usernameFromApi = sessionContext['username']?.toString();
     final resolvedUsername = usernameFromApi?.trim().isNotEmpty == true
