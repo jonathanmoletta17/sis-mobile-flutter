@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:sis_mobile_flutter/models/operational_role.dart';
 import 'package:sis_mobile_flutter/state/app_state.dart';
 import 'package:sis_mobile_flutter/services/glpi_client.dart';
 
@@ -52,6 +53,42 @@ void main() {
       await appState.fetchTickets();
 
       expect(api.statusQueries, isEmpty);
+    },
+  );
+
+  test(
+    'resolvedOperationalRole returns maintenanceTechnician for tecnico with maintenance group',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        'sessionToken': 'test-session',
+        'loggedUsername': 'jonathan-moletta',
+        'activeProfile': 'Super-Admin',
+      });
+
+      final api = _OperationalQueueGlpiClient();
+      final appState = AppState(api);
+      await pumpEventQueue();
+      await appState.fetchTickets();
+
+      expect(appState.resolvedOperationalRole, OperationalRole.admin);
+    },
+  );
+
+  test(
+    'resolvedOperationalRole returns standardRequester for solicitante without groups',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        'sessionToken': 'test-session',
+        'loggedUsername': 'gabriel-conceicao',
+        'activeProfile': 'Solicitante',
+      });
+
+      final api = _OperationalQueueGlpiClient(profile: 'Solicitante');
+      final appState = AppState(api);
+      await pumpEventQueue();
+      await appState.fetchTickets();
+
+      expect(appState.resolvedOperationalRole, OperationalRole.standardRequester);
     },
   );
 

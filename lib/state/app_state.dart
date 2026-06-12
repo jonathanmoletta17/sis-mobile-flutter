@@ -61,6 +61,34 @@ class AppState extends ChangeNotifier {
       List.unmodifiable(_availableEntities);
   List<GlpiTicket> get pendingTickets => _pendingTickets;
 
+  /// Papel operacional resolvido a partir do perfil GLPI ativo e dos grupos da
+  /// sessão. Usado pelo policy layer (PermissionService, TicketQueueFilter) e
+  /// pelas telas que precisam de decisões baseadas em papel + domínio de ticket.
+  /// Retorna [OperationalRole.ineligible] quando o perfil é técnico mas sem
+  /// grupos, e [OperationalRole.unknown] quando o perfil não é reconhecido.
+  OperationalRole get resolvedOperationalRole {
+    if (_groups.isNotEmpty || _activeProfileId != null) {
+      final role = OperationalRoleResolver.resolve(
+        activeProfile:
+            _activeProfileId == null && (_activeProfile ?? '').isEmpty
+            ? null
+            : GlpiProfileRef(
+                id: _activeProfileId ?? 0,
+                name: _activeProfile ?? '',
+              ),
+        groups: _groups,
+      );
+      if (role != OperationalRole.unknown) return role;
+    }
+    if (AppStateTicketSupport.isTechnicianProfile(_activeProfile)) {
+      return OperationalRole.ineligible;
+    }
+    if (AppStateTicketSupport.isRequesterProfile(_activeProfile)) {
+      return OperationalRole.standardRequester;
+    }
+    return OperationalRole.unknown;
+  }
+
   // Construtor: Carrega estado e tickets ao iniciar
   AppState(this._apiService) {
     _loadState();
