@@ -369,12 +369,6 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
   }
 
   //
-  // ==================== WIDGETS DE UI ======================
-  //
-  // ==========================================================
-  // CARD DE VALIDAÇÃO DE SOLUÇÃO (STORY 4)
-  // ==========================================================
-
   Widget _buildSolutionCard(TicketMessage message) {
     final isPending =
         message.solutionStatus == 2 || message.solutionStatus == 1;

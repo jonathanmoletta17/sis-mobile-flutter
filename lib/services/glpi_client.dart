@@ -820,10 +820,6 @@ class GlpiClient {
         if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
       };
 
-      // ALTERAÇÃO:
-      // Onde: mapa de status
-      // Por quê: alinhar com a base atual do GLPI trazida pela main
-      // O que faz: usa códigos corretos para Em andamento / Pendente / Solucionado / Fechado
       final statusId = GlpiStatusMapper.code(newStatus) ?? 1;
       final payload = {
         'input': {'id': ticketId, 'status': statusId},
@@ -1303,10 +1299,6 @@ class GlpiClient {
 
         if (response.body.isNotEmpty) {
           final data = jsonDecode(response.body);
-          // ALTERAÇÃO:
-          // Onde: leitura do ticketId
-          // Por quê: GLPI pode retornar id numérico
-          // O que faz: garante string sempre
           ticketId = data['id']?.toString();
           _debugLog(
             'Ticket criado com ID: $ticketId',
@@ -2037,10 +2029,6 @@ class GlpiClient {
       return null;
     }
   }
-
-  // ====================================================================
-  // STORY 4 - BUSCAR E APROVAR/RECUSAR SOLUÇÕES
-  // ====================================================================
 
   /// Busca as soluções (ITILSolution) registradas neste ticket
   Future<List<Map<String, dynamic>>> getTicketSolutions(

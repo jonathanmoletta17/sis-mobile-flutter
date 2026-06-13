@@ -24,10 +24,6 @@ class AppState extends ChangeNotifier {
   bool _isAuthenticated = false;
   String? _sessionToken; // Token de sessão GLPI
 
-  // ✅ ALTERAÇÃO:
-  // Onde: estado de sessão do AppState
-  // Por quê: unir tua branch com a main
-  // O que faz: guarda usuário logado, cache do ID e perfil ativo
   String? _loggedUsername;
   int? _loggedUserId;
   String? _activeProfile;
@@ -564,10 +560,6 @@ class AppState extends ChangeNotifier {
       return {'success': false, 'message': 'Usuário não autenticado.'};
     }
 
-    // ✅ ALTERAÇÃO:
-    // Onde: updateTicketStatus
-    // Por quê: proteger tickets offline e manter a lógica nova de atribuição
-    // O que faz: bloqueia offline, altera status e tenta autoatribuir em "Em andamento"
     if (ticketId.contains('OFFLINE')) {
       return {
         'success': false,
@@ -819,10 +811,6 @@ class AppState extends ChangeNotifier {
     );
   }
 
-  // ✅ ALTERAÇÃO:
-  // Onde: método público para TicketDetailScreen puxar anexos do ticket
-  // Por quê: TicketDetailScreen não pode acessar _apiService (private)
-  // O que faz: busca documentos do ticket usando token atual
   Future<List<Map<String, dynamic>>> fetchTicketDocuments(
     String ticketId,
   ) async {
@@ -845,10 +833,6 @@ class AppState extends ChangeNotifier {
       return [];
     }
   }
-
-  // ====================================================================
-  // VALIDAÇÃO DE SOLUÇÃO (STORY 4)
-  // ====================================================================
 
   /// Aprova a solução e fecha o chamado
   Future<Map<String, dynamic>> approveSolution(
