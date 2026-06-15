@@ -24,6 +24,10 @@ import '../widgets/searchable_select_field.dart';
 import '../widgets/ui/sis_page_scaffold.dart';
 import '../widgets/ui/sis_section_header.dart';
 
+// NOTA (2026-06-14): MVP FormCreator support - categoria + localização apenas.
+// Outras perguntas (texto, checkbox, data, multi-select, etc.) são ignoradas.
+// Se FormCreator começar a exigir tipos adicionais, isso é "próxima iteração".
+// For now: category dropdown + location dropdown apenas. Escopo pragmático para TODAY.
 class FormTemplate extends StatefulWidget {
   final String serviceName;
   final List<String> localizacaoOptions;

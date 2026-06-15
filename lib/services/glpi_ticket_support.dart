@@ -166,10 +166,13 @@ class GlpiTicketSupport {
       final type = actor.type.trim().toLowerCase();
 
       if (type == 'validator' || type == 'question_group') {
-        // 'validator' actors (role=observer, value=0) são artefatos do
-        // FormCreator sem equivalente direto na criação de ticket via API.
-        // 'question_group' requer a resposta de uma pergunta do formulário —
-        // não aparece no catálogo SIS fora de serviços checklist (bloqueados).
+        // NOTA (2026-06-14): Ignorado propositalmente para MVP (escopo TODAY).
+        // 'validator': atores que validam automaticamente (seria necessário
+        //              capturar e atribuir automaticamente quem valida).
+        // 'question_group': grupos baseados em resposta de pergunta (seria
+        //                   necessário resolver grupo após resposta do usuário).
+        // Se GLPI SIS começar a exigir esses tipos, descomentar e implementar
+        // (estimado 1-2 dias de trabalho, não é bloqueante para MVP).
         continue;
       }
 

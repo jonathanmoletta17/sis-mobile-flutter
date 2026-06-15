@@ -5,6 +5,10 @@ import '../models/ticket_domain.dart';
 import 'ticket_permission_decision.dart';
 
 class PermissionService {
+  // NOTA (2026-06-14): Regras de permissão são institucionais e raramente mudam.
+  // Se precisar alterar (ex: quem pode validar solução, quem pode mudar status),
+  // edite as condições abaixo + execute `flutter test` + redistribua APK.
+  // Decisão: MANTER HARDCODED (não implementar dinâmico) por pragmatismo/MVP.
   static const int ggConservationGroupId = 49;
 
   static TicketPermissionDecision evaluate({
