@@ -1,0 +1,117 @@
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║              SIS MOBILE FLUTTER - MVP VALIDAÇÃO FINAL COM GLPI ADMIN                   ║
+║                                     2026-06-14                                         ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝
+
+PARA: Administrador GLPI SIS
+ASSUNTO: Validação de escopo MVP - 3 confirmações rápidas
+
+═══════════════════════════════════════════════════════════════════════════════════════════
+
+SITUAÇÃO ATUAL:
+O aplicativo SIS Mobile Flutter está 99% pronto para produção.
+Fizemos decisões pragmáticas para acelerar a entrega (economizamos ~7-12 dias).
+Precisamos de 3 confirmações simples para garantir que não há bloqueadores.
+
+═══════════════════════════════════════════════════════════════════════════════════════════
+
+PERGUNTA 1: PERFIS DO SIS
+───────────────────────────────────────────────────────────────────────────────────────
+
+O que está mapeado no app:
+  ✅ admin / super-admin
+  ✅ supervisor
+  ✅ technician (com distinção por grupo: conservação vs manutenção)
+  ✅ requester / self-service / solicitante
+  ✅ GG Conservação requester
+
+Pergunta: "Existem OUTROS perfis no SIS que o app não conhece?"
+
+Resposta esperada:
+  [ ] Não, esses 5-6 perfis cobrem 100% do SIS
+  [ ] Sim, há novos perfis: _________________ (listar)
+
+Se SIM:
+  → Adicionar à enum é rápido (15 minutos de código + rebuild)
+  → Não é bloqueante para MVP
+
+═══════════════════════════════════════════════════════════════════════════════════════════
+
+PERGUNTA 2: FORMCREATOR
+───────────────────────────────────────────────────────────────────────────────────────
+
+O que o app renderiza:
+  ✅ Seleção de Categoria (dropdown dinâmico)
+  ✅ Seleção de Localização (dropdown dinâmico)
+  ❌ Outras perguntas (texto, checkbox, data, multi-select, etc.) = IGNORADAS NO MVP
+
+Pergunta: "O FormCreator do SIS tem perguntas OBRIGATÓRIAS além de categoria e localização?"
+
+Resposta esperada:
+  [ ] Não, só usa categoria + localização (MVP está 100% completo)
+  [ ] Sim, tem outras: _________________ (descrever)
+
+Se SIM:
+  → Marcar como "v2" (próxima iteração, 3-5 dias)
+  → Fallback: GLPI web continua funcionando para forms complexas
+  → Não bloqueante para MVP
+
+═══════════════════════════════════════════════════════════════════════════════════════════
+
+PERGUNTA 3: ATORES FORMCREATOR
+───────────────────────────────────────────────────────────────────────────────────────
+
+O que o app IGNORA:
+  ❌ "validator" actors (atores que validam automaticamente)
+  ❌ "question_group" actors (grupos baseados em resposta de pergunta)
+
+O que o app usa:
+  ✅ author, person, question_person, group (tipos padrão)
+
+Pergunta: "O FormCreator do SIS usa VALIDATOR ou QUESTION_GROUP actors?"
+
+Resposta esperada:
+  [ ] Não, usa apenas tipos padrão (author, person, group, etc.)
+  [ ] Sim, usa: _________________ (descrever)
+
+Se SIM:
+  → Marcar como "v2" (próxima iteração, 1-2 dias)
+  → Não bloqueante para MVP
+
+═══════════════════════════════════════════════════════════════════════════════════════════
+
+COMO RESPONDER:
+
+Envie uma resposta SIMPLES assim:
+
+---
+Validação MVP - SIS Mobile Flutter
+
+1. Perfis: [responda sim/não + lista se sim]
+2. FormCreator (outras perguntas): [responda sim/não + lista se sim]
+3. FormCreator (validator/question_group): [responda sim/não + lista se sim]
+---
+
+═══════════════════════════════════════════════════════════════════════════════════════════
+
+PÓS-VALIDAÇÃO:
+
+Se TODAS as respostas forem NÃO:
+  ✅ MVP está 100% PRONTO
+  ✅ Deploy imediato para produção
+
+Se ALGUMA resposta for SIM:
+  → Tempo de ajuste: ~15 minutos por item (máximo)
+  → Não bloqueia MVP
+
+═══════════════════════════════════════════════════════════════════════════════════════════
+
+DETALHES TÉCNICOS (para sua referência):
+
+Repo: /home/jonathan/projects/work/mobile/sis-mobile-flutter
+Branch: main
+Status: 208/208 testes passando, 0 warnings
+
+Documentação completa: docs/MVP_SCOPE_FINAL.md
+
+═══════════════════════════════════════════════════════════════════════════════════════════
