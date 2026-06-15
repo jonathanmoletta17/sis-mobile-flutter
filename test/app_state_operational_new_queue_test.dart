@@ -86,6 +86,31 @@ void main() {
   );
 
   test(
+    'requester session hydrates numeric GLPI user id before filtering personal tickets',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        'sessionToken': 'test-session',
+        'loggedUsername': 'teste',
+        'activeProfile': 'Solicitante',
+      });
+
+      final api = _RequesterWithoutSessionIdGlpiClient();
+      final appState = AppState(api);
+      await pumpEventQueue();
+
+      final tickets = await appState.fetchTickets();
+
+      expect(api.getMyUserIdCalls, 1);
+      expect(api.requesterUsername, 'teste');
+      expect(api.requesterUserId, 2373);
+      expect(
+        tickets.map((ticket) => ticket['id'].toString()),
+        containsAll(['9597', '9598']),
+      );
+    },
+  );
+
+  test(
     'resolvedOperationalRole returns maintenanceTechnician for tecnico with maintenance group',
     () async {
       SharedPreferences.setMockInitialValues({
@@ -220,6 +245,59 @@ class _OperationalQueueGlpiClient extends GlpiClient {
         'users_id_recipient': 2214,
         'entities_id':
             'Origem > PIRATINI > CASA CIVIL > Secretaria-Executiva > Subchefia Administrativa > Departamento de Tecnologia e Informação',
+      },
+    ];
+  }
+}
+
+class _RequesterWithoutSessionIdGlpiClient extends GlpiClient {
+  String? requesterUsername;
+  int? requesterUserId;
+  int getMyUserIdCalls = 0;
+
+  @override
+  Future<Map<String, dynamic>> getSessionContext(String sessionToken) async {
+    return {
+      'userId': null,
+      'username': 'teste',
+      'profile': 'Solicitante',
+      'profileId': 12,
+      'groups': const [],
+      'activeEntityId': 1,
+      'activeEntityName': 'Origem > PIRATINI',
+      'defaultEntityId': 1,
+      'availableEntities': const [],
+    };
+  }
+
+  @override
+  Future<int?> getMyUserId(String sessionToken) async {
+    getMyUserIdCalls += 1;
+    return 2373;
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getTickets(
+    String sessionToken, {
+    String? requesterUsername,
+    int? requesterUserId,
+  }) async {
+    this.requesterUsername = requesterUsername;
+    this.requesterUserId = requesterUserId;
+    return [
+      {
+        'id': 9598,
+        'name': '[HERMES-E2E-NAO-APAGAR] HERMES_TEST_002',
+        'status': 2,
+        'itilcategories_id': 'Conservação > Limpeza',
+        'users_id_recipient': '2373',
+      },
+      {
+        'id': 9597,
+        'name': '[HERMES-E2E-NAO-APAGAR] HERMES_TEST_001',
+        'status': 2,
+        'itilcategories_id': 'Manutenção > Ar Condicionado > Conserto',
+        'users_id_recipient': '2373',
       },
     ];
   }

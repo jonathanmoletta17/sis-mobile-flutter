@@ -466,6 +466,10 @@ class AppState extends ChangeNotifier {
 
     if (_isAuthenticated && _sessionToken != null) {
       try {
+        if (_loggedUserId == null || _loggedUserId! <= 0) {
+          _loggedUserId = await _apiService.getMyUserId(_sessionToken!);
+        }
+
         final rawTickets = await _apiService.getTickets(
           _sessionToken!,
           requesterUsername: _loggedUsername,
