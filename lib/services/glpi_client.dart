@@ -875,7 +875,12 @@ class GlpiClient {
   ///
   /// No GLPI 10, solicitantes aprovam solução pelo próprio Ticket:
   /// - aprovação: `PUT /Ticket/{id}` com `status=6` e `_accepted=1`;
-  /// - recusa: `PUT /Ticket/{id}` saindo de status solucionado para aberto.
+  /// - recusa: `PUT /Ticket/{id}` com `status=2` (Em Atendimento).
+  ///
+  /// Transição 5→2 confirmada nos logs de produção SIS (tickets 9551, 9472,
+  /// 9269, 9037). Em ausência de técnico atribuído o GLPI pode ir a 1 (Novo)
+  /// — caso raro observado no ticket 9599. O app não trata esse fallback
+  /// porque exigiria ler o estado de atribuição antes de exibir o resultado.
   ///
   /// Atualizar `/ITILSolution/{id}` diretamente exige permissão de solução técnica
   /// (`maySolve`) e retorna `ERROR_RIGHT_MISSING` para perfil solicitante.
@@ -894,7 +899,7 @@ class GlpiClient {
       final payload = {
         'input': {
           'id': ticketId,
-          'status': approve ? GlpiStatus.fechado.code : GlpiStatus.novo.code,
+          'status': approve ? GlpiStatus.fechado.code : GlpiStatus.emAtendimento.code,
           if (approve) '_accepted': 1,
         },
       };

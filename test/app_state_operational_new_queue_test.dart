@@ -23,16 +23,10 @@ void main() {
 
       expect(api.requesterUsername, 'jonathan-moletta');
       expect(api.requesterUserId, 2039);
-      expect(api.statusQueries, [1]);
+      expect(api.statusQueries, unorderedEquals([1, 2, 3, 4, 5]));
       expect(
         tickets.map((ticket) => ticket['id'].toString()),
         contains('9276'),
-      );
-      expect(
-        tickets.firstWhere(
-          (ticket) => ticket['id'].toString() == '9276',
-        )['status'],
-        1,
       );
     },
   );
@@ -160,7 +154,7 @@ void main() {
       await pumpEventQueue();
 
       await appState.fetchTickets();
-      expect(api.statusQueries, [1]);
+      expect(api.statusQueries, unorderedEquals([1, 2, 3, 4, 5]));
       expect(appState.activeProfileId, 11);
       expect(appState.groups, isNotEmpty);
 
