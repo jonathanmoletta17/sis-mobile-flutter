@@ -621,13 +621,23 @@ void main() {
         return null;
       }
 
+      // Status GLPI: 1=Novo, 2=Atendimento, 4=Pendente, 5=Solucionado, 6=Fechado.
+      Future<String> ticketStatus(String id) async {
+        final r = await http.get(
+          Uri.parse('$base/Ticket/$id'),
+          headers: headers(token),
+        );
+        return '${(jsonDecode(r.body) as Map)['status']}';
+      }
+
       final created = <String>[];
       try {
-        // Caminho A: followup com add_reopen (recusar via followup).
+        // RECUSAR: followup add_reopen deve REABRIR (5 -> 1/2).
         final tA = await createTicket();
         created.add(tA);
         await proposeSolution(tA);
         await profile(9);
+        final beforeA = await ticketStatus(tA);
         final fa = await http.post(
           Uri.parse('$base/TicketFollowup'),
           headers: headers(token),
@@ -639,15 +649,17 @@ void main() {
             },
           }),
         );
+        final afterA = await ticketStatus(tA);
         // ignore: avoid_print
-        print('TICKETFOLLOWUP_ADDREOPEN -> ${fa.statusCode}'
-            '${fa.statusCode >= 400 ? ' ${fa.body}' : ''}');
+        print('RECUSAR http=${fa.statusCode} status_antes=$beforeA '
+            'status_depois=$afterA EFEITO_OK=${beforeA == '5' && afterA != '5'}');
 
-        // Caminho B: followup com add_close (APROVAR via followup).
+        // APROVAR: followup add_close deve FECHAR (5 -> 6).
         final tB = await createTicket();
         created.add(tB);
         await proposeSolution(tB);
         await profile(9);
+        final beforeB = await ticketStatus(tB);
         final pb = await http.post(
           Uri.parse('$base/TicketFollowup'),
           headers: headers(token),
@@ -659,9 +671,10 @@ void main() {
             },
           }),
         );
+        final afterB = await ticketStatus(tB);
         // ignore: avoid_print
-        print('TICKETFOLLOWUP_ADDCLOSE -> ${pb.statusCode}'
-            '${pb.statusCode >= 400 ? ' ${pb.body}' : ''}');
+        print('APROVAR http=${pb.statusCode} status_antes=$beforeB '
+            'status_depois=$afterB EFEITO_OK=${beforeB == '5' && afterB == '6'}');
       } finally {
         await profile(11);
         for (final id in created) {
