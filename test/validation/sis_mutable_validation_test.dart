@@ -566,6 +566,121 @@ void main() {
   );
 
   test(
+    'investiga caminho correto de aprovacao de solucao (APPLY)',
+    () async {
+      if (!ready) {
+        markTestSkipped('modo direto desabilitado');
+        return;
+      }
+      if (envOf('SIS_VALIDATION_APPLY').toLowerCase() != 'true') {
+        markTestSkipped('SIS_VALIDATION_APPLY!=true');
+        return;
+      }
+      final categoryId = int.parse(envOf('SIS_TEST_CATEGORY_ID'));
+      final entityId = int.parse(envOf('SIS_TEST_ENTITY_ID'));
+      final token = await initSession();
+
+      Future<void> profile(int id) async {
+        await http.post(
+          Uri.parse('$base/changeActiveProfile'),
+          headers: headers(token),
+          body: jsonEncode({'profiles_id': id}),
+        );
+      }
+
+      Future<String> createTicket() async {
+        await profile(9);
+        final payload = GlpiTicketSupport.buildCreateTicketPayload({
+          'assunto': '$ticketMarker aprov ${DateTime.now().microsecondsSinceEpoch}',
+          'descricao': 'Teste caminho aprovacao. Descartavel.',
+          'serviceName': '',
+          'governedCategoryId': categoryId,
+          'entities_id': entityId,
+          'loggedUserId': 2373,
+        });
+        final r = await http.post(
+          Uri.parse('$base/Ticket'),
+          headers: headers(token),
+          body: jsonEncode(payload),
+        );
+        return (jsonDecode(r.body) as Map)['id'].toString();
+      }
+
+      Future<String?> proposeSolution(String id) async {
+        await profile(11);
+        final r = await http.post(
+          Uri.parse('$base/ITILSolution'),
+          headers: headers(token),
+          body: jsonEncode({
+            'input': {'itemtype': 'Ticket', 'items_id': id, 'content': 'sol'},
+          }),
+        );
+        if (r.statusCode == 200 || r.statusCode == 201) {
+          return (jsonDecode(r.body) as Map)['id'].toString();
+        }
+        return null;
+      }
+
+      final created = <String>[];
+      try {
+        // Caminho A: followup com add_reopen (recusar via followup).
+        final tA = await createTicket();
+        created.add(tA);
+        await proposeSolution(tA);
+        await profile(9);
+        final fa = await http.post(
+          Uri.parse('$base/TicketFollowup'),
+          headers: headers(token),
+          body: jsonEncode({
+            'input': {
+              'tickets_id': tA,
+              'content': 'nao resolvido',
+              'add_reopen': 1,
+            },
+          }),
+        );
+        // ignore: avoid_print
+        print('TICKETFOLLOWUP_ADDREOPEN -> ${fa.statusCode}'
+            '${fa.statusCode >= 400 ? ' ${fa.body}' : ''}');
+
+        // Caminho B: followup com add_close (APROVAR via followup).
+        final tB = await createTicket();
+        created.add(tB);
+        await proposeSolution(tB);
+        await profile(9);
+        final pb = await http.post(
+          Uri.parse('$base/TicketFollowup'),
+          headers: headers(token),
+          body: jsonEncode({
+            'input': {
+              'tickets_id': tB,
+              'content': 'resolvido, obrigado',
+              'add_close': 1,
+            },
+          }),
+        );
+        // ignore: avoid_print
+        print('TICKETFOLLOWUP_ADDCLOSE -> ${pb.statusCode}'
+            '${pb.statusCode >= 400 ? ' ${pb.body}' : ''}');
+      } finally {
+        await profile(11);
+        for (final id in created) {
+          await http.put(
+            Uri.parse('$base/Ticket/$id'),
+            headers: headers(token),
+            body: jsonEncode({
+              'input': {'id': id, 'status': 6},
+            }),
+          );
+        }
+        // ignore: avoid_print
+        print('APROV cleanup tickets=$created');
+        await http.get(Uri.parse('$base/killSession'), headers: headers(token));
+      }
+    },
+  );
+
+  test(
     'diagnostico probe (APPLY+PROBE): isola o campo que dispara ERROR_GLPI_ADD',
     () async {
       if (!ready) {
