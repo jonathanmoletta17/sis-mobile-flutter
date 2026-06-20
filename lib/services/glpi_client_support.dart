@@ -275,6 +275,18 @@ class GlpiClientSupport {
     return trimmed;
   }
 
+  /// Normaliza uma mensagem de erro para exibição/log.
+  ///
+  /// Remove os prefixos `Exception: ` acumulados pelo empacotamento duplo de
+  /// exceções (createTicket captura e reempacota, submitTicket relança), de modo
+  /// que o usuário/log veja `Erro ao criar ticket: [400] - [...]` em vez de
+  /// `Exception: Exception: Erro ao criar ticket: ...`. Preserva o conteúdo
+  /// (códigos como `ERROR_GLPI_ADD` continuam presentes para classificação).
+  static String cleanErrorMessage(Object error) {
+    final raw = error.toString().trim();
+    return raw.replaceFirst(RegExp(r'^(?:Exception:\s*)+'), '').trim();
+  }
+
   /// Monta a busca "meus chamados".
   ///
   /// Semântica correta do GLPI: o usuário deve ver os chamados onde é

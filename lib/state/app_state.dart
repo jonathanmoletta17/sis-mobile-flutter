@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sis_mobile_flutter/utils/html_decode_utils.dart';
 import '../services/glpi_client.dart';
+import '../services/glpi_client_support.dart';
 import '../models/glpi_ticket.dart';
 import '../models/glpi_status.dart';
 import '../models/glpi_identity.dart';
@@ -386,11 +387,12 @@ class AppState extends ChangeNotifier {
       }
     } catch (e) {
       if (_isGovernedSubmitBlocker(e)) {
+        final detail = GlpiClientSupport.cleanErrorMessage(e);
         debugPrint(
-          '⛔ Criação de chamado bloqueada pelo GLPI; não será salva offline: $e',
+          '⛔ Criação de chamado bloqueada pelo GLPI; não será salva offline: $detail',
         );
         notifyListeners();
-        return '⛔ O GLPI recusou a criação deste chamado. Nada foi salvo offline para evitar sincronização impossível. Detalhe: $e';
+        return '⛔ O GLPI recusou a criação deste chamado. Nada foi salvo offline para evitar sincronização impossível. Detalhe: $detail';
       }
 
       debugPrint('⚠️ Erro ao enviar online: $e. Salvando offline...');

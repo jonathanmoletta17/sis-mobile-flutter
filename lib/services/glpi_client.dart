@@ -1120,92 +1120,6 @@ class GlpiClient {
     );
   }
 
-  /// CORREÇÃO: DESAFIO 3: Upload Direto no Contexto do Ticket
-  ///
-  /// OBSOLETO PARA O FLUXO PRINCIPAL - Método mantido apenas como legado/fallback.
-  Future<String?> uploadDocument({
-    required String sessionToken,
-    required List<int> bytes,
-    required String filename,
-    String? mimeType,
-  }) async {
-    final uri = Uri.parse('${GlpiConfig.baseUrl}/Document');
-    _debugLog(
-      '[LEGACY] Enviando documento via /Document -> $uri',
-    );
-
-    final request = http.MultipartRequest('POST', uri);
-
-    request.headers.addAll({
-      'Accept': 'application/json',
-      if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
-    });
-
-    final MediaType contentType = (mimeType != null && mimeType.isNotEmpty)
-        ? MediaType.parse(mimeType)
-        : MediaType('application', 'octet-stream');
-
-    request.files.add(
-      http.MultipartFile.fromBytes(
-        'file',
-        bytes,
-        filename: filename,
-        contentType: contentType,
-      ),
-    );
-
-    request.files.add(
-      http.MultipartFile.fromString(
-        'uploadManifest',
-        jsonEncode({
-          'input': {'name': filename},
-        }),
-        contentType: MediaType('application', 'json'),
-      ),
-    );
-
-    final streamedResponse = await request.send().timeout(
-      GlpiConfig.requestTimeout,
-    );
-    final response = await http.Response.fromStream(streamedResponse);
-
-    _logResponse('UPLOAD_DOCUMENT_LEGACY', response);
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      try {
-        final decoded = jsonDecode(response.body);
-        if (decoded is Map<String, dynamic>) {
-          final id = decoded['id'] ?? decoded['documents_id'];
-          if (id != null) return id.toString();
-        }
-      } catch (e) {
-        _debugLog(
-          'Falha ao extrair ID do documento legado: $e',
-        );
-      }
-    }
-
-    if (_isAuthError(response.statusCode)) throw _authException(response);
-
-    _debugLog(
-      '[LEGACY] Falha no upload: [${response.statusCode}] ${response.body}',
-    );
-    return null;
-  }
-
-  Future<void> linkDocumentToTicket({
-    required String sessionToken,
-    required String ticketId,
-    required String documentId,
-  }) async {
-    await linkDocumentToItem(
-      sessionToken: sessionToken,
-      itemId: ticketId,
-      documentId: documentId,
-      itemType: 'Ticket',
-    );
-  }
-
   Future<void> linkDocumentToItem({
     required String sessionToken,
     required String itemId,
@@ -1402,7 +1316,10 @@ class GlpiClient {
       _debugLog(
         'Falha ao criar ticket: $e',
       );
-      return {'success': false, 'error_message': e.toString()};
+      return {
+        'success': false,
+        'error_message': GlpiClientSupport.cleanErrorMessage(e),
+      };
     }
   }
 
