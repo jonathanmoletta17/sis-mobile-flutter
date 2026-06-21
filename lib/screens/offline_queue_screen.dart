@@ -225,11 +225,7 @@ class _OfflineQueueScreenState extends State<OfflineQueueScreen> {
                       Expanded(
                         child: OutlinedButton.icon(
                           onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => const MyTicketsScreen(),
-                              ),
-                            );
+                            replaceAppRoot(context, const MyTicketsScreen());
                           },
                           icon: const Icon(Icons.list_alt_outlined),
                           label: const Text('Meus chamados'),
@@ -259,9 +255,7 @@ class _OfflineQueueScreenState extends State<OfflineQueueScreen> {
                     'Os chamados salvos localmente aparecerão aqui quando houver necessidade de sincronização.',
                 actionLabel: 'Abrir meus chamados',
                 onAction: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const MyTicketsScreen()),
-                  );
+                  replaceAppRoot(context, const MyTicketsScreen());
                 },
               ),
             )

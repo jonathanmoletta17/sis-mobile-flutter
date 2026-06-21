@@ -871,14 +871,19 @@ class GlpiClient {
     }
   }
 
-  /// Valida ou recusa a última solução do ticket usando o fluxo nativo do GLPI.
+  /// Valida (aprova/recusa) a última solução do ticket pelo fluxo do REQUERENTE.
   ///
-  /// No GLPI 10, solicitantes aprovam solução pelo próprio Ticket:
-  /// - aprovação: `PUT /Ticket/{id}` com `status=6` e `_accepted=1`;
-  /// - recusa: `PUT /Ticket/{id}` saindo de status solucionado para aberto.
+  /// O requerente aprova/recusa a solução do próprio chamado via followup com
+  /// `add_close`/`add_reopen` — mecanismo nativo do GLPI que usa o direito de
+  /// followup (que o perfil Solicitante TEM), e não o `UPDATE` de ticket:
+  /// - aprovação: `POST /TicketFollowup` com `add_close=1` (fecha o chamado);
+  /// - recusa: `POST /TicketFollowup` com `add_reopen=1` (reabre o chamado).
   ///
-  /// Atualizar `/ITILSolution/{id}` diretamente exige permissão de solução técnica
-  /// (`maySolve`) e retorna `ERROR_RIGHT_MISSING` para perfil solicitante.
+  /// NÃO usar `PUT /Ticket {status}`: exige `UPDATE` em ticket, direito que o
+  /// Solicitante não tem -> `ERROR_GLPI_UPDATE`. `PUT /ITILSolution` exige
+  /// `maySolve` (solução técnica) -> `ERROR_RIGHT_MISSING`. Ambos os caminhos
+  /// antigos falhavam para o Solicitante; o de followup foi validado E2E
+  /// (2026-06-20) retornando 201 sem conceder permissão extra ao perfil.
   Future<Map<String, dynamic>> updateTicketSolutionDecision({
     required String ticketId,
     required bool approve,
@@ -886,27 +891,29 @@ class GlpiClient {
   }) async {
     try {
       final headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
         'Accept': 'application/json',
         if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
       };
 
       final payload = {
         'input': {
-          'id': ticketId,
-          'status': approve ? GlpiStatus.fechado.code : GlpiStatus.novo.code,
-          if (approve) '_accepted': 1,
+          'tickets_id': ticketId,
+          'content': approve
+              ? 'Solução aprovada pelo solicitante.'
+              : 'Solução recusada pelo solicitante.',
+          if (approve) 'add_close': 1 else 'add_reopen': 1,
         },
       };
 
-      final uri = Uri.parse('${GlpiConfig.baseUrl}/Ticket/$ticketId');
+      final uri = Uri.parse('${GlpiConfig.baseUrl}/TicketFollowup');
       final response = await http
-          .put(uri, headers: headers, body: jsonEncode(payload))
+          .post(uri, headers: headers, body: jsonEncode(payload))
           .timeout(GlpiConfig.requestTimeout);
 
       _logResponse(approve ? 'APPROVE_SOLUTION' : 'REJECT_SOLUTION', response);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return {
           'success': true,
           'message': approve
@@ -927,7 +934,7 @@ class GlpiClient {
         'error_message': '[${response.statusCode}] ${response.body}',
       };
     } catch (e) {
-      _debugLog('Falha ao validar solução pelo Ticket: $e');
+      _debugLog('Falha ao validar solução via followup: $e');
       return {
         'success': false,
         'message': approve
@@ -1112,92 +1119,6 @@ class GlpiClient {
 
     return GlpiClientSupport.extractDocumentIdsFromDocumentItemBody(
       response.body,
-    );
-  }
-
-  /// CORREÇÃO: DESAFIO 3: Upload Direto no Contexto do Ticket
-  ///
-  /// OBSOLETO PARA O FLUXO PRINCIPAL - Método mantido apenas como legado/fallback.
-  Future<String?> uploadDocument({
-    required String sessionToken,
-    required List<int> bytes,
-    required String filename,
-    String? mimeType,
-  }) async {
-    final uri = Uri.parse('${GlpiConfig.baseUrl}/Document');
-    _debugLog(
-      '[LEGACY] Enviando documento via /Document -> $uri',
-    );
-
-    final request = http.MultipartRequest('POST', uri);
-
-    request.headers.addAll({
-      'Accept': 'application/json',
-      if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
-    });
-
-    final MediaType contentType = (mimeType != null && mimeType.isNotEmpty)
-        ? MediaType.parse(mimeType)
-        : MediaType('application', 'octet-stream');
-
-    request.files.add(
-      http.MultipartFile.fromBytes(
-        'file',
-        bytes,
-        filename: filename,
-        contentType: contentType,
-      ),
-    );
-
-    request.files.add(
-      http.MultipartFile.fromString(
-        'uploadManifest',
-        jsonEncode({
-          'input': {'name': filename},
-        }),
-        contentType: MediaType('application', 'json'),
-      ),
-    );
-
-    final streamedResponse = await request.send().timeout(
-      GlpiConfig.requestTimeout,
-    );
-    final response = await http.Response.fromStream(streamedResponse);
-
-    _logResponse('UPLOAD_DOCUMENT_LEGACY', response);
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      try {
-        final decoded = jsonDecode(response.body);
-        if (decoded is Map<String, dynamic>) {
-          final id = decoded['id'] ?? decoded['documents_id'];
-          if (id != null) return id.toString();
-        }
-      } catch (e) {
-        _debugLog(
-          'Falha ao extrair ID do documento legado: $e',
-        );
-      }
-    }
-
-    if (_isAuthError(response.statusCode)) throw _authException(response);
-
-    _debugLog(
-      '[LEGACY] Falha no upload: [${response.statusCode}] ${response.body}',
-    );
-    return null;
-  }
-
-  Future<void> linkDocumentToTicket({
-    required String sessionToken,
-    required String ticketId,
-    required String documentId,
-  }) async {
-    await linkDocumentToItem(
-      sessionToken: sessionToken,
-      itemId: ticketId,
-      documentId: documentId,
-      itemType: 'Ticket',
     );
   }
 
@@ -1397,7 +1318,10 @@ class GlpiClient {
       _debugLog(
         'Falha ao criar ticket: $e',
       );
-      return {'success': false, 'error_message': e.toString()};
+      return {
+        'success': false,
+        'error_message': GlpiClientSupport.cleanErrorMessage(e),
+      };
     }
   }
 

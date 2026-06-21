@@ -5,7 +5,7 @@ const GLPI_API_PREFIX = '/sis/apirest.php';
 const MOBILE_METADATA_PATH = '/metadata/mobile/sis/catalog';
 
 const READ_ONLY_ITEM_PATTERN =
-  /^\/(?:initSession|search\/Ticket|Ticket(?:\/\d+(?:\/(?:TicketFollowup|ITILSolution|Ticket_User|Group_Ticket|Document_Item|Document))?)?|Document(?:\/\d+)?|Document_Item|ITILFollowup\/\d+\/Document_Item|ITILSolution\/\d+\/Document_Item|User(?:\/\d+)?|Group(?:\/\d+)?|Entity|Location|RequestType|ITILCategory|listSearchOptions\/Ticket|getFullSession|getActiveProfile|getMyProfiles|getMyEntities)(?:$|[/?])/;
+  /^\/(?:initSession|search\/Ticket|Ticket(?:\/\d+(?:\/(?:TicketFollowup|ITILSolution|Ticket_User|Group_Ticket|Document_Item|Document|Log))?)?|Document(?:\/\d+)?|Document_Item|ITILFollowup\/\d+\/Document_Item|ITILSolution\/\d+\/Document_Item|User(?:\/\d+)?|Group(?:\/\d+)?|Entity|Location|RequestType|ITILCategory|listSearchOptions\/Ticket|getFullSession|getActiveProfile|getMyProfiles|getMyEntities|PluginFormcreator(?:Form|Category|Section|Question|TargetTicket|Form_Profile)(?:\/\d+)?)(?:$|[/?])/;
 
 // Leituras de diretório (User/Group). O perfil helpdesk (Solicitante) não tem
 // direito REST de ler User/Group — mas o formulário GLPI permite via dropdown

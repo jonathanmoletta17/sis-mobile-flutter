@@ -1,0 +1,5098 @@
+{
+  "_meta": {
+    "glpi_instance": "sis",
+    "generated_at": "2026-06-17T23:28:44.503441+00:00",
+    "schema_version": "2.0",
+    "source": "API read-only dumps (instances/sis/raw) — caminho enxuto, sem motor epistêmico",
+    "counts": {
+      "profiles": 11,
+      "forms": 41,
+      "target_tickets": 241,
+      "categories": 109
+    }
+  },
+  "status": {
+    "labels": {
+      "1": {
+        "label": "Novo",
+        "is_terminal": false
+      },
+      "2": {
+        "label": "Em atendimento (atribuído)",
+        "is_terminal": false
+      },
+      "3": {
+        "label": "Em atendimento (planejado)",
+        "is_terminal": false
+      },
+      "4": {
+        "label": "Pendente",
+        "is_terminal": false
+      },
+      "5": {
+        "label": "Solucionado",
+        "is_terminal": false
+      },
+      "6": {
+        "label": "Fechado",
+        "is_terminal": true
+      }
+    },
+    "transitions_by_profile": {
+      "1": {
+        "name": "Self-Service",
+        "transitions": {
+          "1": [],
+          "2": [],
+          "3": [],
+          "4": [],
+          "5": [
+            6
+          ],
+          "6": []
+        }
+      },
+      "2": {
+        "name": "Observer",
+        "transitions": {
+          "1": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "2": [
+            1,
+            3,
+            4,
+            5,
+            6
+          ],
+          "3": [
+            1,
+            2,
+            4,
+            5,
+            6
+          ],
+          "4": [
+            1,
+            2,
+            3,
+            5,
+            6
+          ],
+          "5": [
+            1,
+            2,
+            3,
+            4,
+            6
+          ],
+          "6": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "3": {
+        "name": "Admin",
+        "transitions": {
+          "1": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "2": [
+            1,
+            3,
+            4,
+            5,
+            6
+          ],
+          "3": [
+            1,
+            2,
+            4,
+            5,
+            6
+          ],
+          "4": [
+            1,
+            2,
+            3,
+            5,
+            6
+          ],
+          "5": [
+            1,
+            2,
+            3,
+            4,
+            6
+          ],
+          "6": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "4": {
+        "name": "Super-Admin",
+        "transitions": {
+          "1": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "2": [
+            1,
+            3,
+            4,
+            5,
+            6
+          ],
+          "3": [
+            1,
+            2,
+            4,
+            5,
+            6
+          ],
+          "4": [
+            1,
+            2,
+            3,
+            5,
+            6
+          ],
+          "5": [
+            1,
+            2,
+            3,
+            4,
+            6
+          ],
+          "6": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "5": {
+        "name": "Hotliner",
+        "transitions": {
+          "1": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "2": [
+            1,
+            3,
+            4,
+            5,
+            6
+          ],
+          "3": [
+            1,
+            2,
+            4,
+            5,
+            6
+          ],
+          "4": [
+            1,
+            2,
+            3,
+            5,
+            6
+          ],
+          "5": [
+            1,
+            2,
+            3,
+            4,
+            6
+          ],
+          "6": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "6": {
+        "name": "Tecnico",
+        "transitions": {
+          "1": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "2": [
+            1,
+            3,
+            4,
+            5,
+            6
+          ],
+          "3": [
+            1,
+            2,
+            4,
+            5,
+            6
+          ],
+          "4": [
+            1,
+            2,
+            3,
+            5,
+            6
+          ],
+          "5": [
+            1,
+            2,
+            3,
+            4,
+            6
+          ],
+          "6": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "7": {
+        "name": "Supervisor",
+        "transitions": {
+          "1": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "2": [
+            1,
+            3,
+            4,
+            5,
+            6
+          ],
+          "3": [
+            1,
+            2,
+            4,
+            5,
+            6
+          ],
+          "4": [
+            1,
+            2,
+            3,
+            5,
+            6
+          ],
+          "5": [
+            1,
+            2,
+            3,
+            4,
+            6
+          ],
+          "6": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "8": {
+        "name": "Read-Only",
+        "transitions": {
+          "1": [],
+          "2": [],
+          "3": [],
+          "4": [],
+          "5": [],
+          "6": []
+        }
+      },
+      "9": {
+        "name": "Solicitante",
+        "transitions": {
+          "1": [],
+          "2": [],
+          "3": [],
+          "4": [],
+          "5": [
+            6
+          ],
+          "6": [
+            1
+          ]
+        }
+      },
+      "11": {
+        "name": "Manutenção e Conservação",
+        "transitions": {
+          "1": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "2": [
+            1,
+            3,
+            4,
+            5,
+            6
+          ],
+          "3": [
+            1,
+            2,
+            4,
+            5,
+            6
+          ],
+          "4": [
+            1,
+            2,
+            3,
+            5,
+            6
+          ],
+          "5": [
+            1,
+            2,
+            3,
+            4,
+            6
+          ],
+          "6": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "12": {
+        "name": "Solicitante-GG-Conservação",
+        "transitions": {
+          "1": [],
+          "2": [],
+          "3": [],
+          "4": [],
+          "5": [
+            6
+          ],
+          "6": [
+            1
+          ]
+        }
+      }
+    }
+  },
+  "search_options": {
+    "fields": {
+      "requester_user": {
+        "field": 4,
+        "name": "Requerente",
+        "table": "glpi_users",
+        "column": "name"
+      },
+      "author_recipient": {
+        "field": 22,
+        "name": "Autor",
+        "table": "glpi_users",
+        "column": "name"
+      },
+      "observer_user": {
+        "field": 66,
+        "name": "Observador",
+        "table": "glpi_users",
+        "column": "name"
+      },
+      "tech_user": {
+        "field": 5,
+        "name": "Técnico",
+        "table": "glpi_users",
+        "column": "name"
+      },
+      "tech_group": {
+        "field": 8,
+        "name": "Grupo técnico",
+        "table": "glpi_groups",
+        "column": "completename"
+      },
+      "observer_group": {
+        "field": 65,
+        "name": "Grupo observador",
+        "table": "glpi_groups",
+        "column": "completename"
+      },
+      "requester_group": {
+        "field": 71,
+        "name": "Grupo requerente",
+        "table": "glpi_groups",
+        "column": "completename"
+      },
+      "assigned_group": {
+        "field": 112,
+        "name": "Grupo encarregado",
+        "table": "glpi_groups",
+        "column": "completename"
+      },
+      "status": {
+        "field": 12,
+        "name": "Status",
+        "table": "glpi_tickets",
+        "column": "status"
+      },
+      "category": {
+        "field": 7,
+        "name": "Categoria",
+        "table": "glpi_itilcategories",
+        "column": "completename"
+      },
+      "entity": {
+        "field": 80,
+        "name": "Entidade",
+        "table": "glpi_entities",
+        "column": "completename"
+      },
+      "date_open": {
+        "field": 15,
+        "name": "Data de abertura",
+        "table": "glpi_tickets",
+        "column": "date"
+      },
+      "id": {
+        "field": 2,
+        "name": "ID",
+        "table": "glpi_tickets",
+        "column": "id"
+      },
+      "title": {
+        "field": 1,
+        "name": "Título",
+        "table": "glpi_tickets",
+        "column": "name"
+      }
+    },
+    "my_tickets_criteria": {
+      "description": "Tickets onde o usuário é requerente, autor(recipient) ou observador.",
+      "fields_or": [
+        4,
+        22,
+        66
+      ],
+      "searchtype": "equals",
+      "value": "<user_id>",
+      "note": "field 4/22/66 são dropdowns: 'equals' espera o ID do usuário (não o nome)."
+    },
+    "forcedisplay_default": [
+      2,
+      1,
+      12,
+      15,
+      4,
+      7,
+      5,
+      80
+    ],
+    "sort": 15,
+    "order": "DESC"
+  },
+  "visibility": {
+    "1": {
+      "name": "Self-Service",
+      "rights": 2049,
+      "read_bits": [
+        "READMY",
+        "READGROUP"
+      ],
+      "scope": "GROUP_OR_ASSIGNED"
+    },
+    "2": {
+      "name": "Observer",
+      "rights": 168989,
+      "read_bits": [
+        "READMY",
+        "READALL",
+        "READASSIGN",
+        "OWN"
+      ],
+      "scope": "ALL_IN_ENTITY"
+    },
+    "3": {
+      "name": "Admin",
+      "rights": 261151,
+      "read_bits": [
+        "READMY",
+        "READALL",
+        "READGROUP",
+        "READASSIGN",
+        "OWN"
+      ],
+      "scope": "ALL_IN_ENTITY"
+    },
+    "4": {
+      "name": "Super-Admin",
+      "rights": 261151,
+      "read_bits": [
+        "READMY",
+        "READALL",
+        "READGROUP",
+        "READASSIGN",
+        "OWN"
+      ],
+      "scope": "ALL_IN_ENTITY"
+    },
+    "5": {
+      "name": "Hotliner",
+      "rights": 140295,
+      "read_bits": [
+        "READMY",
+        "READALL"
+      ],
+      "scope": "ALL_IN_ENTITY"
+    },
+    "6": {
+      "name": "Tecnico",
+      "rights": 175127,
+      "read_bits": [
+        "READMY",
+        "READALL",
+        "READGROUP",
+        "OWN"
+      ],
+      "scope": "ALL_IN_ENTITY"
+    },
+    "7": {
+      "name": "Supervisor",
+      "rights": 261151,
+      "read_bits": [
+        "READMY",
+        "READALL",
+        "READGROUP",
+        "READASSIGN",
+        "OWN"
+      ],
+      "scope": "ALL_IN_ENTITY"
+    },
+    "8": {
+      "name": "Read-Only",
+      "rights": 138241,
+      "read_bits": [
+        "READMY",
+        "READALL",
+        "READGROUP",
+        "READASSIGN"
+      ],
+      "scope": "ALL_IN_ENTITY"
+    },
+    "9": {
+      "name": "Solicitante",
+      "rights": 1,
+      "read_bits": [
+        "READMY"
+      ],
+      "scope": "OWN_ONLY"
+    },
+    "11": {
+      "name": "Manutenção e Conservação",
+      "rights": 260102,
+      "read_bits": [
+        "READGROUP",
+        "READASSIGN",
+        "OWN"
+      ],
+      "scope": "GROUP_OR_ASSIGNED"
+    },
+    "12": {
+      "name": "Solicitante-GG-Conservação",
+      "rights": 145411,
+      "read_bits": [
+        "READMY",
+        "READGROUP",
+        "READASSIGN"
+      ],
+      "scope": "GROUP_OR_ASSIGNED"
+    }
+  },
+  "form_catalog": {
+    "1": {
+      "name": "Ar-Condicionado",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 1,
+          "target_name": "##answer_133##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 7,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 17,
+          "target_name": "##answer_133##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 2,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 7,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "2": {
+      "name": "Elevadores",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 2,
+          "target_name": "Elevadores - ##answer_137##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 17,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 1
+        },
+        {
+          "id": 21,
+          "target_name": "Elevadores - ##answer_137##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 11,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 17,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 1
+        }
+      ]
+    },
+    "3": {
+      "name": "Carregadores",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 3,
+          "target_name": "##answer_134##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 24,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 18,
+          "target_name": "##answer_134##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 19,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 24,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "4": {
+      "name": "Copa",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 4,
+          "target_name": "##answer_135##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 32,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 19,
+          "target_name": "##answer_135##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 28,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 32,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "5": {
+      "name": "Elétrica",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 5,
+          "target_name": "##answer_136##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 41,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 20,
+          "target_name": "##answer_136##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 36,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 41,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "6": {
+      "name": "Hidráulica",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 6,
+          "target_name": "##answer_138##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 50,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 22,
+          "target_name": "##answer_138##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 45,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 50,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "7": {
+      "name": "Jardinagem",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 14,
+          "target_name": "##answer_139##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 58,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 23,
+          "target_name": "##answer_139##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 54,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 58,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "8": {
+      "name": "Limpeza",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 7,
+          "target_name": "##answer_140##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 66,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 24,
+          "target_name": "##answer_140##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 62,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 66,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "9": {
+      "name": "Marcenaria",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 8,
+          "target_name": "##answer_141##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 75,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 25,
+          "target_name": "##answer_141##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 70,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 75,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "10": {
+      "name": "Mensageria",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 9,
+          "target_name": "##answer_142##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 84,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 26,
+          "target_name": "##answer_142##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 79,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 84,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "11": {
+      "name": "Pedreiro",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 10,
+          "target_name": "##answer_143##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 93,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 27,
+          "target_name": "##answer_143##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 88,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 93,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "12": {
+      "name": "Pintura",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 11,
+          "target_name": "##answer_144##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 102,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 28,
+          "target_name": "##answer_144##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 97,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 102,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "13": {
+      "name": "Técnico de Redes",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 12,
+          "target_name": "##answer_146##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 111,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 29,
+          "target_name": "##answer_146##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 106,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 111,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "14": {
+      "name": "Vidraçaria",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 13,
+          "target_name": "##answer_147##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 120,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 30,
+          "target_name": "##answer_147##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 115,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 120,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "15": {
+      "name": "Projeto",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": []
+    },
+    "18": {
+      "name": "Diversos",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 38,
+          "target_name": "Ar Condicionado - ##answer_191##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 188,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 39,
+          "target_name": "Ar Condicionado - ##answer_191##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 188,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 40,
+          "target_name": "Diversos - ##answer_192##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 41,
+          "target_name": "Diversos - ##answer_192##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 43,
+          "target_name": "Elevadores - ##answer_196##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 146,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 44,
+          "target_name": "Elevadores - ##answer_196##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 146,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 1
+        },
+        {
+          "id": 45,
+          "target_name": "Elétrica - ##answer_200##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 197,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 46,
+          "target_name": "Elétrica - ##answer_200##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 197,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 47,
+          "target_name": "Hidráulica - ##answer_204##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 201,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 48,
+          "target_name": "Hidráulica - ##answer_204##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 201,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 49,
+          "target_name": "Marcenaria - ##answer_208##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 205,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 50,
+          "target_name": "Marcenaria - ##answer_208##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 205,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 51,
+          "target_name": "Pedreiro - ##answer_212##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 209,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 52,
+          "target_name": "Pedreiro - ##answer_212##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 209,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 53,
+          "target_name": "Pintura - ##answer_216##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 213,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 54,
+          "target_name": "Pintura - ##answer_216##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 213,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 55,
+          "target_name": "Técnico de Redes - ##answer_220##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 217,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 56,
+          "target_name": "Técnico de Redes - ##answer_220##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 217,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 57,
+          "target_name": "Vidraçaria - ##answer_224##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 221,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 58,
+          "target_name": "Vidraçaria - ##answer_224##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 221,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 59,
+          "target_name": "Carregadores - ##answer_224##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 225,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 60,
+          "target_name": "Carregadores - ##answer_224##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 225,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 61,
+          "target_name": "Copa - ##answer_232##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 229,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 62,
+          "target_name": "Copa - ##answer_232##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 229,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 63,
+          "target_name": "Jardinagem - ##answer_236##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 233,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 64,
+          "target_name": "Jardinagem - ##answer_236##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 233,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 65,
+          "target_name": "Limpeza - ##answer_240##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 237,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 66,
+          "target_name": "Limpeza - ##answer_240##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 237,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 67,
+          "target_name": "Mensageria - ##answer_244##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 184,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 241,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 68,
+          "target_name": "Mensageria - ##answer_244##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 241,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "21": {
+      "name": "Ar-Condicionado",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 129,
+          "target_name": "##answer_378##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 375,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 130,
+          "target_name": "##answer_378##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 371,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 375,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "22": {
+      "name": "Carregadores",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 131,
+          "target_name": "##answer_387##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 384,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 132,
+          "target_name": "##answer_387##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 380,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 384,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "23": {
+      "name": "Copa",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 133,
+          "target_name": "##answer_395##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 392,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 134,
+          "target_name": "##answer_395##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 389,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 392,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "24": {
+      "name": "Elétrica",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 135,
+          "target_name": "##answer_404##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 401,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 136,
+          "target_name": "##answer_404##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 397,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 401,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "25": {
+      "name": "Elevadores",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 137,
+          "target_name": "Elevadores - ##answer_412##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 17,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 1
+        },
+        {
+          "id": 138,
+          "target_name": "Elevadores - ##answer_412##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 406,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 17,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 1
+        }
+      ]
+    },
+    "26": {
+      "name": "Hidráulica",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 139,
+          "target_name": "##answer_421##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 418,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 140,
+          "target_name": "##answer_421##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 414,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 418,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "27": {
+      "name": "Jardinagem",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 141,
+          "target_name": "##answer_429##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 426,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 142,
+          "target_name": "##answer_429##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 423,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 426,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "28": {
+      "name": "Limpeza",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 143,
+          "target_name": "##answer_437##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 434,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 144,
+          "target_name": "##answer_437##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 431,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 434,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "29": {
+      "name": "Marcenaria",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 145,
+          "target_name": "##answer_446##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 443,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 146,
+          "target_name": "##answer_446##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 439,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 443,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "30": {
+      "name": "Mensageria",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 147,
+          "target_name": "##answer_455##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 452,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 148,
+          "target_name": "##answer_455##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 448,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 452,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "31": {
+      "name": "Pedreiro",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 149,
+          "target_name": "##answer_464##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 461,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 150,
+          "target_name": "##answer_464##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 457,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 461,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "32": {
+      "name": "Pintura",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 151,
+          "target_name": "##answer_473##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 470,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 152,
+          "target_name": "##answer_473##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 466,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 470,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "34": {
+      "name": "Técnico de Redes",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 153,
+          "target_name": "##answer_490##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 487,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 154,
+          "target_name": "##answer_490##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 483,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 487,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "35": {
+      "name": "Vidraçaria",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 155,
+          "target_name": "##answer_500##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 496,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 156,
+          "target_name": "##answer_500##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 492,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 496,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "36": {
+      "name": "Projeto",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 246,
+          "target_name": "Chamado",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 144,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 1
+        }
+      ]
+    },
+    "37": {
+      "name": "Multiplas Demandas",
+      "entities_id": 1,
+      "is_active": 0,
+      "targets": [
+        {
+          "id": 157,
+          "target_name": "Ar Condicionado - ##answer_518##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 515,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 159,
+          "target_name": "Diversos - ##answer_514##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 161,
+          "target_name": "Elevadores - ##answer_522##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 146,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 163,
+          "target_name": "Elétrica - ##answer_526##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 523,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 165,
+          "target_name": "Hidráulica - ##answer_530##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 527,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 167,
+          "target_name": "Marcenaria - ##answer_534##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 531,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 170,
+          "target_name": "Pedreiro - ##answer_538##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 535,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 171,
+          "target_name": "Pintura - ##answer_542##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 539,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 173,
+          "target_name": "Técnico de Redes - ##answer_546##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 543,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 175,
+          "target_name": "Vidraçaria - ##answer_550##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 547,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 177,
+          "target_name": "Carregadores - ##answer_550##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 551,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 179,
+          "target_name": "Copa - ##answer_558##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 555,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 181,
+          "target_name": "Jardinagem - ##answer_562##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 559,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 183,
+          "target_name": "Limpeza - ##answer_566##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 563,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 186,
+          "target_name": "Mensageria - ##answer_570##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 567,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "38": {
+      "name": "CONSERVAÇÃO",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 197,
+          "target_name": "Carregadores - ##answer_616##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 613,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 198,
+          "target_name": "Copa - ##answer_620##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 617,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 199,
+          "target_name": "Jardinagem - ##answer_624##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 621,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 200,
+          "target_name": "Limpeza - ##answer_628##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 625,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 201,
+          "target_name": "Mensageria - ##answer_632##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 629,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "39": {
+      "name": "MANUTENÇÃO",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 202,
+          "target_name": "Ar Condicionado - ##answer_642##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 639,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 203,
+          "target_name": "Elevadores - ##answer_646##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 146,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 204,
+          "target_name": "Elétrica - ##answer_650##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 647,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 205,
+          "target_name": "Hidráulica - ##answer_654##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 651,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 206,
+          "target_name": "Marcenaria - ##answer_658##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 655,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 207,
+          "target_name": "Pedreiro - ##answer_662##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 659,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 208,
+          "target_name": "Pintura - ##answer_666##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 4,
+          "category_rule": 3,
+          "category_question": 663,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 209,
+          "target_name": "Técnico de Redes - ##answer_670##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 667,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 210,
+          "target_name": "Vidraçaria - ##answer_674##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 671,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "40": {
+      "name": "Multiplas Demandas",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 216,
+          "target_name": "Ar Condicionado - ##answer_704##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 701,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 218,
+          "target_name": "Diversos - ##answer_700##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 1
+        },
+        {
+          "id": 220,
+          "target_name": "Elevadores - ##answer_708##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 146,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 222,
+          "target_name": "Elétrica - ##answer_712##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 709,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 224,
+          "target_name": "Hidráulica - ##answer_716##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 713,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 226,
+          "target_name": "Marcenaria - ##answer_720##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 717,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 229,
+          "target_name": "Pedreiro - ##answer_724##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 721,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 230,
+          "target_name": "Pintura - ##answer_728##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 725,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 232,
+          "target_name": "Técnico de Redes - ##answer_732##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 729,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 234,
+          "target_name": "Vidraçaria - ##answer_736##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 733,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 236,
+          "target_name": "Carregadores - ##answer_740##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 737,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 238,
+          "target_name": "Copa - ##answer_744##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 741,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 240,
+          "target_name": "Jardinagem - ##answer_748##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 745,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 242,
+          "target_name": "Limpeza - ##answer_752##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 749,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 245,
+          "target_name": "Mensageria - ##answer_756##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 753,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "44": {
+      "name": "CHECKLIST TOTAL",
+      "entities_id": 1,
+      "is_active": 0,
+      "targets": [
+        {
+          "id": 272,
+          "target_name": "Checklist Refrigeração Ar Central - ##answer_6073## ##answer_6074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 273,
+          "target_name": "Checklist Hidráulica - ##answer_6073## ##answer_6074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 274,
+          "target_name": "Checklist Hidráulica - Ala Residêncial - ##answer_6073## ##answer_6074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 275,
+          "target_name": "Checklist Hidráulica - Ala Governamental - ##answer_6073## ##answer_6074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 276,
+          "target_name": "Checklist GALPÃO - Ala Governamental - ##answer_6073## ##answer_6074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 277,
+          "target_name": "Checklist Hidráulica - ##answer_6073## ##answer_6074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 278,
+          "target_name": "Checklist Iluminação - ##answer_6073## ##answer_6074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 279,
+          "target_name": "Checklist Governamental - ##answer_6073## ##answer_6074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 280,
+          "target_name": "Checklist Pedras Portuguesas - ##answer_6073## ##answer_6074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 281,
+          "target_name": "Checklist Refrigeração Casa Civil 1005 - ##answer_6073## ##answer_6074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 282,
+          "target_name": "Checklist Refrigeração 951 - ##answer_6073## ##answer_6074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "48": {
+      "name": "CHECKLIST REFRIGERAÇÃO",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 316,
+          "target_name": "Checklist Refrigeração Ar Central - ##answer_10599## ##answer_10600##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 152,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 325,
+          "target_name": "Checklist Refrigeração Casa Civil 1005 - ##answer_10599## ##answer_10600##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 152,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 326,
+          "target_name": "Checklist Refrigeração 951 - ##answer_10599## ##answer_10600##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 152,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "49": {
+      "name": "CHECKLIST CALHAS E PLUVIAIS",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 337,
+          "target_name": "CHECKLIST CALHAS E PLUVIAIS ##answer_16361##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 149,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 1
+        }
+      ]
+    },
+    "50": {
+      "name": "CHECKLIST HIDRÁULICO",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 341,
+          "target_name": "Checklist Hidráulica - Ala Residêncial - ##answer_13073## ##answer_13074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 151,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 342,
+          "target_name": "Checklist Hidráulica - Ala Governamental - ##answer_13073## ##answer_13074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 151,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 343,
+          "target_name": "Checklist GALPÃO - Ala Governamental - ##answer_13073## ##answer_13074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 151,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 344,
+          "target_name": "Checklist Hidráulica - ##answer_13073## ##answer_13074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 151,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 350,
+          "target_name": "Checklist Hidráulica - ##answer_13073## ##answer_13074##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 151,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "51": {
+      "name": "CHECKLIST PEDRAS PORTUGUESAS",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 359,
+          "target_name": "Checklist Pedras Portuguesas - ##answer_14310## ##answer_14311##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 150,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 1
+        }
+      ]
+    },
+    "52": {
+      "name": "CHECKLIST ILUMINAÇÃO",
+      "entities_id": 1,
+      "is_active": 1,
+      "targets": [
+        {
+          "id": 362,
+          "target_name": "Checklist Iluminação - ALA RESIDENCIAL 3º Pavimento",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 148,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 363,
+          "target_name": "Checklist ALA GOVERNAMENTAL - 1º Pavimento",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 148,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 364,
+          "target_name": "Checklist Iluminação - ALA RESIDENCIAL - 2º Pavimento",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 148,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 365,
+          "target_name": "Checklist Iluminação - ALA RESIDENCIAL - 1º Pavimento",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 148,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 366,
+          "target_name": "Checklist ALA GOVERNAMENTAL - 2º Pavimento",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 148,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 367,
+          "target_name": "Checklist ALA GOVERNAMENTAL - 3º Pavimento",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 148,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 368,
+          "target_name": "Checklist ALA GOVERNAMENTAL - 4º Pavimento",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 148,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "16": {
+      "name": null,
+      "targets": [
+        {
+          "id": 16,
+          "target_name": "##answer_157##",
+          "destination_entity": 9,
+          "destination_entity_mode": "ENTITY_RELATIVE",
+          "destination_entity_value": 153,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 154,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 1
+        }
+      ]
+    },
+    "17": {
+      "name": null,
+      "targets": [
+        {
+          "id": 36,
+          "target_name": "##answer_181##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 178,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 37,
+          "target_name": "##answer_181##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 174,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 178,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "19": {
+      "name": null,
+      "targets": [
+        {
+          "id": 89,
+          "target_name": "Carregadores - ##answer_287##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 288,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 90,
+          "target_name": "Carregadores - ##answer_287##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 247,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 288,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 91,
+          "target_name": "Copa - ##answer_295##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 292,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 92,
+          "target_name": "Copa - ##answer_295##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 247,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 292,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 93,
+          "target_name": "Jardinagem - ##answer_299##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 24,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 296,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 94,
+          "target_name": "Jardinagem - ##answer_299##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 247,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 296,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 95,
+          "target_name": "Limpeza - ##answer_303##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 300,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 96,
+          "target_name": "Limpeza - ##answer_303##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 247,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 300,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 97,
+          "target_name": "Mensageria - ##answer_307##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 247,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 304,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 98,
+          "target_name": "Mensageria - ##answer_307##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 304,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "20": {
+      "name": null,
+      "targets": [
+        {
+          "id": 99,
+          "target_name": "Ar Condicionado - ##answer_317##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 314,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 100,
+          "target_name": "Ar Condicionado - ##answer_317##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 314,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 101,
+          "target_name": "Diversos - ##answer_313##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 102,
+          "target_name": "Diversos - ##answer_313##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 103,
+          "target_name": "Elevadores - ##answer_321##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 146,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 104,
+          "target_name": "Elevadores - ##answer_321##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 2,
+          "category_question": 146,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 1
+        },
+        {
+          "id": 105,
+          "target_name": "Elétrica - ##answer_325##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 322,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 106,
+          "target_name": "Elétrica - ##answer_325##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 322,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 107,
+          "target_name": "Hidráulica - ##answer_329##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 326,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 108,
+          "target_name": "Hidráulica - ##answer_329##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 326,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 109,
+          "target_name": "Marcenaria - ##answer_333##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 330,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 110,
+          "target_name": "Marcenaria - ##answer_333##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 330,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 111,
+          "target_name": "Pedreiro - ##answer_337##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 334,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 112,
+          "target_name": "Pedreiro - ##answer_337##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 334,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 113,
+          "target_name": "Pintura - ##answer_341##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 338,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 114,
+          "target_name": "Pintura - ##answer_341##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 338,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 115,
+          "target_name": "Técnico de Redes - ##answer_345##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 342,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 116,
+          "target_name": "Técnico de Redes - ##answer_345##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 342,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 117,
+          "target_name": "Vidraçaria - ##answer_349##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 346,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 118,
+          "target_name": "Vidraçaria - ##answer_349##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 346,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 119,
+          "target_name": "Carregadores - ##answer_349##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 350,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 120,
+          "target_name": "Carregadores - ##answer_349##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 350,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 121,
+          "target_name": "Copa - ##answer_357##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 354,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 122,
+          "target_name": "Copa - ##answer_357##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 354,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 123,
+          "target_name": "Jardinagem - ##answer_361##",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 358,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 124,
+          "target_name": "Jardinagem - ##answer_361##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 358,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 125,
+          "target_name": "Limpeza - ##answer_365##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 362,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 126,
+          "target_name": "Limpeza - ##answer_365##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 362,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 127,
+          "target_name": "Mensageria - ##answer_369##",
+          "destination_entity": 8,
+          "destination_entity_mode": "USER",
+          "destination_entity_value": 309,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 366,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        },
+        {
+          "id": 128,
+          "target_name": "Mensageria - ##answer_369##",
+          "destination_entity": 2,
+          "destination_entity_mode": "REQUESTER",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 3,
+          "category_question": 366,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 3,
+          "show_rule": 2
+        }
+      ]
+    },
+    "41": {
+      "name": null,
+      "targets": [
+        {
+          "id": 256,
+          "target_name": "Checklist",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 1
+        },
+        {
+          "id": 257,
+          "target_name": "CHECKLIST teste somente mostrar equipamentos com erro",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 1
+        }
+      ]
+    },
+    "42": {
+      "name": null,
+      "targets": [
+        {
+          "id": 258,
+          "target_name": "Checklist",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 1
+        },
+        {
+          "id": 259,
+          "target_name": "CHECKLIST teste somente mostrar equipamentos com erro",
+          "destination_entity": 1,
+          "destination_entity_mode": "CURRENT_ENTITY",
+          "destination_entity_value": 0,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 1
+        }
+      ]
+    },
+    "43": {
+      "name": null,
+      "targets": [
+        {
+          "id": 260,
+          "target_name": "Checklist Refrigeração Ar Central - ##answer_2015## ##answer_2016##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 262,
+          "target_name": "Checklist Hidráulica - ##answer_2015## ##answer_2016##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 263,
+          "target_name": "Checklist Hidráulica - Ala Residêncial - ##answer_2015## ##answer_2016##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 264,
+          "target_name": "Checklist Hidráulica - Ala Governamental - ##answer_2015## ##answer_2016##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 265,
+          "target_name": "Checklist GALPÃO - Ala Governamental - ##answer_2015## ##answer_2016##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 266,
+          "target_name": "Checklist Hidráulica - ##answer_2015## ##answer_2016##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 267,
+          "target_name": "Checklist Iluminação - ##answer_2015## ##answer_2016##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 268,
+          "target_name": "Checklist Governamental - ##answer_2015## ##answer_2016##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 269,
+          "target_name": "Checklist Pedras Portuguesas - ##answer_2015## ##answer_2016##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 270,
+          "target_name": "Checklist Refrigeração Casa Civil 1005 - ##answer_2015## ##answer_2016##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 271,
+          "target_name": "Checklist Refrigeração 951 - ##answer_2015## ##answer_2016##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "45": {
+      "name": null,
+      "targets": [
+        {
+          "id": 283,
+          "target_name": "Checklist Refrigeração Ar Central - ##answer_7310## ##answer_7311##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 284,
+          "target_name": "Checklist Hidráulica - ##answer_7310## ##answer_7311##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 285,
+          "target_name": "Checklist Hidráulica - Ala Residêncial - ##answer_7310## ##answer_7311##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 286,
+          "target_name": "Checklist Hidráulica - Ala Governamental - ##answer_7310## ##answer_7311##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 287,
+          "target_name": "Checklist GALPÃO - Ala Governamental - ##answer_7310## ##answer_7311##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 288,
+          "target_name": "Checklist Hidráulica - ##answer_7310## ##answer_7311##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 289,
+          "target_name": "Checklist Iluminação - ##answer_7310## ##answer_7311##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 290,
+          "target_name": "Checklist Governamental - ##answer_7310## ##answer_7311##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 291,
+          "target_name": "Checklist Pedras Portuguesas - ##answer_7310## ##answer_7311##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 292,
+          "target_name": "Checklist Refrigeração Casa Civil 1005 - ##answer_7310## ##answer_7311##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 293,
+          "target_name": "Checklist Refrigeração 951 - ##answer_7310## ##answer_7311##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "46": {
+      "name": null,
+      "targets": [
+        {
+          "id": 300,
+          "target_name": "Checklist Iluminação - ##answer_8547## ##answer_8548##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 301,
+          "target_name": "Checklist Governamental - ##answer_8547## ##answer_8548##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    },
+    "47": {
+      "name": null,
+      "targets": [
+        {
+          "id": 305,
+          "target_name": "Checklist Refrigeração Ar Central - ##answer_9784## ##answer_9785##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 306,
+          "target_name": "Checklist Hidráulica - ##answer_9784## ##answer_9785##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 307,
+          "target_name": "Checklist Hidráulica - Ala Residêncial - ##answer_9784## ##answer_9785##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 308,
+          "target_name": "Checklist Hidráulica - Ala Governamental - ##answer_9784## ##answer_9785##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 309,
+          "target_name": "Checklist GALPÃO - Ala Governamental - ##answer_9784## ##answer_9785##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 310,
+          "target_name": "Checklist Hidráulica - ##answer_9784## ##answer_9785##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 311,
+          "target_name": "Checklist Iluminação - ##answer_9784## ##answer_9785##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 312,
+          "target_name": "Checklist Governamental - ##answer_9784## ##answer_9785##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 313,
+          "target_name": "Checklist Pedras Portuguesas - ##answer_9784## ##answer_9785##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 314,
+          "target_name": "Checklist Refrigeração Casa Civil 1005 - ##answer_9784## ##answer_9785##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        },
+        {
+          "id": 315,
+          "target_name": "Checklist Refrigeração 951 - ##answer_9784## ##answer_9785##",
+          "destination_entity": 7,
+          "destination_entity_mode": "SPECIFIC",
+          "destination_entity_value": 58,
+          "tickettemplates_id": 0,
+          "category_rule": 1,
+          "category_question": 0,
+          "sla_rule": 1,
+          "ola_rule": 1,
+          "urgency_rule": 1,
+          "show_rule": 2
+        }
+      ]
+    }
+  },
+  "category_tree": [
+    {
+      "id": 99,
+      "completename": "Conservação",
+      "level": 1,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 55,
+      "completename": "Conservação > Carregadores",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 101,
+      "completename": "Conservação > Carregadores > Descarte",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 102,
+      "completename": "Conservação > Carregadores > Movimentação Equipamentos",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 103,
+      "completename": "Conservação > Carregadores > Movimentação Mobiliário",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 56,
+      "completename": "Conservação > Carregadores > Movimentação de Insumos",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 57,
+      "completename": "Conservação > Carregadores > Recolhimento",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 58,
+      "completename": "Conservação > Carregadores > Substituição",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 98,
+      "completename": "Conservação > Copa",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 105,
+      "completename": "Conservação > Copa > Agua",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 106,
+      "completename": "Conservação > Copa > Café",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 107,
+      "completename": "Conservação > Copa > Limpar louça de salas",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 108,
+      "completename": "Conservação > Copa > Recolher e Limpar Louças Sala de Reunião",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 109,
+      "completename": "Conservação > Copa > Repor Café,Agua Sala de reunião",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 110,
+      "completename": "Conservação > Copa > Repor Louça de salas",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 37,
+      "completename": "Conservação > Jardinagem",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 116,
+      "completename": "Conservação > Jardinagem > Cri-Cri",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 114,
+      "completename": "Conservação > Jardinagem > Descarte",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 117,
+      "completename": "Conservação > Jardinagem > Irrigar/Molhar",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 112,
+      "completename": "Conservação > Jardinagem > Manutenção de folhagens internas",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 40,
+      "completename": "Conservação > Jardinagem > Outras Atividades",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 36,
+      "completename": "Conservação > Jardinagem > Plantação",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 38,
+      "completename": "Conservação > Jardinagem > Poda/Corte",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 39,
+      "completename": "Conservação > Jardinagem > Remoção",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 115,
+      "completename": "Conservação > Jardinagem > Retirada de Inço (gramas e canteiros)",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 113,
+      "completename": "Conservação > Jardinagem > Varrição",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 45,
+      "completename": "Conservação > Limpeza",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 119,
+      "completename": "Conservação > Limpeza > Bandeirante",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 126,
+      "completename": "Conservação > Limpeza > Descarte Lixo Orgânico",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 120,
+      "completename": "Conservação > Limpeza > Janelas e Portas",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 118,
+      "completename": "Conservação > Limpeza > Lava a Jato",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 46,
+      "completename": "Conservação > Limpeza > Limpeza de banheiros",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 47,
+      "completename": "Conservação > Limpeza > Limpeza geral",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 48,
+      "completename": "Conservação > Limpeza > Outras Atividades",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 121,
+      "completename": "Conservação > Limpeza > Recolher Lixo Orgânico",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 49,
+      "completename": "Conservação > Limpeza > Recolher materiais recicláveis",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 122,
+      "completename": "Conservação > Limpeza > Reposição Papel Higiênico",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 123,
+      "completename": "Conservação > Limpeza > Reposição Papel Toalha",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 124,
+      "completename": "Conservação > Limpeza > Reposição de Sabonete",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 125,
+      "completename": "Conservação > Limpeza > Varrição",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 128,
+      "completename": "Conservação > Mensageria",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 129,
+      "completename": "Conservação > Mensageria > Movimentação Documentos",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 130,
+      "completename": "Conservação > Mensageria > Movimentação Insumos até 5Kg",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 131,
+      "completename": "Conservação > Mensageria > Movimentação Materiais até 5Kg",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 132,
+      "completename": "Conservação > Mensageria > Outras entregas e Movimentações até 5Kg",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 145,
+      "completename": "Diversos",
+      "level": 1,
+      "entities_id": "Origem > PIRATINI"
+    },
+    {
+      "id": 104,
+      "completename": "Manutenção",
+      "level": 1,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 1,
+      "completename": "Manutenção > Ar Condicionado",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 2,
+      "completename": "Manutenção > Ar Condicionado > Conserto",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 3,
+      "completename": "Manutenção > Ar Condicionado > Desinstalação",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 100,
+      "completename": "Manutenção > Ar Condicionado > Higienização",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 4,
+      "completename": "Manutenção > Ar Condicionado > Instalação",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 7,
+      "completename": "Manutenção > Ar Condicionado > Outras atividades",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 6,
+      "completename": "Manutenção > Ar Condicionado > Remanejo",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 147,
+      "completename": "Manutenção > Checklist",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 149,
+      "completename": "Manutenção > Checklist > Calhas e Pluviais",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 151,
+      "completename": "Manutenção > Checklist > Hidraulico",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 148,
+      "completename": "Manutenção > Checklist > Iluminação",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 150,
+      "completename": "Manutenção > Checklist > Pedras Portuguesas",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 152,
+      "completename": "Manutenção > Checklist > Refrigeração",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 17,
+      "completename": "Manutenção > Elevadores",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 146,
+      "completename": "Manutenção > Elevadores",
+      "level": 2,
+      "entities_id": "Origem > PIRATINI"
+    },
+    {
+      "id": 22,
+      "completename": "Manutenção > Elétrica",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 23,
+      "completename": "Manutenção > Elétrica > Conserto",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 28,
+      "completename": "Manutenção > Elétrica > Descarte",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 24,
+      "completename": "Manutenção > Elétrica > Instalação",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 26,
+      "completename": "Manutenção > Elétrica > Readequação",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 25,
+      "completename": "Manutenção > Elétrica > Remoção",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 29,
+      "completename": "Manutenção > Elétrica > Suporte",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 27,
+      "completename": "Manutenção > Elétrica > Troca",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 30,
+      "completename": "Manutenção > Hidráulica",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 35,
+      "completename": "Manutenção > Hidráulica > Desentupimento",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 32,
+      "completename": "Manutenção > Hidráulica > Instalação",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 33,
+      "completename": "Manutenção > Hidráulica > Remoção",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 31,
+      "completename": "Manutenção > Hidráulica > Reparo/Conserto",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 34,
+      "completename": "Manutenção > Hidráulica > Troca",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 111,
+      "completename": "Manutenção > Hidráulica > Vazamento",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 50,
+      "completename": "Manutenção > Marcenaria",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 51,
+      "completename": "Manutenção > Marcenaria > Confecção de Mobiliário",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 127,
+      "completename": "Manutenção > Marcenaria > Conserto de Aberturas",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 52,
+      "completename": "Manutenção > Marcenaria > Conserto de Mobiliário",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 54,
+      "completename": "Manutenção > Marcenaria > Outras Atividades",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 53,
+      "completename": "Manutenção > Marcenaria > Remanejo de Mobiliário",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 81,
+      "completename": "Manutenção > Pedreiro",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 82,
+      "completename": "Manutenção > Pedreiro > Instalação",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 133,
+      "completename": "Manutenção > Pedreiro > Montagem/Desmontagem",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 83,
+      "completename": "Manutenção > Pedreiro > Remoção",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 134,
+      "completename": "Manutenção > Pedreiro > Reparo",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 135,
+      "completename": "Manutenção > Pedreiro > Reparo de pedras portuguesas",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 85,
+      "completename": "Manutenção > Pintura",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 136,
+      "completename": "Manutenção > Pintura > Aberturas",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 137,
+      "completename": "Manutenção > Pintura > Forro",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 138,
+      "completename": "Manutenção > Pintura > Mobiliário",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 87,
+      "completename": "Manutenção > Pintura > Outros",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 86,
+      "completename": "Manutenção > Pintura > Parede",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 144,
+      "completename": "Manutenção > Projetos",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 88,
+      "completename": "Manutenção > Rede Computadores",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 91,
+      "completename": "Manutenção > Rede Computadores > Conserto Rede Lógica",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 89,
+      "completename": "Manutenção > Rede Computadores > Instalação de Rede Lógica",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 92,
+      "completename": "Manutenção > Rede Computadores > Organização de Cabeamento",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 90,
+      "completename": "Manutenção > Rede Computadores > Readequação Rede Lógica",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 143,
+      "completename": "Manutenção > Servente",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 94,
+      "completename": "Manutenção > Vidraçaria",
+      "level": 2,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 141,
+      "completename": "Manutenção > Vidraçaria > Divisórias de vidro",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 140,
+      "completename": "Manutenção > Vidraçaria > Janelas",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 142,
+      "completename": "Manutenção > Vidraçaria > Outros",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 139,
+      "completename": "Manutenção > Vidraçaria > Vidro",
+      "level": 3,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 93,
+      "completename": "Saída de Bens Materiais",
+      "level": 1,
+      "entities_id": "Origem"
+    },
+    {
+      "id": 95,
+      "completename": "Serralheria",
+      "level": 1,
+      "entities_id": "Origem"
+    }
+  ],
+  "notifications": {
+    "active": [
+      {
+        "id": "2",
+        "nome": "New Ticket",
+        "evento": "Novo chamado",
+        "template": "Tickets (E-mail)",
+        "destinatarios": "Requerente, Observador"
+      },
+      {
+        "id": "5",
+        "nome": "Add Followup",
+        "evento": "Novo acompanhamento",
+        "template": "Acompanhamento chamado (E-mail)",
+        "destinatarios": "Grupo observador, Grupo requerente, Observador, Requerente, Técnico encarregado do chamado"
+      },
+      {
+        "id": "11",
+        "nome": "Resolve ticket",
+        "evento": "Chamado solucionado",
+        "template": "Solucionado (E-mail)",
+        "destinatarios": "Administrador, Requerente, Observador"
+      },
+      {
+        "id": "12",
+        "nome": "Ticket Validation",
+        "evento": "Pedido de validação",
+        "template": "Tickets Validation (E-mail)",
+        "destinatarios": "Aprovador"
+      },
+      {
+        "id": "83",
+        "nome": "Adicionado novo Observador",
+        "evento": "Novo usuário em observadores",
+        "template": "Novo Observador (E-mail)",
+        "destinatarios": "AdministradorAdministrador de entidadeAutorFornecedorGerente do grupo encarregado do chamadoGerente do grupo observadorGerente do grupo requerenteGrupo encarregado do chamadoGrupo encarregado do chama"
+      },
+      {
+        "id": "84",
+        "nome": "lembrete",
+        "evento": "Lembrete de planejamento",
+        "template": "Planning recall (E-mail)",
+        "destinatarios": ""
+      },
+      {
+        "id": "85",
+        "nome": "Ticket Satisfaction Reminder",
+        "evento": "Lembrete da pesquisa",
+        "template": "",
+        "destinatarios": ""
+      },
+      {
+        "id": "86",
+        "nome": "New Task",
+        "evento": "A task has been added",
+        "template": "Tasks (E-mail)",
+        "destinatarios": ""
+      },
+      {
+        "id": "87",
+        "nome": "Update Task",
+        "evento": "A task has been updated",
+        "template": "Tasks (E-mail)",
+        "destinatarios": ""
+      },
+      {
+        "id": "88",
+        "nome": "Delete Task",
+        "evento": "A task has been removed",
+        "template": "Tasks (E-mail)",
+        "destinatarios": ""
+      }
+    ],
+    "source": "/home/jonathan/.brain/glpi-ui-scan/sis-2026-06-17/active-notifications-wiring.csv"
+  }
+}

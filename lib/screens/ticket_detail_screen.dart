@@ -402,6 +402,50 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
     );
   }
 
+  /// Botões de próximo status derivados do contrato (transições permitidas por
+  /// perfil). Usa fallback hardcoded se o contrato ainda não foi carregado ou
+  /// o profileId não está disponível.
+  List<Widget> _allowedStatusButtons(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
+    final profileId = appState.activeProfileId ?? 0;
+    final currentCode = _statusCode ?? 0;
+
+    if (profileId > 0 && currentCode > 0 && appState.rulesClient.isLoaded) {
+      final allowed = appState.rulesClient
+          .allowedStatusTransitions(profileId: profileId, current: currentCode)
+          .where((code) => code != currentCode)
+          .toList();
+
+      if (allowed.isNotEmpty) {
+        return allowed
+            .map(GlpiStatusMapper.tryParse)
+            .whereType<GlpiStatus>()
+            .map((status) => _buildStatusButton(
+                  label: status.label,
+                  color: status == GlpiStatus.solucionado
+                      ? AppColors.brand
+                      : AppColors.info,
+                  targetStatus: status,
+                ))
+            .toList();
+      }
+    }
+
+    // Fallback: botões originais para quando o contrato ainda não carregou.
+    return [
+      _buildStatusButton(
+        label: GlpiStatus.emAtendimento.label,
+        color: AppColors.info,
+        targetStatus: GlpiStatus.emAtendimento,
+      ),
+      _buildStatusButton(
+        label: GlpiStatus.solucionado.label,
+        color: AppColors.brand,
+        targetStatus: GlpiStatus.solucionado,
+      ),
+    ];
+  }
+
   Widget _buildStatusButton({
     required String label,
     required Color color,
@@ -426,6 +470,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                           startInSolutionMode: true,
                           ticketOwner: _ticketOwnerName,
                           ticketOwnerUserId: _ticketOwnerUserId,
+                          ticketStatus: _ticketData['status'],
                           isClosed: _isClosedTicket,
                         ),
                       ),
@@ -518,15 +563,15 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
         case 2:
           return 'Baixa';
         case 3:
-          return 'Media';
+          return 'Média';
         case 4:
           return 'Alta';
         case 5:
           return 'Muito Alta';
         case 6:
-          return 'Critica';
+          return 'Crítica';
         default:
-          return 'Media';
+          return 'Média';
       }
     }
 
@@ -536,13 +581,13 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
       case 2:
         return 'Baixa';
       case 3:
-        return 'Media';
+        return 'Média';
       case 4:
         return 'Alta';
       case 5:
         return 'Muito Alta';
       default:
-        return 'Media';
+        return 'Média';
     }
   }
 
@@ -815,18 +860,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Row(
-                      children: [
-                        _buildStatusButton(
-                          label: GlpiStatus.emAtendimento.label,
-                          color: AppColors.info,
-                          targetStatus: GlpiStatus.emAtendimento,
-                        ),
-                        _buildStatusButton(
-                          label: GlpiStatus.solucionado.label,
-                          color: AppColors.brand,
-                          targetStatus: GlpiStatus.solucionado,
-                        ),
-                      ],
+                      children: _allowedStatusButtons(context),
                     ),
                   ],
                 ),

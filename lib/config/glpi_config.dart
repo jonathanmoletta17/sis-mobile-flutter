@@ -37,18 +37,6 @@ class GlpiConfig {
     return normalized == 'true' || normalized == '1' || normalized == 'yes';
   }
 
-  /// Endpoint de autenticação
-  static String get initSessionEndpoint => '$baseUrl/initSession';
-
-  /// Endpoint para encerrar sessão
-  static String get killSessionEndpoint => '$baseUrl/killSession';
-
-  /// Endpoint de categorias ITIL
-  static String get itilCategoryEndpoint => '$baseUrl/ITILCategory';
-
-  /// Endpoint de tickets
-  static String get ticketEndpoint => '$baseUrl/Ticket';
-
   static bool _looksLikeDticEndpoint(String url) {
     final lower = url.toLowerCase();
     return lower.contains('dtic-glpi') ||

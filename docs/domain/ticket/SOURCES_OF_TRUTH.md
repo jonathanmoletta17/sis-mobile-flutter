@@ -51,6 +51,36 @@ Objetivo: evitar que lista, detalhe, conversa e GLPI sustentem verdades diferent
 | anexo | armazenamento/selecionador local ate envio | Validar no Android real quando mudar fluxo. |
 | ticket criado | resposta GLPI | Lista/detalhe devem refletir ticket remoto depois da criacao. |
 
+#### Contrato do payload nativo `POST /Ticket` (perfil Solicitante)
+
+**Pre-requisito de permissao (GLPI):** o perfil do usuario PRECISA do direito
+`CREATE` (bit 4) no objeto `Chamado`/Ticket. Sem ele, `POST /Ticket` retorna
+`[400] ERROR_GLPI_ADD` **independente do payload** (ate `{name, content}` falha).
+Isto e separado da interface simplificada/helpdesk, que cria ticket sem exigir
+`CREATE` — a API REST sempre exige. Provado E2E em 2026-06-20: perfil Solicitante
+sem `CREATE` (rights=1=READMY) recusava tudo; apos conceder `CREATE`, criou (ver
+[[solicitante-rest-ticket-block]]). Concedido o direito, o payload abaixo cria e
+a RuleTicket atribui o grupo (ticket 9777 -> grupo 21 CC-CONSERVACAO).
+
+O app cria o chamado com a sessao do proprio usuario (o Worker apenas repassa
+`/Ticket` upstream; sessao de servico elevada so cobre `GET User/Group`). Por
+isso o payload e **minimo**: contem conteudo, `entities_id`, `itilcategories_id`,
+`locations_id` e o requerente/observador (apenas pessoas).
+
+- O app **nunca** envia `_groups_id_assign`, `_groups_id_requester`,
+  `_groups_id_observer` nem `_users_id_assign`. O perfil Solicitante pode criar
+  chamado, mas nao atribui-lo a grupo/tecnico; fornecer esses campos faz o GLPI
+  recusar a criacao inteira (`ERROR_GLPI_ADD` / "Voce nao tem permissao para
+  executar essa acao"). Ver `GlpiTicketSupport.buildGovernedActorFields`.
+- A **atribuicao de grupo** e responsabilidade das RuleTicket do GLPI
+  (disparadas por categoria/entidade), como ja ocorre no fluxo FormCreator web.
+  Por isso categoria e entidade sao obrigatorias no payload.
+- O **read-back governado** (`GlpiClient.validateGovernedTicketReadback`) le o
+  ticket criado e compara o grupo final com `expectedAssignmentGroup`;
+  divergencia vira aviso, nao bloqueio.
+- Requerente/observador: "para mim" -> requerente = usuario logado; "para outra
+  pessoa" -> requerente = beneficiario, observador = usuario logado.
+
 ## Eventos que devem invalidar ou reidratar dados
 
 | Evento | Superficies afetadas |

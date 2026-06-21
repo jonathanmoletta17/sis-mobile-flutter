@@ -1157,7 +1157,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                           value: 'camera',
                           child: ListTile(
                             leading: Icon(Icons.camera_alt_outlined),
-                            title: Text('Camera'),
+                            title: Text('Câmera'),
                           ),
                         ),
                         const PopupMenuItem<String>(

@@ -473,6 +473,9 @@ class _TicketActionPanelState extends State<_TicketActionPanel> {
               ),
               const SizedBox(height: AppSpacing.md),
             ],
+            // TODO(dtic-contract): quando o contrato DTIC/CAU for gerado
+            // (mesmo pipeline do SIS), substituir por GlpiRulesClient
+            // com profileId do DticAppState — análogo ao SIS ticket_detail_screen.
             if (widget.capabilities.canUpdateStatus) ...[
               Wrap(
                 spacing: AppSpacing.sm,

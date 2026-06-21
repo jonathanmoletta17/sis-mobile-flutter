@@ -1,31 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sis_mobile_flutter/catalog/governed_service_catalog.dart';
-import 'package:sis_mobile_flutter/catalog/governed_submission_contract.dart';
 import 'package:sis_mobile_flutter/data/service_data.dart';
 import 'package:sis_mobile_flutter/models/glpi_ticket.dart';
 import 'package:sis_mobile_flutter/services/glpi_ticket_support.dart';
 
 void main() {
-  GovernedSubmissionContract contractWithActors(List<GovernedActor> actors) {
-    final record = GovernedServiceRecord(
-      catalogRecordId: 'test:actors',
-      serviceId: 'pintura',
-      serviceLabel: 'Pintura',
-      profileVisibility: const [GovernedProfile(name: 'Solicitante')],
-      formId: 12,
-      targetTicketId: 28,
-      audience: 'para_terceiro',
-      actors: actors,
-      expectedBaseTaskTemplates: const [],
-      readbackContract: const [],
-    );
-    return GovernedSubmissionContract(
-      record: record,
-      entityId: 50,
-      readbackExpectation: record.toReadbackExpectation(expectedEntityId: 50),
-    );
-  }
-
   test('payload de criacao inclui entities_id quando presente', () {
     final payload = GlpiTicketSupport.buildCreateTicketPayload({
       'assunto': 'Teste',
@@ -134,70 +112,80 @@ void main() {
     expect(restored.governedActors.single['type'], 'question_person');
   });
 
+  test('payload "para mim": requerente = usuario logado, sem grupos/assign', () {
+    final payload = GlpiTicketSupport.buildCreateTicketPayload({
+      'assunto': 'Teste',
+      'descricao': 'Descricao',
+      'serviceName': 'Carregadores',
+      'localizacao': 'Local (Root 36): Armazem',
+      'entities_id': 24,
+      'loggedUserId': 1548,
+    });
+
+    final input = payload['input'] as Map<String, dynamic>;
+
+    expect(input['_users_id_requester'], [1548]);
+    expect(input.containsKey('_users_id_observer'), isFalse);
+    // Perfil Solicitante nao pode atribuir grupo/tecnico: nunca emitir.
+    expect(input.containsKey('_groups_id_assign'), isFalse);
+    expect(input.containsKey('_groups_id_requester'), isFalse);
+    expect(input.containsKey('_groups_id_observer'), isFalse);
+    expect(input.containsKey('_users_id_assign'), isFalse);
+  });
+
   test(
-    'payload aplica atores Solicitante: terceiro requester e autor observer',
+    'payload "para outra pessoa": beneficiario requester, autor observer, sem grupos',
     () {
       final payload = GlpiTicketSupport.buildCreateTicketPayload({
         'assunto': 'Teste',
         'descricao': 'Descricao',
-        'serviceName': 'Pintura',
+        'serviceName': 'Carregadores',
+        'localizacao': 'Local (Root 36): Armazem',
+        'entities_id': 24,
         'beneficiaryUserId': 2373,
         'loggedUserId': 1548,
-        'governedContract': contractWithActors(const [
-          GovernedActor(role: 'requester', type: 'question_person', value: 371),
-          GovernedActor(role: 'observer', type: 'author'),
-        ]),
       });
 
       final input = payload['input'] as Map<String, dynamic>;
 
       expect(input['_users_id_requester'], [2373]);
       expect(input['_users_id_observer'], [1548]);
+      expect(input.containsKey('_groups_id_assign'), isFalse);
+      expect(input.containsKey('_groups_id_requester'), isFalse);
+      expect(input.containsKey('_groups_id_observer'), isFalse);
+      expect(input.containsKey('_users_id_assign'), isFalse);
     },
   );
 
-  test('payload aplica atores GG: terceiro observer e grupos do catalogo', () {
-    final payload = GlpiTicketSupport.buildCreateTicketPayload({
-      'assunto': 'Teste',
-      'descricao': 'Descricao',
-      'serviceName': 'Limpeza',
-      'beneficiaryUserId': 2373,
-      'loggedUserId': 1548,
-      'governedContract': contractWithActors(const [
-        GovernedActor(role: 'observer', type: 'question_person', value: 572),
-        GovernedActor(role: 'requester', type: 'group', value: 49),
-        GovernedActor(role: 'assigned', type: 'group', value: 21),
-      ]),
-    });
-
-    final input = payload['input'] as Map<String, dynamic>;
-
-    expect(input.containsKey('_users_id_requester'), isFalse);
-    expect(input['_users_id_observer'], [2373]);
-    expect(input['_groups_id_requester'], [49]);
-    expect(input['_groups_id_assign'], [21]);
-  });
-
   test(
-    'payload Marcenaria/Pintura sem question_person nao promove terceiro a ator',
+    'regressao Henrique: Solicitante "para mim" nao envia _groups_id_assign '
+    '(causa do ERROR_GLPI_ADD) e mantem gatilhos da RuleTicket',
     () {
-      final payload = GlpiTicketSupport.buildCreateTicketPayload({
-        'assunto': 'Teste',
-        'descricao': 'Descricao',
-        'serviceName': 'Pintura',
-        'beneficiaryUserId': 2373,
-        'loggedUserId': 1548,
-        'governedContract': contractWithActors(const [
-          GovernedActor(role: 'requester', type: 'author'),
-          GovernedActor(role: 'assigned', type: 'group', value: 22),
-        ]),
-      });
+      for (final serviceName in const ['Limpeza', 'Jardinagem', 'Marcenaria']) {
+        final payload = GlpiTicketSupport.buildCreateTicketPayload({
+          'assunto': 'Limpar agua do chao',
+          'descricao': 'Teste',
+          'serviceName': serviceName,
+          'governedCategoryId': 7001,
+          'governedLocationId': 7002,
+          'governedEntityId': 81,
+          'entities_id': 81,
+          'loggedUserId': 2363, // henrique-missio
+        });
 
-      final input = payload['input'] as Map<String, dynamic>;
+        final input = payload['input'] as Map<String, dynamic>;
 
-      expect(input.containsKey('_users_id_requester'), isFalse);
-      expect(input.containsKey('_users_id_observer'), isFalse);
-      expect(input['_groups_id_assign'], [22]);
+        // Nenhum campo de atribuicao/grupo: o GLPI atribui via RuleTicket.
+        expect(input.containsKey('_groups_id_assign'), isFalse);
+        expect(input.containsKey('_groups_id_requester'), isFalse);
+        expect(input.containsKey('_groups_id_observer'), isFalse);
+        expect(input.containsKey('_users_id_assign'), isFalse);
+        // Gatilhos da RuleTicket presentes (categoria + entidade).
+        expect(input['entities_id'], 81);
+        expect(input['itilcategories_id'], 7001);
+        // Requerente = proprio usuario logado.
+        expect(input['_users_id_requester'], [2363]);
+      }
     },
   );
 

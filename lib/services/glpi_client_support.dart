@@ -275,39 +275,74 @@ class GlpiClientSupport {
     return trimmed;
   }
 
+  /// Normaliza uma mensagem de erro para exibição/log.
+  ///
+  /// Remove os prefixos `Exception: ` acumulados pelo empacotamento duplo de
+  /// exceções (createTicket captura e reempacota, submitTicket relança), de modo
+  /// que o usuário/log veja `Erro ao criar ticket: [400] - [...]` em vez de
+  /// `Exception: Exception: Erro ao criar ticket: ...`. Preserva o conteúdo
+  /// (códigos como `ERROR_GLPI_ADD` continuam presentes para classificação).
+  static String cleanErrorMessage(Object error) {
+    final raw = error.toString().trim();
+    return raw.replaceFirst(RegExp(r'^(?:Exception:\s*)+'), '').trim();
+  }
+
+  /// Monta a busca "meus chamados".
+  ///
+  /// Semântica correta do GLPI: o usuário deve ver os chamados onde é
+  /// requerente (SearchOption 4), autor/recipient (22) OU observador (66).
+  /// Filtrar só por requerente (campo 4) perdia os tickets criados via API,
+  /// que registram o usuário apenas como `users_id_recipient` (campo 22) —
+  /// causa do bloqueador de listagem (2026-06-15). Os três campos são
+  /// dropdowns de usuário: com ID usa-se `equals`; só com nome, `contains`
+  /// no campo 4 (fallback degradado).
+  ///
+  /// Field IDs validados via listSearchOptions/Ticket na instância SIS.
   static Uri buildRequesterTicketSearchUri(
     String baseUrl, {
     int? requesterUserId,
     String? requesterUsername,
     int rangeEnd = 500,
   }) {
-    final value = requesterUserId != null && requesterUserId > 0
-        ? requesterUserId.toString()
-        : requesterUsername?.trim();
+    final hasId = requesterUserId != null && requesterUserId > 0;
+    final value = hasId ? requesterUserId.toString() : requesterUsername?.trim();
     if (value == null || value.isEmpty) {
       throw ArgumentError('requesterUserId or requesterUsername is required');
     }
 
-    return Uri.parse('$baseUrl/search/Ticket').replace(
-      queryParameters: {
-        'criteria[0][field]': '4',
-        'criteria[0][searchtype]':
-            requesterUserId != null && requesterUserId > 0
-            ? 'equals'
-            : 'contains',
-        'criteria[0][value]': value,
-        'forcedisplay[0]': '2',
-        'forcedisplay[1]': '1',
-        'forcedisplay[2]': '12',
-        'forcedisplay[3]': '15',
-        'forcedisplay[4]': '4',
-        'forcedisplay[5]': '7',
-        'forcedisplay[6]': '5',
-        'sort': '15',
-        'order': 'DESC',
-        'range': '0-$rangeEnd',
-      },
-    );
+    final params = <String, String>{};
+
+    if (hasId) {
+      // OR de atores: requerente(4) OR autor/recipient(22) OR observador(66)
+      const actorFields = ['4', '22', '66'];
+      for (var i = 0; i < actorFields.length; i++) {
+        if (i > 0) params['criteria[$i][link]'] = 'OR';
+        params['criteria[$i][field]'] = actorFields[i];
+        params['criteria[$i][searchtype]'] = 'equals';
+        params['criteria[$i][value]'] = value;
+      }
+    } else {
+      // Sem ID: fallback por nome do requerente (degradado).
+      params['criteria[0][field]'] = '4';
+      params['criteria[0][searchtype]'] = 'contains';
+      params['criteria[0][value]'] = value;
+    }
+
+    params.addAll(const {
+      'forcedisplay[0]': '2',
+      'forcedisplay[1]': '1',
+      'forcedisplay[2]': '12',
+      'forcedisplay[3]': '15',
+      'forcedisplay[4]': '4',
+      'forcedisplay[5]': '7',
+      'forcedisplay[6]': '5',
+      'forcedisplay[7]': '80',
+      'sort': '15',
+      'order': 'DESC',
+    });
+    params['range'] = '0-$rangeEnd';
+
+    return Uri.parse('$baseUrl/search/Ticket').replace(queryParameters: params);
   }
 
   static Map<String, dynamic> mapSearchTicketRow(Map<String, dynamic> row) {

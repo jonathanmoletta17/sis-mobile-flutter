@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../services/glpi_client_support.dart';
 import '../state/app_state.dart';
+import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../widgets/ui/glpi_login_surface.dart';
 
@@ -59,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Falha na autenticação. Verifique usuário e senha.'),
+            backgroundColor: AppColors.danger,
           ),
         );
       }
@@ -70,9 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
       final message = e is GlpiAuthFailure
           ? e.userMessage
           : 'Erro ao autenticar. Verifique os dados informados e tente novamente.';
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message), backgroundColor: AppColors.danger),
+      );
     }
   }
 
@@ -132,6 +134,9 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 108,
           fit: BoxFit.contain,
           semanticLabel: 'SIS',
+          cacheWidth: 324,
+          cacheHeight: 236,
+          errorBuilder: (_, __, ___) => const SizedBox.shrink(),
         ),
         children: [
           Form(

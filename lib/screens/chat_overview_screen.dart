@@ -101,7 +101,7 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Numero do Chamado:',
+                      'Número do Chamado:',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: AppSpacing.xs),
@@ -243,7 +243,9 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
             final allTickets = snapshot.data ?? [];
 
             Iterable<Map<String, dynamic>> filtered = allTickets.where(
-              (t) => _isTicketOpen(t['status']),
+              (t) =>
+                  _isTicketOpen(t['status']) ||
+                  GlpiStatusMapper.isSolved(t['status']),
             );
 
             if (_filterTicketId != null && _filterTicketId!.isNotEmpty) {

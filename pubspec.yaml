@@ -75,6 +75,7 @@ flutter:
 
   assets:
     - assets/images/logo.png
+    - assets/glpi_rules_sis.json
     - .env
     - .env.public
     - .env.public.dtic

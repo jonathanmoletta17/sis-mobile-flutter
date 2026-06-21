@@ -3,7 +3,7 @@ import 'package:sis_mobile_flutter/services/glpi_client_support.dart';
 
 void main() {
   group('GlpiClientSupport.buildRequesterTicketSearchUri', () {
-    test('prefers requester user id with equals search when available', () {
+    test('uses OR of actor fields (requester/author/observer) with user id', () {
       final uri = GlpiClientSupport.buildRequesterTicketSearchUri(
         'https://sis.example/apirest.php',
         requesterUserId: 2373,
@@ -11,9 +11,16 @@ void main() {
       );
 
       expect(uri.path, '/apirest.php/search/Ticket');
+      // Requerente (4) OR Autor/recipient (22) OR Observador (66), todos equals ID.
       expect(uri.queryParameters['criteria[0][field]'], '4');
       expect(uri.queryParameters['criteria[0][searchtype]'], 'equals');
       expect(uri.queryParameters['criteria[0][value]'], '2373');
+      expect(uri.queryParameters['criteria[1][link]'], 'OR');
+      expect(uri.queryParameters['criteria[1][field]'], '22');
+      expect(uri.queryParameters['criteria[1][value]'], '2373');
+      expect(uri.queryParameters['criteria[2][link]'], 'OR');
+      expect(uri.queryParameters['criteria[2][field]'], '66');
+      expect(uri.queryParameters['criteria[2][value]'], '2373');
     });
 
     test(

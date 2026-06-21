@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sis_mobile_flutter/utils/html_decode_utils.dart';
 import '../services/glpi_client.dart';
+import '../services/glpi_client_support.dart';
 import '../models/glpi_ticket.dart';
 import '../models/glpi_status.dart';
 import '../models/glpi_identity.dart';
 import '../models/glpi_user_ref.dart';
 import '../models/operational_role.dart';
 import '../models/ticket_message.dart';
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -15,10 +17,12 @@ import 'app_state_message_support.dart';
 import 'app_state_solution_support.dart';
 import 'app_state_storage.dart';
 import 'app_state_ticket_support.dart';
+import '../services/glpi_rules_client.dart';
 
 class AppState extends ChangeNotifier {
   // --- Dependências ---
   final GlpiClient _apiService;
+  final GlpiRulesClient _rulesClient = GlpiRulesClient();
 
   // --- Estado de Autenticação ---
   bool _isAuthenticated = false;
@@ -48,6 +52,7 @@ class AppState extends ChangeNotifier {
   int? get loggedUserId => _loggedUserId;
   String? get activeProfile => _activeProfile;
   int? get activeProfileId => _activeProfileId;
+  GlpiRulesClient get rulesClient => _rulesClient;
   List<GlpiGroupRef> get groups => List.unmodifiable(_groups);
   int? get activeEntityId => _activeEntityId;
   String? get activeEntityName => _activeEntityName;
@@ -150,6 +155,7 @@ class AppState extends ChangeNotifier {
         _sessionToken = storedToken;
         _isAuthenticated = true;
         _applySessionContext(sessionContext, fallbackUsername: _loggedUsername);
+        await _tryLoadRules();
         _reconcileSelectedTicketEntity(
           preferredId: snapshot.selectedTicketEntityId,
           preferredName: snapshot.selectedTicketEntityName,
@@ -212,6 +218,15 @@ class AppState extends ChangeNotifier {
     _selectedTicketEntityName = null;
     _availableEntities = const [];
     await AppStateStorage.clearSessionSnapshot();
+  }
+
+  Future<void> _tryLoadRules() async {
+    if (_rulesClient.isLoaded) return;
+    try {
+      await _rulesClient.load();
+    } catch (e) {
+      debugPrint('⚠️ Contrato de regras GLPI não carregado: $e');
+    }
   }
 
   Future<void> _handleSessionInvalid(Object error) async {
@@ -282,6 +297,7 @@ class AppState extends ChangeNotifier {
         _applySessionContext(sessionContext, fallbackUsername: user);
         _reconcileSelectedTicketEntity();
         _isAuthenticated = true;
+        await _tryLoadRules();
 
         await AppStateStorage.saveSessionSnapshot(
           sessionToken: token,
@@ -295,7 +311,7 @@ class AppState extends ChangeNotifier {
         );
 
         notifyListeners();
-        synchronizeTickets();
+        unawaited(synchronizeTickets());
         return true;
       } catch (e) {
         debugPrint('❌ Falha ao validar sessão após login: $e');
@@ -371,11 +387,12 @@ class AppState extends ChangeNotifier {
       }
     } catch (e) {
       if (_isGovernedSubmitBlocker(e)) {
+        final detail = GlpiClientSupport.cleanErrorMessage(e);
         debugPrint(
-          '⛔ Criação de chamado bloqueada pelo GLPI; não será salva offline: $e',
+          '⛔ Criação de chamado bloqueada pelo GLPI; não será salva offline: $detail',
         );
         notifyListeners();
-        return '⛔ O GLPI recusou a criação deste chamado. Nada foi salvo offline para evitar sincronização impossível. Detalhe: $e';
+        return '⛔ O GLPI recusou a criação deste chamado. Nada foi salvo offline para evitar sincronização impossível. Detalhe: $detail';
       }
 
       debugPrint('⚠️ Erro ao enviar online: $e. Salvando offline...');
@@ -466,6 +483,10 @@ class AppState extends ChangeNotifier {
 
     if (_isAuthenticated && _sessionToken != null) {
       try {
+        if (_loggedUserId == null || _loggedUserId! <= 0) {
+          _loggedUserId = await _apiService.getMyUserId(_sessionToken!);
+        }
+
         final rawTickets = await _apiService.getTickets(
           _sessionToken!,
           requesterUsername: _loggedUsername,
@@ -490,21 +511,39 @@ class AppState extends ChangeNotifier {
 
         if (_canViewOperationalNewQueue()) {
           try {
-            final newTickets = await _apiService.getTicketsByStatus(
-              _sessionToken!,
-              status: GlpiStatus.novo.code,
-            );
-            for (final ticket in newTickets) {
-              final id = ticket['id']?.toString();
-              if (id == null || id.isEmpty) continue;
-              // Tickets pessoais já presentes mantêm sua fonte (requestedByMe);
-              // tickets que só existem na fila operacional são marcados como tal.
-              if (!onlineById.containsKey(id)) {
-                onlineById[id] = {...ticket, '_source': 'operational'};
+            final activeStatuses = [
+              GlpiStatus.novo,
+              GlpiStatus.emAtendimento,
+              GlpiStatus.planejado,
+              GlpiStatus.pendente,
+              GlpiStatus.solucionado,
+            ];
+            final statusFutures = activeStatuses.map((s) async {
+              try {
+                return await _apiService.getTicketsByStatus(
+                  _sessionToken!,
+                  status: s.code,
+                );
+              } catch (e) {
+                if (_isSessionInvalidError(e)) rethrow;
+                debugPrint('⚠️ Erro ao buscar fila operacional status ${s.label}: $e');
+                return <Map<String, dynamic>>[];
+              }
+            });
+            final allStatusTickets = await Future.wait(statusFutures);
+            for (final tickets in allStatusTickets) {
+              for (final ticket in tickets) {
+                final id = ticket['id']?.toString();
+                if (id == null || id.isEmpty) continue;
+                // Tickets pessoais já presentes mantêm sua fonte (requestedByMe);
+                // tickets que só existem na fila operacional são marcados como tal.
+                if (!onlineById.containsKey(id)) {
+                  onlineById[id] = {...ticket, '_source': 'operational'};
+                }
               }
             }
           } catch (e) {
-            debugPrint('⚠️ Erro ao buscar fila operacional de Novos: $e');
+            debugPrint('⚠️ Erro ao buscar fila operacional: $e');
             if (_isSessionInvalidError(e)) {
               await _handleSessionInvalid(e);
               rethrow;
