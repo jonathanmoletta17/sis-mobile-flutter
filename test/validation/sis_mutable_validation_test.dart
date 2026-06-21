@@ -117,6 +117,164 @@ void main() {
   }
 
   test(
+    'cleanup (APPLY): fecha tickets [TESTE-AUTOMATIZADO SIS] ainda abertos',
+    () async {
+      if (!ready) {
+        markTestSkipped('modo direto desabilitado');
+        return;
+      }
+      if (envOf('SIS_VALIDATION_APPLY').toLowerCase() != 'true') {
+        markTestSkipped('SIS_VALIDATION_APPLY!=true');
+        return;
+      }
+      final adminUser = envOf('SIS_TEST_ADMIN_USER');
+      final adminPassword = envOf('SIS_TEST_ADMIN_PASSWORD');
+      if (adminUser.isEmpty || adminPassword.isEmpty) {
+        markTestSkipped('sem credenciais admin de teste');
+        return;
+      }
+      final init = await http.get(
+        Uri.parse('$base/initSession'),
+        headers: {
+          ...headers(null),
+          'Authorization':
+              'Basic ${base64Encode(utf8.encode('$adminUser:$adminPassword'))}',
+        },
+      );
+      final token = (jsonDecode(init.body) as Map)['session_token'] as String;
+      try {
+        final uri = Uri.parse(
+          '$base/search/Ticket'
+          '?criteria[0][field]=1'
+          '&criteria[0][searchtype]=contains'
+          '&criteria[0][value]=TESTE-AUTOMATIZADO'
+          '&forcedisplay[0]=2&forcedisplay[1]=12'
+          '&range=0-300',
+        );
+        final r = await http.get(uri, headers: headers(token));
+        final rows = ((jsonDecode(r.body) as Map)['data'] as List?) ?? const [];
+        final fechados = <String>[];
+        final falhou = <String>[];
+        for (final row in rows) {
+          if (row is! Map) continue;
+          final id = '${row['2']}';
+          if ('${row['12']}' == '6') continue;
+          // Alguns tickets do probe foram criados sem categoria; o GLPI exige
+          // categoria antes de solucionar/fechar. Atribui antes.
+          await http.put(
+            Uri.parse('$base/Ticket/$id'),
+            headers: headers(token),
+            body: jsonEncode({
+              'input': {'id': id, 'itilcategories_id': 47},
+            }),
+          );
+          // Ciclo de vida do GLPI: Novo nao vai direto a Fechado. Adiciona uma
+          // solucao (-> Solucionado 5) e entao fecha (-> 6).
+          final sol = await http.post(
+            Uri.parse('$base/ITILSolution'),
+            headers: headers(token),
+            body: jsonEncode({
+              'input': {
+                'itemtype': 'Ticket',
+                'items_id': id,
+                'content': 'Encerramento de ticket de teste automatizado.',
+              },
+            }),
+          );
+          final put = await http.put(
+            Uri.parse('$base/Ticket/$id'),
+            headers: headers(token),
+            body: jsonEncode({
+              'input': {'id': id, 'status': 6},
+            }),
+          );
+          // ignore: avoid_print
+          print('  $id sol=${sol.statusCode} put=${put.statusCode}'
+              '${sol.statusCode >= 400 ? ' solbody=${sol.body}' : ''}');
+          final check = await http.get(
+            Uri.parse('$base/Ticket/$id'),
+            headers: headers(token),
+          );
+          final st = '${(jsonDecode(check.body) as Map)['status']}';
+          if (st == '6') {
+            fechados.add(id);
+          } else {
+            falhou.add('$id(st=$st)');
+          }
+        }
+        // ignore: avoid_print
+        print('CLEANUP_FINAL fechados=$fechados falhou=$falhou');
+      } finally {
+        await http.get(Uri.parse('$base/killSession'), headers: headers(token));
+      }
+    },
+  );
+
+  test(
+    'auditoria read-only: lista tickets [TESTE-AUTOMATIZADO SIS] e seus status',
+    () async {
+      if (!ready) {
+        markTestSkipped('modo direto desabilitado');
+        return;
+      }
+      final adminUser = envOf('SIS_TEST_ADMIN_USER');
+      final adminPassword = envOf('SIS_TEST_ADMIN_PASSWORD');
+      final hasAdmin = adminUser.isNotEmpty && adminPassword.isNotEmpty;
+      // Usa admin (visao ampla) se houver; senao a propria conta de teste.
+      final String token;
+      if (hasAdmin) {
+        final init = await http.get(
+          Uri.parse('$base/initSession'),
+          headers: {
+            ...headers(null),
+            'Authorization':
+                'Basic ${base64Encode(utf8.encode('$adminUser:$adminPassword'))}',
+          },
+        );
+        token = (jsonDecode(init.body) as Map)['session_token'] as String;
+      } else {
+        token = await initSession();
+      }
+      try {
+        final uri = Uri.parse(
+          '$base/search/Ticket'
+          '?criteria[0][field]=1'
+          '&criteria[0][searchtype]=contains'
+          '&criteria[0][value]=TESTE-AUTOMATIZADO'
+          '&forcedisplay[0]=2&forcedisplay[1]=1&forcedisplay[2]=12'
+          '&sort=2&order=ASC&range=0-300',
+        );
+        final r = await http.get(uri, headers: headers(token));
+        final body = jsonDecode(r.body);
+        final rows = (body is Map ? body['data'] : null) as List? ?? const [];
+        const statusName = {
+          '1': 'Novo',
+          '2': 'Atendimento',
+          '3': 'Atendimento(plan)',
+          '4': 'Pendente',
+          '5': 'Solucionado',
+          '6': 'Fechado',
+        };
+        var abertos = 0;
+        final lines = <String>[];
+        for (final row in rows) {
+          if (row is! Map) continue;
+          final id = '${row['2']}';
+          final st = '${row['12']}';
+          if (st != '6') abertos++;
+          lines.add('$id=${statusName[st] ?? st}');
+        }
+        // ignore: avoid_print
+        print('AUDITORIA total=${rows.length} nao_fechados=$abertos');
+        // ignore: avoid_print
+        print('AUDITORIA tickets: ${lines.join(' | ')}');
+      } finally {
+        await http.get(Uri.parse('$base/killSession'), headers: headers(token));
+      }
+    },
+  );
+
+  test(
     'read-only direto: login + changeActiveProfile + contexto da conta de teste',
     () async {
       if (!ready) {
@@ -688,6 +846,645 @@ void main() {
         }
         // ignore: avoid_print
         print('APROV cleanup tickets=$created');
+        await http.get(Uri.parse('$base/killSession'), headers: headers(token));
+      }
+    },
+  );
+
+  test(
+    'validacao adicional (APPLY): anexo (efeito), read-back e para-terceiro',
+    () async {
+      if (!ready) {
+        markTestSkipped('modo direto desabilitado');
+        return;
+      }
+      if (envOf('SIS_VALIDATION_APPLY').toLowerCase() != 'true') {
+        markTestSkipped('SIS_VALIDATION_APPLY!=true');
+        return;
+      }
+      final categoryId = int.parse(envOf('SIS_TEST_CATEGORY_ID'));
+      final entityId = int.parse(envOf('SIS_TEST_ENTITY_ID'));
+
+      // Beneficiario do "para-terceiro" = conta admin de teste (nao usuario real).
+      int? thirdPartyId;
+      final adminUser = envOf('SIS_TEST_ADMIN_USER');
+      final adminPassword = envOf('SIS_TEST_ADMIN_PASSWORD');
+      if (adminUser.isNotEmpty && adminPassword.isNotEmpty) {
+        final ai = await http.get(
+          Uri.parse('$base/initSession'),
+          headers: {
+            ...headers(null),
+            'Authorization':
+                'Basic ${base64Encode(utf8.encode('$adminUser:$adminPassword'))}',
+          },
+        );
+        final at = (jsonDecode(ai.body) as Map)['session_token'] as String;
+        final fs = await http.get(
+          Uri.parse('$base/getFullSession'),
+          headers: headers(at),
+        );
+        final sess = (jsonDecode(fs.body) as Map)['session'] as Map;
+        thirdPartyId = int.tryParse('${sess['glpiID']}');
+        await http.get(Uri.parse('$base/killSession'), headers: headers(at));
+      }
+
+      final token = await initSession();
+      Future<void> profile(int id) async {
+        await http.post(
+          Uri.parse('$base/changeActiveProfile'),
+          headers: headers(token),
+          body: jsonEncode({'profiles_id': id}),
+        );
+      }
+
+      Future<String> createTicket(Map<String, dynamic> extra) async {
+        await profile(9);
+        final payload = GlpiTicketSupport.buildCreateTicketPayload({
+          'assunto': '$ticketMarker extra ${DateTime.now().microsecondsSinceEpoch}',
+          'descricao': 'Validacao adicional. Descartavel.',
+          'serviceName': '',
+          'governedCategoryId': categoryId,
+          'entities_id': entityId,
+          'loggedUserId': 2373,
+          ...extra,
+        });
+        final r = await http.post(
+          Uri.parse('$base/Ticket'),
+          headers: headers(token),
+          body: jsonEncode(payload),
+        );
+        expect(r.statusCode, anyOf(200, 201), reason: 'criacao: ${r.body}');
+        return (jsonDecode(r.body) as Map)['id'].toString();
+      }
+
+      final created = <String>[];
+      try {
+        // 1) ANEXO — efeito real (documento vinculado ao ticket).
+        final tA = await createTicket(const {});
+        created.add(tA);
+        final mp = http.MultipartRequest(
+          'POST',
+          Uri.parse('$base/Ticket/$tA/Document'),
+        );
+        mp.headers.addAll({
+          'Accept': 'application/json',
+          'App-Token': appToken,
+          'Session-Token': token,
+        });
+        mp.files.add(http.MultipartFile.fromString(
+          'uploadManifest',
+          jsonEncode({
+            'input': {
+              'name': 'anexo.txt',
+              '_filename': ['anexo.txt'],
+              'items_id': tA,
+              'itemtype': 'Ticket',
+            },
+          }),
+          contentType: MediaType('application', 'json'),
+        ));
+        mp.files.add(http.MultipartFile.fromBytes(
+          'filename[0]',
+          utf8.encode('conteudo de teste'),
+          filename: 'anexo.txt',
+          contentType: MediaType('text', 'plain'),
+        ));
+        final up = await http.Response.fromStream(await mp.send());
+        // Verificacao do vinculo com sessao ADMIN (direito de document garantido).
+        var diStatus = -1;
+        var docs = -1;
+        if (adminUser.isNotEmpty && adminPassword.isNotEmpty) {
+          final ai = await http.get(
+            Uri.parse('$base/initSession'),
+            headers: {
+              ...headers(null),
+              'Authorization':
+                  'Basic ${base64Encode(utf8.encode('$adminUser:$adminPassword'))}',
+            },
+          );
+          final at = (jsonDecode(ai.body) as Map)['session_token'] as String;
+          final di = await http.get(
+            Uri.parse('$base/Ticket/$tA/Document_Item'),
+            headers: headers(at),
+          );
+          diStatus = di.statusCode;
+          if (di.statusCode == 200 || di.statusCode == 206) {
+            docs = (jsonDecode(di.body) as List).length;
+          }
+          await http.get(Uri.parse('$base/killSession'), headers: headers(at));
+        }
+        // ignore: avoid_print
+        print('ANEXO_EFEITO ticket=$tA upload=${up.statusCode} '
+            'di_http=$diStatus docs_vinculados=$docs (le como admin)');
+
+        // 2) READ-BACK governado — grupo, categoria e task templates.
+        final tB = await createTicket(const {});
+        created.add(tB);
+        final gt = await http.get(
+          Uri.parse('$base/Ticket/$tB/Group_Ticket?range=0-50'),
+          headers: headers(token),
+        );
+        String? grp;
+        if (gt.statusCode == 200 || gt.statusCode == 206) {
+          for (final r in (jsonDecode(gt.body) as List)) {
+            if (r is Map && '${r['type']}' == '2') grp = '${r['groups_id']}';
+          }
+        }
+        await profile(11); // tecnico le TicketTask
+        final tk = await http.get(
+          Uri.parse('$base/Ticket/$tB/TicketTask?range=0-50'),
+          headers: headers(token),
+        );
+        final tasks = (tk.statusCode == 200 || tk.statusCode == 206)
+            ? (jsonDecode(tk.body) as List).length
+            : -1;
+        final tBfull = await http.get(
+          Uri.parse('$base/Ticket/$tB'),
+          headers: headers(token),
+        );
+        final cat = '${(jsonDecode(tBfull.body) as Map)['itilcategories_id']}';
+        // ignore: avoid_print
+        print('READBACK ticket=$tB grupo=$grp categoria=$cat '
+            'task_templates=$tasks');
+
+        // 3) PARA-TERCEIRO — beneficiario=requester, autor logado=observer.
+        if (thirdPartyId != null && thirdPartyId != 2373) {
+          final tC = await createTicket({'beneficiaryUserId': thirdPartyId});
+          created.add(tC);
+          final tu = await http.get(
+            Uri.parse('$base/Ticket/$tC/Ticket_User?range=0-50'),
+            headers: headers(token),
+          );
+          String? requester;
+          String? observer;
+          if (tu.statusCode == 200 || tu.statusCode == 206) {
+            for (final r in (jsonDecode(tu.body) as List)) {
+              if (r is! Map) continue;
+              if ('${r['type']}' == '1') requester = '${r['users_id']}';
+              if ('${r['type']}' == '3') observer = '${r['users_id']}';
+            }
+          }
+          // ignore: avoid_print
+          print('PARA_TERCEIRO ticket=$tC beneficiario=$thirdPartyId '
+              'requester=$requester observer=$observer '
+              'OK=${requester == '$thirdPartyId' && observer == '2373'}');
+        } else {
+          // ignore: avoid_print
+          print('PARA_TERCEIRO pulado (sem beneficiario de teste distinto)');
+        }
+      } finally {
+        // Cleanup via tecnico (tem UPDATE): solucao + fechar. Categoria ja = 47.
+        await profile(11);
+        for (final id in created) {
+          await http.post(
+            Uri.parse('$base/ITILSolution'),
+            headers: headers(token),
+            body: jsonEncode({
+              'input': {'itemtype': 'Ticket', 'items_id': id, 'content': 'fim'},
+            }),
+          );
+          await http.put(
+            Uri.parse('$base/Ticket/$id'),
+            headers: headers(token),
+            body: jsonEncode({
+              'input': {'id': id, 'status': 6},
+            }),
+          );
+        }
+        // ignore: avoid_print
+        print('EXTRA cleanup tickets=$created');
+        await http.get(Uri.parse('$base/killSession'), headers: headers(token));
+      }
+    },
+  );
+
+  test(
+    'valida caminho WORKER como Solicitante (APPLY): ajusta default, valida, reverte',
+    () async {
+      if (!ready) {
+        markTestSkipped('modo direto desabilitado');
+        return;
+      }
+      if (envOf('SIS_VALIDATION_APPLY').toLowerCase() != 'true') {
+        markTestSkipped('SIS_VALIDATION_APPLY!=true');
+        return;
+      }
+      final adminUser = envOf('SIS_TEST_ADMIN_USER');
+      final adminPassword = envOf('SIS_TEST_ADMIN_PASSWORD');
+      final workerBase = envOf('GLPI_BASE_URL');
+      if (adminUser.isEmpty || adminPassword.isEmpty || workerBase.isEmpty) {
+        markTestSkipped('sem admin de teste ou GLPI_BASE_URL (Worker)');
+        return;
+      }
+      const puId = 2714; // profile 9 (Solicitante) / entidade 28 (DTIC)
+      final categoryId = int.parse(envOf('SIS_TEST_CATEGORY_ID'));
+
+      // Sessao admin (GLPI direto) para ajustar/reverter o default.
+      final ai = await http.get(
+        Uri.parse('$base/initSession'),
+        headers: {
+          ...headers(null),
+          'Authorization':
+              'Basic ${base64Encode(utf8.encode('$adminUser:$adminPassword'))}',
+        },
+      );
+      final adminToken = (jsonDecode(ai.body) as Map)['session_token'] as String;
+
+      // Headers para o Worker: o Worker injeta o proprio App-Token.
+      Map<String, String> wHeaders(String? t) => {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        if (t != null) 'Session-Token': t,
+      };
+
+      var reverted = false;
+      String? createdViaWorker;
+      try {
+        // 1) Marca Solicitante/DTIC como perfil padrao.
+        final set = await http.put(
+          Uri.parse('$base/Profile_User/$puId'),
+          headers: headers(adminToken),
+          body: jsonEncode({
+            'input': {'id': puId, 'is_default': 1},
+          }),
+        );
+        final afterSet = await http.get(
+          Uri.parse('$base/Profile_User/$puId'),
+          headers: headers(adminToken),
+        );
+        // ignore: avoid_print
+        print('SET_DEFAULT pu=$puId -> ${set.statusCode} '
+            'is_default_persistiu=${(jsonDecode(afterSet.body) as Map)['is_default']}');
+
+        // 2) Login da conta de teste VIA WORKER e confere o perfil ativo.
+        final wInit = await http.get(
+          Uri.parse('$workerBase/initSession'),
+          headers: {
+            ...wHeaders(null),
+            'Authorization':
+                'Basic ${base64Encode(utf8.encode('$testUser:$testPassword'))}',
+          },
+        );
+        // ignore: avoid_print
+        print('WORKER_INIT -> ${wInit.statusCode}');
+        if (wInit.statusCode == 200) {
+          final wToken =
+              (jsonDecode(wInit.body) as Map)['session_token'] as String;
+          final wFull = await http.get(
+            Uri.parse('$workerBase/getFullSession'),
+            headers: wHeaders(wToken),
+          );
+          final sess =
+              ((jsonDecode(wFull.body) as Map)['session'] as Map?) ?? const {};
+          final perfil = '${sess['glpiactiveprofile']?['name']}';
+          final ent = '${sess['glpiactive_entity']}';
+          // ignore: avoid_print
+          print('WORKER perfil_ativo=$perfil entidade=$ent userId=${sess['glpiID']}');
+
+          if (perfil.toLowerCase().contains('solicitante')) {
+            // 3) Cria chamado COMO SOLICITANTE pelo Worker (caminho do APK).
+            final payload = GlpiTicketSupport.buildCreateTicketPayload({
+              'assunto': '$ticketMarker WORKER ${DateTime.now().microsecondsSinceEpoch}',
+              'descricao': 'Validacao via Worker (caminho do APK). Descartavel.',
+              'serviceName': '',
+              'governedCategoryId': categoryId,
+              'entities_id': 28,
+              'loggedUserId': 2373,
+            });
+            final wCreate = await http.post(
+              Uri.parse('$workerBase/Ticket'),
+              headers: wHeaders(wToken),
+              body: jsonEncode(payload),
+            );
+            // ignore: avoid_print
+            print('WORKER_CRIAR -> ${wCreate.statusCode}: ${wCreate.body}');
+            if (wCreate.statusCode == 200 || wCreate.statusCode == 201) {
+              createdViaWorker = (jsonDecode(wCreate.body) as Map)['id'].toString();
+            }
+            await http.get(
+              Uri.parse('$workerBase/killSession'),
+              headers: wHeaders(wToken),
+            );
+          }
+        }
+      } finally {
+        // 4) REVERTE o default ao estado original (is_default=0).
+        final rev = await http.put(
+          Uri.parse('$base/Profile_User/$puId'),
+          headers: headers(adminToken),
+          body: jsonEncode({
+            'input': {'id': puId, 'is_default': 0},
+          }),
+        );
+        final check = await http.get(
+          Uri.parse('$base/Profile_User/$puId'),
+          headers: headers(adminToken),
+        );
+        final nowDef = '${(jsonDecode(check.body) as Map)['is_default']}';
+        reverted = rev.statusCode == 200 && (nowDef == '0' || nowDef == 'null');
+        // ignore: avoid_print
+        print('REVERT_DEFAULT pu=$puId put=${rev.statusCode} '
+            'is_default_agora=$nowDef revertido=$reverted');
+
+        // Cleanup do ticket criado via Worker (via admin: categoria + solucao + fechar).
+        if (createdViaWorker != null) {
+          await http.post(
+            Uri.parse('$base/ITILSolution'),
+            headers: headers(adminToken),
+            body: jsonEncode({
+              'input': {
+                'itemtype': 'Ticket',
+                'items_id': createdViaWorker,
+                'content': 'fim',
+              },
+            }),
+          );
+          await http.put(
+            Uri.parse('$base/Ticket/$createdViaWorker'),
+            headers: headers(adminToken),
+            body: jsonEncode({
+              'input': {'id': createdViaWorker, 'status': 6},
+            }),
+          );
+          // ignore: avoid_print
+          print('WORKER cleanup ticket=$createdViaWorker fechado');
+        }
+        await http.get(
+          Uri.parse('$base/killSession'),
+          headers: headers(adminToken),
+        );
+      }
+      expect(reverted, isTrue,
+          reason: 'ATENCAO: reverter is_default do Profile_User $puId para 0');
+    },
+  );
+
+  test(
+    'valida WORKER E2E (APPLY): criar+grupo, mensagem, anexo, aprovar, recusar',
+    () async {
+      if (!ready) {
+        markTestSkipped('modo direto desabilitado');
+        return;
+      }
+      if (envOf('SIS_VALIDATION_APPLY').toLowerCase() != 'true') {
+        markTestSkipped('SIS_VALIDATION_APPLY!=true');
+        return;
+      }
+      final adminUser = envOf('SIS_TEST_ADMIN_USER');
+      final adminPassword = envOf('SIS_TEST_ADMIN_PASSWORD');
+      final workerBase = envOf('GLPI_BASE_URL');
+      if (adminUser.isEmpty || adminPassword.isEmpty || workerBase.isEmpty) {
+        markTestSkipped('sem admin de teste ou GLPI_BASE_URL (Worker)');
+        return;
+      }
+      final categoryId = int.parse(envOf('SIS_TEST_CATEGORY_ID'));
+
+      // Worker injeta o App-Token; nao enviar aqui.
+      Map<String, String> wH(String? t, {bool json = true}) => {
+        if (json) 'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        if (t != null) 'Session-Token': t,
+      };
+
+      // Login da conta de teste VIA WORKER (perfil padrao = Solicitante).
+      final wInit = await http.get(
+        Uri.parse('$workerBase/initSession'),
+        headers: {
+          ...wH(null),
+          'Authorization':
+              'Basic ${base64Encode(utf8.encode('$testUser:$testPassword'))}',
+        },
+      );
+      expect(wInit.statusCode, 200, reason: 'worker init: ${wInit.body}');
+      final wToken = (jsonDecode(wInit.body) as Map)['session_token'] as String;
+      final wFull = await http.get(
+        Uri.parse('$workerBase/getFullSession'),
+        headers: wH(wToken),
+      );
+      final perfil =
+          '${((jsonDecode(wFull.body) as Map)['session'] as Map)['glpiactiveprofile']?['name']}';
+      // ignore: avoid_print
+      print('WORKER_E2E perfil_ativo=$perfil');
+      if (!perfil.toLowerCase().contains('solicitante')) {
+        // ignore: avoid_print
+        print('WORKER_E2E ABORTADO: padrao da conta nao e Solicitante');
+        await http.get(
+          Uri.parse('$workerBase/killSession'),
+          headers: wH(wToken),
+        );
+        return;
+      }
+
+      // Sessao admin (GLPI direto) para propor solucao, read-back e cleanup.
+      final ai = await http.get(
+        Uri.parse('$base/initSession'),
+        headers: {
+          ...headers(null),
+          'Authorization':
+              'Basic ${base64Encode(utf8.encode('$adminUser:$adminPassword'))}',
+        },
+      );
+      final aToken = (jsonDecode(ai.body) as Map)['session_token'] as String;
+
+      Future<String> criarViaWorker() async {
+        final payload = GlpiTicketSupport.buildCreateTicketPayload({
+          'assunto': '$ticketMarker WKE2E ${DateTime.now().microsecondsSinceEpoch}',
+          'descricao': 'Validacao E2E via Worker (caminho do APK). Descartavel.',
+          'serviceName': '',
+          'governedCategoryId': categoryId,
+          'entities_id': 28,
+          'loggedUserId': 2373,
+        });
+        final r = await http.post(
+          Uri.parse('$workerBase/Ticket'),
+          headers: wH(wToken),
+          body: jsonEncode(payload),
+        );
+        expect(r.statusCode, anyOf(200, 201), reason: 'worker criar: ${r.body}');
+        return (jsonDecode(r.body) as Map)['id'].toString();
+      }
+
+      Future<String> statusOf(String id) async {
+        final r = await http.get(
+          Uri.parse('$base/Ticket/$id'),
+          headers: headers(aToken),
+        );
+        return '${(jsonDecode(r.body) as Map)['status']}';
+      }
+
+      Future<void> proporSolucao(String id) async {
+        await http.post(
+          Uri.parse('$base/ITILSolution'),
+          headers: headers(aToken),
+          body: jsonEncode({
+            'input': {'itemtype': 'Ticket', 'items_id': id, 'content': 'sol'},
+          }),
+        );
+      }
+
+      final created = <String>[];
+      try {
+        // CRIAR + grupo (read-back via admin).
+        final id1 = await criarViaWorker();
+        created.add(id1);
+        final gt = await http.get(
+          Uri.parse('$base/Ticket/$id1/Group_Ticket?range=0-50'),
+          headers: headers(aToken),
+        );
+        String? grp;
+        for (final r in (jsonDecode(gt.body) as List)) {
+          if (r is Map && '${r['type']}' == '2') grp = '${r['groups_id']}';
+        }
+        // ignore: avoid_print
+        print('WORKER_E2E_CRIAR id=$id1 grupo=$grp');
+
+        // MENSAGEM via Worker.
+        final msg = await http.post(
+          Uri.parse('$workerBase/TicketFollowup'),
+          headers: wH(wToken),
+          body: jsonEncode({
+            'input': {'tickets_id': id1, 'content': 'msg teste', 'is_private': 0},
+          }),
+        );
+        // ignore: avoid_print
+        print('WORKER_E2E_MENSAGEM -> ${msg.statusCode}');
+
+        // ANEXO via Worker (multipart) + verificacao via admin.
+        final mp = http.MultipartRequest(
+          'POST',
+          Uri.parse('$workerBase/Ticket/$id1/Document'),
+        );
+        mp.headers.addAll({'Accept': 'application/json', 'Session-Token': wToken});
+        mp.files.add(http.MultipartFile.fromString(
+          'uploadManifest',
+          jsonEncode({
+            'input': {
+              'name': 'a.txt',
+              '_filename': ['a.txt'],
+              'items_id': id1,
+              'itemtype': 'Ticket',
+            },
+          }),
+          contentType: MediaType('application', 'json'),
+        ));
+        mp.files.add(http.MultipartFile.fromBytes(
+          'filename[0]',
+          utf8.encode('x'),
+          filename: 'a.txt',
+          contentType: MediaType('text', 'plain'),
+        ));
+        final up = await http.Response.fromStream(await mp.send());
+        final di = await http.get(
+          Uri.parse('$base/Ticket/$id1/Document_Item'),
+          headers: headers(aToken),
+        );
+        final docs = (di.statusCode == 200 || di.statusCode == 206)
+            ? (jsonDecode(di.body) as List).length
+            : -1;
+        // ignore: avoid_print
+        print('WORKER_E2E_ANEXO upload=${up.statusCode} docs=$docs');
+
+        // APROVAR via Worker (followup add_close).
+        final id2 = await criarViaWorker();
+        created.add(id2);
+        await proporSolucao(id2);
+        final sb = await statusOf(id2);
+        final ap = await http.post(
+          Uri.parse('$workerBase/TicketFollowup'),
+          headers: wH(wToken),
+          body: jsonEncode({
+            'input': {'tickets_id': id2, 'content': 'ok', 'add_close': 1},
+          }),
+        );
+        final sa = await statusOf(id2);
+        // ignore: avoid_print
+        print('WORKER_E2E_APROVAR http=${ap.statusCode} $sb->$sa '
+            'OK=${sb == '5' && sa == '6'}');
+
+        // RECUSAR via Worker (followup add_reopen).
+        final id3 = await criarViaWorker();
+        created.add(id3);
+        await proporSolucao(id3);
+        final sb3 = await statusOf(id3);
+        final rj = await http.post(
+          Uri.parse('$workerBase/TicketFollowup'),
+          headers: wH(wToken),
+          body: jsonEncode({
+            'input': {'tickets_id': id3, 'content': 'nao', 'add_reopen': 1},
+          }),
+        );
+        final sa3 = await statusOf(id3);
+        // ignore: avoid_print
+        print('WORKER_E2E_RECUSAR http=${rj.statusCode} $sb3->$sa3 '
+            'OK=${sb3 == '5' && sa3 != '5'}');
+      } finally {
+        // Cleanup via admin (categoria ja=47): solucao (tolerante) + fechar.
+        for (final id in created) {
+          await http.post(
+            Uri.parse('$base/ITILSolution'),
+            headers: headers(aToken),
+            body: jsonEncode({
+              'input': {'itemtype': 'Ticket', 'items_id': id, 'content': 'fim'},
+            }),
+          );
+          await http.put(
+            Uri.parse('$base/Ticket/$id'),
+            headers: headers(aToken),
+            body: jsonEncode({
+              'input': {'id': id, 'status': 6},
+            }),
+          );
+        }
+        // ignore: avoid_print
+        print('WORKER_E2E cleanup tickets=$created');
+        await http.get(
+          Uri.parse('$workerBase/killSession'),
+          headers: wH(wToken),
+        );
+        await http.get(Uri.parse('$base/killSession'), headers: headers(aToken));
+      }
+    },
+  );
+
+  test(
+    'admin read-only: inspeciona Profile_User da conta de teste (2373)',
+    () async {
+      if (!ready) {
+        markTestSkipped('modo direto desabilitado');
+        return;
+      }
+      final adminUser = envOf('SIS_TEST_ADMIN_USER');
+      final adminPassword = envOf('SIS_TEST_ADMIN_PASSWORD');
+      if (adminUser.isEmpty || adminPassword.isEmpty) {
+        markTestSkipped('sem credenciais admin de teste');
+        return;
+      }
+      final init = await http.get(
+        Uri.parse('$base/initSession'),
+        headers: {
+          ...headers(null),
+          'Authorization':
+              'Basic ${base64Encode(utf8.encode('$adminUser:$adminPassword'))}',
+        },
+      );
+      final token = (jsonDecode(init.body) as Map)['session_token'] as String;
+      try {
+        final r = await http.get(
+          Uri.parse('$base/User/2373/Profile_User?range=0-50'),
+          headers: headers(token),
+        );
+        // ignore: avoid_print
+        print('PROFILE_USER http=${r.statusCode}');
+        if (r.statusCode == 200 || r.statusCode == 206) {
+          for (final pu in (jsonDecode(r.body) as List)) {
+            if (pu is! Map) continue;
+            // ignore: avoid_print
+            print('  PU id=${pu['id']} profiles_id=${pu['profiles_id']} '
+                'entities_id=${pu['entities_id']} '
+                'is_default=${pu['is_default']} is_dynamic=${pu['is_dynamic']}');
+          }
+        }
+      } finally {
         await http.get(Uri.parse('$base/killSession'), headers: headers(token));
       }
     },
