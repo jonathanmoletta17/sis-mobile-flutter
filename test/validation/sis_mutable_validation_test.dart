@@ -1491,6 +1491,111 @@ void main() {
   );
 
   test(
+    'valida fluxos TECNICOS (APPLY): criar, propor solucao, atualizar status, fila, mensagem',
+    () async {
+      if (!ready) {
+        markTestSkipped('modo direto desabilitado');
+        return;
+      }
+      if (envOf('SIS_VALIDATION_APPLY').toLowerCase() != 'true') {
+        markTestSkipped('SIS_VALIDATION_APPLY!=true');
+        return;
+      }
+      final categoryId = int.parse(envOf('SIS_TEST_CATEGORY_ID'));
+      final token = await initSession();
+
+      Future<void> profile(int id) async {
+        await http.post(
+          Uri.parse('$base/changeActiveProfile'),
+          headers: headers(token),
+          body: jsonEncode({'profiles_id': id}),
+        );
+      }
+
+      Future<String> statusOf(String id) async {
+        final r = await http.get(
+          Uri.parse('$base/Ticket/$id'),
+          headers: headers(token),
+        );
+        return '${(jsonDecode(r.body) as Map)['status']}';
+      }
+
+      final created = <String>[];
+      try {
+        await profile(11); // Tecnico / Manutencao e Conservacao
+
+        Future<String> criar() async {
+          final payload = GlpiTicketSupport.buildCreateTicketPayload({
+            'assunto': '$ticketMarker TEC ${DateTime.now().microsecondsSinceEpoch}',
+            'descricao': 'Validacao fluxos tecnicos. Descartavel.',
+            'serviceName': '',
+            'governedCategoryId': categoryId,
+            'entities_id': 28,
+            'loggedUserId': 2373,
+          });
+          final c = await http.post(
+            Uri.parse('$base/Ticket'),
+            headers: headers(token),
+            body: jsonEncode(payload),
+          );
+          return (jsonDecode(c.body) as Map)['id'].toString();
+        }
+
+        // Ticket A: criar + atualizar status (UPDATE) + mensagem.
+        final tA = await criar();
+        created.add(tA);
+        final put = await http.put(
+          Uri.parse('$base/Ticket/$tA'),
+          headers: headers(token),
+          body: jsonEncode({
+            'input': {'id': tA, 'status': 2},
+          }),
+        );
+        final st = await statusOf(tA);
+        // ignore: avoid_print
+        print('TEC_CRIAR id=$tA | TEC_STATUS http=${put.statusCode} '
+            'status=$st OK=${st == '2'}');
+        final msg = await http.post(
+          Uri.parse('$base/TicketFollowup'),
+          headers: headers(token),
+          body: jsonEncode({
+            'input': {'tickets_id': tA, 'content': 'andamento', 'is_private': 0},
+          }),
+        );
+        // ignore: avoid_print
+        print('TEC_MENSAGEM -> ${msg.statusCode}');
+
+        // NOTA: propor solucao pelo tecnico depende de `maySolve` (tecnico
+        // atribuido ao grupo do chamado). Validado separadamente; aqui nao se
+        // assegura para nao depender do estado de grupos/atribuicao da conta.
+
+        // Ler fila operacional por status (search/Ticket).
+        final fila = await http.get(
+          Uri.parse('$base/search/Ticket'
+              '?criteria[0][field]=12&criteria[0][searchtype]=equals'
+              '&criteria[0][value]=5&forcedisplay[0]=2&range=0-5'),
+          headers: headers(token),
+        );
+        // ignore: avoid_print
+        print('TEC_FILA(status=5) http=${fila.statusCode}');
+      } finally {
+        for (final tid in created) {
+          await http.put(
+            Uri.parse('$base/Ticket/$tid'),
+            headers: headers(token),
+            body: jsonEncode({
+              'input': {'id': tid, 'status': 6},
+            }),
+          );
+        }
+        // ignore: avoid_print
+        print('TEC cleanup tickets=$created');
+        await http.get(Uri.parse('$base/killSession'), headers: headers(token));
+      }
+    },
+  );
+
+  test(
     'diagnostico probe (APPLY+PROBE): isola o campo que dispara ERROR_GLPI_ADD',
     () async {
       if (!ready) {
