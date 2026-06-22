@@ -442,6 +442,64 @@ class GlpiClient {
     );
   }
 
+  /// Busca chamados para o campo glpiselect "Checklist Programada".
+  /// Query vazia retorna os mais recentes (sem filtro de titulo).
+  /// Retorna lista de {id: int, name: String} ordenada por data DESC.
+  Future<List<Map<String, dynamic>>> searchTicketsForGlpiSelect(
+    String sessionToken, {
+    String query = '',
+    int maxResults = 20,
+  }) async {
+    final text = query.trim();
+    final String criteria = text.isEmpty
+        ? ''
+        : '&criteria[0][field]=1'
+          '&criteria[0][searchtype]=contains'
+          '&criteria[0][value]=${Uri.encodeQueryComponent(text)}';
+
+    final uri = Uri.parse(
+      '${GlpiConfig.baseUrl}/search/Ticket'
+      '?forcedisplay[0]=2'
+      '&forcedisplay[1]=1'
+      '&sort=15'
+      '&order=DESC'
+      '&range=0-${maxResults - 1}'
+      '$criteria',
+    );
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+    };
+
+    final response = await http
+        .get(uri, headers: headers)
+        .timeout(GlpiConfig.requestTimeout);
+    _logResponse('SEARCH_TICKETS_GLPISELECT', response);
+
+    if (response.statusCode == 200 || response.statusCode == 206) {
+      final payload =
+          (jsonDecode(response.body) as Map).cast<String, dynamic>();
+      final rows = payload['data'] as List<dynamic>? ?? const [];
+      return rows
+          .whereType<Map>()
+          .map((row) {
+            final r = row.cast<String, dynamic>();
+            final id = int.tryParse('${r['2'] ?? ''}') ?? 0;
+            final name = r['1']?.toString() ?? '';
+            return {'id': id, 'name': name};
+          })
+          .where(
+            (t) => (t['id'] as int) > 0 && (t['name'] as String).isNotEmpty,
+          )
+          .toList();
+    }
+
+    if (_isAuthError(response.statusCode)) throw _authException(response);
+    return const [];
+  }
+
   Future<Map<String, dynamic>> getTicketById(
     String ticketId,
     String sessionToken,

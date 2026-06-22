@@ -54,7 +54,8 @@ SisChecklistCatalog _previewCatalog() {
     'questions': [
       {'id': 0, 'form_id': 50, 'section_id': 500, 'name': 'Checklist', 'fieldtype': 'select', 'required': false, 'show_rule': 1, 'row': 0, 'col': 0, 'width': 4, 'values': '["CORRETIVA","PREVENTIVA"]', 'default_values': 'PREVENTIVA'},
       {'id': 1, 'form_id': 50, 'section_id': 500, 'name': 'Local', 'fieldtype': 'select', 'required': true, 'show_rule': 1, 'row': 1, 'col': 0, 'width': 4, 'values': '["ALA RESIDENCIAL","ALA GOVERNAMENTAL"]'},
-      {'id': 2, 'form_id': 50, 'section_id': 500, 'name': 'Observações', 'fieldtype': 'textarea', 'required': false, 'show_rule': 1, 'row': 2, 'col': 0, 'width': 4},
+      {'id': 4, 'form_id': 50, 'section_id': 500, 'name': 'Checklist Programada', 'fieldtype': 'glpiselect', 'itemtype': 'Ticket', 'required': false, 'show_rule': 1, 'row': 2, 'col': 0, 'width': 4, 'values': '{"entity_restrict":"2"}'},
+      {'id': 2, 'form_id': 50, 'section_id': 500, 'name': 'Observações', 'fieldtype': 'textarea', 'required': false, 'show_rule': 1, 'row': 3, 'col': 0, 'width': 4},
     ],
     'conditions': const [],
     'targets': [

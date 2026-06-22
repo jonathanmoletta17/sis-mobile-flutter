@@ -92,7 +92,11 @@ class SisChecklistPreparedSubmission {
     String? formName,
     String? targetName,
   }) {
-    final name = targetName != null ? 'Checklist $targetName' : 'Checklist SIS';
+    final baseName =
+        targetName != null ? 'Checklist $targetName' : 'Checklist SIS';
+    final programada = _findProgramadaAnswer(catalog);
+    final name =
+        programada.isNotEmpty ? '$baseName - $programada' : baseName;
     return {
       'name': name,
       'content': toTicketContent(catalog, formName: formName, targetName: targetName),
@@ -100,6 +104,18 @@ class SisChecklistPreparedSubmission {
       'itilcategories_id': categoryId,
       'type': 1,
     };
+  }
+
+  String _findProgramadaAnswer(SisChecklistCatalog catalog) {
+    for (final q in catalog.questionsForForm(formId)) {
+      if (q.name == 'Checklist Programada' && q.isGlpiSelect) {
+        final val = answers[q.id];
+        if (val != null && val.toString().trim().isNotEmpty) {
+          return val.toString().trim();
+        }
+      }
+    }
+    return '';
   }
 }
 

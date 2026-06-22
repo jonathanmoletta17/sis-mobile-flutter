@@ -283,6 +283,56 @@ void main() {
       expect(find.byKey(const Key('checklist_review_button')), findsOneWidget);
     });
 
+    testWidgets('glpiselect sem ticketSearcher mostra info box (nao interativo)', (tester) async {
+      // Sem ticketSearcher, o campo glpiselect cai no estado informativo padrão.
+      // O catalog de teste nao tem glpiselect; verificamos que o form abre normal.
+      await tester.pumpWidget(MaterialApp(
+        home: SisChecklistFormScreen(catalog: _catalog(), formId: 50, targetId: 341),
+      ));
+      await tester.pump();
+      expect(find.byKey(const Key('checklist_review_button')), findsOneWidget);
+      expect(find.byKey(const Key('checklist_glpiselect_field')), findsNothing);
+    });
+
+    testWidgets('glpiselect com ticketSearcher mostra campo interativo', (tester) async {
+      // Catalog com pergunta glpiselect; com ticketSearcher, deve aparecer o campo.
+      final catalogComGlpiselect = SisChecklistCatalog.fromMap({
+        'schema_version': 'test',
+        'source_snapshot_sha256': 'test',
+        'forms': [
+          {'id': 50, 'name': 'CHECKLIST HIDRAULICO', 'is_active': true, 'is_visible': true, 'helpdesk_home': true, 'profile_ids': [4], 'group_ids': [22]},
+        ],
+        'sections': [
+          {'id': 500, 'form_id': 50, 'name': 'Dados', 'order': 1},
+        ],
+        'questions': [
+          {'id': 1, 'form_id': 50, 'section_id': 500, 'name': 'Local', 'fieldtype': 'select', 'required': true, 'show_rule': 1, 'row': 0, 'col': 0, 'width': 4, 'values': '["A","B"]'},
+          {'id': 4, 'form_id': 50, 'section_id': 500, 'name': 'Checklist Programada', 'fieldtype': 'glpiselect', 'itemtype': 'Ticket', 'required': false, 'show_rule': 1, 'row': 1, 'col': 0, 'width': 4, 'values': '{"entity_restrict":"2"}'},
+        ],
+        'conditions': const [],
+        'targets': [
+          {'id': 341, 'form_id': 50, 'name': 'HIDRAULICO ALA RESIDENCIAL', 'destination_entity_value': 58, 'category_rule': 2, 'category_id': 151, 'location_rule': 2, 'urgency_rule': 1, 'type_rule': 1, 'show_rule': 2},
+        ],
+        'categories': [
+          {'id': 151, 'name': 'Hidraulico', 'completename': 'Manutencao > Checklist > Hidraulico', 'parent_id': 147, 'level': 3},
+        ],
+      });
+
+      Future<List<Map<String, dynamic>>> fakeSearcher(String q) async => const [];
+
+      await tester.pumpWidget(MaterialApp(
+        home: SisChecklistFormScreen(
+          catalog: catalogComGlpiselect,
+          formId: 50,
+          targetId: 341,
+          ticketSearcher: fakeSearcher,
+        ),
+      ));
+      await tester.pump();
+      expect(find.byKey(const Key('checklist_glpiselect_field')), findsOneWidget);
+      expect(find.text('Selecionar chamado...'), findsOneWidget);
+    });
+
     testWidgets('submission disabled shows review button, not send', (tester) async {
       await tester.pumpWidget(MaterialApp(
         home: SisChecklistFormScreen(catalog: _catalog(), formId: 50, targetId: 341),

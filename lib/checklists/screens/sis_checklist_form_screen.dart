@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../checklist_catalog.dart';
@@ -20,6 +22,7 @@ class SisChecklistFormScreen extends StatefulWidget {
     this.submissionEnabled = false,
     this.onSubmit,
     this.preselectedType,
+    this.ticketSearcher,
   });
 
   final SisChecklistCatalog catalog;
@@ -32,6 +35,10 @@ class SisChecklistFormScreen extends StatefulWidget {
   /// "Checklist" do formulario. Permite que o usuario escolha o tipo antes de
   /// abrir o form, replicando o fluxo do helpdesk web do GLPI.
   final String? preselectedType;
+
+  /// Busca de chamados para o campo "Checklist Programada" (glpiselect/Ticket).
+  /// Quando presente, o campo exibe um seletor interativo com busca por titulo.
+  final Future<List<Map<String, dynamic>>> Function(String query)? ticketSearcher;
 
   /// Callback de submissao real. Recebe a submissao preparada e devolve um
   /// mapa de resultado da mutacao.
@@ -183,6 +190,7 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
           question: question,
           value: _answers[question.id],
           onChanged: (value) => _setAnswer(question.id, value),
+          glpiSelectBuilder: _glpiSelectBuilder,
         ));
       }
     }
@@ -234,5 +242,190 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
     } finally {
       if (mounted) setState(() => _submitting = false);
     }
+  }
+
+  Widget Function(SisChecklistQuestion, dynamic, ValueChanged<dynamic>)?
+  get _glpiSelectBuilder {
+    final searcher = widget.ticketSearcher;
+    if (searcher == null) return null;
+    return (question, value, onChanged) => _GlpiTicketSelectField(
+      question: question,
+      value: value,
+      onChanged: onChanged,
+      ticketSearcher: searcher,
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Widget de seleção de chamado (glpiselect/Ticket)
+// ---------------------------------------------------------------------------
+
+class _GlpiTicketSelectField extends StatelessWidget {
+  const _GlpiTicketSelectField({
+    required this.question,
+    required this.value,
+    required this.onChanged,
+    required this.ticketSearcher,
+  });
+
+  final SisChecklistQuestion question;
+  final dynamic value;
+  final ValueChanged<dynamic> onChanged;
+  final Future<List<Map<String, dynamic>>> Function(String) ticketSearcher;
+
+  Future<void> _openSearch(BuildContext context) async {
+    final result = await showModalBottomSheet<Map<String, dynamic>>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => _TicketSearchSheet(searcher: ticketSearcher),
+    );
+    if (result != null) {
+      onChanged(result['name']?.toString() ?? '');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final hasValue = value != null && value.toString().isNotEmpty;
+    return InkWell(
+      key: const Key('checklist_glpiselect_field'),
+      onTap: () => _openSearch(context),
+      borderRadius: BorderRadius.circular(4),
+      child: InputDecorator(
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          suffixIcon: Icon(Icons.search),
+          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          isDense: true,
+        ),
+        child: Text(
+          hasValue ? value.toString() : 'Selecionar chamado...',
+          style: TextStyle(
+            color: hasValue ? null : Theme.of(context).hintColor,
+          ),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    );
+  }
+}
+
+class _TicketSearchSheet extends StatefulWidget {
+  const _TicketSearchSheet({required this.searcher});
+
+  final Future<List<Map<String, dynamic>>> Function(String) searcher;
+
+  @override
+  State<_TicketSearchSheet> createState() => _TicketSearchSheetState();
+}
+
+class _TicketSearchSheetState extends State<_TicketSearchSheet> {
+  final _controller = TextEditingController();
+  Timer? _debounce;
+  List<Map<String, dynamic>> _results = const [];
+  bool _loading = false;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _search('');
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onQueryChanged(String query) {
+    _debounce?.cancel();
+    _debounce = Timer(
+      const Duration(milliseconds: 400),
+      () => _search(query),
+    );
+  }
+
+  Future<void> _search(String query) async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final results = await widget.searcher(query);
+      if (mounted) setState(() { _results = results; _loading = false; });
+    } catch (_) {
+      if (mounted) {
+        setState(() { _error = 'Falha ao buscar chamados.'; _loading = false; });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
+    final sheetHeight = MediaQuery.of(context).size.height * 0.65;
+    return Padding(
+      padding: EdgeInsets.only(bottom: bottom),
+      child: SizedBox(
+        height: sheetHeight,
+        child: Column(
+          children: [
+            const SizedBox(height: 8),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Theme.of(context).dividerColor,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              child: TextField(
+                controller: _controller,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  hintText: 'Pesquisar chamado...',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
+                onChanged: _onQueryChanged,
+              ),
+            ),
+            Expanded(
+              child: _loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _error != null
+                  ? Center(child: Text(_error!))
+                  : _results.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'Nenhum chamado encontrado.',
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: _results.length,
+                      itemBuilder: (ctx, i) {
+                        final ticket = _results[i];
+                        final id = ticket['id'];
+                        final name = ticket['name']?.toString() ?? '';
+                        return ListTile(
+                          key: Key('ticket_result_$id'),
+                          title: Text(name, overflow: TextOverflow.ellipsis),
+                          subtitle: Text('#$id'),
+                          onTap: () => Navigator.of(ctx).pop(ticket),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

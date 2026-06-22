@@ -114,6 +114,24 @@ class AppState extends ChangeNotifier {
     return result;
   }
 
+  /// Busca chamados para o campo "Checklist Programada" (glpiselect/Ticket).
+  /// Usa a sessão ativa; retorna lista de {id, name}.
+  Future<List<Map<String, dynamic>>> searchTicketsForChecklist(
+    String query,
+  ) async {
+    final token = _sessionToken;
+    if (token == null || token.isEmpty) return const [];
+    try {
+      return await _apiService.searchTicketsForGlpiSelect(
+        token,
+        query: query,
+      );
+    } catch (e) {
+      debugPrint('[AppState] searchTicketsForChecklist erro: $e');
+      return const [];
+    }
+  }
+
   /// Papel operacional resolvido a partir do perfil GLPI ativo e dos grupos da
   /// sessão. Usado pelo policy layer (PermissionService, TicketQueueFilter) e
   /// pelas telas que precisam de decisões baseadas em papel + domínio de ticket.

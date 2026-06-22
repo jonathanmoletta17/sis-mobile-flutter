@@ -42,6 +42,7 @@ class SisChecklistEntryCard extends StatelessWidget {
               userGroupIds: userGroupIds,
               submissionEnabled: GlpiConfig.sisChecklistSubmissionEnabled,
               onSubmit: appState.submitChecklist,
+              ticketSearcher: appState.searchTicketsForChecklist,
             ),
           ),
         ),

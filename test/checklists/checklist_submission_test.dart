@@ -22,6 +22,8 @@ SisChecklistCatalog _catalog() {
       {'id': 2, 'form_id': 50, 'section_id': 500, 'name': 'Detalhe', 'fieldtype': 'textarea', 'required': true, 'show_rule': 2, 'row': 2, 'col': 0, 'width': 4},
       // anexo opcional
       {'id': 3, 'form_id': 50, 'section_id': 500, 'name': 'Foto', 'fieldtype': 'file', 'required': false, 'show_rule': 1, 'row': 3, 'col': 0, 'width': 4},
+      // chamado programado (glpiselect/Ticket) — opcional, nao cria vinculo
+      {'id': 4, 'form_id': 50, 'section_id': 500, 'name': 'Checklist Programada', 'fieldtype': 'glpiselect', 'itemtype': 'Ticket', 'required': false, 'show_rule': 1, 'row': 4, 'col': 0, 'width': 4, 'values': '{"entity_restrict":"2"}'},
     ],
     'conditions': [
       {'id': 9001, 'itemtype': 'PluginFormcreatorQuestion', 'items_id': 2, 'source_question_id': 1, 'show_condition': 1, 'show_value': 'B', 'show_logic': 1, 'order': 1},
@@ -155,5 +157,42 @@ void main() {
     );
     final input = result.toTicketInput(catalog: _catalog());
     expect(input['name'], 'Checklist SIS');
+  });
+
+  test('toTicketInput inclui Checklist Programada no nome quando preenchida', () {
+    final result = _preparer().prepare(
+      formId: 50,
+      targetId: 341,
+      answers: {0: 'PREVENTIVA', 1: 'A', 4: '19-05 as 09:00 CALICA'},
+    );
+    final input = result.toTicketInput(
+      catalog: _catalog(),
+      targetName: 'HIDRAULICO ALA RESIDENCIAL',
+    );
+    expect(input['name'], 'Checklist HIDRAULICO ALA RESIDENCIAL - 19-05 as 09:00 CALICA');
+  });
+
+  test('toTicketInput sem Checklist Programada usa nome base sem sufixo', () {
+    final result = _preparer().prepare(
+      formId: 50,
+      targetId: 341,
+      answers: {0: 'PREVENTIVA', 1: 'A'},
+    );
+    final input = result.toTicketInput(
+      catalog: _catalog(),
+      targetName: 'HIDRAULICO ALA RESIDENCIAL',
+    );
+    expect(input['name'], 'Checklist HIDRAULICO ALA RESIDENCIAL');
+  });
+
+  test('glpiselect nao bloqueia review (campo nao obrigatorio)', () {
+    // Q4 "Checklist Programada" e opcional — form pode ser revisado sem ela
+    final result = _preparer().prepare(
+      formId: 50,
+      targetId: 341,
+      answers: {1: 'A'},
+    );
+    expect(result.canReview, isTrue);
+    expect(result.missingRequiredQuestionIds, isEmpty);
   });
 }
