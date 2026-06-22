@@ -52,8 +52,9 @@ SisChecklistCatalog _previewCatalog() {
       {'id': 500, 'form_id': 50, 'name': 'Dados Gerais', 'order': 1},
     ],
     'questions': [
-      {'id': 1, 'form_id': 50, 'section_id': 500, 'name': 'Local', 'fieldtype': 'select', 'required': true, 'show_rule': 1, 'row': 0, 'col': 0, 'width': 4, 'values': '["ALA RESIDENCIAL","ALA GOVERNAMENTAL"]'},
-      {'id': 2, 'form_id': 50, 'section_id': 500, 'name': 'Observações', 'fieldtype': 'textarea', 'required': false, 'show_rule': 1, 'row': 1, 'col': 0, 'width': 4},
+      {'id': 0, 'form_id': 50, 'section_id': 500, 'name': 'Checklist', 'fieldtype': 'select', 'required': false, 'show_rule': 1, 'row': 0, 'col': 0, 'width': 4, 'values': '["CORRETIVA","PREVENTIVA"]', 'default_values': 'PREVENTIVA'},
+      {'id': 1, 'form_id': 50, 'section_id': 500, 'name': 'Local', 'fieldtype': 'select', 'required': true, 'show_rule': 1, 'row': 1, 'col': 0, 'width': 4, 'values': '["ALA RESIDENCIAL","ALA GOVERNAMENTAL"]'},
+      {'id': 2, 'form_id': 50, 'section_id': 500, 'name': 'Observações', 'fieldtype': 'textarea', 'required': false, 'show_rule': 1, 'row': 2, 'col': 0, 'width': 4},
     ],
     'conditions': const [],
     'targets': [
