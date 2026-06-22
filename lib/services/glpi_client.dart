@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
 import '../catalog/governed_service_catalog.dart';
+import '../checklists/checklist_catalog.dart';
+import '../checklists/checklist_submission.dart';
 import '../config/glpi_config.dart';
 import '../models/glpi_status.dart';
 import '../models/glpi_user_ref.dart';
@@ -2053,6 +2055,152 @@ class GlpiClient {
       );
       if (_isSessionInvalidException(e)) rethrow;
       return false;
+    }
+  }
+
+  /// Submissao FormCreator de checklist. Bloqueada por padrao: so executa quando
+  /// `SIS_ENABLE_CHECKLISTS_SUBMISSION=true` no app E o Worker SIS permite a rota
+  /// (`ALLOW_FORMCREATOR_SUBMISSION=true`), em ambiente autorizado. Anexos ficam
+  /// bloqueados ate o contrato de arquivo ser validado em sandbox.
+  ///
+  /// O app NAO envia App-Token: o Worker SIS injeta o segredo upstream.
+  Future<Map<String, dynamic>> submitFormCreatorAnswer({
+    required SisChecklistPreparedSubmission submission,
+    required String sessionToken,
+  }) async {
+    if (!GlpiConfig.sisChecklistSubmissionEnabled) {
+      return {
+        'success': false,
+        'blocked': true,
+        'message': 'Submissao de checklist desabilitada no app.',
+      };
+    }
+    if (sessionToken.isEmpty) {
+      return {
+        'success': false,
+        'blocked': true,
+        'message': 'Sessao GLPI ausente para submissao de checklist.',
+      };
+    }
+    if (submission.hasAttachments) {
+      return {
+        'success': false,
+        'blocked': true,
+        'message':
+            'Submissao com anexos de checklist exige validacao sandbox antes de habilitar.',
+      };
+    }
+
+    try {
+      final uri = Uri.parse('${GlpiConfig.baseUrl}/PluginFormcreatorFormAnswer');
+      final response = await http
+          .post(
+            uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Session-Token': sessionToken,
+            },
+            body: jsonEncode({'input': submission.toFormCreatorInput()}),
+          )
+          .timeout(GlpiConfig.requestTimeout);
+
+      _logResponse('FORMCREATOR_SUBMIT', response);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        dynamic data;
+        if (response.body.isNotEmpty) {
+          data = jsonDecode(response.body);
+        }
+        final ticketId = (data is Map ? data['id'] : null)?.toString();
+        return {'success': true, 'ticket_id': ticketId, 'raw': data};
+      }
+
+      if (_isAuthError(response.statusCode)) {
+        throw _authException(response);
+      }
+
+      return {
+        'success': false,
+        'message': 'GLPI respondeu HTTP ${response.statusCode}',
+        'status_code': response.statusCode,
+        'body': response.body,
+      };
+    } catch (e) {
+      if (_isSessionInvalidException(e)) rethrow;
+      return {'success': false, 'message': 'Falha ao submeter checklist: $e'};
+    }
+  }
+
+  /// Submissao de checklist via `POST /Ticket`. Usado quando FormCreator REST nao
+  /// esta disponivel nesta versao do GLPI. O ticket recebe as respostas visiveis
+  /// formatadas em HTML no campo `content`, com a categoria e entidade derivadas
+  /// do target escolhido pelo operador — o que garante disparo correto das
+  /// RuleTickets de atribuicao de grupo (CC-MANUTENCAO).
+  Future<Map<String, dynamic>> submitChecklistAsTicket({
+    required SisChecklistPreparedSubmission submission,
+    required String sessionToken,
+    required SisChecklistCatalog catalog,
+    String? formName,
+    String? targetName,
+  }) async {
+    if (!GlpiConfig.sisChecklistSubmissionEnabled) {
+      return {
+        'success': false,
+        'blocked': true,
+        'message': 'Submissao de checklist desabilitada no app.',
+      };
+    }
+    if (sessionToken.isEmpty) {
+      return {
+        'success': false,
+        'blocked': true,
+        'message': 'Sessao GLPI ausente para submissao de checklist.',
+      };
+    }
+
+    try {
+      final uri = Uri.parse('${GlpiConfig.baseUrl}/Ticket');
+      final ticketInput = submission.toTicketInput(
+        catalog: catalog,
+        formName: formName,
+        targetName: targetName,
+      );
+      final response = await http
+          .post(
+            uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Session-Token': sessionToken,
+            },
+            body: jsonEncode({'input': ticketInput}),
+          )
+          .timeout(GlpiConfig.requestTimeout);
+
+      _logResponse('CHECKLIST_TICKET_SUBMIT', response);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        dynamic data;
+        if (response.body.isNotEmpty) data = jsonDecode(response.body);
+        final ticketId = (data is Map ? data['id'] : null)?.toString();
+        return {'success': true, 'ticket_id': ticketId, 'raw': data};
+      }
+
+      if (_isAuthError(response.statusCode)) throw _authException(response);
+
+      return {
+        'success': false,
+        'message': 'GLPI respondeu HTTP ${response.statusCode}',
+        'status_code': response.statusCode,
+        'body': response.body,
+      };
+    } catch (e) {
+      if (_isSessionInvalidException(e)) rethrow;
+      return {
+        'success': false,
+        'message': 'Erro ao criar ticket de checklist: $e',
+      };
     }
   }
 }

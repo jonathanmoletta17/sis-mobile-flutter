@@ -1,0 +1,112 @@
+import 'package:flutter/material.dart';
+
+import '../checklist_catalog.dart';
+import '../checklist_submission.dart';
+import 'sis_checklist_form_screen.dart';
+
+/// Superficie de entrada dos checklists especializados. Lista os forms que o
+/// GLPI atribui ao usuario via perfil OU grupo (OR semantico, espelhando
+/// `access_rights=2` do FormCreator — `formcreator_forms_profiles` + `Form_Group`).
+class SisChecklistCatalogScreen extends StatelessWidget {
+  const SisChecklistCatalogScreen({
+    super.key,
+    required this.catalog,
+    required this.activeProfileId,
+    this.userGroupIds = const [],
+    this.submissionEnabled = false,
+    this.onSubmit,
+  });
+
+  final SisChecklistCatalog catalog;
+  final int? activeProfileId;
+
+  /// Grupos do usuario na sessao GLPI (`glpigroups` de `getFullSession`).
+  /// Passado como complemento ao perfil para gate OR: acesso por perfil OU grupo.
+  final List<int> userGroupIds;
+
+  final bool submissionEnabled;
+  final Future<Map<String, dynamic>> Function(SisChecklistPreparedSubmission)? onSubmit;
+
+  @override
+  Widget build(BuildContext context) {
+    final forms = catalog.formsVisibleToUser(activeProfileId, userGroupIds);
+    return Scaffold(
+      appBar: AppBar(title: const Text('Checklists')),
+      body: forms.isEmpty
+          ? const _EmptyState()
+          : ListView(
+              padding: const EdgeInsets.all(12),
+              children: [
+                for (final form in forms) _FormGroup(form: form, screen: this),
+              ],
+            ),
+    );
+  }
+}
+
+class _FormGroup extends StatelessWidget {
+  const _FormGroup({required this.form, required this.screen});
+
+  final SisChecklistForm form;
+  final SisChecklistCatalogScreen screen;
+
+  @override
+  Widget build(BuildContext context) {
+    final targets = screen.catalog.targetsForForm(form.id);
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+            child: Text(form.name, style: Theme.of(context).textTheme.titleMedium),
+          ),
+          for (final target in targets)
+            ListTile(
+              key: Key('checklist_target_${target.id}'),
+              title: Text(target.name),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => SisChecklistFormScreen(
+                    catalog: screen.catalog,
+                    formId: form.id,
+                    targetId: target.id,
+                    submissionEnabled: screen.submissionEnabled,
+                    onSubmit: screen.onSubmit,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  const _EmptyState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      key: const Key('checklist_empty_state'),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.checklist_rtl, size: 48),
+            const SizedBox(height: 12),
+            Text(
+              'Nenhum checklist disponível para o seu perfil.',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

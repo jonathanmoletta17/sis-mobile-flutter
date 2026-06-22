@@ -1,11 +1,13 @@
 import {MOBILE_METADATA_CATALOG} from './metadata_catalog.js';
+import {SIS_CHECKLIST_CATALOG} from './checklist_catalog.js';
 
 const GLPI_ORIGIN = 'http://cau.ppiratini.intra.rs.gov.br';
 const GLPI_API_PREFIX = '/sis/apirest.php';
 const MOBILE_METADATA_PATH = '/metadata/mobile/sis/catalog';
+const MOBILE_CHECKLIST_METADATA_PATH = '/metadata/mobile/sis/checklists';
 
 const READ_ONLY_ITEM_PATTERN =
-  /^\/(?:initSession|search\/Ticket|Ticket(?:\/\d+(?:\/(?:TicketFollowup|ITILSolution|Ticket_User|Group_Ticket|Document_Item|Document|Log))?)?|Document(?:\/\d+)?|Document_Item|ITILFollowup\/\d+\/Document_Item|ITILSolution\/\d+\/Document_Item|User(?:\/\d+)?|Group(?:\/\d+)?|Entity|Location|RequestType|ITILCategory|listSearchOptions\/Ticket|getFullSession|getActiveProfile|getMyProfiles|getMyEntities|PluginFormcreator(?:Form|Category|Section|Question|TargetTicket|Form_Profile)(?:\/\d+)?)(?:$|[/?])/;
+  /^\/(?:initSession|search\/Ticket|Ticket(?:\/\d+(?:\/(?:TicketFollowup|ITILSolution|Ticket_User|Group_Ticket|Document_Item|Document|Log))?)?|Document(?:\/\d+)?|Document_Item|ITILFollowup\/\d+\/Document_Item|ITILSolution\/\d+\/Document_Item|User(?:\/\d+)?|Group(?:\/\d+)?|Entity|Location|RequestType|ITILCategory|listSearchOptions\/Ticket|getFullSession|getActiveProfile|getMyProfiles|getMyEntities|PluginFormcreator(?:Form|Category|Section|Question|TargetTicket|Form_Profile|Form_Group)(?:\/\d+)?|search\/PluginGenericobjectConservacao|PluginGenericobjectConservacao(?:\/\d+)?)(?:$|[/?])/;
 
 // Leituras de diretório (User/Group). O perfil helpdesk (Solicitante) não tem
 // direito REST de ler User/Group — mas o formulário GLPI permite via dropdown
@@ -44,6 +46,10 @@ const worker = {
       return metadataCatalogResponse(request);
     }
 
+    if (incoming.pathname === MOBILE_CHECKLIST_METADATA_PATH) {
+      return checklistCatalogResponse(request);
+    }
+
     if (!env.GLPI) {
       return jsonError(500, 'SIS GLPI VPC binding is not configured.');
     }
@@ -51,7 +57,7 @@ const worker = {
     const glpiPath = normalizeGlpiPath(incoming.pathname);
     const apiPath = glpiPath.slice(GLPI_API_PREFIX.length) || '/';
 
-    if (!isAllowedRequest(request.method, apiPath)) {
+    if (!isAllowedRequest(request.method, apiPath, env)) {
       return jsonError(403, 'Endpoint blocked by SIS Worker allowlist.');
     }
 
@@ -169,12 +175,20 @@ function normalizeGlpiPath(pathname) {
   return `${GLPI_API_PREFIX}${pathname.startsWith('/') ? pathname : `/${pathname}`}`;
 }
 
-function isAllowedRequest(method, apiPath) {
+function isAllowedRequest(method, apiPath, env = {}) {
   if (method === 'GET') {
     return GET_ALLOWLIST.has(apiPath) || READ_ONLY_ITEM_PATTERN.test(apiPath);
   }
   if (method === 'POST') {
-    return POST_ALLOWLIST.has(apiPath) || SIS_ACTION_POST_PATTERNS.some((pattern) => pattern.test(apiPath));
+    if (POST_ALLOWLIST.has(apiPath) || SIS_ACTION_POST_PATTERNS.some((pattern) => pattern.test(apiPath))) {
+      return true;
+    }
+    // Submissao FormCreator de checklist: bloqueada por padrao. So passa quando o
+    // ambiente declara explicitamente ALLOW_FORMCREATOR_SUBMISSION=true.
+    return (
+      env.ALLOW_FORMCREATOR_SUBMISSION === 'true' &&
+      apiPath === '/PluginFormcreatorFormAnswer'
+    );
   }
   if (method === 'PUT') {
     return SIS_ACTION_PUT_PATTERN.test(apiPath);
@@ -187,7 +201,39 @@ export const __test = {
   isAllowedRequest,
   normalizeGlpiPath,
   metadataCatalogResponse,
+  checklistCatalogResponse,
 };
+
+function checklistCatalogResponse(request) {
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return jsonError(405, 'Checklist metadata catalog is read-only.');
+  }
+
+  const etag = quotedEtag(SIS_CHECKLIST_CATALOG.source_snapshot_sha256);
+  if (request.headers.get('If-None-Match') === etag) {
+    return withCors(new Response(null, {
+      status: 304,
+      headers: checklistMetadataHeaders(etag),
+    }));
+  }
+
+  const body = JSON.stringify(SIS_CHECKLIST_CATALOG);
+  return withCors(new Response(request.method === 'HEAD' ? null : body, {
+    status: 200,
+    headers: {
+      ...checklistMetadataHeaders(etag),
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+  }));
+}
+
+function checklistMetadataHeaders(etag) {
+  return {
+    'Cache-Control': 'private, max-age=300',
+    'ETag': etag,
+    'X-GLPI-Snapshot-Hash': SIS_CHECKLIST_CATALOG.source_snapshot_sha256 || '',
+  };
+}
 
 function metadataCatalogResponse(request) {
   if (request.method !== 'GET' && request.method !== 'HEAD') {

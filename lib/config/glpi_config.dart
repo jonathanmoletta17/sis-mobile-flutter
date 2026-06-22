@@ -43,4 +43,24 @@ class GlpiConfig {
         lower.contains('/glpi/apirest.php') ||
         lower.contains('cau.ppiratini.intra.rs.gov.br/glpi');
   }
+
+  // --- Checklists SIS (FormCreator) ---
+
+  /// Habilita o caminho de submissao FormCreator de checklist no app.
+  /// Default desligado; so executa de fato quando o Worker tambem permite
+  /// (`ALLOW_FORMCREATOR_SUBMISSION=true` no Worker) e em ambiente autorizado.
+  static bool get sisChecklistSubmissionEnabled =>
+      _flag('SIS_ENABLE_CHECKLISTS_SUBMISSION');
+
+  static String? _env(String key) {
+    if (!dotenv.isInitialized) return null;
+    return dotenv.maybeGet(key);
+  }
+
+  static bool _flag(String key) {
+    final raw = _env(key);
+    if (raw == null) return false;
+    final normalized = raw.trim().toLowerCase();
+    return normalized == 'true' || normalized == '1' || normalized == 'yes';
+  }
 }

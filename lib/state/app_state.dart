@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sis_mobile_flutter/utils/html_decode_utils.dart';
 import '../services/glpi_client.dart';
 import '../services/glpi_client_support.dart';
@@ -9,8 +10,8 @@ import '../models/glpi_user_ref.dart';
 import '../models/operational_role.dart';
 import '../models/ticket_message.dart';
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'app_state_attachment_support.dart';
 import 'app_state_message_support.dart';
@@ -18,6 +19,8 @@ import 'app_state_solution_support.dart';
 import 'app_state_storage.dart';
 import 'app_state_ticket_support.dart';
 import '../services/glpi_rules_client.dart';
+import '../checklists/checklist_catalog.dart';
+import '../checklists/checklist_submission.dart';
 
 class AppState extends ChangeNotifier {
   // --- Dependências ---
@@ -61,6 +64,55 @@ class AppState extends ChangeNotifier {
   List<Map<String, dynamic>> get availableEntities =>
       List.unmodifiable(_availableEntities);
   List<GlpiTicket> get pendingTickets => _pendingTickets;
+
+  // --- Catalogo read-only de checklists (FormCreator) ---
+  static const _checklistAssetPath = 'assets/sis_checklists_catalog.json';
+
+  SisChecklistCatalog? _checklistCatalog;
+  String? _checklistCatalogError;
+
+  SisChecklistCatalog? get checklistCatalog => _checklistCatalog;
+  String? get checklistCatalogError => _checklistCatalogError;
+
+  /// Carrega o catalogo de checklists do asset embarcado. Tolerante a falha:
+  /// nunca interrompe o fluxo de login. O gate de visibilidade e puramente
+  /// baseado em dados (perfil ativo vs `profile_ids` por form do GLPI).
+  Future<void> loadChecklistCatalog() async {
+    try {
+      final jsonStr = await rootBundle.loadString(_checklistAssetPath);
+      final data = (jsonDecode(jsonStr) as Map).cast<String, dynamic>();
+      _checklistCatalog = SisChecklistCatalog.fromMap(data);
+      _checklistCatalogError = null;
+    } catch (e) {
+      _checklistCatalog = null;
+      _checklistCatalogError = 'Catalogo de checklists indisponivel.';
+    }
+    notifyListeners();
+  }
+
+  /// Submete um checklist como ticket GLPI. As respostas visiveis vao no campo
+  /// `content` do ticket (HTML); categoria e entidade vem do target escolhido,
+  /// garantindo disparo das RuleTickets de atribuicao de grupo (CC-MANUTENCAO).
+  /// So executa quando `SIS_ENABLE_CHECKLISTS_SUBMISSION=true`.
+  Future<Map<String, dynamic>> submitChecklist(
+    SisChecklistPreparedSubmission submission,
+  ) async {
+    final catalog = checklistCatalog;
+    if (catalog == null) {
+      return {'success': false, 'blocked': true, 'message': 'Catálogo de checklist não carregado.'};
+    }
+    final result = await _apiService.submitChecklistAsTicket(
+      submission: submission,
+      sessionToken: _sessionToken ?? '',
+      catalog: catalog,
+      formName: catalog.formById(submission.formId)?.name,
+      targetName: catalog.targetById(submission.targetId)?.name,
+    );
+    if (result['success'] == true) {
+      unawaited(synchronizeTickets());
+    }
+    return result;
+  }
 
   /// Papel operacional resolvido a partir do perfil GLPI ativo e dos grupos da
   /// sessão. Usado pelo policy layer (PermissionService, TicketQueueFilter) e
@@ -312,6 +364,7 @@ class AppState extends ChangeNotifier {
 
         notifyListeners();
         unawaited(synchronizeTickets());
+        unawaited(loadChecklistCatalog());
         return true;
       } catch (e) {
         debugPrint('❌ Falha ao validar sessão após login: $e');
