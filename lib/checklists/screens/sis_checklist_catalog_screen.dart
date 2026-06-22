@@ -44,15 +44,39 @@ class SisChecklistCatalogScreen extends StatelessWidget {
   }
 }
 
-class _FormGroup extends StatelessWidget {
+class _FormGroup extends StatefulWidget {
   const _FormGroup({required this.form, required this.screen});
 
   final SisChecklistForm form;
   final SisChecklistCatalogScreen screen;
 
   @override
+  State<_FormGroup> createState() => _FormGroupState();
+}
+
+class _FormGroupState extends State<_FormGroup> {
+  // Tipo selecionado pelo operador antes de abrir o form. Espelha a primeira
+  // pergunta "Checklist" que aparece em todos os forms (default: PREVENTIVA).
+  String _selectedType = 'PREVENTIVA';
+
+  void _openTarget(BuildContext context, SisChecklistTarget target) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => SisChecklistFormScreen(
+          catalog: widget.screen.catalog,
+          formId: widget.form.id,
+          targetId: target.id,
+          submissionEnabled: widget.screen.submissionEnabled,
+          onSubmit: widget.screen.onSubmit,
+          preselectedType: _selectedType,
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final targets = screen.catalog.targetsForForm(form.id);
+    final targets = widget.screen.catalog.targetsForForm(widget.form.id);
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: Column(
@@ -60,24 +84,41 @@ class _FormGroup extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-            child: Text(form.name, style: Theme.of(context).textTheme.titleMedium),
+            child: Text(
+              widget.form.name,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+            child: SegmentedButton<String>(
+              key: Key('checklist_type_${widget.form.id}'),
+              segments: const [
+                ButtonSegment(
+                  value: 'PREVENTIVA',
+                  label: Text('Preventiva'),
+                  icon: Icon(Icons.check_circle_outline, size: 16),
+                ),
+                ButtonSegment(
+                  value: 'CORRETIVA',
+                  label: Text('Corretiva'),
+                  icon: Icon(Icons.build_outlined, size: 16),
+                ),
+              ],
+              selected: {_selectedType},
+              onSelectionChanged: (selection) =>
+                  setState(() => _selectedType = selection.first),
+              style: const ButtonStyle(
+                visualDensity: VisualDensity.compact,
+              ),
+            ),
           ),
           for (final target in targets)
             ListTile(
               key: Key('checklist_target_${target.id}'),
               title: Text(target.name),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => SisChecklistFormScreen(
-                    catalog: screen.catalog,
-                    formId: form.id,
-                    targetId: target.id,
-                    submissionEnabled: screen.submissionEnabled,
-                    onSubmit: screen.onSubmit,
-                  ),
-                ),
-              ),
+              onTap: () => _openTarget(context, target),
             ),
         ],
       ),

@@ -11,15 +11,17 @@ SisChecklistCatalog _catalog() {
       {'id': 50, 'name': 'CHECKLIST HIDRAULICO', 'is_active': true, 'is_visible': true, 'helpdesk_home': true, 'profile_ids': [4]},
     ],
     'sections': [
-      {'id': 500, 'form_id': 50, 'name': 'S', 'order': 1},
+      {'id': 500, 'form_id': 50, 'name': 'Dados Gerais', 'order': 1},
     ],
     'questions': [
+      // tipo PREVENTIVA/CORRETIVA — sempre visivel, default=PREVENTIVA
+      {'id': 0, 'form_id': 50, 'section_id': 500, 'name': 'Checklist', 'fieldtype': 'select', 'required': false, 'show_rule': 1, 'row': 0, 'col': 0, 'width': 4, 'values': '["CORRETIVA","PREVENTIVA"]', 'default_values': 'PREVENTIVA'},
       // obrigatoria sempre visivel
-      {'id': 1, 'form_id': 50, 'section_id': 500, 'name': 'Local', 'fieldtype': 'select', 'required': true, 'show_rule': 1, 'row': 0, 'col': 0, 'width': 4, 'values': '["A","B"]'},
+      {'id': 1, 'form_id': 50, 'section_id': 500, 'name': 'Local', 'fieldtype': 'select', 'required': true, 'show_rule': 1, 'row': 1, 'col': 0, 'width': 4, 'values': '["A","B"]'},
       // obrigatoria condicional (so aparece se Q1 == B)
-      {'id': 2, 'form_id': 50, 'section_id': 500, 'name': 'Detalhe', 'fieldtype': 'textarea', 'required': true, 'show_rule': 2, 'row': 1, 'col': 0, 'width': 4},
+      {'id': 2, 'form_id': 50, 'section_id': 500, 'name': 'Detalhe', 'fieldtype': 'textarea', 'required': true, 'show_rule': 2, 'row': 2, 'col': 0, 'width': 4},
       // anexo opcional
-      {'id': 3, 'form_id': 50, 'section_id': 500, 'name': 'Foto', 'fieldtype': 'file', 'required': false, 'show_rule': 1, 'row': 2, 'col': 0, 'width': 4},
+      {'id': 3, 'form_id': 50, 'section_id': 500, 'name': 'Foto', 'fieldtype': 'file', 'required': false, 'show_rule': 1, 'row': 3, 'col': 0, 'width': 4},
     ],
     'conditions': [
       {'id': 9001, 'itemtype': 'PluginFormcreatorQuestion', 'items_id': 2, 'source_question_id': 1, 'show_condition': 1, 'show_value': 'B', 'show_logic': 1, 'order': 1},
@@ -92,5 +94,66 @@ void main() {
       () => _preparer().prepare(formId: 50, targetId: 999, answers: {}),
       throwsA(isA<ArgumentError>()),
     );
+  });
+
+  // --- toTicketContent / toTicketInput ---
+
+  test('toTicketContent inclui resposta Checklist=PREVENTIVA quando inicializada pelo defaultValues', () {
+    // Simula o fluxo: _initDefaultValues() preenche Q0=PREVENTIVA, target condition preenche Q1=A
+    final result = _preparer().prepare(
+      formId: 50,
+      targetId: 341,
+      answers: {0: 'PREVENTIVA', 1: 'A'},
+    );
+    final content = result.toTicketContent(
+      _catalog(),
+      formName: 'CHECKLIST HIDRAULICO',
+      targetName: 'HIDRAULICO ALA RESIDENCIAL',
+    );
+    expect(content, contains('CHECKLIST HIDRAULICO'));
+    expect(content, contains('HIDRAULICO ALA RESIDENCIAL'));
+    expect(content, contains('Checklist:'));
+    expect(content, contains('PREVENTIVA'));
+    expect(content, contains('Local:'));
+    expect(content, contains('A'));
+  });
+
+  test('toTicketContent inclui CORRETIVA quando preselectedType="CORRETIVA"', () {
+    final result = _preparer().prepare(
+      formId: 50,
+      targetId: 341,
+      answers: {0: 'CORRETIVA', 1: 'A'},
+    );
+    final content = result.toTicketContent(_catalog());
+    expect(content, contains('Checklist:'));
+    expect(content, contains('CORRETIVA'));
+    expect(content, isNot(contains('PREVENTIVA')));
+  });
+
+  test('toTicketInput gera payload com name, entities_id, itilcategories_id', () {
+    final result = _preparer().prepare(
+      formId: 50,
+      targetId: 341,
+      answers: {0: 'PREVENTIVA', 1: 'A'},
+    );
+    final input = result.toTicketInput(
+      catalog: _catalog(),
+      formName: 'CHECKLIST HIDRAULICO',
+      targetName: 'HIDRAULICO ALA RESIDENCIAL',
+    );
+    expect(input['name'], 'Checklist HIDRAULICO ALA RESIDENCIAL');
+    expect(input['entities_id'], 58);
+    expect(input['itilcategories_id'], 151);
+    expect(input['type'], 1);
+    expect(input['content'], isA<String>());
+    expect((input['content'] as String), contains('PREVENTIVA'));
+  });
+
+  test('toTicketInput sem targetName usa nome generico', () {
+    final result = _preparer().prepare(
+      formId: 50, targetId: 341, answers: {0: 'PREVENTIVA', 1: 'A'},
+    );
+    final input = result.toTicketInput(catalog: _catalog());
+    expect(input['name'], 'Checklist SIS');
   });
 }

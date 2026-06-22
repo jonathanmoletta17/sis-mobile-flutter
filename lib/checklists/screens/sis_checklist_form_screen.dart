@@ -19,6 +19,7 @@ class SisChecklistFormScreen extends StatefulWidget {
     required this.targetId,
     this.submissionEnabled = false,
     this.onSubmit,
+    this.preselectedType,
   });
 
   final SisChecklistCatalog catalog;
@@ -26,8 +27,14 @@ class SisChecklistFormScreen extends StatefulWidget {
   final int targetId;
   final bool submissionEnabled;
 
-  /// Callback de submissao real (Phase 7). Recebe a submissao preparada e
-  /// devolve um mapa de resultado da mutacao.
+  /// Tipo de manutencao pre-selecionado na tela de catalogo ("PREVENTIVA" ou
+  /// "CORRETIVA"). Quando presente, sobrepoe o defaultValue da pergunta
+  /// "Checklist" do formulario. Permite que o usuario escolha o tipo antes de
+  /// abrir o form, replicando o fluxo do helpdesk web do GLPI.
+  final String? preselectedType;
+
+  /// Callback de submissao real. Recebe a submissao preparada e devolve um
+  /// mapa de resultado da mutacao.
   final Future<Map<String, dynamic>> Function(SisChecklistPreparedSubmission)? onSubmit;
 
   @override
@@ -49,7 +56,32 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
       catalog: widget.catalog,
       conditionEngine: _engine,
     );
+    _initDefaultValues();
     _prefillFromTargetConditions();
+  }
+
+  // Inicializa respostas a partir dos valores padrao das perguntas. Executado
+  // antes do prefill de target para que as condicoes de target possam sobrescrever.
+  // A pergunta "Checklist" (PREVENTIVA/CORRETIVA) usa [preselectedType] se fornecido.
+  void _initDefaultValues() {
+    for (final question in widget.catalog.questionsForForm(widget.formId)) {
+      if (_answers.containsKey(question.id)) continue;
+      final isChecklistTypeField = question.name == 'Checklist' &&
+          question.isSelect &&
+          question.rawValues.contains('PREVENTIVA');
+      final rawDefault = isChecklistTypeField && widget.preselectedType != null
+          ? widget.preselectedType!
+          : question.defaultValues;
+      if (rawDefault.isEmpty) continue;
+      final value = question.isMultiselect
+          ? rawDefault
+                .split(',')
+                .map((s) => s.trim())
+                .where((s) => s.isNotEmpty)
+                .toList()
+          : rawDefault;
+      _answers[question.id] = value;
+    }
   }
 
   // Pre-preenche as perguntas de "Local" (e similares) com base nas condicoes
