@@ -20,6 +20,7 @@ import 'app_state_storage.dart';
 import 'app_state_ticket_support.dart';
 import '../services/glpi_rules_client.dart';
 import '../checklists/checklist_catalog.dart';
+import '../checklists/checklist_option_client.dart';
 import '../checklists/checklist_submission.dart';
 
 class AppState extends ChangeNotifier {
@@ -132,6 +133,28 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  /// Busca itens de conservação física (PluginGenericobjectConservacao) para
+  /// campos glpiselect de checklists. Retorna lista de {id, name}.
+  Future<List<Map<String, dynamic>>> searchConservacaoForChecklist(
+    String query,
+  ) async {
+    final token = _sessionToken;
+    if (token == null || token.isEmpty) return const [];
+    try {
+      final options = await SisChecklistOptionClient().search(
+        itemType: 'PluginGenericobjectConservacao',
+        query: query,
+        sessionToken: token,
+      );
+      return options
+          .map((o) => {'id': o.id, 'name': o.label})
+          .toList(growable: false);
+    } catch (e) {
+      debugPrint('[AppState] searchConservacaoForChecklist erro: $e');
+      return const [];
+    }
+  }
+
   /// Papel operacional resolvido a partir do perfil GLPI ativo e dos grupos da
   /// sessão. Usado pelo policy layer (PermissionService, TicketQueueFilter) e
   /// pelas telas que precisam de decisões baseadas em papel + domínio de ticket.
@@ -226,6 +249,7 @@ class AppState extends ChangeNotifier {
         _isAuthenticated = true;
         _applySessionContext(sessionContext, fallbackUsername: _loggedUsername);
         await _tryLoadRules();
+        unawaited(loadChecklistCatalog());
         _reconcileSelectedTicketEntity(
           preferredId: snapshot.selectedTicketEntityId,
           preferredName: snapshot.selectedTicketEntityName,

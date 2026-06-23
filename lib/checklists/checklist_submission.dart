@@ -161,7 +161,11 @@ class SisChecklistSubmissionPreparer {
       if (question.isFile) {
         fileQuestionIds.add(question.id);
       }
-      if (question.required && _isMissing(answers[question.id])) {
+      final isInventoryLookup = question.isGlpiSelect &&
+          question.itemType == 'PluginGenericobjectConservacao';
+      if (question.required &&
+          !isInventoryLookup &&
+          _isMissing(answers[question.id])) {
         missingRequired.add(question.id);
       }
     }

@@ -23,6 +23,7 @@ class SisChecklistFormScreen extends StatefulWidget {
     this.onSubmit,
     this.preselectedType,
     this.ticketSearcher,
+    this.conservacaoSearcher,
   });
 
   final SisChecklistCatalog catalog;
@@ -37,8 +38,10 @@ class SisChecklistFormScreen extends StatefulWidget {
   final String? preselectedType;
 
   /// Busca de chamados para o campo "Checklist Programada" (glpiselect/Ticket).
-  /// Quando presente, o campo exibe um seletor interativo com busca por titulo.
   final Future<List<Map<String, dynamic>>> Function(String query)? ticketSearcher;
+
+  /// Busca de itens de conservação física para campos glpiselect/PluginGenericobjectConservacao.
+  final Future<List<Map<String, dynamic>>> Function(String query)? conservacaoSearcher;
 
   /// Callback de submissao real. Recebe a submissao preparada e devolve um
   /// mapa de resultado da mutacao.
@@ -73,6 +76,7 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
   void _initDefaultValues() {
     for (final question in widget.catalog.questionsForForm(widget.formId)) {
       if (_answers.containsKey(question.id)) continue;
+      if (question.isGlpiSelect) continue;
       final isChecklistTypeField = question.name == 'Checklist' &&
           question.isSelect &&
           question.rawValues.contains('PREVENTIVA');
@@ -244,41 +248,81 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
     }
   }
 
-  Widget Function(SisChecklistQuestion, dynamic, ValueChanged<dynamic>)?
+  Widget Function(SisChecklistQuestion, dynamic, ValueChanged<dynamic>)
   get _glpiSelectBuilder {
-    final searcher = widget.ticketSearcher;
-    if (searcher == null) return null;
-    return (question, value, onChanged) => _GlpiTicketSelectField(
-      question: question,
-      value: value,
-      onChanged: onChanged,
-      ticketSearcher: searcher,
-    );
+    final ticketSearcher = widget.ticketSearcher;
+    final conservacaoSearcher = widget.conservacaoSearcher;
+    return (question, value, onChanged) {
+      if (question.itemType == 'Ticket' && ticketSearcher != null) {
+        return _GlpiItemSelectField(
+          question: question,
+          value: value,
+          onChanged: onChanged,
+          searcher: ticketSearcher,
+          placeholder: 'Selecionar chamado...',
+          widgetKey: const Key('checklist_glpiselect_field'),
+        );
+      }
+      if (question.itemType == 'PluginGenericobjectConservacao' &&
+          conservacaoSearcher != null) {
+        return _GlpiItemSelectField(
+          question: question,
+          value: value,
+          onChanged: onChanged,
+          searcher: conservacaoSearcher,
+          placeholder: 'Selecionar item de inventário...',
+          widgetKey: Key('checklist_conservacao_${question.id}'),
+        );
+      }
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: InputDecorator(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            isDense: true,
+            prefixIcon: Icon(Icons.inventory_2_outlined),
+          ),
+          child: Text(
+            'Item de inventário — seleção disponível no GLPI web.',
+            style: TextStyle(color: Colors.grey[600], fontSize: 13),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      );
+    };
   }
 }
 
 // ---------------------------------------------------------------------------
-// Widget de seleção de chamado (glpiselect/Ticket)
+// Widget generico de seleção de item glpiselect (Ticket, Conservacao, etc.)
 // ---------------------------------------------------------------------------
 
-class _GlpiTicketSelectField extends StatelessWidget {
-  const _GlpiTicketSelectField({
+class _GlpiItemSelectField extends StatelessWidget {
+  const _GlpiItemSelectField({
     required this.question,
     required this.value,
     required this.onChanged,
-    required this.ticketSearcher,
+    required this.searcher,
+    required this.placeholder,
+    required this.widgetKey,
   });
 
   final SisChecklistQuestion question;
   final dynamic value;
   final ValueChanged<dynamic> onChanged;
-  final Future<List<Map<String, dynamic>>> Function(String) ticketSearcher;
+  final Future<List<Map<String, dynamic>>> Function(String) searcher;
+  final String placeholder;
+  final Key widgetKey;
 
   Future<void> _openSearch(BuildContext context) async {
     final result = await showModalBottomSheet<Map<String, dynamic>>(
       context: context,
       isScrollControlled: true,
-      builder: (_) => _TicketSearchSheet(searcher: ticketSearcher),
+      builder: (_) => _ItemSearchSheet(
+        searcher: searcher,
+        placeholder: placeholder,
+      ),
     );
     if (result != null) {
       onChanged(result['name']?.toString() ?? '');
@@ -289,7 +333,7 @@ class _GlpiTicketSelectField extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasValue = value != null && value.toString().isNotEmpty;
     return InkWell(
-      key: const Key('checklist_glpiselect_field'),
+      key: widgetKey,
       onTap: () => _openSearch(context),
       borderRadius: BorderRadius.circular(4),
       child: InputDecorator(
@@ -300,7 +344,7 @@ class _GlpiTicketSelectField extends StatelessWidget {
           isDense: true,
         ),
         child: Text(
-          hasValue ? value.toString() : 'Selecionar chamado...',
+          hasValue ? value.toString() : placeholder,
           style: TextStyle(
             color: hasValue ? null : Theme.of(context).hintColor,
           ),
@@ -311,16 +355,17 @@ class _GlpiTicketSelectField extends StatelessWidget {
   }
 }
 
-class _TicketSearchSheet extends StatefulWidget {
-  const _TicketSearchSheet({required this.searcher});
+class _ItemSearchSheet extends StatefulWidget {
+  const _ItemSearchSheet({required this.searcher, required this.placeholder});
 
   final Future<List<Map<String, dynamic>>> Function(String) searcher;
+  final String placeholder;
 
   @override
-  State<_TicketSearchSheet> createState() => _TicketSearchSheetState();
+  State<_ItemSearchSheet> createState() => _ItemSearchSheetState();
 }
 
-class _TicketSearchSheetState extends State<_TicketSearchSheet> {
+class _ItemSearchSheetState extends State<_ItemSearchSheet> {
   final _controller = TextEditingController();
   Timer? _debounce;
   List<Map<String, dynamic>> _results = const [];
@@ -358,7 +403,7 @@ class _TicketSearchSheetState extends State<_TicketSearchSheet> {
       if (mounted) setState(() { _results = results; _loading = false; });
     } catch (_) {
       if (mounted) {
-        setState(() { _error = 'Falha ao buscar chamados.'; _loading = false; });
+        setState(() { _error = 'Falha ao buscar itens.'; _loading = false; });
       }
     }
   }
@@ -387,10 +432,10 @@ class _TicketSearchSheetState extends State<_TicketSearchSheet> {
               child: TextField(
                 controller: _controller,
                 autofocus: true,
-                decoration: const InputDecoration(
-                  hintText: 'Pesquisar chamado...',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  hintText: widget.placeholder,
+                  prefixIcon: const Icon(Icons.search),
+                  border: const OutlineInputBorder(),
                   isDense: true,
                 ),
                 onChanged: _onQueryChanged,
@@ -404,21 +449,21 @@ class _TicketSearchSheetState extends State<_TicketSearchSheet> {
                   : _results.isEmpty
                   ? const Center(
                       child: Text(
-                        'Nenhum chamado encontrado.',
+                        'Nenhum item encontrado.',
                         textAlign: TextAlign.center,
                       ),
                     )
                   : ListView.builder(
                       itemCount: _results.length,
                       itemBuilder: (ctx, i) {
-                        final ticket = _results[i];
-                        final id = ticket['id'];
-                        final name = ticket['name']?.toString() ?? '';
+                        final item = _results[i];
+                        final id = item['id'];
+                        final name = item['name']?.toString() ?? '';
                         return ListTile(
-                          key: Key('ticket_result_$id'),
+                          key: Key('item_result_$id'),
                           title: Text(name, overflow: TextOverflow.ellipsis),
                           subtitle: Text('#$id'),
-                          onTap: () => Navigator.of(ctx).pop(ticket),
+                          onTap: () => Navigator.of(ctx).pop(item),
                         );
                       },
                     ),

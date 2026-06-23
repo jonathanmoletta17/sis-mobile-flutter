@@ -341,5 +341,41 @@ void main() {
       expect(find.byKey(const Key('checklist_submit_button')), findsNothing);
       expect(find.byKey(const Key('checklist_status_banner')), findsOneWidget);
     });
+
+    testWidgets('glpiselect PluginGenericobjectConservacao com conservacaoSearcher mostra seletor interativo', (tester) async {
+      final catalogComConservacao = SisChecklistCatalog.fromMap({
+        'schema_version': 'test',
+        'source_snapshot_sha256': 'test',
+        'forms': [
+          {'id': 80, 'name': 'CHECKLIST CALHAS', 'is_active': true, 'is_visible': true, 'helpdesk_home': true, 'profile_ids': [4], 'group_ids': []},
+        ],
+        'sections': [{'id': 800, 'form_id': 80, 'name': 'Calhas', 'order': 1}],
+        'questions': [
+          {'id': 900, 'form_id': 80, 'section_id': 800, 'name': 'Calha Ala Gov', 'fieldtype': 'glpiselect', 'itemtype': 'PluginGenericobjectConservacao', 'required': false, 'show_rule': 1, 'row': 0, 'col': 0, 'width': 4, 'default_values': '299'},
+        ],
+        'conditions': const [],
+        'targets': [
+          {'id': 801, 'form_id': 80, 'name': 'CALHAS ALA GOV', 'destination_entity_value': 58, 'category_rule': 2, 'category_id': 148, 'location_rule': 2, 'urgency_rule': 1, 'type_rule': 1, 'show_rule': 1},
+        ],
+        'categories': [
+          {'id': 148, 'name': 'Calhas', 'completename': 'Manutencao > Checklist > Calhas', 'parent_id': 147, 'level': 3},
+        ],
+      });
+
+      Future<List<Map<String, dynamic>>> fakeConservacaoSearcher(String q) async => const [];
+
+      await tester.pumpWidget(MaterialApp(
+        home: SisChecklistFormScreen(
+          catalog: catalogComConservacao,
+          formId: 80,
+          targetId: 801,
+          conservacaoSearcher: fakeConservacaoSearcher,
+        ),
+      ));
+      await tester.pump();
+      expect(find.byKey(const Key('checklist_conservacao_900')), findsOneWidget);
+      expect(find.text('Selecionar item de inventário...'), findsOneWidget);
+      expect(find.text('299'), findsNothing);
+    });
   });
 }

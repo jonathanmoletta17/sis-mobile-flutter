@@ -16,6 +16,7 @@ class SisChecklistCatalogScreen extends StatelessWidget {
     this.submissionEnabled = false,
     this.onSubmit,
     this.ticketSearcher,
+    this.conservacaoSearcher,
   });
 
   final SisChecklistCatalog catalog;
@@ -29,8 +30,10 @@ class SisChecklistCatalogScreen extends StatelessWidget {
   final Future<Map<String, dynamic>> Function(SisChecklistPreparedSubmission)? onSubmit;
 
   /// Busca de chamados para o campo "Checklist Programada" (glpiselect/Ticket).
-  /// Quando presente, o campo se torna interativo no form screen.
   final Future<List<Map<String, dynamic>>> Function(String query)? ticketSearcher;
+
+  /// Busca de itens de conservação física (PluginGenericobjectConservacao).
+  final Future<List<Map<String, dynamic>>> Function(String query)? conservacaoSearcher;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +78,7 @@ class _FormGroupState extends State<_FormGroup> {
           onSubmit: widget.screen.onSubmit,
           preselectedType: _selectedType,
           ticketSearcher: widget.screen.ticketSearcher,
+          conservacaoSearcher: widget.screen.conservacaoSearcher,
         ),
       ),
     );
