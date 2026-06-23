@@ -414,5 +414,108 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('CALHAS ALA GOVERNAMENTAL'), findsOneWidget);
     });
+
+    testWidgets('multiselect com default_values=[] nao pre-preenche o campo', (tester) async {
+      final catalogComDefaultVazio = SisChecklistCatalog.fromMap({
+        'schema_version': 'test',
+        'source_snapshot_sha256': 'test',
+        'forms': [
+          {'id': 60, 'name': 'CHECKLIST VAZIO', 'is_active': true, 'is_visible': true, 'helpdesk_home': true, 'profile_ids': [4], 'group_ids': []},
+        ],
+        'sections': [
+          {'id': 600, 'form_id': 60, 'name': 'Dados', 'order': 1},
+        ],
+        'questions': [
+          {
+            'id': 10,
+            'form_id': 60,
+            'section_id': 600,
+            'name': 'Local',
+            'fieldtype': 'multiselect',
+            'required': true,
+            'show_rule': 1,
+            'row': 0,
+            'col': 0,
+            'width': 4,
+            'values': '["X","Y"]',
+            'default_values': '[]',
+          },
+        ],
+        'conditions': const [],
+        'targets': [
+          {'id': 500, 'form_id': 60, 'name': 'ALVO SEM CONDICOES', 'destination_entity_value': 58, 'category_rule': 2, 'category_id': 151, 'location_rule': 2, 'urgency_rule': 1, 'type_rule': 1, 'show_rule': 1},
+        ],
+        'categories': [
+          {'id': 151, 'name': 'Hidraulico', 'completename': 'Manutencao > Checklist > Hidraulico', 'parent_id': 147, 'level': 3},
+        ],
+      });
+      await tester.pumpWidget(MaterialApp(
+        home: SisChecklistFormScreen(catalog: catalogComDefaultVazio, formId: 60, targetId: 500),
+      ));
+      await tester.pump();
+      final checkX = tester.widget<CheckboxListTile>(find.byKey(const Key('checklist_check_X')));
+      final checkY = tester.widget<CheckboxListTile>(find.byKey(const Key('checklist_check_Y')));
+      expect(checkX.value, isFalse, reason: 'X nao deve estar marcado — default_values=[] e vazio');
+      expect(checkY.value, isFalse, reason: 'Y nao deve estar marcado — default_values=[] e vazio');
+      final reviewButton = tester.widget<FilledButton>(find.byKey(const Key('checklist_review_button')));
+      expect(reviewButton.onPressed, isNull, reason: 'review bloqueado — campo required vazio');
+    });
+
+    testWidgets('condicoes de target vencem sobre default_values nao vazio', (tester) async {
+      final catalogComDefaultNaoVazio = SisChecklistCatalog.fromMap({
+        'schema_version': 'test',
+        'source_snapshot_sha256': 'test',
+        'forms': [
+          {'id': 70, 'name': 'CHECKLIST REFRIG', 'is_active': true, 'is_visible': true, 'helpdesk_home': true, 'profile_ids': [4], 'group_ids': []},
+        ],
+        'sections': [
+          {'id': 700, 'form_id': 70, 'name': 'Dados', 'order': 1},
+        ],
+        'questions': [
+          {
+            'id': 20,
+            'form_id': 70,
+            'section_id': 700,
+            'name': 'Local',
+            'fieldtype': 'multiselect',
+            'required': true,
+            'show_rule': 1,
+            'row': 0,
+            'col': 0,
+            'width': 4,
+            'values': '["AR CENTRAL","CASA CIVIL","951"]',
+            'default_values': '["AR CENTRAL","CASA CIVIL","951"]',
+          },
+        ],
+        'conditions': [
+          {
+            'id': 8001,
+            'itemtype': 'PluginFormcreatorTargetTicket',
+            'items_id': 600,
+            'source_question_id': 20,
+            'show_condition': 1,
+            'show_value': '951',
+            'show_logic': 1,
+            'order': 1,
+          },
+        ],
+        'targets': [
+          {'id': 600, 'form_id': 70, 'name': 'REFRIG 951', 'destination_entity_value': 58, 'category_rule': 2, 'category_id': 151, 'location_rule': 2, 'urgency_rule': 1, 'type_rule': 1, 'show_rule': 2},
+        ],
+        'categories': [
+          {'id': 151, 'name': 'Hidraulico', 'completename': 'Manutencao > Checklist > Hidraulico', 'parent_id': 147, 'level': 3},
+        ],
+      });
+      await tester.pumpWidget(MaterialApp(
+        home: SisChecklistFormScreen(catalog: catalogComDefaultNaoVazio, formId: 70, targetId: 600),
+      ));
+      await tester.pump();
+      final check951 = tester.widget<CheckboxListTile>(find.byKey(const Key('checklist_check_951')));
+      final checkAR = tester.widget<CheckboxListTile>(find.byKey(const Key('checklist_check_AR CENTRAL')));
+      final checkCC = tester.widget<CheckboxListTile>(find.byKey(const Key('checklist_check_CASA CIVIL')));
+      expect(check951.value, isTrue, reason: '951 deve estar marcado pela condicao do target');
+      expect(checkAR.value, isFalse, reason: 'AR CENTRAL nao deve estar marcado — condicao de target vence sobre default');
+      expect(checkCC.value, isFalse, reason: 'CASA CIVIL nao deve estar marcado — condicao de target vence sobre default');
+    });
   });
 }

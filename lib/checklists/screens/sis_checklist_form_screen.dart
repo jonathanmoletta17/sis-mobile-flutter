@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
@@ -72,14 +73,17 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
       catalog: widget.catalog,
       conditionEngine: _engine,
     );
-    _initDefaultValues();
     _prefillFromTargetConditions();
+    _initDefaultValues();
     _resolveVisibleConservacaoDefaults();
   }
 
   // Inicializa respostas a partir dos valores padrao das perguntas. Executado
-  // antes do prefill de target para que as condicoes de target possam sobrescrever.
+  // APOS _prefillFromTargetConditions para que condicoes de target tenham
+  // prioridade (o guard containsKey abaixo pula questoes ja preenchidas).
   // A pergunta "Checklist" (PREVENTIVA/CORRETIVA) usa [preselectedType] se fornecido.
+  // Campos glpiselect sao ignorados: seus default_values sao IDs numericos do GLPI
+  // que nao podem ser exibidos sem resolucao de nome via API.
   void _initDefaultValues() {
     for (final question in widget.catalog.questionsForForm(widget.formId)) {
       if (_answers.containsKey(question.id)) continue;
@@ -91,16 +95,32 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
           ? widget.preselectedType!
           : question.defaultValues;
       if (rawDefault.isEmpty) continue;
-      final value = question.isMultiselect
-          ? rawDefault
-                .split(',')
-                .map((s) => s.trim())
-                .where((s) => s.isNotEmpty)
-                .toList()
-          : rawDefault;
-      _answers[question.id] = value;
+      if (question.isMultiselect) {
+        final list = _parseMultiselectDefault(rawDefault);
+        if (list.isEmpty) continue;
+        _answers[question.id] = list;
+      } else {
+        _answers[question.id] = rawDefault;
+      }
     }
   }
+
+  // Parseia default_values de campo multiselect: tenta JSON array primeiro
+  // (formato do GLPI: '["A","B"]' ou '[]'), com fallback para CSV.
+  // Retorna lista vazia se rawDefault for um array JSON vazio.
+  static List<String> _parseMultiselectDefault(String raw) {
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is List) {
+        return decoded
+            .map((e) => e.toString().trim())
+            .where((s) => s.isNotEmpty)
+            .toList();
+      }
+    } catch (_) {}
+    return raw.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+  }
+
 
   // Percorre as questões atualmente visíveis e dispara resolução assíncrona de
   // default_values para campos glpiselect/Conservacao ainda não preenchidos.
