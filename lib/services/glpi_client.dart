@@ -788,6 +788,7 @@ class GlpiClient {
     final results = await Future.wait([
       fetchBy('name'),
       fetchBy('realname'),
+      fetchBy('firstname'),
     ], eagerError: false);
 
     final users = <GlpiUserRef>[];
