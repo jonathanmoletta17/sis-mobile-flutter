@@ -17,6 +17,7 @@ class SisChecklistCatalogScreen extends StatelessWidget {
     this.onSubmit,
     this.ticketSearcher,
     this.conservacaoSearcher,
+    this.conservacaoResolver,
   });
 
   final SisChecklistCatalog catalog;
@@ -34,6 +35,9 @@ class SisChecklistCatalogScreen extends StatelessWidget {
 
   /// Busca de itens de conservação física (PluginGenericobjectConservacao).
   final Future<List<Map<String, dynamic>>> Function(String query)? conservacaoSearcher;
+
+  /// Resolve o nome de um item Conservacao pelo ID numérico (para pré-popular defaults).
+  final Future<String?> Function(int id)? conservacaoResolver;
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +83,7 @@ class _FormGroupState extends State<_FormGroup> {
           preselectedType: _selectedType,
           ticketSearcher: widget.screen.ticketSearcher,
           conservacaoSearcher: widget.screen.conservacaoSearcher,
+          conservacaoResolver: widget.screen.conservacaoResolver,
         ),
       ),
     );

@@ -155,6 +155,24 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  /// Resolve o nome de um item PluginGenericobjectConservacao pelo ID numérico.
+  /// Usado para pré-popular campos glpiselect com default_values ao abrir o form.
+  Future<String?> lookupConservacaoById(int id) async {
+    final token = _sessionToken;
+    if (token == null || token.isEmpty) return null;
+    try {
+      final option = await SisChecklistOptionClient().lookupById(
+        itemType: 'PluginGenericobjectConservacao',
+        id: id,
+        sessionToken: token,
+      );
+      return option?.label;
+    } catch (e) {
+      debugPrint('[AppState] lookupConservacaoById erro: $e');
+      return null;
+    }
+  }
+
   /// Papel operacional resolvido a partir do perfil GLPI ativo e dos grupos da
   /// sessão. Usado pelo policy layer (PermissionService, TicketQueueFilter) e
   /// pelas telas que precisam de decisões baseadas em papel + domínio de ticket.

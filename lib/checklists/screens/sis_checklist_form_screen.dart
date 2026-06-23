@@ -24,6 +24,7 @@ class SisChecklistFormScreen extends StatefulWidget {
     this.preselectedType,
     this.ticketSearcher,
     this.conservacaoSearcher,
+    this.conservacaoResolver,
   });
 
   final SisChecklistCatalog catalog;
@@ -43,6 +44,9 @@ class SisChecklistFormScreen extends StatefulWidget {
   /// Busca de itens de conservação física para campos glpiselect/PluginGenericobjectConservacao.
   final Future<List<Map<String, dynamic>>> Function(String query)? conservacaoSearcher;
 
+  /// Resolve nome de item Conservacao por ID (para pré-popular default_values).
+  final Future<String?> Function(int id)? conservacaoResolver;
+
   /// Callback de submissao real. Recebe a submissao preparada e devolve um
   /// mapa de resultado da mutacao.
   final Future<Map<String, dynamic>> Function(SisChecklistPreparedSubmission)? onSubmit;
@@ -57,6 +61,8 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
   late final SisChecklistSubmissionPreparer _preparer;
   bool _submitting = false;
   String? _resultMessage;
+  // IDs de questões com resolução de default em andamento (evita duplicatas).
+  final Set<int> _pendingResolutions = {};
 
   @override
   void initState() {
@@ -68,6 +74,7 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
     );
     _initDefaultValues();
     _prefillFromTargetConditions();
+    _resolveVisibleConservacaoDefaults();
   }
 
   // Inicializa respostas a partir dos valores padrao das perguntas. Executado
@@ -92,6 +99,46 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
                 .toList()
           : rawDefault;
       _answers[question.id] = value;
+    }
+  }
+
+  // Percorre as questões atualmente visíveis e dispara resolução assíncrona de
+  // default_values para campos glpiselect/Conservacao ainda não preenchidos.
+  // Chamado no initState e após cada mudança de resposta para cobrir campos que
+  // se tornam visíveis condicionalmente (show_rule=2).
+  void _resolveVisibleConservacaoDefaults() {
+    final resolver = widget.conservacaoResolver;
+    if (resolver == null) return;
+    for (final section in widget.catalog.sectionsForForm(widget.formId)) {
+      if (!_engine.isSectionVisible(section, _answers)) continue;
+      for (final q in widget.catalog.questionsForSection(section.id)) {
+        if (!_engine.isQuestionVisible(q, _answers)) continue;
+        if (!q.isGlpiSelect) continue;
+        if (q.itemType != 'PluginGenericobjectConservacao') continue;
+        if (_answers.containsKey(q.id)) continue;
+        if (_pendingResolutions.contains(q.id)) continue;
+        final id = int.tryParse(q.defaultValues);
+        if (id == null || id <= 0) continue;
+        _resolveConservacaoDefault(resolver, q.id, id);
+      }
+    }
+  }
+
+  Future<void> _resolveConservacaoDefault(
+    Future<String?> Function(int) resolver,
+    int questionId,
+    int itemId,
+  ) async {
+    _pendingResolutions.add(questionId);
+    try {
+      final name = await resolver(itemId);
+      if (!mounted) return;
+      // Só preenche se o usuário ainda não interagiu com o campo.
+      if (name != null && name.isNotEmpty && !_answers.containsKey(questionId)) {
+        setState(() => _answers[questionId] = name);
+      }
+    } finally {
+      _pendingResolutions.remove(questionId);
     }
   }
 
@@ -127,6 +174,9 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
 
   void _setAnswer(int questionId, dynamic value) {
     setState(() => _answers[questionId] = value);
+    // Após cada mudança de resposta, campos condicionais podem ter ficado
+    // visíveis — resolve defaults de Conservacao para os recém-visíveis.
+    _resolveVisibleConservacaoDefaults();
   }
 
   bool get _canSubmit =>

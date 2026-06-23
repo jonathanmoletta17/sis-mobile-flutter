@@ -44,6 +44,7 @@ class SisChecklistEntryCard extends StatelessWidget {
               onSubmit: appState.submitChecklist,
               ticketSearcher: appState.searchTicketsForChecklist,
               conservacaoSearcher: appState.searchConservacaoForChecklist,
+              conservacaoResolver: appState.lookupConservacaoById,
             ),
           ),
         ),

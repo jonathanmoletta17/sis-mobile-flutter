@@ -29,6 +29,46 @@ class SisChecklistOptionClient {
   final http.Client _httpClient;
   final int rangeEnd;
 
+  /// Resolve um item pelo ID exato. Usa o campo 2 (ID) da busca GLPI com
+  /// searchtype=equals. Retorna null se não encontrado ou em caso de erro.
+  Future<SisChecklistLookupOption?> lookupById({
+    required String itemType,
+    required int id,
+    required String sessionToken,
+  }) async {
+    if (!supportedItemTypes.contains(itemType)) return null;
+
+    final uri = Uri.parse(
+      '${GlpiConfig.baseUrl}/search/$itemType'
+      '?criteria[0][field]=2'
+      '&criteria[0][searchtype]=equals'
+      '&criteria[0][value]=$id'
+      '&forcedisplay[0]=2'
+      '&forcedisplay[1]=1'
+      '&range=0-0',
+    );
+
+    try {
+      final response = await _httpClient.get(uri, headers: {
+        'Accept': 'application/json',
+        if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+      }).timeout(GlpiConfig.requestTimeout);
+
+      if (response.statusCode != 200 && response.statusCode != 206) {
+        return null;
+      }
+
+      final decoded = jsonDecode(response.body);
+      if (decoded is! Map) return null;
+      final rows = decoded['data'];
+      if (rows is! List || rows.isEmpty) return null;
+
+      return _mapRow(rows.first as Map);
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<List<SisChecklistLookupOption>> search({
     required String itemType,
     required String query,

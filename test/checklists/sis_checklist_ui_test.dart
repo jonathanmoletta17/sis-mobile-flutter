@@ -377,5 +377,42 @@ void main() {
       expect(find.text('Selecionar item de inventário...'), findsOneWidget);
       expect(find.text('299'), findsNothing);
     });
+
+    testWidgets('conservacaoResolver pre-popula campo com nome resolvido assincronamente', (tester) async {
+      final catalogComDefault = SisChecklistCatalog.fromMap({
+        'schema_version': 'test',
+        'source_snapshot_sha256': 'test',
+        'forms': [
+          {'id': 81, 'name': 'CHECKLIST CALHAS', 'is_active': true, 'is_visible': true, 'helpdesk_home': true, 'profile_ids': [4], 'group_ids': []},
+        ],
+        'sections': [{'id': 810, 'form_id': 81, 'name': 'Calhas', 'order': 1}],
+        'questions': [
+          {'id': 901, 'form_id': 81, 'section_id': 810, 'name': 'Calha Ala Gov', 'fieldtype': 'glpiselect', 'itemtype': 'PluginGenericobjectConservacao', 'required': false, 'show_rule': 1, 'row': 0, 'col': 0, 'width': 4, 'default_values': '42'},
+        ],
+        'conditions': const [],
+        'targets': [
+          {'id': 811, 'form_id': 81, 'name': 'TARGET', 'destination_entity_value': 1, 'category_rule': 2, 'category_id': 148, 'location_rule': 1, 'urgency_rule': 1, 'type_rule': 1, 'show_rule': 1},
+        ],
+        'categories': [
+          {'id': 148, 'name': 'Calhas', 'completename': 'Manutencao > Checklist > Calhas', 'parent_id': 147, 'level': 3},
+        ],
+      });
+
+      Future<List<Map<String, dynamic>>> noopSearcher(String q) async => const [];
+      Future<String?> fakeResolver(int id) async => id == 42 ? 'CALHAS ALA GOVERNAMENTAL' : null;
+
+      await tester.pumpWidget(MaterialApp(
+        home: SisChecklistFormScreen(
+          catalog: catalogComDefault,
+          formId: 81,
+          targetId: 811,
+          conservacaoSearcher: noopSearcher,
+          conservacaoResolver: fakeResolver,
+        ),
+      ));
+      await tester.pump();
+      await tester.pumpAndSettle();
+      expect(find.text('CALHAS ALA GOVERNAMENTAL'), findsOneWidget);
+    });
   });
 }
