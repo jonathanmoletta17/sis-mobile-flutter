@@ -33,25 +33,25 @@ class TicketDomainResolver {
     List<GlpiGroupRef> assignedGroups = const [],
     List<GlpiGroupRef> observerGroups = const [],
   }) {
-    final candidates = <TicketDomain>{};
     final category = normalizeGlpiText(categoryCompletename);
 
-    if (category.startsWith('manutencao') ||
-        category.contains('> manutencao')) {
-      candidates.add(TicketDomain.maintenance);
+    final categoryCandidates = <TicketDomain>{};
+    if (category.startsWith('manutencao') || category.contains('> manutencao')) {
+      categoryCandidates.add(TicketDomain.maintenance);
     }
-    if (category.startsWith('conservacao') ||
-        category.contains('> conservacao')) {
-      candidates.add(TicketDomain.conservation);
+    if (category.startsWith('conservacao') || category.contains('> conservacao')) {
+      categoryCandidates.add(TicketDomain.conservation);
     }
+
+    final groupCandidates = <TicketDomain>{};
 
     // Classificação por ID de grupo (precisa; vem do endpoint /Ticket/ID/Group_Ticket).
     final assignedIds = assignedGroups.map((group) => group.id).toSet();
     if (assignedIds.contains(maintenanceGroupId)) {
-      candidates.add(TicketDomain.maintenance);
+      groupCandidates.add(TicketDomain.maintenance);
     }
     if (assignedIds.contains(conservationGroupId)) {
-      candidates.add(TicketDomain.conservation);
+      groupCandidates.add(TicketDomain.conservation);
     }
 
     // Classificação por nome de grupo (fallback; vem do field 8 da busca /search/Ticket
@@ -59,15 +59,33 @@ class TicketDomainResolver {
     for (final group in assignedGroups) {
       if (group.id != 0) continue;
       final norm = normalizeGlpiText(group.name);
-      if (norm.contains('manutencao')) candidates.add(TicketDomain.maintenance);
+      if (norm.contains('manutencao')) groupCandidates.add(TicketDomain.maintenance);
       if (norm.contains('conservacao') && !norm.contains('gg')) {
-        candidates.add(TicketDomain.conservation);
+        groupCandidates.add(TicketDomain.conservation);
       }
     }
 
-    final technicalCandidates = candidates
-        .where((candidate) => candidate.isTechnicalExecution)
+    final technicalGroupCandidates = groupCandidates
+        .where((c) => c.isTechnicalExecution)
         .toSet();
+    final technicalCategoryCandidates = categoryCandidates
+        .where((c) => c.isTechnicalExecution)
+        .toSet();
+
+    // Quando os grupos são ambíguos (2 domínios) e a categoria aponta para um
+    // único domínio, a categoria desempata. Exemplo: ticket #8942 com categoria
+    // "Manutenção > Pintura" e dois grupos (CC-MANUTENCAO + CC-CONSERVACÃO) →
+    // deve ser Manutenção, não unknown.
+    // Conflito real (categoria ≠ grupo único) permanece como unknown.
+    if (technicalCategoryCandidates.length == 1 &&
+        technicalGroupCandidates.length > 1) {
+      return technicalCategoryCandidates.single;
+    }
+
+    final technicalCandidates = {
+      ...technicalCategoryCandidates,
+      ...technicalGroupCandidates,
+    };
     if (technicalCandidates.length > 1) return TicketDomain.unknown;
     if (technicalCandidates.length == 1) return technicalCandidates.single;
 

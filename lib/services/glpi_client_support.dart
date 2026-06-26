@@ -349,11 +349,27 @@ class GlpiClientSupport {
     return Uri.parse('$baseUrl/search/Ticket').replace(queryParameters: params);
   }
 
+  // GLPI retorna campo 8 (grupo técnico) como List quando o ticket tem múltiplos
+  // grupos atribuídos. Aqui normalizamos para string com separador '|' de modo que
+  // _groupRefs() possa criar um GlpiGroupRef por entrada.
+  static String? _extractMultiGroupName(dynamic value) {
+    if (value == null) return null;
+    if (value is List) {
+      final joined = value
+          .map((e) => e.toString().trim())
+          .where((s) => s.isNotEmpty)
+          .join('|');
+      return joined.isEmpty ? null : joined;
+    }
+    final text = value.toString().trim();
+    return text.isEmpty ? null : text;
+  }
+
   static Map<String, dynamic> mapSearchTicketRow(Map<String, dynamic> row) {
     final requester = row['4'] ?? row['users_id_recipient'];
     final assignee = row['5'] ?? row['users_id_assign'];
-    final assignedGroupName = row['8']?.toString().trim();
-    final observerGroupName = row['65']?.toString().trim();
+    final assignedGroupName = _extractMultiGroupName(row['8']);
+    final observerGroupName = _extractMultiGroupName(row['65']);
     return {
       'id': row['2'] ?? row['id'],
       'name': row['1'] ?? row['name'],

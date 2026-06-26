@@ -119,16 +119,24 @@ class TicketQueueClassifier {
   }) {
     final parsedId = _numericId(id);
     final nameText = name?.toString().trim() ?? '';
-    // Sem ID nem nome: nada a fazer.
     if (parsedId == null && nameText.isEmpty) return const [];
-    // id=0 é sentinela: grupo veio por nome da busca (sem ID numérico disponível).
-    return [
-      GlpiGroupRef(
-        id: parsedId ?? 0,
-        name: nameText,
-        isAssign: isAssign,
-      ),
-    ];
+
+    // Sem ID numérico: grupo(s) vêm por nome do field 8/65 da busca.
+    // Múltiplos grupos são separados por '|' (normalizados em mapSearchTicketRow).
+    // id=0 é sentinela nome-only.
+    if (parsedId == null) {
+      if (nameText.contains('|')) {
+        return nameText
+            .split('|')
+            .map((n) => n.trim())
+            .where((n) => n.isNotEmpty)
+            .map((n) => GlpiGroupRef(id: 0, name: n, isAssign: isAssign))
+            .toList();
+      }
+      return [GlpiGroupRef(id: 0, name: nameText, isAssign: isAssign)];
+    }
+
+    return [GlpiGroupRef(id: parsedId, name: nameText, isAssign: isAssign)];
   }
 
   static int? _numericId(dynamic value) {

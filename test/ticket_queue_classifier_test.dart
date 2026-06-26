@@ -155,5 +155,64 @@ void main() {
         expect(queue, TicketQueueType.ggConservationShared);
       });
     });
+
+    // Cenários de múltiplos grupos: GLPI retorna field 8 como array quando o
+    // ticket tem CC-MANUTENCAO E CC-CONSERVACAO atribuídos simultaneamente.
+    // O app serializa como 'CC-CONSERVACÃO|CC-MANUTENCAO' no assigned_group_name.
+    group('tickets com dois grupos atribuidos (Multiplas Demandas)', () {
+      test('categoria Manutencao ganha sobre grupos ambiguos -> fila manutencao', () {
+        // Caso real: ticket #8942 tem categoria "Manutenção > Pintura" mas
+        // ambos CC-CONSERVACÃO e CC-MANUTENCAO atribuídos. Categoria vence.
+        final queue = TicketQueueClassifier.primaryQueueForTicket(
+          {
+            'id': 8942,
+            '_source': 'operational',
+            'status': 2,
+            'itilcategories_id': 'Manutenção > Pintura',
+            'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
+            'users_id_recipient': 2214,
+          },
+          role: OperationalRole.maintenanceTechnician,
+          loggedUserId: 2039,
+        );
+
+        expect(queue, TicketQueueType.maintenanceQueue);
+      });
+
+      test('sem categoria + dois grupos -> nao classifica (Fila Operacional)', () {
+        // Ticket genuinamente ambíguo: sem categoria específica e com ambos os
+        // grupos. Correto ficar em "Fila Operacional" aguardando triagem.
+        final queue = TicketQueueClassifier.primaryQueueForTicket(
+          {
+            'id': 10019,
+            '_source': 'operational',
+            'status': 2,
+            'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
+            'users_id_recipient': 2214,
+          },
+          role: OperationalRole.hybrid,
+          loggedUserId: 2039,
+        );
+
+        expect(queue, isNull);
+      });
+
+      test('categoria Conservacao ganha sobre grupos ambiguos -> fila conservacao', () {
+        final queue = TicketQueueClassifier.primaryQueueForTicket(
+          {
+            'id': 9999,
+            '_source': 'operational',
+            'status': 2,
+            'itilcategories_id': 'Conservação > Limpeza',
+            'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
+            'users_id_recipient': 2214,
+          },
+          role: OperationalRole.conservationTechnician,
+          loggedUserId: 2039,
+        );
+
+        expect(queue, TicketQueueType.conservationQueue);
+      });
+    });
   });
 }
