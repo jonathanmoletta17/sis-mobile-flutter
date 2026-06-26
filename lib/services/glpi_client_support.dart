@@ -305,7 +305,9 @@ class GlpiClientSupport {
     int rangeEnd = 500,
   }) {
     final hasId = requesterUserId != null && requesterUserId > 0;
-    final value = hasId ? requesterUserId.toString() : requesterUsername?.trim();
+    final value = hasId
+        ? requesterUserId.toString()
+        : requesterUsername?.trim();
     if (value == null || value.isEmpty) {
       throw ArgumentError('requesterUserId or requesterUsername is required');
     }

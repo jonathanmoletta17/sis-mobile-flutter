@@ -136,7 +136,10 @@ void main() {
       await pumpEventQueue();
       await appState.fetchTickets();
 
-      expect(appState.resolvedOperationalRole, OperationalRole.standardRequester);
+      expect(
+        appState.resolvedOperationalRole,
+        OperationalRole.standardRequester,
+      );
     },
   );
 

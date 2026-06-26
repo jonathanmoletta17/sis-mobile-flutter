@@ -8,9 +8,11 @@ import 'package:sis_mobile_flutter/checklists/checklist_option_client.dart';
 
 void main() {
   setUp(() {
-    dotenv.testLoad(mergeWith: const <String, String>{
-      'SIS_GLPI_BASE_URL': 'https://worker.test/sis/apirest.php',
-    });
+    dotenv.testLoad(
+      mergeWith: const <String, String>{
+        'SIS_GLPI_BASE_URL': 'https://worker.test/sis/apirest.php',
+      },
+    );
   });
 
   test('Ticket lookup uses /search/Ticket and parses rows', () async {
@@ -42,24 +44,33 @@ void main() {
     expect(options.first.label, 'Checklist programada A');
   });
 
-  test('PluginGenericobjectConservacao lookup uses its own search path', () async {
-    Uri? requested;
-    final client = SisChecklistOptionClient(
-      httpClient: MockClient((request) async {
-        requested = request.url;
-        return http.Response(jsonEncode({'data': []}), 200,
-            headers: {'content-type': 'application/json; charset=utf-8'});
-      }),
-    );
+  test(
+    'PluginGenericobjectConservacao lookup uses its own search path',
+    () async {
+      Uri? requested;
+      final client = SisChecklistOptionClient(
+        httpClient: MockClient((request) async {
+          requested = request.url;
+          return http.Response(
+            jsonEncode({'data': []}),
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
+        }),
+      );
 
-    await client.search(
-      itemType: 'PluginGenericobjectConservacao',
-      query: 'bomba',
-      sessionToken: 'sess',
-    );
+      await client.search(
+        itemType: 'PluginGenericobjectConservacao',
+        query: 'bomba',
+        sessionToken: 'sess',
+      );
 
-    expect(requested!.path, contains('/search/PluginGenericobjectConservacao'));
-  });
+      expect(
+        requested!.path,
+        contains('/search/PluginGenericobjectConservacao'),
+      );
+    },
+  );
 
   test('unknown itemtype returns empty list without HTTP', () async {
     var called = false;

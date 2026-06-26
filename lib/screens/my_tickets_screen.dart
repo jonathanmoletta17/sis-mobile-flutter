@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../catalog/service_catalog_provider.dart';
 import '../models/glpi_status.dart';
+import '../models/ticket_queue_type.dart';
+import '../policy/ticket_queue_classifier.dart';
 import '../state/app_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
@@ -86,6 +88,19 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
 
   int _groupSortWeight(String key) {
     if (key == 'offline') return 0;
+    final queue = _queueFromGroupKey(key);
+    if (queue != null) {
+      return switch (queue) {
+        TicketQueueType.assignedToMe => 1,
+        TicketQueueType.pendingValidation => 2,
+        TicketQueueType.maintenanceQueue => 3,
+        TicketQueueType.conservationQueue => 4,
+        TicketQueueType.ggConservationShared => 5,
+        TicketQueueType.requestedByMe => 6,
+        TicketQueueType.supervision => 7,
+        TicketQueueType.allAdmin => 8,
+      };
+    }
     if (key == 'operational') return 1;
     if (key.startsWith('status_')) {
       final code = int.tryParse(key.replaceFirst('status_', ''));
@@ -94,13 +109,42 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
     return 999;
   }
 
-  String _groupKey(Map<String, dynamic> ticket) {
-    if (ticket['_source'] == 'operational') return 'operational';
+  String _groupKey(Map<String, dynamic> ticket, AppState appState) {
+    if (ticket['_source'] == 'operational') {
+      final queue = TicketQueueClassifier.primaryQueueForTicket(
+        ticket,
+        role: appState.resolvedOperationalRole,
+        loggedUserId: appState.loggedUserId,
+        sessionGroups: appState.groups,
+      );
+      if (queue != null) return 'queue_${queue.name}';
+      return 'operational';
+    }
     final rawStatus = ticket['status'];
     if (GlpiStatusMapper.isOffline(rawStatus)) return 'offline';
     final code = GlpiStatusMapper.code(rawStatus);
     if (code != null) return 'status_$code';
     return 'other_${_statusLabel(rawStatus)}';
+  }
+
+  TicketQueueType? _queueFromGroupKey(String key) {
+    if (!key.startsWith('queue_')) return null;
+    final queueName = key.replaceFirst('queue_', '');
+    for (final queue in TicketQueueType.values) {
+      if (queue.name == queueName) return queue;
+    }
+    return null;
+  }
+
+  String _groupLabel(String key, Map<String, dynamic> ticket) {
+    final queue = _queueFromGroupKey(key);
+    if (queue != null) return queue.label;
+    if (key == 'operational') return 'Fila Operacional';
+    return _statusLabel(ticket['status']);
+  }
+
+  bool _isOperationalGroup(String key) {
+    return key == 'operational' || _queueFromGroupKey(key) != null;
   }
 
   bool _matchesStatusFilter(Map<String, dynamic> ticket) {
@@ -111,7 +155,10 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
   String _operationalSubtitle(Map<String, dynamic> ticket) {
     final requester = ticket['users_id_recipient']?.toString().trim();
     final service = ticket['serviceName']?.toString().trim();
-    if (requester != null && requester.isNotEmpty && service != null && service.isNotEmpty) {
+    if (requester != null &&
+        requester.isNotEmpty &&
+        service != null &&
+        service.isNotEmpty) {
       return '$requester • $service';
     }
     return requester ?? service ?? 'N/A';
@@ -332,12 +379,10 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
           final groupLabelByKey = <String, String>{};
 
           for (final ticket in filteredList) {
-            final key = _groupKey(ticket);
+            final key = _groupKey(ticket, appState);
             groupedTickets.putIfAbsent(key, () => []);
             groupedTickets[key]!.add(ticket);
-            groupLabelByKey[key] = key == 'operational'
-                ? 'Fila Operacional'
-                : _statusLabel(ticket['status']);
+            groupLabelByKey[key] = _groupLabel(key, ticket);
           }
 
           final sortedGroupKeys = groupedTickets.keys.toList()
@@ -397,7 +442,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
                       final groupKey = sortedGroupKeys[index];
                       final ticketsInGroup = groupedTickets[groupKey]!;
                       final statusGroup = groupLabelByKey[groupKey] ?? groupKey;
-                      final isOperational = groupKey == 'operational';
+                      final isOperational = _isOperationalGroup(groupKey);
                       final tone = isOperational
                           ? AppStatusTone.brand
                           : AppStatusPalette.fromGlpiStatus(

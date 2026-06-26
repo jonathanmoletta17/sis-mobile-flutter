@@ -19,12 +19,19 @@ class SisChecklistEntryCard extends StatelessWidget {
     final catalog = appState.checklistCatalog;
     if (catalog == null) return const SizedBox.shrink();
 
-    final userGroupIds = appState.groups.map((g) => g.id).toList(growable: false);
-    final forms = catalog.formsVisibleToUser(appState.activeProfileId, userGroupIds);
+    final userGroupIds = appState.groups
+        .map((g) => g.id)
+        .toList(growable: false);
+    final forms = catalog.formsVisibleToUser(
+      appState.activeProfileId,
+      userGroupIds,
+    );
     if (forms.isEmpty) return const SizedBox.shrink();
 
-    final targetCount =
-        forms.fold<int>(0, (sum, form) => sum + catalog.targetsForForm(form.id).length);
+    final targetCount = forms.fold<int>(
+      0,
+      (sum, form) => sum + catalog.targetsForForm(form.id).length,
+    );
 
     return Card(
       key: const Key('checklist_entry_card'),

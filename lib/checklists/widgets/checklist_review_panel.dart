@@ -47,12 +47,24 @@ class ChecklistReviewPanel extends StatelessWidget {
             const SizedBox(height: 8),
             _row(context, 'Formulário', form.name),
             _row(context, 'Destino', target.name),
-            _row(context, 'Categoria',
-                category != null ? '${category!.completeName} (#${category!.id})' : '#${submission.categoryId}'),
+            _row(
+              context,
+              'Categoria',
+              category != null
+                  ? '${category!.completeName} (#${category!.id})'
+                  : '#${submission.categoryId}',
+            ),
             _row(context, 'Entidade', '#${submission.entityId}'),
-            _row(context, 'Campos visíveis', '${submission.visibleQuestionIds.length}'),
-            _row(context, 'Obrigatórios faltando',
-                '${submission.missingRequiredQuestionIds.length}'),
+            _row(
+              context,
+              'Campos visíveis',
+              '${submission.visibleQuestionIds.length}',
+            ),
+            _row(
+              context,
+              'Obrigatórios faltando',
+              '${submission.missingRequiredQuestionIds.length}',
+            ),
             const SizedBox(height: 12),
             _statusBanner(context),
           ],
@@ -83,20 +95,20 @@ class ChecklistReviewPanel extends StatelessWidget {
     final theme = Theme.of(context);
     final (icon, color, message) = switch (state) {
       ChecklistSubmissionState.blocked => (
-          Icons.error_outline,
-          theme.colorScheme.error,
-          'Preencha os campos obrigatórios visíveis para revisar.',
-        ),
+        Icons.error_outline,
+        theme.colorScheme.error,
+        'Preencha os campos obrigatórios visíveis para revisar.',
+      ),
       ChecklistSubmissionState.previewOnly => (
-          Icons.visibility_outlined,
-          theme.colorScheme.primary,
-          'Modo somente leitura: submissão de checklist desabilitada no app.',
-        ),
+        Icons.visibility_outlined,
+        theme.colorScheme.primary,
+        'Modo somente leitura: submissão de checklist desabilitada no app.',
+      ),
       ChecklistSubmissionState.readyToSubmit => (
-          Icons.check_circle_outline,
-          Colors.green,
-          'Pronto para enviar em ambiente autorizado.',
-        ),
+        Icons.check_circle_outline,
+        Colors.green,
+        'Pronto para enviar em ambiente autorizado.',
+      ),
     };
 
     return Container(

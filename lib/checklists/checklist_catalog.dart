@@ -108,11 +108,16 @@ class SisChecklistCatalog {
   /// Forms que o usuario GLPI pode ver: perfil OU grupo (OR semantico, espelhando
   /// `access_rights=2` do FormCreator). Fonte dinamica: sem nomes hardcoded.
   /// Requer ao menos um target ativo para o form aparecer.
-  List<SisChecklistForm> formsVisibleToUser(int? profileId, List<int> userGroupIds) {
+  List<SisChecklistForm> formsVisibleToUser(
+    int? profileId,
+    List<int> userGroupIds,
+  ) {
     return forms
-        .where((form) =>
-            form.isVisibleToUser(profileId, userGroupIds) &&
-            targetsForForm(form.id).isNotEmpty)
+        .where(
+          (form) =>
+              form.isVisibleToUser(profileId, userGroupIds) &&
+              targetsForForm(form.id).isNotEmpty,
+        )
         .toList(growable: false);
   }
 
@@ -121,18 +126,21 @@ class SisChecklistCatalog {
   List<SisChecklistForm> formsVisibleToProfile(int? profileId) =>
       formsVisibleToUser(profileId, const []);
 
-  List<SisChecklistTarget> targetsForForm(int formId) =>
-      targets.where((target) => target.formId == formId).toList(growable: false);
+  List<SisChecklistTarget> targetsForForm(int formId) => targets
+      .where((target) => target.formId == formId)
+      .toList(growable: false);
 
-  List<SisChecklistSection> sectionsForForm(int formId) =>
-      sections.where((section) => section.formId == formId).toList(growable: false);
+  List<SisChecklistSection> sectionsForForm(int formId) => sections
+      .where((section) => section.formId == formId)
+      .toList(growable: false);
 
   List<SisChecklistQuestion> questionsForSection(int sectionId) => questions
       .where((question) => question.sectionId == sectionId)
       .toList(growable: false);
 
-  List<SisChecklistQuestion> questionsForForm(int formId) =>
-      questions.where((question) => question.formId == formId).toList(growable: false);
+  List<SisChecklistQuestion> questionsForForm(int formId) => questions
+      .where((question) => question.formId == formId)
+      .toList(growable: false);
 
   SisChecklistTarget? targetById(int id) {
     for (final target in targets) {
@@ -151,8 +159,10 @@ class SisChecklistCatalog {
   /// Condicoes que governam a visibilidade de um item especifico.
   List<SisChecklistCondition> conditionsFor(String itemType, int itemId) =>
       conditions
-          .where((condition) =>
-              condition.itemType == itemType && condition.itemId == itemId)
+          .where(
+            (condition) =>
+                condition.itemType == itemType && condition.itemId == itemId,
+          )
           .toList(growable: false);
 }
 
@@ -185,7 +195,8 @@ class SisChecklistForm {
     return userGroupIds.any(groupIds.contains);
   }
 
-  bool isVisibleToProfile(int? profileId) => isVisibleToUser(profileId, const []);
+  bool isVisibleToProfile(int? profileId) =>
+      isVisibleToUser(profileId, const []);
 
   factory SisChecklistForm.fromMap(Map<String, dynamic> map) {
     return SisChecklistForm(
@@ -284,7 +295,10 @@ class SisChecklistQuestion {
   bool get isSupported => supportedFieldTypes.contains(fieldType);
 
   factory SisChecklistQuestion.fromMap(Map<String, dynamic> map) {
-    final fieldType = _readText(map['fieldtype'], fallback: 'text').toLowerCase();
+    final fieldType = _readText(
+      map['fieldtype'],
+      fallback: 'text',
+    ).toLowerCase();
     final rawValues = _readValues(map['values']);
     return SisChecklistQuestion(
       id: _readInt(map['id']),
@@ -295,7 +309,8 @@ class SisChecklistQuestion {
       itemType: _readText(map['itemtype']),
       required: _readBool(map['required']),
       rawValues: rawValues,
-      options: (fieldType == 'select' ||
+      options:
+          (fieldType == 'select' ||
               fieldType == 'radios' ||
               fieldType == 'multiselect')
           ? SisChecklistOption.parseList(rawValues)
@@ -336,10 +351,12 @@ class SisChecklistOption {
           final optionValue = key.toString().trim();
           final optionLabel = value?.toString().trim() ?? optionValue;
           if (optionValue.isNotEmpty || optionLabel.isNotEmpty) {
-            entries.add(SisChecklistOption(
-              value: optionValue.isEmpty ? optionLabel : optionValue,
-              label: optionLabel.isEmpty ? optionValue : optionLabel,
-            ));
+            entries.add(
+              SisChecklistOption(
+                value: optionValue.isEmpty ? optionLabel : optionValue,
+                label: optionLabel.isEmpty ? optionValue : optionLabel,
+              ),
+            );
           }
         });
         return entries;
@@ -501,8 +518,10 @@ bool _readBool(dynamic value, {bool fallback = false}) {
   if (value is bool) return value;
   if (value is num) return value != 0;
   final normalized = value.toString().trim().toLowerCase();
-  if (normalized == '1' || normalized == 'true' || normalized == 'yes') return true;
-  if (normalized == '0' || normalized == 'false' || normalized == 'no') return false;
+  if (normalized == '1' || normalized == 'true' || normalized == 'yes')
+    return true;
+  if (normalized == '0' || normalized == 'false' || normalized == 'no')
+    return false;
   return fallback;
 }
 

@@ -48,19 +48,26 @@ class GlpiRulesClient {
   Future<void> load() async {
     final jsonStr = await rootBundle.loadString(_assetPath);
     _data = (jsonDecode(jsonStr) as Map).cast<String, dynamic>();
-    final status = (_data['status'] as Map?)?.cast<String, dynamic>() ?? const {};
-    _statusLabels = (status['labels'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final status =
+        (_data['status'] as Map?)?.cast<String, dynamic>() ?? const {};
+    _statusLabels =
+        (status['labels'] as Map?)?.cast<String, dynamic>() ?? const {};
     _transitionsByProfile =
-        (status['transitions_by_profile'] as Map?)?.cast<String, dynamic>() ?? const {};
-    _visibility = (_data['visibility'] as Map?)?.cast<String, dynamic>() ?? const {};
-    _searchOptions = (_data['search_options'] as Map?)?.cast<String, dynamic>() ?? const {};
-    _formCatalog = (_data['form_catalog'] as Map?)?.cast<String, dynamic>() ?? const {};
+        (status['transitions_by_profile'] as Map?)?.cast<String, dynamic>() ??
+        const {};
+    _visibility =
+        (_data['visibility'] as Map?)?.cast<String, dynamic>() ?? const {};
+    _searchOptions =
+        (_data['search_options'] as Map?)?.cast<String, dynamic>() ?? const {};
+    _formCatalog =
+        (_data['form_catalog'] as Map?)?.cast<String, dynamic>() ?? const {};
   }
 
   // ---- Status (L3) ----
   String statusLabel(int statusId) {
     final entry = _statusLabels['$statusId'];
-    if (entry is Map && entry['label'] is String) return entry['label'] as String;
+    if (entry is Map && entry['label'] is String)
+      return entry['label'] as String;
     return 'Status $statusId';
   }
 
@@ -71,7 +78,10 @@ class GlpiRulesClient {
 
   /// Próximos status permitidos para o perfil a partir do status atual.
   /// Combina a denylist do perfil (L2) com o ciclo de vida (L3).
-  List<int> allowedStatusTransitions({required int profileId, required int current}) {
+  List<int> allowedStatusTransitions({
+    required int profileId,
+    required int current,
+  }) {
     final prof = _transitionsByProfile['$profileId'];
     if (prof is! Map) return const [];
     final trans = prof['transitions'];
@@ -101,7 +111,9 @@ class GlpiRulesClient {
   List<int> get myTicketsActorFields {
     final crit = _searchOptions['my_tickets_criteria'];
     if (crit is Map && crit['fields_or'] is List) {
-      return (crit['fields_or'] as List).map((e) => (e as num).toInt()).toList();
+      return (crit['fields_or'] as List)
+          .map((e) => (e as num).toInt())
+          .toList();
     }
     return const [4, 22, 66];
   }

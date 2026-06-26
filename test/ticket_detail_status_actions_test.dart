@@ -13,7 +13,8 @@ import 'package:sis_mobile_flutter/state/app_state.dart';
 // para garantir que canSendCommonInteraction = true.
 const _kFixtureTicket = {
   'id': '9734',
-  'name': '[HERMES-E2E-NAO-APAGAR] SOLICITANTE_TESTE - validação ponta a ponta SIS Mobile',
+  'name':
+      '[HERMES-E2E-NAO-APAGAR] SOLICITANTE_TESTE - validação ponta a ponta SIS Mobile',
   'status': 2, // Em Atendimento
   'date_mod': '2026-06-18 10:00:00',
   'itilcategories_id': 'Limpeza',
@@ -25,9 +26,7 @@ const _kFixtureTicket = {
 Widget _wrap(AppState appState, Map<String, dynamic> ticket) =>
     ChangeNotifierProvider.value(
       value: appState,
-      child: MaterialApp(
-        home: TicketDetailScreen(ticket: ticket),
-      ),
+      child: MaterialApp(home: TicketDetailScreen(ticket: ticket)),
     );
 
 // Monta a tela e aguarda _loadState() completar antes de aplicar o perfil de
@@ -105,6 +104,24 @@ void main() {
         );
       },
     );
+
+    testWidgets('Técnico vê CTA clara para assumir chamado Novo', (
+      tester,
+    ) async {
+      await _pumpWithProfile(
+        tester,
+        {
+          ...Map.from(_kFixtureTicket),
+          'status': 1,
+          'users_id_recipient': 'teste',
+          'Users_id_recipient': 'teste',
+        },
+        profile: 'Tecnico',
+        username: 'tecnico_teste',
+      );
+
+      expect(find.text('Assumir e iniciar atendimento'), findsOneWidget);
+    });
 
     testWidgets(
       'Técnico NÃO vê "Ações de Status" quando é o próprio requerente',

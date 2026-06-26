@@ -25,12 +25,20 @@ class ChecklistQuestionField extends StatelessWidget {
 
   /// Construtor opcional para `glpiselect` (lookup read-only). Conectado na
   /// fase de lookups; ausente => estado informativo.
-  final Widget Function(SisChecklistQuestion question, dynamic value,
-      ValueChanged<dynamic> onChanged)? glpiSelectBuilder;
+  final Widget Function(
+    SisChecklistQuestion question,
+    dynamic value,
+    ValueChanged<dynamic> onChanged,
+  )?
+  glpiSelectBuilder;
 
   /// Construtor opcional para `file` (anexo). Ausente => estado informativo.
-  final Widget Function(SisChecklistQuestion question, dynamic value,
-      ValueChanged<dynamic> onChanged)? fileBuilder;
+  final Widget Function(
+    SisChecklistQuestion question,
+    dynamic value,
+    ValueChanged<dynamic> onChanged,
+  )?
+  fileBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +73,10 @@ class ChecklistQuestionField extends StatelessWidget {
           ),
         ),
         if (question.required)
-          Text('*', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          Text(
+            '*',
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
       ],
     );
   }
@@ -74,14 +85,18 @@ class ChecklistQuestionField extends StatelessWidget {
     final current = value?.toString();
     return DropdownButtonFormField<String>(
       key: const Key('checklist_select'),
-      initialValue: question.options.any((o) => o.value == current) ? current : null,
+      initialValue: question.options.any((o) => o.value == current)
+          ? current
+          : null,
       isExpanded: true,
       decoration: const InputDecoration(border: OutlineInputBorder()),
       items: question.options
-          .map((option) => DropdownMenuItem<String>(
-                value: option.value,
-                child: Text(option.label, overflow: TextOverflow.ellipsis),
-              ))
+          .map(
+            (option) => DropdownMenuItem<String>(
+              value: option.value,
+              child: Text(option.label, overflow: TextOverflow.ellipsis),
+            ),
+          )
           .toList(),
       onChanged: onChanged,
     );
@@ -91,17 +106,19 @@ class ChecklistQuestionField extends StatelessWidget {
     final current = value?.toString();
     return Column(
       children: question.options
-          .map((option) => RadioListTile<String>(
-                key: Key('checklist_radio_${option.value}'),
-                dense: true,
-                contentPadding: EdgeInsets.zero,
-                value: option.value,
-                // ignore: deprecated_member_use
-                groupValue: current,
-                title: Text(option.label),
-                // ignore: deprecated_member_use
-                onChanged: onChanged,
-              ))
+          .map(
+            (option) => RadioListTile<String>(
+              key: Key('checklist_radio_${option.value}'),
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              value: option.value,
+              // ignore: deprecated_member_use
+              groupValue: current,
+              title: Text(option.label),
+              // ignore: deprecated_member_use
+              onChanged: onChanged,
+            ),
+          )
           .toList(),
     );
   }
@@ -113,23 +130,25 @@ class ChecklistQuestionField extends StatelessWidget {
     };
     return Column(
       children: question.options
-          .map((option) => CheckboxListTile(
-                key: Key('checklist_check_${option.value}'),
-                dense: true,
-                contentPadding: EdgeInsets.zero,
-                controlAffinity: ListTileControlAffinity.leading,
-                value: selected.contains(option.value),
-                title: Text(option.label),
-                onChanged: (checked) {
-                  final next = Set<String>.from(selected);
-                  if (checked == true) {
-                    next.add(option.value);
-                  } else {
-                    next.remove(option.value);
-                  }
-                  onChanged(next.toList());
-                },
-              ))
+          .map(
+            (option) => CheckboxListTile(
+              key: Key('checklist_check_${option.value}'),
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              controlAffinity: ListTileControlAffinity.leading,
+              value: selected.contains(option.value),
+              title: Text(option.label),
+              onChanged: (checked) {
+                final next = Set<String>.from(selected);
+                if (checked == true) {
+                  next.add(option.value);
+                } else {
+                  next.remove(option.value);
+                }
+                onChanged(next.toList());
+              },
+            ),
+          )
           .toList(),
     );
   }
@@ -188,7 +207,9 @@ class ChecklistQuestionField extends StatelessWidget {
         children: [
           Icon(icon, size: 18),
           const SizedBox(width: 8),
-          Expanded(child: Text(message, style: Theme.of(context).textTheme.bodySmall)),
+          Expanded(
+            child: Text(message, style: Theme.of(context).textTheme.bodySmall),
+          ),
         ],
       ),
     );

@@ -7,12 +7,17 @@ void main() {
   late SisChecklistCatalog catalog;
 
   setUpAll(() {
-    final raw = File('test/fixtures/sis_checklists_catalog.json').readAsStringSync();
+    final raw = File(
+      'test/fixtures/sis_checklists_catalog.json',
+    ).readAsStringSync();
     catalog = SisChecklistCatalog.fromJson(raw);
   });
 
   test('parses generated SIS checklist catalog', () {
-    expect(catalog.forms.map((form) => form.id), containsAll(<int>[48, 49, 50, 51, 52]));
+    expect(
+      catalog.forms.map((form) => form.id),
+      containsAll(<int>[48, 49, 50, 51, 52]),
+    );
     expect(catalog.targets, hasLength(17));
     expect(catalog.questions, hasLength(1252));
     expect(catalog.formById(52)!.name, 'CHECKLIST ILUMINAÇÃO');
@@ -24,17 +29,25 @@ void main() {
 
   test('carries GLPI profile gate (formcreator_forms_profiles) per form', () {
     for (final form in catalog.forms) {
-      expect(form.profileIds, <int>[4], reason: 'form ${form.id} deve ser so Super-Admin hoje');
+      expect(form.profileIds, <int>[
+        4,
+      ], reason: 'form ${form.id} deve ser so Super-Admin hoje');
       expect(form.isVisibleToProfile(4), isTrue);
       // perfil 11 sem grupo 22 nao ve os checklists (gate OR: precisa de perfil OU grupo)
-      expect(form.isVisibleToProfile(11), isFalse, reason: 'perfil 11 sem grupo nao ve');
+      expect(
+        form.isVisibleToProfile(11),
+        isFalse,
+        reason: 'perfil 11 sem grupo nao ve',
+      );
       expect(form.isVisibleToProfile(null), isFalse);
     }
   });
 
   test('carries GLPI group gate (PluginFormcreatorForm_Group) per form', () {
     for (final form in catalog.forms) {
-      expect(form.groupIds, <int>[22], reason: 'form ${form.id} deve ter grupo CC-MANUTENCAO (22)');
+      expect(form.groupIds, <int>[
+        22,
+      ], reason: 'form ${form.id} deve ter grupo CC-MANUTENCAO (22)');
     }
   });
 
@@ -54,7 +67,9 @@ void main() {
   });
 
   test('derives checklist categories 148-152 from active targets', () {
-    final categoryIds = catalog.targets.map((target) => target.categoryId).toSet();
+    final categoryIds = catalog.targets
+        .map((target) => target.categoryId)
+        .toSet();
     expect(categoryIds, <int>{148, 149, 150, 151, 152});
     for (final target in catalog.targets) {
       expect(target.destinationEntityValue, 58);
@@ -63,7 +78,8 @@ void main() {
 
   test('parses select option values', () {
     final checklistType = catalog.questions.firstWhere(
-      (question) => question.fieldType == 'select' && question.options.isNotEmpty,
+      (question) =>
+          question.fieldType == 'select' && question.options.isNotEmpty,
     );
     expect(
       checklistType.options.map((option) => option.value),
@@ -73,7 +89,10 @@ void main() {
 
   test('rejects empty or invalid catalog', () {
     expect(() => SisChecklistCatalog.fromJson('{}'), throwsFormatException);
-    expect(() => SisChecklistCatalog.fromJson('{"forms":[]}'), throwsFormatException);
+    expect(
+      () => SisChecklistCatalog.fromJson('{"forms":[]}'),
+      throwsFormatException,
+    );
     expect(() => SisChecklistCatalog.fromJson('[]'), throwsFormatException);
   });
 }

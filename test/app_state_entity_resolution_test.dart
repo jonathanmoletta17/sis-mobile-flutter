@@ -113,7 +113,7 @@ void main() {
       'serviceName': 'Ar-Condicionado',
     });
 
-    expect(message, contains('GLPI recusou'));
+    expect(message, contains('não tem permissão para abrir chamados'));
     expect(appState.pendingTickets, isEmpty);
   });
 }

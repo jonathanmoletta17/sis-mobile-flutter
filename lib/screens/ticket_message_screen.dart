@@ -965,7 +965,9 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(result.message ?? 'Download iniciado.'),
+                              content: Text(
+                                result.message ?? 'Download iniciado.',
+                              ),
                               backgroundColor: result.success
                                   ? AppColors.success
                                   : AppColors.danger,

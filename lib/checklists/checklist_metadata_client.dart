@@ -21,8 +21,8 @@ class SisChecklistMetadataClient {
     http.Client? httpClient,
     Future<SharedPreferences> Function()? prefsFactory,
     this.timeout = const Duration(seconds: 8),
-  })  : _httpClient = httpClient ?? http.Client(),
-        _prefsFactory = prefsFactory ?? SharedPreferences.getInstance;
+  }) : _httpClient = httpClient ?? http.Client(),
+       _prefsFactory = prefsFactory ?? SharedPreferences.getInstance;
 
   Future<SisChecklistCatalog?> loadChecklistCatalog({
     required String? catalogUrl,

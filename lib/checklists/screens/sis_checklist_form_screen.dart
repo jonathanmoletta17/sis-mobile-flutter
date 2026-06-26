@@ -40,17 +40,20 @@ class SisChecklistFormScreen extends StatefulWidget {
   final String? preselectedType;
 
   /// Busca de chamados para o campo "Checklist Programada" (glpiselect/Ticket).
-  final Future<List<Map<String, dynamic>>> Function(String query)? ticketSearcher;
+  final Future<List<Map<String, dynamic>>> Function(String query)?
+  ticketSearcher;
 
   /// Busca de itens de conservação física para campos glpiselect/PluginGenericobjectConservacao.
-  final Future<List<Map<String, dynamic>>> Function(String query)? conservacaoSearcher;
+  final Future<List<Map<String, dynamic>>> Function(String query)?
+  conservacaoSearcher;
 
   /// Resolve nome de item Conservacao por ID (para pré-popular default_values).
   final Future<String?> Function(int id)? conservacaoResolver;
 
   /// Callback de submissao real. Recebe a submissao preparada e devolve um
   /// mapa de resultado da mutacao.
-  final Future<Map<String, dynamic>> Function(SisChecklistPreparedSubmission)? onSubmit;
+  final Future<Map<String, dynamic>> Function(SisChecklistPreparedSubmission)?
+  onSubmit;
 
   @override
   State<SisChecklistFormScreen> createState() => _SisChecklistFormScreenState();
@@ -88,7 +91,8 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
     for (final question in widget.catalog.questionsForForm(widget.formId)) {
       if (_answers.containsKey(question.id)) continue;
       if (question.isGlpiSelect) continue;
-      final isChecklistTypeField = question.name == 'Checklist' &&
+      final isChecklistTypeField =
+          question.name == 'Checklist' &&
           question.isSelect &&
           question.rawValues.contains('PREVENTIVA');
       final rawDefault = isChecklistTypeField && widget.preselectedType != null
@@ -118,9 +122,12 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
             .toList();
       }
     } catch (_) {}
-    return raw.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+    return raw
+        .split(',')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
   }
-
 
   // Percorre as questões atualmente visíveis e dispara resolução assíncrona de
   // default_values para campos glpiselect/Conservacao ainda não preenchidos.
@@ -154,7 +161,9 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
       final name = await resolver(itemId);
       if (!mounted) return;
       // Só preenche se o usuário ainda não interagiu com o campo.
-      if (name != null && name.isNotEmpty && !_answers.containsKey(questionId)) {
+      if (name != null &&
+          name.isNotEmpty &&
+          !_answers.containsKey(questionId)) {
         setState(() => _answers[questionId] = name);
       }
     } finally {
@@ -171,7 +180,9 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
   // marcar visualmente); select e radios recebem String diretamente.
   void _prefillFromTargetConditions() {
     final conditions = widget.catalog.conditionsFor(
-        SisChecklistCondition.targetTicketItemType, widget.targetId);
+      SisChecklistCondition.targetTicketItemType,
+      widget.targetId,
+    );
     if (conditions.isEmpty) return;
 
     final questionsById = {
@@ -199,8 +210,7 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
     _resolveVisibleConservacaoDefaults();
   }
 
-  bool get _canSubmit =>
-      widget.submissionEnabled && widget.onSubmit != null;
+  bool get _canSubmit => widget.submissionEnabled && widget.onSubmit != null;
 
   @override
   Widget build(BuildContext context) {
@@ -255,17 +265,24 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
           .where((question) => _engine.isQuestionVisible(question, _answers))
           .toList();
       if (questions.isEmpty) continue;
-      widgets.add(Padding(
-        padding: const EdgeInsets.only(top: 8, bottom: 4),
-        child: Text(section.name, style: Theme.of(context).textTheme.titleMedium),
-      ));
+      widgets.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 8, bottom: 4),
+          child: Text(
+            section.name,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
+      );
       for (final question in questions) {
-        widgets.add(ChecklistQuestionField(
-          question: question,
-          value: _answers[question.id],
-          onChanged: (value) => _setAnswer(question.id, value),
-          glpiSelectBuilder: _glpiSelectBuilder,
-        ));
+        widgets.add(
+          ChecklistQuestionField(
+            question: question,
+            value: _answers[question.id],
+            onChanged: (value) => _setAnswer(question.id, value),
+            glpiSelectBuilder: _glpiSelectBuilder,
+          ),
+        );
       }
     }
     return widgets;
@@ -291,7 +308,10 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
           : null,
       icon: _submitting
           ? const SizedBox(
-              width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
           : const Icon(Icons.send_outlined),
       label: const Text('Enviar'),
     );
@@ -389,10 +409,8 @@ class _GlpiItemSelectField extends StatelessWidget {
     final result = await showModalBottomSheet<Map<String, dynamic>>(
       context: context,
       isScrollControlled: true,
-      builder: (_) => _ItemSearchSheet(
-        searcher: searcher,
-        placeholder: placeholder,
-      ),
+      builder: (_) =>
+          _ItemSearchSheet(searcher: searcher, placeholder: placeholder),
     );
     if (result != null) {
       onChanged(result['name']?.toString() ?? '');
@@ -457,10 +475,7 @@ class _ItemSearchSheetState extends State<_ItemSearchSheet> {
 
   void _onQueryChanged(String query) {
     _debounce?.cancel();
-    _debounce = Timer(
-      const Duration(milliseconds: 400),
-      () => _search(query),
-    );
+    _debounce = Timer(const Duration(milliseconds: 400), () => _search(query));
   }
 
   Future<void> _search(String query) async {
@@ -470,10 +485,17 @@ class _ItemSearchSheetState extends State<_ItemSearchSheet> {
     });
     try {
       final results = await widget.searcher(query);
-      if (mounted) setState(() { _results = results; _loading = false; });
+      if (mounted)
+        setState(() {
+          _results = results;
+          _loading = false;
+        });
     } catch (_) {
       if (mounted) {
-        setState(() { _error = 'Falha ao buscar itens.'; _loading = false; });
+        setState(() {
+          _error = 'Falha ao buscar itens.';
+          _loading = false;
+        });
       }
     }
   }

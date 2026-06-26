@@ -6,10 +6,7 @@ class AttachmentOpeningPolicy {
     return sanitized.isEmpty ? 'anexo' : sanitized;
   }
 
-  static String resolveMimeType({
-    required String filename,
-    String? mimeType,
-  }) {
+  static String resolveMimeType({required String filename, String? mimeType}) {
     final normalizedMime = mimeType?.trim().toLowerCase();
     if (normalizedMime != null &&
         normalizedMime.isNotEmpty &&

@@ -23,13 +23,22 @@ void main() {
       expect(rules.isStatusTerminal(1), isFalse); // Novo
     });
 
-    test('Tecnico (6) pode todas as transições; Solicitante (9) é restrito', () {
-      final tecFromNew = rules.allowedStatusTransitions(profileId: 6, current: 1);
-      expect(tecFromNew, containsAll(<int>[2, 5, 6]));
+    test(
+      'Tecnico (6) pode todas as transições; Solicitante (9) é restrito',
+      () {
+        final tecFromNew = rules.allowedStatusTransitions(
+          profileId: 6,
+          current: 1,
+        );
+        expect(tecFromNew, containsAll(<int>[2, 5, 6]));
 
-      final solFromNew = rules.allowedStatusTransitions(profileId: 9, current: 1);
-      expect(solFromNew, isEmpty); // solicitante não move de Novo
-    });
+        final solFromNew = rules.allowedStatusTransitions(
+          profileId: 9,
+          current: 1,
+        );
+        expect(solFromNew, isEmpty); // solicitante não move de Novo
+      },
+    );
 
     test('visibilidade: Tecnico vê todos; Solicitante só os próprios', () {
       expect(rules.visibilityScope(profileId: 6), VisibilityScope.allInEntity);

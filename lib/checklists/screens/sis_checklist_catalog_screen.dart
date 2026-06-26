@@ -28,13 +28,16 @@ class SisChecklistCatalogScreen extends StatelessWidget {
   final List<int> userGroupIds;
 
   final bool submissionEnabled;
-  final Future<Map<String, dynamic>> Function(SisChecklistPreparedSubmission)? onSubmit;
+  final Future<Map<String, dynamic>> Function(SisChecklistPreparedSubmission)?
+  onSubmit;
 
   /// Busca de chamados para o campo "Checklist Programada" (glpiselect/Ticket).
-  final Future<List<Map<String, dynamic>>> Function(String query)? ticketSearcher;
+  final Future<List<Map<String, dynamic>>> Function(String query)?
+  ticketSearcher;
 
   /// Busca de itens de conservação física (PluginGenericobjectConservacao).
-  final Future<List<Map<String, dynamic>>> Function(String query)? conservacaoSearcher;
+  final Future<List<Map<String, dynamic>>> Function(String query)?
+  conservacaoSearcher;
 
   /// Resolve o nome de um item Conservacao pelo ID numérico (para pré-popular defaults).
   final Future<String?> Function(int id)? conservacaoResolver;
@@ -123,9 +126,7 @@ class _FormGroupState extends State<_FormGroup> {
               selected: {_selectedType},
               onSelectionChanged: (selection) =>
                   setState(() => _selectedType = selection.first),
-              style: const ButtonStyle(
-                visualDensity: VisualDensity.compact,
-              ),
+              style: const ButtonStyle(visualDensity: VisualDensity.compact),
             ),
           ),
           for (final target in targets)

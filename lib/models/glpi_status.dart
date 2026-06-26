@@ -1,3 +1,8 @@
+/// Status nativos de Ticket do GLPI (1..6). O GLPI core NÃO possui um status
+/// "Cancelado": cancelar equivale a fechar (status 6), opcionalmente com uma
+/// solução/justificativa indicando o cancelamento. Por isso o cenário de
+/// auditoria "Solucionado → Cancelado" se resolve como encerramento e não como
+/// um estado próprio (A2).
 enum GlpiStatus {
   novo(1, 'Novo'),
   emAtendimento(2, 'Em Atendimento'),

@@ -3,8 +3,6 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/glpi_status.dart';
@@ -13,6 +11,7 @@ import '../../theme/app_radius.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_status.dart';
 import '../../utils/file_validator.dart';
+import '../../utils/platform_attachment_opener.dart';
 import '../../utils/ticket_form_summary.dart';
 import '../../widgets/ui/sis_empty_state.dart';
 import '../../widgets/ui/sis_loading_state.dart';
@@ -88,16 +87,18 @@ class _DticTicketDetailScreenState extends State<DticTicketDetailScreen> {
       final bytes = await context.read<DticAppState>().downloadDocument(
         document,
       );
-      final tempDir = await getTemporaryDirectory();
-      final safeName = document.name.replaceAll(RegExp(r'[\\/]'), '_');
-      final file = File('${tempDir.path}/$safeName');
-      await file.writeAsBytes(bytes, flush: true);
-      final result = await OpenFilex.open(file.path);
+      final result = await openAttachmentBytes(
+        bytes: Uint8List.fromList(bytes),
+        filename: document.name,
+        mimeType: document.mime,
+      );
       if (!mounted) return;
-      if (result.type != ResultType.done) {
+      if (!result.success) {
         messenger.showSnackBar(
           SnackBar(content: Text('Nao foi possivel abrir: ${result.message}')),
         );
+      } else if (result.message != null && result.message!.isNotEmpty) {
+        messenger.showSnackBar(SnackBar(content: Text(result.message!)));
       }
     } catch (error) {
       if (!mounted) return;

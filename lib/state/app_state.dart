@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:sis_mobile_flutter/utils/html_decode_utils.dart';
+import 'package:sis_mobile_flutter/utils/glpi_name_formatter.dart';
 import '../services/glpi_client.dart';
 import '../services/glpi_client_support.dart';
+import '../services/glpi_ticket_support.dart';
 import '../models/glpi_ticket.dart';
 import '../models/glpi_status.dart';
 import '../models/glpi_identity.dart';
@@ -100,7 +102,11 @@ class AppState extends ChangeNotifier {
   ) async {
     final catalog = checklistCatalog;
     if (catalog == null) {
-      return {'success': false, 'blocked': true, 'message': 'Catálogo de checklist não carregado.'};
+      return {
+        'success': false,
+        'blocked': true,
+        'message': 'Catálogo de checklist não carregado.',
+      };
     }
     final result = await _apiService.submitChecklistAsTicket(
       submission: submission,
@@ -123,10 +129,7 @@ class AppState extends ChangeNotifier {
     final token = _sessionToken;
     if (token == null || token.isEmpty) return const [];
     try {
-      return await _apiService.searchTicketsForGlpiSelect(
-        token,
-        query: query,
-      );
+      return await _apiService.searchTicketsForGlpiSelect(token, query: query);
     } catch (e) {
       debugPrint('[AppState] searchTicketsForChecklist erro: $e');
       return const [];
@@ -505,6 +508,17 @@ class AppState extends ChangeNotifier {
           '⛔ Criação de chamado bloqueada pelo GLPI; não será salva offline: $detail',
         );
         notifyListeners();
+        // Caso específico: o perfil ATIVO não tem direito de criar ticket
+        // (ex.: perfil 12 "Solicitante-GG-Conservação", que é de tratamento e
+        // não abre chamados). Mensagem acionável em vez de erro genérico — o app
+        // não troca de perfil, então o ajuste é no perfil padrão (admin).
+        if (_isPermissionDeniedError(e)) {
+          return '⛔ Seu perfil ativo não tem permissão para abrir chamados. '
+              'Confirme que está usando o perfil de Solicitante — perfis de '
+              'tratamento (ex.: Solicitante-GG-Conservação) não abrem chamados. '
+              'Se precisa abrir chamados, contate o administrador para ajustar '
+              'seu perfil padrão no GLPI. Detalhe: $detail';
+        }
         return '⛔ O GLPI recusou a criação deste chamado. Nada foi salvo offline para evitar sincronização impossível. Detalhe: $detail';
       }
 
@@ -639,7 +653,9 @@ class AppState extends ChangeNotifier {
                 );
               } catch (e) {
                 if (_isSessionInvalidError(e)) rethrow;
-                debugPrint('⚠️ Erro ao buscar fila operacional status ${s.label}: $e');
+                debugPrint(
+                  '⚠️ Erro ao buscar fila operacional status ${s.label}: $e',
+                );
                 return <Map<String, dynamic>>[];
               }
             });
@@ -806,25 +822,109 @@ class AppState extends ChangeNotifier {
       }
 
       if (isAssigned) {
-        return {
-          'success': true,
-          'message': 'Status alterado e Chamado assumido com sucesso!',
-        };
+        return _confirmInProgressAssignment(ticketId);
       } else {
         return {
-          'success': true,
-          'message': 'Status alterado, mas FALHA ao atribuir o técnico.',
+          'success': false,
+          'statusUpdated': true,
+          'assignmentFailed': true,
+          'message':
+              'Status alterado para Em Atendimento, mas não foi possível atribuir o técnico.',
         };
       }
     }
 
-    return {'success': true, 'message': 'Status atualizado com sucesso.'};
+    return {
+      'success': true,
+      'statusUpdated': true,
+      'message': 'Status atualizado com sucesso.',
+    };
+  }
+
+  Future<Map<String, dynamic>> _confirmInProgressAssignment(
+    String ticketId,
+  ) async {
+    try {
+      final confirmedTicket = await _apiService.getTicketById(
+        ticketId,
+        _sessionToken!,
+      );
+      final statusConfirmed =
+          GlpiStatusMapper.code(confirmedTicket['status']) ==
+          GlpiStatus.emAtendimento.code;
+      final assignmentConfirmed = _ticketAssigneeMatchesLoggedUser(
+        confirmedTicket,
+      );
+
+      if (statusConfirmed && assignmentConfirmed) {
+        return {
+          'success': true,
+          'statusUpdated': true,
+          'assigned': true,
+          'readBackConfirmed': true,
+          'message': 'Status alterado e Chamado assumido com sucesso!',
+        };
+      }
+
+      return {
+        'success': false,
+        'statusUpdated': statusConfirmed,
+        'assigned': false,
+        'assignmentFailed': !assignmentConfirmed,
+        'readBackConfirmed': false,
+        'message':
+            'O GLPI não confirmou o status Em Atendimento com o técnico responsável.',
+      };
+    } catch (e) {
+      if (_isSessionInvalidError(e)) {
+        await _handleSessionInvalid(e);
+      }
+      return {
+        'success': false,
+        'statusUpdated': true,
+        'assigned': false,
+        'confirmationFailed': true,
+        'readBackConfirmed': false,
+        'message':
+            'Status e atribuição enviados, mas não foi possível confirmar no GLPI.',
+      };
+    }
+  }
+
+  bool _ticketAssigneeMatchesLoggedUser(Map<String, dynamic> ticket) {
+    final expectedUserId = _loggedUserId;
+    if (expectedUserId == null || expectedUserId <= 0) return false;
+    final assigneeId = _numericId(
+      ticket['assignee_user_id'] ??
+          ticket['users_id_assign_id'] ??
+          ticket['Users_id_assign_id'] ??
+          ticket['users_id_assign'] ??
+          ticket['Users_id_assign'],
+    );
+    return assigneeId == expectedUserId;
+  }
+
+  int? _numericId(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    final extracted = GlpiNameFormatter.extractNumericId(value);
+    if (extracted != null) return int.tryParse(extracted);
+    final text = value.toString().trim();
+    if (!RegExp(r'^\d+$').hasMatch(text)) return null;
+    return int.tryParse(text);
   }
 
   // Método para tentar sincronizar tickets pendentes
   Future<int> synchronizeTickets() async {
     if (_pendingTickets.isEmpty) {
       debugPrint('📝 Nenhum ticket pendente para sincronizar');
+      return 0;
+    }
+    if (!_isAuthenticated || _sessionToken == null || _sessionToken!.isEmpty) {
+      debugPrint(
+        '⏸️ Sincronizacao offline adiada: sessao GLPI ausente ou expirada.',
+      );
       return 0;
     }
 
@@ -840,34 +940,41 @@ class AppState extends ChangeNotifier {
       final String? path =
           mapData['anexoPath'] ?? mapData['attachmentPath'] ?? ticket.anexoPath;
 
-      if (path != null && path.isNotEmpty) {
-        final file = File(path);
-
-        if (await file.exists()) {
+      if (!_hasStoredAttachmentBytes(mapData) &&
+          path != null &&
+          path.isNotEmpty) {
+        if (kIsWeb) {
           debugPrint(
-            '📎 [SYNC] Arquivo offline encontrado! Lendo bytes...: $path',
+            '⚠️ [SYNC] Anexo offline possui apenas path no Web; arquivo não pode ser relido: $path',
           );
-
-          mapData['attachmentBytes'] = await file.readAsBytes();
-          mapData['attachmentName'] =
-              mapData['anexoName'] ?? path.split(Platform.pathSeparator).last;
+          _appendOfflineAttachmentWarning(mapData);
         } else {
-          debugPrint(
-            '⚠️ [SYNC] ERRO CRÍTICO: O arquivo sumiu do celular! Caminho: $path',
-          );
-          mapData['content'] =
-              '${mapData['content'] ?? ''}\n\n[AVISO DO APP: O anexo offline foi perdido pois o cache do sistema foi limpo]';
+          final file = File(path);
+
+          if (await file.exists()) {
+            debugPrint(
+              '📎 [SYNC] Arquivo offline encontrado! Lendo bytes...: $path',
+            );
+
+            mapData['attachmentBytes'] = await file.readAsBytes();
+            mapData['attachmentName'] =
+                mapData['anexoName'] ?? path.split(Platform.pathSeparator).last;
+          } else {
+            debugPrint(
+              '⚠️ [SYNC] ERRO CRÍTICO: O arquivo sumiu do celular! Caminho: $path',
+            );
+            _appendOfflineAttachmentWarning(mapData);
+          }
         }
       } else {
         debugPrint(
-          'ℹ️ [SYNC] Nenhum caminho de anexo salvo neste ticket offline.',
+          _hasStoredAttachmentBytes(mapData)
+              ? '📎 [SYNC] Anexo offline restaurado por bytes salvos.'
+              : 'ℹ️ [SYNC] Nenhum caminho de anexo salvo neste ticket offline.',
         );
       }
 
-      final result = await _apiService.createTicket(
-        mapData,
-        _sessionToken ?? '',
-      );
+      final result = await _apiService.createTicket(mapData, _sessionToken!);
 
       if (result['success'] == true) {
         debugPrint('✅ Ticket sincronizado: ${ticket.assunto}');
@@ -892,6 +999,32 @@ class AppState extends ChangeNotifier {
     return syncedCount;
   }
 
+  bool _hasStoredAttachmentBytes(Map<String, dynamic> mapData) {
+    return _hasBytePayload(mapData['attachmentBytes']) ||
+        _hasByteListPayload(mapData['attachmentBytesList']) ||
+        _hasByteListPayload(mapData['attachmentsBytes']) ||
+        _hasByteListPayload(mapData['attachmentBytesArray']);
+  }
+
+  bool _hasBytePayload(dynamic value) {
+    return value is List && value.isNotEmpty;
+  }
+
+  bool _hasByteListPayload(dynamic value) {
+    if (value is! List || value.isEmpty) return false;
+    return value.any(_hasBytePayload);
+  }
+
+  void _appendOfflineAttachmentWarning(Map<String, dynamic> mapData) {
+    const warning =
+        '[AVISO DO APP: O anexo offline foi perdido pois o cache do sistema foi limpo]';
+    final currentDescription =
+        (mapData['descricao'] ?? mapData['content'] ?? '').toString().trim();
+    mapData['descricao'] = currentDescription.isEmpty
+        ? warning
+        : '$currentDescription\n\n$warning';
+  }
+
   // === MÉTODOS PARA GERENCIAR MENSAGENS DE TICKETS ===
 
   /// Busca todas as mensagens E documentos (do Ticket + Followups + Solutions)
@@ -913,6 +1046,7 @@ class AppState extends ChangeNotifier {
     required String ticketId,
     required String messageContent,
     List<String> filePaths = const [],
+    List<GlpiTicketAttachment> attachments = const [],
     bool isSolution = false,
   }) async {
     return AppStateMessageSupport.sendTicketMessageWithAttachments(
@@ -922,6 +1056,7 @@ class AppState extends ChangeNotifier {
       ticketId: ticketId,
       messageContent: messageContent,
       filePaths: filePaths,
+      attachments: attachments,
       isSolution: isSolution,
       uploadAndLinkImage: _uploadAndLinkImage,
       isSessionInvalidError: _isSessionInvalidError,

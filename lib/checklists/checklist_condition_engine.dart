@@ -15,7 +15,10 @@ class SisChecklistConditionEngine {
 
   final SisChecklistCatalog catalog;
 
-  bool isSectionVisible(SisChecklistSection section, Map<int, dynamic> answers) {
+  bool isSectionVisible(
+    SisChecklistSection section,
+    Map<int, dynamic> answers,
+  ) {
     return _isItemVisible(
       itemType: SisChecklistCondition.sectionItemType,
       itemId: section.id,
@@ -25,7 +28,10 @@ class SisChecklistConditionEngine {
     );
   }
 
-  bool isQuestionVisible(SisChecklistQuestion question, Map<int, dynamic> answers) {
+  bool isQuestionVisible(
+    SisChecklistQuestion question,
+    Map<int, dynamic> answers,
+  ) {
     // Pergunta so e visivel se a secao dela tambem for.
     final section = _sectionById(question.sectionId);
     if (section != null && !isSectionVisible(section, answers)) {

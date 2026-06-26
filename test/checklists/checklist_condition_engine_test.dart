@@ -13,7 +13,14 @@ SisChecklistCatalog _catalog({
     'schema_version': 'test',
     'source_snapshot_sha256': 'test',
     'forms': [
-      {'id': 1, 'name': 'F', 'is_active': true, 'is_visible': true, 'helpdesk_home': true, 'profile_ids': [4]},
+      {
+        'id': 1,
+        'name': 'F',
+        'is_active': true,
+        'is_visible': true,
+        'helpdesk_home': true,
+        'profile_ids': [4],
+      },
     ],
     'sections': [
       {'id': 10, 'form_id': 1, 'name': 'S', 'order': 1},
@@ -25,18 +32,22 @@ SisChecklistCatalog _catalog({
   });
 }
 
-Map<String, dynamic> _q(int id, {int showRule = 1, String fieldtype = 'text'}) => {
-      'id': id,
-      'form_id': 1,
-      'section_id': 10,
-      'name': 'Q$id',
-      'fieldtype': fieldtype,
-      'required': false,
-      'show_rule': showRule,
-      'row': id,
-      'col': 0,
-      'width': 4,
-    };
+Map<String, dynamic> _q(
+  int id, {
+  int showRule = 1,
+  String fieldtype = 'text',
+}) => {
+  'id': id,
+  'form_id': 1,
+  'section_id': 10,
+  'name': 'Q$id',
+  'fieldtype': fieldtype,
+  'required': false,
+  'show_rule': showRule,
+  'row': id,
+  'col': 0,
+  'width': 4,
+};
 
 Map<String, dynamic> _cond(
   int itemId,
@@ -46,17 +57,16 @@ Map<String, dynamic> _cond(
   int showLogic = 1,
   int order = 1,
   String itemType = SisChecklistCondition.questionItemType,
-}) =>
-    {
-      'id': 9000 + itemId + order,
-      'itemtype': itemType,
-      'items_id': itemId,
-      'source_question_id': sourceQuestionId,
-      'show_condition': showCondition,
-      'show_value': showValue,
-      'show_logic': showLogic,
-      'order': order,
-    };
+}) => {
+  'id': 9000 + itemId + order,
+  'itemtype': itemType,
+  'items_id': itemId,
+  'source_question_id': sourceQuestionId,
+  'show_condition': showCondition,
+  'show_value': showValue,
+  'show_logic': showLogic,
+  'order': order,
+};
 
 void main() {
   test('show rule 1 is always visible', () {
@@ -90,16 +100,29 @@ void main() {
     expect(engine.isQuestionVisible(question, {99: 'NAO'}), isTrue);
   });
 
-  test('multiselect answer matches when any selected value equals expected', () {
-    final catalog = _catalog(
-      questions: [_q(1, showRule: 2)],
-      conditions: [_cond(1, 99, showValue: 'B')],
-    );
-    final engine = SisChecklistConditionEngine(catalog);
-    final question = catalog.questions.first;
-    expect(engine.isQuestionVisible(question, {99: ['A', 'B', 'C']}), isTrue);
-    expect(engine.isQuestionVisible(question, {99: ['A', 'C']}), isFalse);
-  });
+  test(
+    'multiselect answer matches when any selected value equals expected',
+    () {
+      final catalog = _catalog(
+        questions: [_q(1, showRule: 2)],
+        conditions: [_cond(1, 99, showValue: 'B')],
+      );
+      final engine = SisChecklistConditionEngine(catalog);
+      final question = catalog.questions.first;
+      expect(
+        engine.isQuestionVisible(question, {
+          99: ['A', 'B', 'C'],
+        }),
+        isTrue,
+      );
+      expect(
+        engine.isQuestionVisible(question, {
+          99: ['A', 'C'],
+        }),
+        isFalse,
+      );
+    },
+  );
 
   test('show_logic 1 is AND and 2 is OR', () {
     final andCatalog = _catalog(
@@ -111,8 +134,14 @@ void main() {
     );
     final andEngine = SisChecklistConditionEngine(andCatalog);
     final andQuestion = andCatalog.questions.first;
-    expect(andEngine.isQuestionVisible(andQuestion, {98: 'X', 99: 'Y'}), isTrue);
-    expect(andEngine.isQuestionVisible(andQuestion, {98: 'X', 99: 'Z'}), isFalse);
+    expect(
+      andEngine.isQuestionVisible(andQuestion, {98: 'X', 99: 'Y'}),
+      isTrue,
+    );
+    expect(
+      andEngine.isQuestionVisible(andQuestion, {98: 'X', 99: 'Z'}),
+      isFalse,
+    );
 
     final orCatalog = _catalog(
       questions: [_q(1, showRule: 2)],

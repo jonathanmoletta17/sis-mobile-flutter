@@ -18,7 +18,11 @@ SisChecklistPreparedSubmission _submission({Set<int> files = const {}}) {
 
 void main() {
   test('blocks before HTTP when the app submission flag is off', () async {
-    dotenv.testLoad(mergeWith: const <String, String>{'SIS_ENABLE_CHECKLISTS_SUBMISSION': 'false'});
+    dotenv.testLoad(
+      mergeWith: const <String, String>{
+        'SIS_ENABLE_CHECKLISTS_SUBMISSION': 'false',
+      },
+    );
     final result = await GlpiClient().submitFormCreatorAnswer(
       submission: _submission(),
       sessionToken: 'sess',
@@ -28,7 +32,11 @@ void main() {
   });
 
   test('blocks when session token is missing even with flag on', () async {
-    dotenv.testLoad(mergeWith: const <String, String>{'SIS_ENABLE_CHECKLISTS_SUBMISSION': 'true'});
+    dotenv.testLoad(
+      mergeWith: const <String, String>{
+        'SIS_ENABLE_CHECKLISTS_SUBMISSION': 'true',
+      },
+    );
     final result = await GlpiClient().submitFormCreatorAnswer(
       submission: _submission(),
       sessionToken: '',
@@ -37,16 +45,23 @@ void main() {
     expect(result['blocked'], isTrue);
   });
 
-  test('blocks attachment submissions until the file contract is validated', () async {
-    dotenv.testLoad(mergeWith: const <String, String>{'SIS_ENABLE_CHECKLISTS_SUBMISSION': 'true'});
-    final result = await GlpiClient().submitFormCreatorAnswer(
-      submission: _submission(files: {3}),
-      sessionToken: 'sess',
-    );
-    expect(result['success'], isFalse);
-    expect(result['blocked'], isTrue);
-    expect(result['message'], contains('anexos'));
-  });
+  test(
+    'blocks attachment submissions until the file contract is validated',
+    () async {
+      dotenv.testLoad(
+        mergeWith: const <String, String>{
+          'SIS_ENABLE_CHECKLISTS_SUBMISSION': 'true',
+        },
+      );
+      final result = await GlpiClient().submitFormCreatorAnswer(
+        submission: _submission(files: {3}),
+        sessionToken: 'sess',
+      );
+      expect(result['success'], isFalse);
+      expect(result['blocked'], isTrue);
+      expect(result['message'], contains('anexos'));
+    },
+  );
 
   test('prepared payload carries FormCreator shape', () {
     final payload = _submission().toFormCreatorInput();

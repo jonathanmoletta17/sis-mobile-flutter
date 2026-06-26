@@ -16,7 +16,9 @@ void main() {
 
   test('empty URL returns null and does not throw', () async {
     final client = SisChecklistMetadataClient(
-      httpClient: MockClient((_) async => http.Response('should not be called', 500)),
+      httpClient: MockClient(
+        (_) async => http.Response('should not be called', 500),
+      ),
     );
     final catalog = await client.loadChecklistCatalog(catalogUrl: '');
     expect(catalog, isNull);
@@ -48,8 +50,14 @@ void main() {
     expect(calls, 1);
 
     final prefs = await SharedPreferences.getInstance();
-    expect(prefs.getString(SisChecklistMetadataClient.cacheKeyCatalogEtag), '"abc"');
-    expect(prefs.getString(SisChecklistMetadataClient.cacheKeyCatalogJson), isNotNull);
+    expect(
+      prefs.getString(SisChecklistMetadataClient.cacheKeyCatalogEtag),
+      '"abc"',
+    );
+    expect(
+      prefs.getString(SisChecklistMetadataClient.cacheKeyCatalogJson),
+      isNotNull,
+    );
   });
 
   test('HTTP 304 falls back to cache and sends If-None-Match', () async {
@@ -79,7 +87,9 @@ void main() {
       SisChecklistMetadataClient.cacheKeyCatalogJson: _fixtureJson(),
     });
     final client = SisChecklistMetadataClient(
-      httpClient: MockClient((_) async => throw const SocketException('offline')),
+      httpClient: MockClient(
+        (_) async => throw const SocketException('offline'),
+      ),
     );
     final catalog = await client.loadChecklistCatalog(
       catalogUrl: 'https://worker.test/metadata/mobile/sis/checklists',
@@ -90,7 +100,9 @@ void main() {
 
   test('network error without cache returns null', () async {
     final client = SisChecklistMetadataClient(
-      httpClient: MockClient((_) async => throw const SocketException('offline')),
+      httpClient: MockClient(
+        (_) async => throw const SocketException('offline'),
+      ),
     );
     final catalog = await client.loadChecklistCatalog(
       catalogUrl: 'https://worker.test/metadata/mobile/sis/checklists',

@@ -9,16 +9,20 @@ void main() {
   });
 
   test('submission flag reads truthy values', () {
-    dotenv.testLoad(mergeWith: const <String, String>{
-      'SIS_ENABLE_CHECKLISTS_SUBMISSION': '1',
-    });
+    dotenv.testLoad(
+      mergeWith: const <String, String>{
+        'SIS_ENABLE_CHECKLISTS_SUBMISSION': '1',
+      },
+    );
     expect(GlpiConfig.sisChecklistSubmissionEnabled, isTrue);
   });
 
   test('submission flag treats non-truthy strings as false', () {
-    dotenv.testLoad(mergeWith: const <String, String>{
-      'SIS_ENABLE_CHECKLISTS_SUBMISSION': 'maybe',
-    });
+    dotenv.testLoad(
+      mergeWith: const <String, String>{
+        'SIS_ENABLE_CHECKLISTS_SUBMISSION': 'maybe',
+      },
+    );
     expect(GlpiConfig.sisChecklistSubmissionEnabled, isFalse);
   });
 }

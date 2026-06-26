@@ -146,12 +146,11 @@ class AppStateMessageSupport {
       final errors = <String>[];
 
       if (isAttachmentOnly) {
-        log?.call('Modo anexo-only: fazer upload dos anexos ANTES de criar follow-up');
+        log?.call(
+          'Modo anexo-only: fazer upload dos anexos ANTES de criar follow-up',
+        );
         for (final path in filePaths) {
-          final uploadResult = await uploadAndLinkImage(
-            ticketId,
-            path,
-          );
+          final uploadResult = await uploadAndLinkImage(ticketId, path);
           if (uploadResult['success'] == true) {
             successCount++;
           } else {
@@ -198,7 +197,9 @@ class AppStateMessageSupport {
         }
 
         if (successCount > 0) {
-          log?.call('$successCount anexo(s) enviado(s). Criar follow-up placeholder.');
+          log?.call(
+            '$successCount anexo(s) enviado(s). Criar follow-up placeholder.',
+          );
           final result = isSolution
               ? await apiService.addTicketSolution(
                   ticketId,

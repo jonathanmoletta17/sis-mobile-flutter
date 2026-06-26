@@ -57,7 +57,8 @@ class SisChecklistPreparedSubmission {
 
     final buffer = StringBuffer('<p>');
     if (formName != null) buffer.write('<b>Formulário:</b> $formName<br>');
-    if (targetName != null) buffer.write('<b>Local de aplicação:</b> $targetName<br>');
+    if (targetName != null)
+      buffer.write('<b>Local de aplicação:</b> $targetName<br>');
     buffer.write('</p>');
 
     int? currentSection;
@@ -92,14 +93,18 @@ class SisChecklistPreparedSubmission {
     String? formName,
     String? targetName,
   }) {
-    final baseName =
-        targetName != null ? 'Checklist $targetName' : 'Checklist SIS';
+    final baseName = targetName != null
+        ? 'Checklist $targetName'
+        : 'Checklist SIS';
     final programada = _findProgramadaAnswer(catalog);
-    final name =
-        programada.isNotEmpty ? '$baseName - $programada' : baseName;
+    final name = programada.isNotEmpty ? '$baseName - $programada' : baseName;
     return {
       'name': name,
-      'content': toTicketContent(catalog, formName: formName, targetName: targetName),
+      'content': toTicketContent(
+        catalog,
+        formName: formName,
+        targetName: targetName,
+      ),
       'entities_id': entityId,
       'itilcategories_id': categoryId,
       'type': 1,
@@ -135,7 +140,9 @@ class SisChecklistSubmissionPreparer {
   }) {
     final target = catalog.targetById(targetId);
     if (target == null) {
-      throw ArgumentError('target $targetId nao existe no catalogo de checklist');
+      throw ArgumentError(
+        'target $targetId nao existe no catalogo de checklist',
+      );
     }
     if (target.formId != formId) {
       throw ArgumentError(
@@ -143,7 +150,9 @@ class SisChecklistSubmissionPreparer {
       );
     }
     if (target.categoryId <= 0) {
-      throw ArgumentError('target $targetId sem categoria derivavel (category_id <= 0)');
+      throw ArgumentError(
+        'target $targetId sem categoria derivavel (category_id <= 0)',
+      );
     }
     if (target.destinationEntityValue <= 0) {
       throw ArgumentError('target $targetId sem entidade destino derivavel');
@@ -161,7 +170,8 @@ class SisChecklistSubmissionPreparer {
       if (question.isFile) {
         fileQuestionIds.add(question.id);
       }
-      final isInventoryLookup = question.isGlpiSelect &&
+      final isInventoryLookup =
+          question.isGlpiSelect &&
           question.itemType == 'PluginGenericobjectConservacao';
       if (question.required &&
           !isInventoryLookup &&

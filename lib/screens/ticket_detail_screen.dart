@@ -14,6 +14,7 @@ import '../theme/app_status.dart';
 import '../utils/attachment_display.dart';
 import '../utils/glpi_name_formatter.dart';
 import '../utils/glpi_text_formatter.dart';
+import '../utils/platform_attachment_opener.dart';
 import '../utils/ticket_form_summary.dart';
 import '../widgets/ui/sis_empty_state.dart';
 import '../widgets/ui/sis_page_scaffold.dart';
@@ -291,6 +292,47 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
     }
   }
 
+  Future<void> _downloadAndOpenRemoteAttachment(
+    Map<String, dynamic> doc,
+  ) async {
+    final downloadUrl = (doc['download_url'] ?? '').toString();
+    final filename = (doc['name'] ?? 'anexo').toString();
+    if (downloadUrl.isEmpty) return;
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Baixando $filename...')));
+
+    try {
+      final appState = Provider.of<AppState>(context, listen: false);
+      final bytes = await appState.downloadImage(downloadUrl);
+      if (bytes == null || bytes.isEmpty) {
+        throw Exception('download retornou vazio');
+      }
+
+      final result = await openAttachmentBytes(
+        bytes: bytes,
+        filename: filename,
+        mimeType: doc['mime']?.toString(),
+      );
+      if (!mounted) return;
+      if (!result.success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Nao foi possivel abrir: ${result.message}')),
+        );
+      } else if (result.message != null && result.message!.isNotEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(result.message!)));
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Falha ao abrir anexo: $e')));
+    }
+  }
+
   Widget _buildRemoteAttachmentsList() {
     if (_isLoadingRemoteAttachments) {
       return const SizedBox(
@@ -378,20 +420,32 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                     ),
                   )
                 else
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.md,
-                      vertical: AppSpacing.md,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(AppRadius.sm),
-                      border: Border.all(color: AppColors.border),
-                    ),
-                    child: Text(
-                      filename,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                  InkWell(
+                    onTap: () => _downloadAndOpenRemoteAttachment(doc),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.md,
+                        vertical: AppSpacing.md,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
+                        border: Border.all(color: AppColors.border),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.open_in_new, size: 18),
+                          const SizedBox(width: AppSpacing.sm),
+                          Expanded(
+                            child: Text(
+                              filename,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
               ],
@@ -405,7 +459,9 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
   /// Botões de próximo status derivados do contrato (transições permitidas por
   /// perfil). Usa fallback hardcoded se o contrato ainda não foi carregado ou
   /// o profileId não está disponível.
-  List<Widget> _allowedStatusButtons(BuildContext context) {
+  /// Transições de status permitidas para o perfil ativo (via contrato), já
+  /// excluindo o status atual. Fallback básico se o contrato não carregou.
+  List<GlpiStatus> _allowedStatusTargets(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
     final profileId = appState.activeProfileId ?? 0;
     final currentCode = _statusCode ?? 0;
@@ -414,92 +470,134 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
       final allowed = appState.rulesClient
           .allowedStatusTransitions(profileId: profileId, current: currentCode)
           .where((code) => code != currentCode)
+          .map(GlpiStatusMapper.tryParse)
+          .whereType<GlpiStatus>()
           .toList();
-
-      if (allowed.isNotEmpty) {
-        return allowed
-            .map(GlpiStatusMapper.tryParse)
-            .whereType<GlpiStatus>()
-            .map((status) => _buildStatusButton(
-                  label: status.label,
-                  color: status == GlpiStatus.solucionado
-                      ? AppColors.brand
-                      : AppColors.info,
-                  targetStatus: status,
-                ))
-            .toList();
-      }
+      if (allowed.isNotEmpty) return allowed;
     }
 
-    // Fallback: botões originais para quando o contrato ainda não carregou.
+    // Fallback: transições básicas quando o contrato ainda não carregou.
     return [
-      _buildStatusButton(
-        label: GlpiStatus.emAtendimento.label,
-        color: AppColors.info,
-        targetStatus: GlpiStatus.emAtendimento,
-      ),
-      _buildStatusButton(
-        label: GlpiStatus.solucionado.label,
-        color: AppColors.brand,
-        targetStatus: GlpiStatus.solucionado,
-      ),
-    ];
+      GlpiStatus.emAtendimento,
+      GlpiStatus.solucionado,
+    ].where((status) => status.code != currentCode).toList();
   }
 
-  Widget _buildStatusButton({
-    required String label,
-    required Color color,
-    required GlpiStatus targetStatus,
-  }) {
-    final currentCode = _statusCode;
-    final isCurrentStatus = currentCode == targetStatus.code;
-    final isTerminal = _isClosedForInteraction;
+  Color _statusColor(GlpiStatus status) =>
+      status == GlpiStatus.solucionado ? AppColors.brand : AppColors.info;
 
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: ElevatedButton(
-          onPressed: (_isUpdating || isCurrentStatus || isTerminal)
-              ? null
-              : () async {
-                  if (targetStatus == GlpiStatus.solucionado) {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => TicketMessageScreen(
-                          ticketId: _ticketId,
-                          startInSolutionMode: true,
-                          ticketOwner: _ticketOwnerName,
-                          ticketOwnerUserId: _ticketOwnerUserId,
-                          ticketStatus: _ticketData['status'],
-                          isClosed: _isClosedTicket,
-                        ),
-                      ),
-                    );
-                    if (!mounted) return;
-                    await _rehydrateTicket();
-                    return;
-                  }
+  bool _isAssumeAndStartAction(BuildContext context) {
+    final currentStatus = GlpiStatusMapper.tryParse(_ticketData['status']);
+    if (currentStatus != GlpiStatus.novo) return false;
+    return _allowedStatusTargets(context).contains(GlpiStatus.emAtendimento);
+  }
 
-                  await _updateStatus(targetStatus);
-                },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: isCurrentStatus
-                ? color.withValues(alpha: 0.45)
-                : color,
-            foregroundColor: isCurrentStatus
-                ? AppColors.textStrong
-                : AppColors.textInverse,
+  Future<void> _onStatusSelected(GlpiStatus targetStatus) async {
+    if (targetStatus == GlpiStatus.solucionado) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => TicketMessageScreen(
+            ticketId: _ticketId,
+            startInSolutionMode: true,
+            ticketOwner: _ticketOwnerName,
+            ticketOwnerUserId: _ticketOwnerUserId,
+            ticketStatus: _ticketData['status'],
+            isClosed: _isClosedTicket,
           ),
-          child: _isUpdating && !isCurrentStatus
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 2,
+        ),
+      );
+      if (!mounted) return;
+      await _rehydrateTicket();
+      return;
+    }
+    await _updateStatus(targetStatus);
+  }
+
+  /// Abre um bottom sheet com as transições de status permitidas. Escala melhor
+  /// que botões lado a lado e é mais confortável em telas pequenas (M2).
+  Future<void> _openStatusSheet(BuildContext context) async {
+    final targets = _allowedStatusTargets(context);
+    if (targets.isEmpty) return;
+
+    final selected = await showModalBottomSheet<GlpiStatus>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  AppSpacing.sm,
+                  AppSpacing.md,
+                  AppSpacing.xs,
+                ),
+                child: Text(
+                  'Alterar status',
+                  style: Theme.of(sheetContext).textTheme.titleMedium,
+                ),
+              ),
+              for (final status in targets)
+                ListTile(
+                  leading: Icon(
+                    status == GlpiStatus.solucionado
+                        ? Icons.task_alt_outlined
+                        : Icons.flag_outlined,
+                    color: _statusColor(status),
                   ),
-                )
-              : Text(label),
+                  title: Text(status.label),
+                  onTap: () => Navigator.of(sheetContext).pop(status),
+                ),
+              const SizedBox(height: AppSpacing.sm),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (selected != null) await _onStatusSelected(selected);
+  }
+
+  Widget _buildChangeStatusButton(BuildContext context) {
+    final isAssumeAndStartAction = _isAssumeAndStartAction(context);
+    final disabled =
+        _isUpdating ||
+        _isClosedForInteraction ||
+        _allowedStatusTargets(context).isEmpty;
+
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: disabled
+            ? null
+            : () => isAssumeAndStartAction
+                  ? _onStatusSelected(GlpiStatus.emAtendimento)
+                  : _openStatusSheet(context),
+        icon: _isUpdating
+            ? const SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
+            : Icon(
+                isAssumeAndStartAction
+                    ? Icons.person_add_alt_1
+                    : Icons.sync_alt,
+              ),
+        label: Text(
+          isAssumeAndStartAction
+              ? 'Assumir e iniciar atendimento'
+              : 'Alterar status',
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.info,
+          foregroundColor: AppColors.textInverse,
         ),
       ),
     );
@@ -859,9 +957,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                           'Atualize o andamento do chamado ou encaminhe para solução.',
                     ),
                     const SizedBox(height: AppSpacing.md),
-                    Row(
-                      children: _allowedStatusButtons(context),
-                    ),
+                    _buildChangeStatusButton(context),
                   ],
                 ),
               ),

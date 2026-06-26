@@ -85,12 +85,8 @@ class GlpiClient {
   ) async {
     final url = Uri.parse('${GlpiConfig.baseUrl}/initSession');
 
-    _debugLog(
-      'Autenticando em: $url',
-    );
-    _debugLog(
-      'Iniciando autenticação...',
-    );
+    _debugLog('Autenticando em: $url');
+    _debugLog('Iniciando autenticação...');
 
     try {
       final response = await http
@@ -116,9 +112,7 @@ class GlpiClient {
 
       final data = jsonDecode(response.body);
       _sessionToken = data['session_token'];
-      _debugLog(
-        'Sessão iniciada com sucesso',
-      );
+      _debugLog('Sessão iniciada com sucesso');
     } catch (e) {
       _debugLog('Falha durante autenticacao GLPI: $e');
       rethrow;
@@ -135,9 +129,7 @@ class GlpiClient {
           .timeout(GlpiConfig.requestTimeout);
       _logResponse('KILL_SESSION', response);
     } catch (e) {
-      _debugLog(
-        'Erro ao encerrar sessão: $e',
-      );
+      _debugLog('Erro ao encerrar sessão: $e');
     } finally {
       _sessionToken = null;
     }
@@ -169,9 +161,7 @@ class GlpiClient {
         .get(uri, headers: headers)
         .timeout(
           GlpiConfig.requestTimeout,
-          onTimeout: () => throw Exception(
-            'Timeout ao validar sessão',
-          ),
+          onTimeout: () => throw Exception('Timeout ao validar sessão'),
         );
 
     _logResponse('GET_FULL_SESSION', response);
@@ -286,9 +276,7 @@ class GlpiClient {
     String? requesterUsername,
     int? requesterUserId,
   }) async {
-    _debugLog(
-      'Buscando tickets...',
-    );
+    _debugLog('Buscando tickets...');
 
     try {
       final headers = {
@@ -305,17 +293,14 @@ class GlpiClient {
           requesterUserId: requesterUserId,
           requesterUsername: normalizedRequester,
         );
-        _debugLog(
-          'GET: $searchUri',
-        );
+        _debugLog('GET: $searchUri');
 
         final searchResponse = await http
             .get(searchUri, headers: headers)
             .timeout(
               GlpiConfig.requestTimeout,
-              onTimeout: () => throw Exception(
-                'Timeout ao buscar tickets do requerente',
-              ),
+              onTimeout: () =>
+                  throw Exception('Timeout ao buscar tickets do requerente'),
             );
 
         _logResponse('SEARCH_TICKETS_REQUESTER', searchResponse);
@@ -349,26 +334,20 @@ class GlpiClient {
       final uri = Uri.parse(
         '${GlpiConfig.baseUrl}/Ticket?expand_dropdowns=true&range=0-100&sort=date_mod&order=DESC',
       );
-      _debugLog(
-        'GET: $uri',
-      );
+      _debugLog('GET: $uri');
 
       final response = await http
           .get(uri, headers: headers)
           .timeout(
             GlpiConfig.requestTimeout,
-            onTimeout: () => throw Exception(
-              'Timeout ao buscar tickets',
-            ),
+            onTimeout: () => throw Exception('Timeout ao buscar tickets'),
           );
 
       _logResponse('GET_TICKETS', response);
 
       if (response.statusCode == 200 || response.statusCode == 206) {
         final List<dynamic> tickets = jsonDecode(response.body);
-        _debugLog(
-          '${tickets.length} tickets encontrados.',
-        );
+        _debugLog('${tickets.length} tickets encontrados.');
         return tickets.map((t) => t as Map<String, dynamic>).toList();
       }
 
@@ -380,9 +359,7 @@ class GlpiClient {
         'Erro ao buscar tickets: [${response.statusCode}] - ${response.body}',
       );
     } catch (e) {
-      _debugLog(
-        'Falha ao buscar tickets: $e',
-      );
+      _debugLog('Falha ao buscar tickets: $e');
       rethrow;
     }
   }
@@ -454,8 +431,8 @@ class GlpiClient {
     final String criteria = text.isEmpty
         ? ''
         : '&criteria[0][field]=1'
-          '&criteria[0][searchtype]=contains'
-          '&criteria[0][value]=${Uri.encodeQueryComponent(text)}';
+              '&criteria[0][searchtype]=contains'
+              '&criteria[0][value]=${Uri.encodeQueryComponent(text)}';
 
     final uri = Uri.parse(
       '${GlpiConfig.baseUrl}/search/Ticket'
@@ -479,8 +456,8 @@ class GlpiClient {
     _logResponse('SEARCH_TICKETS_GLPISELECT', response);
 
     if (response.statusCode == 200 || response.statusCode == 206) {
-      final payload =
-          (jsonDecode(response.body) as Map).cast<String, dynamic>();
+      final payload = (jsonDecode(response.body) as Map)
+          .cast<String, dynamic>();
       final rows = payload['data'] as List<dynamic>? ?? const [];
       return rows
           .whereType<Map>()
@@ -511,7 +488,7 @@ class GlpiClient {
     };
 
     final uri = Uri.parse(
-      '${GlpiConfig.baseUrl}/Ticket/$ticketId?expand_dropdowns=true',
+      '${GlpiConfig.baseUrl}/Ticket/$ticketId?expand_dropdowns=true&with_documents=true',
     );
     final response = await http
         .get(uri, headers: headers)
@@ -870,9 +847,7 @@ class GlpiClient {
     String newStatus,
     String sessionToken,
   ) async {
-    _debugLog(
-      'Atualizando status do ticket $ticketId para $newStatus...',
-    );
+    _debugLog('Atualizando status do ticket $ticketId para $newStatus...');
 
     try {
       final headers = {
@@ -881,35 +856,38 @@ class GlpiClient {
         if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
       };
 
-      final statusId = GlpiStatusMapper.code(newStatus) ?? 1;
+      final statusId = GlpiStatusMapper.code(newStatus);
+      if (statusId == null) {
+        _debugLog(
+          'Status invalido para atualizacao do ticket $ticketId: "$newStatus".',
+        );
+        return {
+          'success': false,
+          'error_message':
+              'Status invalido: "$newStatus". Operacao cancelada para evitar '
+              'rebaixar o chamado indevidamente.',
+        };
+      }
       final payload = {
         'input': {'id': ticketId, 'status': statusId},
       };
 
       final uri = Uri.parse('${GlpiConfig.baseUrl}/Ticket/$ticketId');
 
-      _debugLog(
-        'PUT: $uri',
-      );
-      _debugLog(
-        'Payload: ${jsonEncode(payload)}',
-      );
+      _debugLog('PUT: $uri');
+      _debugLog('Payload: ${jsonEncode(payload)}');
 
       final response = await http
           .put(uri, headers: headers, body: jsonEncode(payload))
           .timeout(
             GlpiConfig.requestTimeout,
-            onTimeout: () => throw Exception(
-              'Timeout ao atualizar ticket',
-            ),
+            onTimeout: () => throw Exception('Timeout ao atualizar ticket'),
           );
 
       _logResponse('UPDATE_STATUS', response);
 
       if (response.statusCode == 200) {
-        _debugLog(
-          'Status do ticket atualizado com sucesso.',
-        );
+        _debugLog('Status do ticket atualizado com sucesso.');
         return {'success': true, 'message': 'Status atualizado com sucesso.'};
       }
 
@@ -921,9 +899,7 @@ class GlpiClient {
         'Erro ao atualizar ticket: [${response.statusCode}] - ${response.body}',
       );
     } catch (e) {
-      _debugLog(
-        'Falha ao atualizar ticket: $e',
-      );
+      _debugLog('Falha ao atualizar ticket: $e');
       return {
         'success': false,
         'message': 'Falha ao atualizar status.',
@@ -945,6 +921,17 @@ class GlpiClient {
   /// `maySolve` (solução técnica) -> `ERROR_RIGHT_MISSING`. Ambos os caminhos
   /// antigos falhavam para o Solicitante; o de followup foi validado E2E
   /// (2026-06-20) retornando 201 sem conceder permissão extra ao perfil.
+  /// Aprova (`add_close`) ou recusa (`add_reopen`) a solução via TicketFollowup —
+  /// caminho nativo do requerente (Solicitante tem direito de followup, mas NÃO
+  /// de UPDATE em Ticket, logo não pode setar status diretamente).
+  ///
+  /// A1 (auditoria 2026-06-25, confirmado E2E + config GLPI): na RECUSA, o GLPI
+  /// reabre o chamado para **Novo (1)**. Isto é POR DESIGN — não é defeito:
+  ///  - o GLPI 10.0.2 reabre para Novo nativamente no `add_reopen`;
+  ///  - a instância tem a RuleTicket #178 "Chamados recusados voltam para novos"
+  ///    (critério status==2 → ação status=1), confirmando a intenção de negócio.
+  /// Logo, recusado → Novo é o comportamento esperado e o app está alinhado.
+  /// Nenhuma regra (ativa ou inativa) manda o reopen para "Em Atendimento".
   Future<Map<String, dynamic>> updateTicketSolutionDecision({
     required String ticketId,
     required bool approve,
@@ -1063,9 +1050,7 @@ class GlpiClient {
     _debugLog(
       '[UPLOAD] Tentando anexo direto em $itemType/$itemId -> $uriDirect',
     );
-    _debugLog(
-      '[UPLOAD] Arquivo: $filename (${bytes.length} bytes)',
-    );
+    _debugLog('[UPLOAD] Arquivo: $filename (${bytes.length} bytes)');
 
     final linkedDocumentIdsBefore = await _getLinkedDocumentIdsForItem(
       sessionToken: sessionToken,
@@ -1157,6 +1142,13 @@ class GlpiClient {
     required String itemType,
     required String itemId,
   }) async {
+    final embeddedIds = await _getEmbeddedDocumentIdsForItem(
+      sessionToken: sessionToken,
+      itemType: itemType,
+      itemId: itemId,
+    );
+    if (embeddedIds != null) return embeddedIds;
+
     final uri = Uri.parse(
       '${GlpiConfig.baseUrl}/$itemType/$itemId/Document_Item',
     );
@@ -1209,9 +1201,7 @@ class GlpiClient {
       },
     };
 
-    _debugLog(
-      'Payload Link: ${jsonEncode(payload)}',
-    );
+    _debugLog('Payload Link: ${jsonEncode(payload)}');
 
     final response = await http
         .post(uri, headers: headers, body: jsonEncode(payload))
@@ -1220,9 +1210,7 @@ class GlpiClient {
     _logResponse('LINK_DOCUMENT', response);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      _debugLog(
-        'Anexo vinculado ao ticket com sucesso.',
-      );
+      _debugLog('Anexo vinculado ao ticket com sucesso.');
       return;
     }
 
@@ -1243,9 +1231,7 @@ class GlpiClient {
     Map<String, dynamic> formData,
     String sessionToken,
   ) async {
-    _debugLog(
-      'Criando novo ticket...',
-    );
+    _debugLog('Criando novo ticket...');
 
     try {
       final headers = {
@@ -1258,20 +1244,14 @@ class GlpiClient {
 
       final uri = Uri.parse('${GlpiConfig.baseUrl}/Ticket');
 
-      _debugLog(
-        'POST: $uri',
-      );
-      _debugLog(
-        'Payload Ticket: ${jsonEncode(payload)}',
-      );
+      _debugLog('POST: $uri');
+      _debugLog('Payload Ticket: ${jsonEncode(payload)}');
 
       final response = await http
           .post(uri, headers: headers, body: jsonEncode(payload))
           .timeout(
             GlpiConfig.requestTimeout,
-            onTimeout: () => throw Exception(
-              'Timeout ao criar ticket',
-            ),
+            onTimeout: () => throw Exception('Timeout ao criar ticket'),
           );
 
       _logResponse('CREATE_TICKET', response);
@@ -1282,13 +1262,9 @@ class GlpiClient {
         if (response.body.isNotEmpty) {
           final data = jsonDecode(response.body);
           ticketId = data['id']?.toString();
-          _debugLog(
-            'Ticket criado com ID: $ticketId',
-          );
+          _debugLog('Ticket criado com ID: $ticketId');
         } else {
-          _debugLog(
-            'Ticket criado com sucesso (resposta vazia)',
-          );
+          _debugLog('Ticket criado com sucesso (resposta vazia)');
           ticketId = null;
         }
 
@@ -1376,9 +1352,7 @@ class GlpiClient {
         'Erro ao criar ticket: [${response.statusCode}] - ${response.body}',
       );
     } catch (e) {
-      _debugLog(
-        'Falha ao criar ticket: $e',
-      );
+      _debugLog('Falha ao criar ticket: $e');
       return {
         'success': false,
         'error_message': GlpiClientSupport.cleanErrorMessage(e),
@@ -1398,9 +1372,7 @@ class GlpiClient {
     String ticketId,
     String sessionToken,
   ) async {
-    _debugLog(
-      'Buscando mensagens do ticket $ticketId...',
-    );
+    _debugLog('Buscando mensagens do ticket $ticketId...');
 
     try {
       final headers = {
@@ -1412,26 +1384,20 @@ class GlpiClient {
       final uri = Uri.parse(
         '${GlpiConfig.baseUrl}/Ticket/$ticketId/TicketFollowup?expand_dropdowns=true&range=0-200&sort=date_creation&order=DESC',
       );
-      _debugLog(
-        'GET: $uri',
-      );
+      _debugLog('GET: $uri');
 
       final response = await http
           .get(uri, headers: headers)
           .timeout(
             GlpiConfig.requestTimeout,
-            onTimeout: () => throw Exception(
-              'Timeout ao buscar mensagens',
-            ),
+            onTimeout: () => throw Exception('Timeout ao buscar mensagens'),
           );
 
       _logResponse('GET_FOLLOWUPS', response);
 
       if (response.statusCode == 200 || response.statusCode == 206) {
         final List<dynamic> messages = jsonDecode(response.body);
-        _debugLog(
-          '${messages.length} mensagens encontradas.',
-        );
+        _debugLog('${messages.length} mensagens encontradas.');
         return messages.map((m) => m as Map<String, dynamic>).toList();
       }
 
@@ -1439,14 +1405,10 @@ class GlpiClient {
         throw _authException(response);
       }
 
-      _debugLog(
-        'Erro ao buscar mensagens: [${response.statusCode}]',
-      );
+      _debugLog('Erro ao buscar mensagens: [${response.statusCode}]');
       return [];
     } catch (e) {
-      _debugLog(
-        'Falha ao buscar mensagens: $e',
-      );
+      _debugLog('Falha ao buscar mensagens: $e');
       if (_isSessionInvalidException(e)) rethrow;
       return [];
     }
@@ -1457,9 +1419,7 @@ class GlpiClient {
     String message,
     String sessionToken,
   ) async {
-    _debugLog(
-      'Adicionando mensagem ao ticket $ticketId...',
-    );
+    _debugLog('Adicionando mensagem ao ticket $ticketId...');
 
     try {
       final headers = {
@@ -1473,29 +1433,21 @@ class GlpiClient {
       };
 
       final uri = Uri.parse('${GlpiConfig.baseUrl}/TicketFollowup');
-      _debugLog(
-        'POST: $uri',
-      );
-      _debugLog(
-        'Payload followup: ${jsonEncode(payload)}',
-      );
+      _debugLog('POST: $uri');
+      _debugLog('Payload followup: ${jsonEncode(payload)}');
 
       final response = await http
           .post(uri, headers: headers, body: jsonEncode(payload))
           .timeout(
             GlpiConfig.requestTimeout,
-            onTimeout: () => throw Exception(
-              'Timeout ao adicionar mensagem',
-            ),
+            onTimeout: () => throw Exception('Timeout ao adicionar mensagem'),
           );
 
       _logResponse('ADD_FOLLOWUP', response);
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         final followupId = _extractEntityIdFromBody(response.body);
-        _debugLog(
-          'Mensagem adicionada com sucesso (followupId=$followupId)',
-        );
+        _debugLog('Mensagem adicionada com sucesso (followupId=$followupId)');
         return {
           'success': true,
           'message': 'Resposta enviada com sucesso',
@@ -1507,9 +1459,7 @@ class GlpiClient {
         throw _authException(response);
       }
 
-      _debugLog(
-        'Erro ao adicionar mensagem: [${response.statusCode}]',
-      );
+      _debugLog('Erro ao adicionar mensagem: [${response.statusCode}]');
       return {
         'success': false,
         'error':
@@ -1517,9 +1467,7 @@ class GlpiClient {
             'Falha ao enviar resposta.',
       };
     } catch (e) {
-      _debugLog(
-        'Falha ao adicionar mensagem: $e',
-      );
+      _debugLog('Falha ao adicionar mensagem: $e');
       if (_isSessionInvalidException(e)) rethrow;
       return {'success': false, 'error': e.toString()};
     }
@@ -1531,9 +1479,7 @@ class GlpiClient {
     String message,
     String sessionToken,
   ) async {
-    _debugLog(
-      'Adicionando SOLUÇÃO ao ticket $ticketId...',
-    );
+    _debugLog('Adicionando SOLUÇÃO ao ticket $ticketId...');
 
     try {
       final headers = {
@@ -1552,33 +1498,24 @@ class GlpiClient {
       };
 
       final uri = Uri.parse('${GlpiConfig.baseUrl}/ITILSolution');
-      _debugLog(
-        'POST: $uri',
-      );
-      _debugLog(
-        'Payload Solution: ${jsonEncode(payload)}',
-      );
+      _debugLog('POST: $uri');
+      _debugLog('Payload Solution: ${jsonEncode(payload)}');
 
       final response = await http
           .post(uri, headers: headers, body: jsonEncode(payload))
           .timeout(
             GlpiConfig.requestTimeout,
-            onTimeout: () => throw Exception(
-              'Timeout ao enviar solução',
-            ),
+            onTimeout: () => throw Exception('Timeout ao enviar solução'),
           );
 
       _logResponse('ADD_SOLUTION', response);
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         final solutionId = _extractEntityIdFromBody(response.body);
-        _debugLog(
-          'Solução adicionada com sucesso (solutionId=$solutionId)',
-        );
+        _debugLog('Solução adicionada com sucesso (solutionId=$solutionId)');
         return {
           'success': true,
-          'message':
-              'Solução enviada com sucesso',
+          'message': 'Solução enviada com sucesso',
           'entity_id': solutionId,
         };
       }
@@ -1594,9 +1531,7 @@ class GlpiClient {
             'Falha ao enviar solução.',
       };
     } catch (e) {
-      _debugLog(
-        'Falha ao adicionar solução: $e',
-      );
+      _debugLog('Falha ao adicionar solução: $e');
       if (_isSessionInvalidException(e)) rethrow;
       return {'success': false, 'error': e.toString()};
     }
@@ -1678,7 +1613,14 @@ class GlpiClient {
   Future<Set<String>> getTicketDocumentIds(
     String ticketId,
     String sessionToken,
-  ) {
+  ) async {
+    final embeddedIds = await _getEmbeddedDocumentIdsForItem(
+      sessionToken: sessionToken,
+      itemType: 'Ticket',
+      itemId: ticketId,
+    );
+    if (embeddedIds != null) return embeddedIds;
+
     return _getLinkedDocumentIdsForItem(
       sessionToken: sessionToken,
       itemType: 'Ticket',
@@ -1691,9 +1633,7 @@ class GlpiClient {
     String ticketId,
     String sessionToken,
   ) async {
-    _debugLog(
-      'Buscando documentos principais do ticket $ticketId...',
-    );
+    _debugLog('Buscando documentos principais do ticket $ticketId...');
 
     try {
       final headers = {
@@ -1701,6 +1641,12 @@ class GlpiClient {
         'Accept': 'application/json',
         if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
       };
+
+      final embeddedDocs = await _getEmbeddedDocumentsForTicket(
+        ticketId,
+        sessionToken,
+      );
+      if (embeddedDocs != null) return embeddedDocs;
 
       final docIds = await _getLinkedDocumentIdsForItem(
         sessionToken: sessionToken,
@@ -1711,12 +1657,90 @@ class GlpiClient {
 
       return await _fetchDocumentDetails(docIds.toList(), ticketId, headers);
     } catch (e) {
-      _debugLog(
-        'Erro ao buscar documentos do ticket: $e',
-      );
+      _debugLog('Erro ao buscar documentos do ticket: $e');
       if (_isSessionInvalidException(e)) rethrow;
       return [];
     }
+  }
+
+  Future<List<Map<String, dynamic>>?> _getEmbeddedDocumentsForTicket(
+    String ticketId,
+    String sessionToken,
+  ) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+    };
+
+    final uri = Uri.parse(
+      '${GlpiConfig.baseUrl}/Ticket/$ticketId?expand_dropdowns=true&with_documents=true',
+    );
+    final response = await http
+        .get(uri, headers: headers)
+        .timeout(GlpiConfig.requestTimeout);
+
+    if (_isAuthError(response.statusCode)) throw _authException(response);
+    if (response.statusCode != 200) return null;
+
+    final decoded = jsonDecode(response.body);
+    if (decoded is! Map) return null;
+
+    final documents = decoded['_documents'];
+    if (documents is! List) return null;
+
+    return _normalizeEmbeddedDocuments(documents, ticketId);
+  }
+
+  List<Map<String, dynamic>> _normalizeEmbeddedDocuments(
+    List<dynamic> documents,
+    String contextId,
+  ) {
+    return documents
+        .whereType<Map>()
+        .map((raw) => raw.cast<String, dynamic>())
+        .map((docData) {
+          final id = docData['id']?.toString().trim() ?? '';
+          if (id.isEmpty) return null;
+          final filename =
+              docData['filename']?.toString().trim().isNotEmpty == true
+              ? docData['filename'].toString().trim()
+              : docData['name']?.toString().trim().isNotEmpty == true
+              ? docData['name'].toString().trim()
+              : 'Anexo-$id';
+
+          return {
+            'id': id,
+            'items_id': contextId,
+            'name': filename,
+            'date_creation': docData['date_creation'],
+            'users_id': docData['users_id'],
+            'uploader_id': docData['users_id'],
+            'mime': docData['mime'],
+            'download_url': '${GlpiConfig.baseUrl}/Document/$id?alt=media',
+          };
+        })
+        .whereType<Map<String, dynamic>>()
+        .toList(growable: false);
+  }
+
+  Future<Set<String>?> _getEmbeddedDocumentIdsForItem({
+    required String sessionToken,
+    required String itemType,
+    required String itemId,
+  }) async {
+    if (itemType != 'Ticket') return null;
+
+    final embeddedDocs = await _getEmbeddedDocumentsForTicket(
+      itemId,
+      sessionToken,
+    );
+    if (embeddedDocs == null) return null;
+
+    return embeddedDocs
+        .map((doc) => doc['id']?.toString().trim() ?? '')
+        .where((id) => id.isNotEmpty)
+        .toSet();
   }
 
   // ---------------------------------------------------------------------
@@ -1761,18 +1785,14 @@ class GlpiClient {
           }
         } catch (e) {
           if (_isSessionInvalidException(e)) rethrow;
-          _debugLog(
-            'Erro doc followup $fId: $e',
-          );
+          _debugLog('Erro doc followup $fId: $e');
         }
       }).toList();
 
       await Future.wait(tasks);
       return allFollowupDocs;
     } catch (e) {
-      _debugLog(
-        'Erro geral ao buscar documentos de followups: $e',
-      );
+      _debugLog('Erro geral ao buscar documentos de followups: $e');
       if (_isSessionInvalidException(e)) rethrow;
       return [];
     }
@@ -1817,9 +1837,7 @@ class GlpiClient {
         }
       } catch (e) {
         if (_isSessionInvalidException(e)) rethrow;
-        _debugLog(
-          'Erro detalhes doc $id: $e',
-        );
+        _debugLog('Erro detalhes doc $id: $e');
       }
       return null;
     }).toList();
@@ -1835,9 +1853,7 @@ class GlpiClient {
     List<String> solutionIds,
     String sessionToken,
   ) async {
-    _debugLog(
-      'Buscando documentos de ${solutionIds.length} soluções...',
-    );
+    _debugLog('Buscando documentos de ${solutionIds.length} soluções...');
 
     try {
       final headers = {
@@ -1870,18 +1886,14 @@ class GlpiClient {
           }
         } catch (e) {
           if (_isSessionInvalidException(e)) rethrow;
-          _debugLog(
-            'Erro doc solution $sId: $e',
-          );
+          _debugLog('Erro doc solution $sId: $e');
         }
       }).toList();
 
       await Future.wait(tasks);
       return allSolutionDocs;
     } catch (e) {
-      _debugLog(
-        'Erro geral ao buscar documentos de soluções: $e',
-      );
+      _debugLog('Erro geral ao buscar documentos de soluções: $e');
       if (_isSessionInvalidException(e)) rethrow;
       return [];
     }
@@ -1897,15 +1909,11 @@ class GlpiClient {
       final context = await getSessionContext(sessionToken);
       final id = context['userId'] as int?;
       if (id != null) {
-        _debugLog(
-          'ID do usuário logado: $id',
-        );
+        _debugLog('ID do usuário logado: $id');
       }
       return id;
     } catch (e) {
-      _debugLog(
-        'Erro ao buscar ID do usuário na sessão: $e',
-      );
+      _debugLog('Erro ao buscar ID do usuário na sessão: $e');
       if (_isSessionInvalidException(e)) rethrow;
     }
     return null;
@@ -1917,15 +1925,11 @@ class GlpiClient {
       final context = await getSessionContext(sessionToken);
       final profileName = context['profile']?.toString();
       if (profileName != null && profileName.trim().isNotEmpty) {
-        _debugLog(
-          'Perfil ativo detectado: $profileName',
-        );
+        _debugLog('Perfil ativo detectado: $profileName');
         return profileName;
       }
     } catch (e) {
-      _debugLog(
-        'Erro ao buscar perfil na sessão: $e',
-      );
+      _debugLog('Erro ao buscar perfil na sessão: $e');
       if (_isSessionInvalidException(e)) rethrow;
     }
     return null;
@@ -1937,9 +1941,7 @@ class GlpiClient {
     int userId,
     String sessionToken,
   ) async {
-    _debugLog(
-      'Atribuindo ticket $ticketId ao usuário $userId...',
-    );
+    _debugLog('Atribuindo ticket $ticketId ao usuário $userId...');
     try {
       final headers = {
         'Content-Type': 'application/json',
@@ -1964,17 +1966,13 @@ class GlpiClient {
       _logResponse('ASSIGN_TICKET', response);
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        _debugLog(
-          'Técnico atribuído com sucesso.',
-        );
+        _debugLog('Técnico atribuído com sucesso.');
         return true;
       }
 
       if (response.statusCode == 400 &&
           response.body.contains('Item already exists')) {
-        _debugLog(
-          'O técnico já estava atribuído a este chamado. (Ignorando)',
-        );
+        _debugLog('O técnico já estava atribuído a este chamado. (Ignorando)');
         return true;
       }
 
@@ -1984,9 +1982,7 @@ class GlpiClient {
 
       return false;
     } catch (e) {
-      _debugLog(
-        'Erro ao atribuir chamado: $e',
-      );
+      _debugLog('Erro ao atribuir chamado: $e');
       if (_isSessionInvalidException(e)) rethrow;
       return false;
     }
@@ -2020,9 +2016,7 @@ class GlpiClient {
     String ticketId,
     String sessionToken,
   ) async {
-    _debugLog(
-      'Buscando soluções do ticket $ticketId...',
-    );
+    _debugLog('Buscando soluções do ticket $ticketId...');
 
     try {
       final headers = {
@@ -2034,9 +2028,7 @@ class GlpiClient {
       final uri = Uri.parse(
         '${GlpiConfig.baseUrl}/Ticket/$ticketId/ITILSolution?expand_dropdowns=true&sort=date_creation&order=DESC',
       );
-      _debugLog(
-        'GET: $uri',
-      );
+      _debugLog('GET: $uri');
 
       final response = await http
           .get(uri, headers: headers)
@@ -2048,9 +2040,7 @@ class GlpiClient {
 
       if (response.statusCode == 200 || response.statusCode == 206) {
         final List<dynamic> solutions = jsonDecode(response.body);
-        _debugLog(
-          '${solutions.length} soluções encontradas.',
-        );
+        _debugLog('${solutions.length} soluções encontradas.');
         return solutions.map((s) => s as Map<String, dynamic>).toList();
       }
 
@@ -2059,9 +2049,7 @@ class GlpiClient {
       );
       return [];
     } catch (e) {
-      _debugLog(
-        'Erro ao buscar soluções: $e',
-      );
+      _debugLog('Erro ao buscar soluções: $e');
       if (_isSessionInvalidException(e)) rethrow;
       return [];
     }
@@ -2073,9 +2061,7 @@ class GlpiClient {
     required int newStatus,
     required String sessionToken,
   }) async {
-    _debugLog(
-      'Atualizando status da solução $solutionId para $newStatus...',
-    );
+    _debugLog('Atualizando status da solução $solutionId para $newStatus...');
 
     try {
       final headers = {
@@ -2097,9 +2083,7 @@ class GlpiClient {
       _logResponse('UPDATE_SOLUTION', response);
 
       if (response.statusCode == 200) {
-        _debugLog(
-          'Status da solução atualizado com sucesso!',
-        );
+        _debugLog('Status da solução atualizado com sucesso!');
         return true;
       }
 
@@ -2109,9 +2093,7 @@ class GlpiClient {
 
       return false;
     } catch (e) {
-      _debugLog(
-        'Falha ao atualizar solução: $e',
-      );
+      _debugLog('Falha ao atualizar solução: $e');
       if (_isSessionInvalidException(e)) rethrow;
       return false;
     }
@@ -2151,7 +2133,9 @@ class GlpiClient {
     }
 
     try {
-      final uri = Uri.parse('${GlpiConfig.baseUrl}/PluginFormcreatorFormAnswer');
+      final uri = Uri.parse(
+        '${GlpiConfig.baseUrl}/PluginFormcreatorFormAnswer',
+      );
       final response = await http
           .post(
             uri,

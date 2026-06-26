@@ -54,7 +54,11 @@ class FileValidator {
     if (ext.endsWith('.doc') || ext.endsWith('.docx')) return '📝';
     if (ext.endsWith('.xls') || ext.endsWith('.xlsx')) return '📊';
     if (ext.endsWith('.txt') || ext.endsWith('.csv')) return '📋';
-    if (ext.endsWith('.mp4') || ext.endsWith('.mov') || ext.endsWith('.avi') || ext.endsWith('.webm')) return '🎬';
+    if (ext.endsWith('.mp4') ||
+        ext.endsWith('.mov') ||
+        ext.endsWith('.avi') ||
+        ext.endsWith('.webm'))
+      return '🎬';
     return '📎';
   }
 }

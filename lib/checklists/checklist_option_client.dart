@@ -19,7 +19,7 @@ class SisChecklistLookupOption {
 /// O Worker SIS so permite estes GETs em allowlist read-only.
 class SisChecklistOptionClient {
   SisChecklistOptionClient({http.Client? httpClient, this.rangeEnd = 25})
-      : _httpClient = httpClient ?? http.Client();
+    : _httpClient = httpClient ?? http.Client();
 
   static const Set<String> supportedItemTypes = {
     'Ticket',
@@ -49,10 +49,15 @@ class SisChecklistOptionClient {
     );
 
     try {
-      final response = await _httpClient.get(uri, headers: {
-        'Accept': 'application/json',
-        if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
-      }).timeout(GlpiConfig.requestTimeout);
+      final response = await _httpClient
+          .get(
+            uri,
+            headers: {
+              'Accept': 'application/json',
+              if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+            },
+          )
+          .timeout(GlpiConfig.requestTimeout);
 
       if (response.statusCode != 200 && response.statusCode != 206) {
         return null;
@@ -89,10 +94,15 @@ class SisChecklistOptionClient {
     );
 
     try {
-      final response = await _httpClient.get(uri, headers: {
-        'Accept': 'application/json',
-        if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
-      }).timeout(GlpiConfig.requestTimeout);
+      final response = await _httpClient
+          .get(
+            uri,
+            headers: {
+              'Accept': 'application/json',
+              if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+            },
+          )
+          .timeout(GlpiConfig.requestTimeout);
 
       if (response.statusCode != 200 && response.statusCode != 206) {
         return const [];

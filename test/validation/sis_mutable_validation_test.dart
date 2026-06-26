@@ -91,6 +91,36 @@ void main() {
     return (jsonDecode(resp.body) as Map)['session_token'] as String;
   }
 
+  // B2: extrai o session_token com seguranca. Quando o login falha (ex.: 401),
+  // o corpo e um array de erro (`["ERROR_GLPI_LOGIN", ...]`) e o cast direto
+  // `as Map` quebrava o teste com erro de tipo. Aqui lancamos mensagem clara.
+  String tokenFromResponse(http.Response resp) {
+    final decoded = jsonDecode(resp.body);
+    if (decoded is Map && decoded['session_token'] != null) {
+      return decoded['session_token'] as String;
+    }
+    throw StateError('initSession falhou (${resp.statusCode}): ${resp.body}');
+  }
+
+  String? jsonFieldValue(String body, String key) {
+    try {
+      final decoded = jsonDecode(body);
+      if (decoded is Map && decoded.containsKey(key)) {
+        return decoded[key]?.toString();
+      }
+      if (decoded is List) {
+        for (final item in decoded) {
+          if (item is Map && item.containsKey(key)) {
+            return item[key]?.toString();
+          }
+        }
+      }
+    } catch (_) {
+      return null;
+    }
+    return null;
+  }
+
   Future<Map<String, dynamic>> activateProfileAndContext(
     String token,
     int profileId,
@@ -141,7 +171,7 @@ void main() {
               'Basic ${base64Encode(utf8.encode('$adminUser:$adminPassword'))}',
         },
       );
-      final token = (jsonDecode(init.body) as Map)['session_token'] as String;
+      final token = tokenFromResponse(init);
       try {
         final uri = Uri.parse(
           '$base/search/Ticket'
@@ -189,8 +219,10 @@ void main() {
             }),
           );
           // ignore: avoid_print
-          print('  $id sol=${sol.statusCode} put=${put.statusCode}'
-              '${sol.statusCode >= 400 ? ' solbody=${sol.body}' : ''}');
+          print(
+            '  $id sol=${sol.statusCode} put=${put.statusCode}'
+            '${sol.statusCode >= 400 ? ' solbody=${sol.body}' : ''}',
+          );
           final check = await http.get(
             Uri.parse('$base/Ticket/$id'),
             headers: headers(token),
@@ -231,7 +263,7 @@ void main() {
                 'Basic ${base64Encode(utf8.encode('$adminUser:$adminPassword'))}',
           },
         );
-        token = (jsonDecode(init.body) as Map)['session_token'] as String;
+        token = tokenFromResponse(init);
       } else {
         token = await initSession();
       }
@@ -296,138 +328,130 @@ void main() {
         );
         expect(session['glpiactiveprofile']?['name'], isNotNull);
       } finally {
-        await http.get(
-          Uri.parse('$base/killSession'),
-          headers: headers(token),
-        );
-      }
-    },
-  );
-
-  test(
-    'mutavel direto (APPLY): perfil-alvo cria ticket, valida grupo via '
-    'read-back e fecha',
-    () async {
-      if (!ready) {
-        markTestSkipped('modo direto desabilitado');
-        return;
-      }
-      if (envOf('SIS_VALIDATION_APPLY').toLowerCase() != 'true') {
-        markTestSkipped('SIS_VALIDATION_APPLY!=true: mutacao desabilitada');
-        return;
-      }
-      final profileId = int.tryParse(envOf('SIS_TEST_PROFILE_ID')) ?? 9;
-      final categoryId = int.tryParse(envOf('SIS_TEST_CATEGORY_ID'));
-      final entityId = int.tryParse(envOf('SIS_TEST_ENTITY_ID'));
-      expect(categoryId, isNotNull, reason: 'defina SIS_TEST_CATEGORY_ID');
-      expect(entityId, isNotNull, reason: 'defina SIS_TEST_ENTITY_ID');
-
-      final token = await initSession();
-      String? ticketId;
-      try {
-        final session = await activateProfileAndContext(token, profileId);
-        final rawUserId = session['glpiID'];
-        final userId = rawUserId is int
-            ? rawUserId
-            : int.tryParse('$rawUserId');
-        // ignore: avoid_print
-        print(
-          'Criando como perfil=${session['glpiactiveprofile']?['name']} '
-          'userId=$userId entidade=$entityId categoria=$categoryId',
-        );
-
-        final stamp = DateTime.now().toIso8601String();
-        final formData = <String, dynamic>{
-          'assunto': '$ticketMarker validacao RuleTicket $stamp',
-          'descricao':
-              'Ticket de teste automatizado, descartavel. Valida atribuicao de '
-              'grupo via RuleTicket (payload minimo). Pode ser fechado.',
-          'serviceName': '',
-          'governedCategoryId': categoryId,
-          'entities_id': entityId,
-          'loggedUserId': userId,
-        };
-        final payload = GlpiTicketSupport.buildCreateTicketPayload(formData);
-        final input = payload['input'] as Map<String, dynamic>;
-        // Prova local: o payload do app NAO contem campos de atribuicao.
-        expect(input.containsKey('_groups_id_assign'), isFalse);
-        expect(input.containsKey('_groups_id_requester'), isFalse);
-        expect(input.containsKey('_users_id_assign'), isFalse);
-
-        final create = await http.post(
-          Uri.parse('$base/Ticket'),
-          headers: headers(token),
-          body: jsonEncode(payload),
-        );
-        // ignore: avoid_print
-        print('POST /Ticket -> ${create.statusCode}: ${create.body}');
-        expect(
-          create.statusCode,
-          anyOf(200, 201),
-          reason: 'GLPI recusou a criacao (perfil $profileId): ${create.body}',
-        );
-        ticketId = (jsonDecode(create.body) as Map)['id'].toString();
-        // ignore: avoid_print
-        print('Ticket criado: ID=$ticketId (REGISTRAR p/ auditoria/limpeza)');
-
-        // Read-back: prova de que a RuleTicket atribuiu um grupo, ja que o app
-        // NAO envia mais _groups_id_assign.
-        final gt = await http.get(
-          Uri.parse('$base/Ticket/$ticketId/Group_Ticket?range=0-50'),
-          headers: headers(token),
-        );
-        String? assignedGroupId;
-        if (gt.statusCode == 200 || gt.statusCode == 206) {
-          final rows = jsonDecode(gt.body);
-          if (rows is List) {
-            for (final r in rows) {
-              if (r is Map && '${r['type']}' == '2') {
-                assignedGroupId = '${r['groups_id']}';
-                break;
-              }
-            }
-          }
-        }
-        String? assignedGroupName;
-        if (assignedGroupId != null) {
-          final g = await http.get(
-            Uri.parse('$base/Group/$assignedGroupId'),
-            headers: headers(token),
-          );
-          if (g.statusCode == 200) {
-            final gm = jsonDecode(g.body);
-            if (gm is Map) {
-              assignedGroupName = '${gm['completename'] ?? gm['name']}';
-            }
-          }
-        }
-        // ignore: avoid_print
-        print(
-          'Read-back -> grupo_atribuido_id=$assignedGroupId '
-          'grupo_nome=$assignedGroupName',
-        );
-        expect(
-          assignedGroupId,
-          isNotNull,
-          reason:
-              'RuleTicket nao atribuiu grupo; revisar regra por categoria/entidade',
-        );
-      } finally {
-        if (ticketId != null) {
-          final close = await http.put(
-            Uri.parse('$base/Ticket/$ticketId'),
-            headers: headers(token),
-            body: jsonEncode({
-              'input': {'id': ticketId, 'status': 6},
-            }),
-          );
-          // ignore: avoid_print
-          print('Cleanup -> ticket $ticketId fechado: ${close.statusCode}');
-        }
         await http.get(Uri.parse('$base/killSession'), headers: headers(token));
       }
     },
   );
+
+  test('mutavel direto (APPLY): perfil-alvo cria ticket, valida grupo via '
+      'read-back e fecha', () async {
+    if (!ready) {
+      markTestSkipped('modo direto desabilitado');
+      return;
+    }
+    if (envOf('SIS_VALIDATION_APPLY').toLowerCase() != 'true') {
+      markTestSkipped('SIS_VALIDATION_APPLY!=true: mutacao desabilitada');
+      return;
+    }
+    final profileId = int.tryParse(envOf('SIS_TEST_PROFILE_ID')) ?? 9;
+    final categoryId = int.tryParse(envOf('SIS_TEST_CATEGORY_ID'));
+    final entityId = int.tryParse(envOf('SIS_TEST_ENTITY_ID'));
+    expect(categoryId, isNotNull, reason: 'defina SIS_TEST_CATEGORY_ID');
+    expect(entityId, isNotNull, reason: 'defina SIS_TEST_ENTITY_ID');
+
+    final token = await initSession();
+    String? ticketId;
+    try {
+      final session = await activateProfileAndContext(token, profileId);
+      final rawUserId = session['glpiID'];
+      final userId = rawUserId is int ? rawUserId : int.tryParse('$rawUserId');
+      // ignore: avoid_print
+      print(
+        'Criando como perfil=${session['glpiactiveprofile']?['name']} '
+        'userId=$userId entidade=$entityId categoria=$categoryId',
+      );
+
+      final stamp = DateTime.now().toIso8601String();
+      final formData = <String, dynamic>{
+        'assunto': '$ticketMarker validacao RuleTicket $stamp',
+        'descricao':
+            'Ticket de teste automatizado, descartavel. Valida atribuicao de '
+            'grupo via RuleTicket (payload minimo). Pode ser fechado.',
+        'serviceName': '',
+        'governedCategoryId': categoryId,
+        'entities_id': entityId,
+        'loggedUserId': userId,
+      };
+      final payload = GlpiTicketSupport.buildCreateTicketPayload(formData);
+      final input = payload['input'] as Map<String, dynamic>;
+      // Prova local: o payload do app NAO contem campos de atribuicao.
+      expect(input.containsKey('_groups_id_assign'), isFalse);
+      expect(input.containsKey('_groups_id_requester'), isFalse);
+      expect(input.containsKey('_users_id_assign'), isFalse);
+
+      final create = await http.post(
+        Uri.parse('$base/Ticket'),
+        headers: headers(token),
+        body: jsonEncode(payload),
+      );
+      // ignore: avoid_print
+      print('POST /Ticket -> ${create.statusCode}: ${create.body}');
+      expect(
+        create.statusCode,
+        anyOf(200, 201),
+        reason: 'GLPI recusou a criacao (perfil $profileId): ${create.body}',
+      );
+      ticketId = (jsonDecode(create.body) as Map)['id'].toString();
+      // ignore: avoid_print
+      print('Ticket criado: ID=$ticketId (REGISTRAR p/ auditoria/limpeza)');
+
+      // Read-back: prova de que a RuleTicket atribuiu um grupo, ja que o app
+      // NAO envia mais _groups_id_assign.
+      final gt = await http.get(
+        Uri.parse('$base/Ticket/$ticketId/Group_Ticket?range=0-50'),
+        headers: headers(token),
+      );
+      String? assignedGroupId;
+      if (gt.statusCode == 200 || gt.statusCode == 206) {
+        final rows = jsonDecode(gt.body);
+        if (rows is List) {
+          for (final r in rows) {
+            if (r is Map && '${r['type']}' == '2') {
+              assignedGroupId = '${r['groups_id']}';
+              break;
+            }
+          }
+        }
+      }
+      String? assignedGroupName;
+      if (assignedGroupId != null) {
+        final g = await http.get(
+          Uri.parse('$base/Group/$assignedGroupId'),
+          headers: headers(token),
+        );
+        if (g.statusCode == 200) {
+          final gm = jsonDecode(g.body);
+          if (gm is Map) {
+            assignedGroupName = '${gm['completename'] ?? gm['name']}';
+          }
+        }
+      }
+      // ignore: avoid_print
+      print(
+        'Read-back -> grupo_atribuido_id=$assignedGroupId '
+        'grupo_nome=$assignedGroupName',
+      );
+      expect(
+        assignedGroupId,
+        isNotNull,
+        reason:
+            'RuleTicket nao atribuiu grupo; revisar regra por categoria/entidade',
+      );
+    } finally {
+      if (ticketId != null) {
+        final close = await http.put(
+          Uri.parse('$base/Ticket/$ticketId'),
+          headers: headers(token),
+          body: jsonEncode({
+            'input': {'id': ticketId, 'status': 6},
+          }),
+        );
+        // ignore: avoid_print
+        print('Cleanup -> ticket $ticketId fechado: ${close.statusCode}');
+      }
+      await http.get(Uri.parse('$base/killSession'), headers: headers(token));
+    }
+  });
 
   test(
     'admin read-only: inspeciona ProfileRight ticket dos perfis 9 (Solicitante) '
@@ -451,7 +475,7 @@ void main() {
         headers: {...headers(null), 'Authorization': auth},
       );
       expect(init.statusCode, 200, reason: 'admin initSession: ${init.body}');
-      final token = (jsonDecode(init.body) as Map)['session_token'] as String;
+      final token = tokenFromResponse(init);
 
       // Objetos exercidos pelas acoes mutaveis do app como Solicitante.
       const relevant = {
@@ -542,8 +566,10 @@ void main() {
           }),
         );
         // ignore: avoid_print
-        print('ACAO followup -> ${fup.statusCode}'
-            '${fup.statusCode >= 400 ? ' ${fup.body}' : ''}');
+        print(
+          'ACAO followup -> ${fup.statusCode}'
+          '${fup.statusCode >= 400 ? ' ${fup.body}' : ''}',
+        );
 
         // 2) Mudanca de status via PUT /Ticket (proxy de aprovar/recusar solucao).
         final put = await http.put(
@@ -554,8 +580,10 @@ void main() {
           }),
         );
         // ignore: avoid_print
-        print('ACAO put_status -> ${put.statusCode}'
-            '${put.statusCode >= 400 ? ' ${put.body}' : ''}');
+        print(
+          'ACAO put_status -> ${put.statusCode}'
+          '${put.statusCode >= 400 ? ' ${put.body}' : ''}',
+        );
       } finally {
         if (ticketId != null) {
           await http.put(
@@ -599,7 +627,8 @@ void main() {
       Future<String> createAsRequester() async {
         await profile(9);
         final payload = GlpiTicketSupport.buildCreateTicketPayload({
-          'assunto': '$ticketMarker ciclo ${DateTime.now().microsecondsSinceEpoch}',
+          'assunto':
+              '$ticketMarker ciclo ${DateTime.now().microsecondsSinceEpoch}',
           'descricao': 'Teste de ciclo. Descartavel.',
           'serviceName': '',
           'governedCategoryId': categoryId,
@@ -645,9 +674,11 @@ void main() {
           }),
         );
         // ignore: avoid_print
-        print('APROVAR_SOLUCAO ticket=$tA solucao_post=$solA '
-            'put_aprovar=${approve.statusCode}'
-            '${approve.statusCode >= 400 ? ' ${approve.body}' : ''}');
+        print(
+          'APROVAR_SOLUCAO ticket=$tA solucao_post=$solA '
+          'put_aprovar=${approve.statusCode}'
+          '${approve.statusCode >= 400 ? ' ${approve.body}' : ''}',
+        );
 
         // --- Cenario B: RECUSAR solucao ---
         final tB = await createAsRequester();
@@ -662,9 +693,11 @@ void main() {
           }),
         );
         // ignore: avoid_print
-        print('RECUSAR_SOLUCAO ticket=$tB solucao_post=$solB '
-            'put_recusar=${reject.statusCode}'
-            '${reject.statusCode >= 400 ? ' ${reject.body}' : ''}');
+        print(
+          'RECUSAR_SOLUCAO ticket=$tB solucao_post=$solB '
+          'put_recusar=${reject.statusCode}'
+          '${reject.statusCode >= 400 ? ' ${reject.body}' : ''}',
+        );
 
         // --- Cenario C: ANEXAR arquivo ---
         final tC = await createAsRequester();
@@ -702,8 +735,10 @@ void main() {
         );
         final attachResp = await http.Response.fromStream(await req.send());
         // ignore: avoid_print
-        print('ANEXAR ticket=$tC -> ${attachResp.statusCode}'
-            '${attachResp.statusCode >= 400 ? ' ${attachResp.body}' : ''}');
+        print(
+          'ANEXAR ticket=$tC -> ${attachResp.statusCode}'
+          '${attachResp.statusCode >= 400 ? ' ${attachResp.body}' : ''}',
+        );
       } finally {
         // Cleanup com perfil tecnico (tem UPDATE) para garantir fechamento.
         await profile(11);
@@ -723,133 +758,135 @@ void main() {
     },
   );
 
-  test(
-    'investiga caminho correto de aprovacao de solucao (APPLY)',
-    () async {
-      if (!ready) {
-        markTestSkipped('modo direto desabilitado');
-        return;
-      }
-      if (envOf('SIS_VALIDATION_APPLY').toLowerCase() != 'true') {
-        markTestSkipped('SIS_VALIDATION_APPLY!=true');
-        return;
-      }
-      final categoryId = int.parse(envOf('SIS_TEST_CATEGORY_ID'));
-      final entityId = int.parse(envOf('SIS_TEST_ENTITY_ID'));
-      final token = await initSession();
+  test('investiga caminho correto de aprovacao de solucao (APPLY)', () async {
+    if (!ready) {
+      markTestSkipped('modo direto desabilitado');
+      return;
+    }
+    if (envOf('SIS_VALIDATION_APPLY').toLowerCase() != 'true') {
+      markTestSkipped('SIS_VALIDATION_APPLY!=true');
+      return;
+    }
+    final categoryId = int.parse(envOf('SIS_TEST_CATEGORY_ID'));
+    final entityId = int.parse(envOf('SIS_TEST_ENTITY_ID'));
+    final token = await initSession();
 
-      Future<void> profile(int id) async {
-        await http.post(
-          Uri.parse('$base/changeActiveProfile'),
-          headers: headers(token),
-          body: jsonEncode({'profiles_id': id}),
-        );
-      }
+    Future<void> profile(int id) async {
+      await http.post(
+        Uri.parse('$base/changeActiveProfile'),
+        headers: headers(token),
+        body: jsonEncode({'profiles_id': id}),
+      );
+    }
 
-      Future<String> createTicket() async {
-        await profile(9);
-        final payload = GlpiTicketSupport.buildCreateTicketPayload({
-          'assunto': '$ticketMarker aprov ${DateTime.now().microsecondsSinceEpoch}',
-          'descricao': 'Teste caminho aprovacao. Descartavel.',
-          'serviceName': '',
-          'governedCategoryId': categoryId,
-          'entities_id': entityId,
-          'loggedUserId': 2373,
-        });
-        final r = await http.post(
-          Uri.parse('$base/Ticket'),
-          headers: headers(token),
-          body: jsonEncode(payload),
-        );
+    Future<String> createTicket() async {
+      await profile(9);
+      final payload = GlpiTicketSupport.buildCreateTicketPayload({
+        'assunto':
+            '$ticketMarker aprov ${DateTime.now().microsecondsSinceEpoch}',
+        'descricao': 'Teste caminho aprovacao. Descartavel.',
+        'serviceName': '',
+        'governedCategoryId': categoryId,
+        'entities_id': entityId,
+        'loggedUserId': 2373,
+      });
+      final r = await http.post(
+        Uri.parse('$base/Ticket'),
+        headers: headers(token),
+        body: jsonEncode(payload),
+      );
+      return (jsonDecode(r.body) as Map)['id'].toString();
+    }
+
+    Future<String?> proposeSolution(String id) async {
+      await profile(11);
+      final r = await http.post(
+        Uri.parse('$base/ITILSolution'),
+        headers: headers(token),
+        body: jsonEncode({
+          'input': {'itemtype': 'Ticket', 'items_id': id, 'content': 'sol'},
+        }),
+      );
+      if (r.statusCode == 200 || r.statusCode == 201) {
         return (jsonDecode(r.body) as Map)['id'].toString();
       }
+      return null;
+    }
 
-      Future<String?> proposeSolution(String id) async {
-        await profile(11);
-        final r = await http.post(
-          Uri.parse('$base/ITILSolution'),
-          headers: headers(token),
-          body: jsonEncode({
-            'input': {'itemtype': 'Ticket', 'items_id': id, 'content': 'sol'},
-          }),
-        );
-        if (r.statusCode == 200 || r.statusCode == 201) {
-          return (jsonDecode(r.body) as Map)['id'].toString();
-        }
-        return null;
-      }
+    // Status GLPI: 1=Novo, 2=Atendimento, 4=Pendente, 5=Solucionado, 6=Fechado.
+    Future<String> ticketStatus(String id) async {
+      final r = await http.get(
+        Uri.parse('$base/Ticket/$id'),
+        headers: headers(token),
+      );
+      return '${(jsonDecode(r.body) as Map)['status']}';
+    }
 
-      // Status GLPI: 1=Novo, 2=Atendimento, 4=Pendente, 5=Solucionado, 6=Fechado.
-      Future<String> ticketStatus(String id) async {
-        final r = await http.get(
+    final created = <String>[];
+    try {
+      // RECUSAR: followup add_reopen deve REABRIR (5 -> 1/2).
+      final tA = await createTicket();
+      created.add(tA);
+      await proposeSolution(tA);
+      await profile(9);
+      final beforeA = await ticketStatus(tA);
+      final fa = await http.post(
+        Uri.parse('$base/TicketFollowup'),
+        headers: headers(token),
+        body: jsonEncode({
+          'input': {
+            'tickets_id': tA,
+            'content': 'nao resolvido',
+            'add_reopen': 1,
+          },
+        }),
+      );
+      final afterA = await ticketStatus(tA);
+      // ignore: avoid_print
+      print(
+        'RECUSAR http=${fa.statusCode} status_antes=$beforeA '
+        'status_depois=$afterA EFEITO_OK=${beforeA == '5' && afterA != '5'}',
+      );
+
+      // APROVAR: followup add_close deve FECHAR (5 -> 6).
+      final tB = await createTicket();
+      created.add(tB);
+      await proposeSolution(tB);
+      await profile(9);
+      final beforeB = await ticketStatus(tB);
+      final pb = await http.post(
+        Uri.parse('$base/TicketFollowup'),
+        headers: headers(token),
+        body: jsonEncode({
+          'input': {
+            'tickets_id': tB,
+            'content': 'resolvido, obrigado',
+            'add_close': 1,
+          },
+        }),
+      );
+      final afterB = await ticketStatus(tB);
+      // ignore: avoid_print
+      print(
+        'APROVAR http=${pb.statusCode} status_antes=$beforeB '
+        'status_depois=$afterB EFEITO_OK=${beforeB == '5' && afterB == '6'}',
+      );
+    } finally {
+      await profile(11);
+      for (final id in created) {
+        await http.put(
           Uri.parse('$base/Ticket/$id'),
           headers: headers(token),
-        );
-        return '${(jsonDecode(r.body) as Map)['status']}';
-      }
-
-      final created = <String>[];
-      try {
-        // RECUSAR: followup add_reopen deve REABRIR (5 -> 1/2).
-        final tA = await createTicket();
-        created.add(tA);
-        await proposeSolution(tA);
-        await profile(9);
-        final beforeA = await ticketStatus(tA);
-        final fa = await http.post(
-          Uri.parse('$base/TicketFollowup'),
-          headers: headers(token),
           body: jsonEncode({
-            'input': {
-              'tickets_id': tA,
-              'content': 'nao resolvido',
-              'add_reopen': 1,
-            },
+            'input': {'id': id, 'status': 6},
           }),
         );
-        final afterA = await ticketStatus(tA);
-        // ignore: avoid_print
-        print('RECUSAR http=${fa.statusCode} status_antes=$beforeA '
-            'status_depois=$afterA EFEITO_OK=${beforeA == '5' && afterA != '5'}');
-
-        // APROVAR: followup add_close deve FECHAR (5 -> 6).
-        final tB = await createTicket();
-        created.add(tB);
-        await proposeSolution(tB);
-        await profile(9);
-        final beforeB = await ticketStatus(tB);
-        final pb = await http.post(
-          Uri.parse('$base/TicketFollowup'),
-          headers: headers(token),
-          body: jsonEncode({
-            'input': {
-              'tickets_id': tB,
-              'content': 'resolvido, obrigado',
-              'add_close': 1,
-            },
-          }),
-        );
-        final afterB = await ticketStatus(tB);
-        // ignore: avoid_print
-        print('APROVAR http=${pb.statusCode} status_antes=$beforeB '
-            'status_depois=$afterB EFEITO_OK=${beforeB == '5' && afterB == '6'}');
-      } finally {
-        await profile(11);
-        for (final id in created) {
-          await http.put(
-            Uri.parse('$base/Ticket/$id'),
-            headers: headers(token),
-            body: jsonEncode({
-              'input': {'id': id, 'status': 6},
-            }),
-          );
-        }
-        // ignore: avoid_print
-        print('APROV cleanup tickets=$created');
-        await http.get(Uri.parse('$base/killSession'), headers: headers(token));
       }
-    },
-  );
+      // ignore: avoid_print
+      print('APROV cleanup tickets=$created');
+      await http.get(Uri.parse('$base/killSession'), headers: headers(token));
+    }
+  });
 
   test(
     'validacao adicional (APPLY): anexo (efeito), read-back e para-terceiro',
@@ -900,7 +937,8 @@ void main() {
       Future<String> createTicket(Map<String, dynamic> extra) async {
         await profile(9);
         final payload = GlpiTicketSupport.buildCreateTicketPayload({
-          'assunto': '$ticketMarker extra ${DateTime.now().microsecondsSinceEpoch}',
+          'assunto':
+              '$ticketMarker extra ${DateTime.now().microsecondsSinceEpoch}',
           'descricao': 'Validacao adicional. Descartavel.',
           'serviceName': '',
           'governedCategoryId': categoryId,
@@ -931,24 +969,28 @@ void main() {
           'App-Token': appToken,
           'Session-Token': token,
         });
-        mp.files.add(http.MultipartFile.fromString(
-          'uploadManifest',
-          jsonEncode({
-            'input': {
-              'name': 'anexo.txt',
-              '_filename': ['anexo.txt'],
-              'items_id': tA,
-              'itemtype': 'Ticket',
-            },
-          }),
-          contentType: MediaType('application', 'json'),
-        ));
-        mp.files.add(http.MultipartFile.fromBytes(
-          'filename[0]',
-          utf8.encode('conteudo de teste'),
-          filename: 'anexo.txt',
-          contentType: MediaType('text', 'plain'),
-        ));
+        mp.files.add(
+          http.MultipartFile.fromString(
+            'uploadManifest',
+            jsonEncode({
+              'input': {
+                'name': 'anexo.txt',
+                '_filename': ['anexo.txt'],
+                'items_id': tA,
+                'itemtype': 'Ticket',
+              },
+            }),
+            contentType: MediaType('application', 'json'),
+          ),
+        );
+        mp.files.add(
+          http.MultipartFile.fromBytes(
+            'filename[0]',
+            utf8.encode('conteudo de teste'),
+            filename: 'anexo.txt',
+            contentType: MediaType('text', 'plain'),
+          ),
+        );
         final up = await http.Response.fromStream(await mp.send());
         // Verificacao do vinculo com sessao ADMIN (direito de document garantido).
         var diStatus = -1;
@@ -974,8 +1016,10 @@ void main() {
           await http.get(Uri.parse('$base/killSession'), headers: headers(at));
         }
         // ignore: avoid_print
-        print('ANEXO_EFEITO ticket=$tA upload=${up.statusCode} '
-            'di_http=$diStatus docs_vinculados=$docs (le como admin)');
+        print(
+          'ANEXO_EFEITO ticket=$tA upload=${up.statusCode} '
+          'di_http=$diStatus docs_vinculados=$docs (le como admin)',
+        );
 
         // 2) READ-BACK governado — grupo, categoria e task templates.
         final tB = await createTicket(const {});
@@ -1004,8 +1048,10 @@ void main() {
         );
         final cat = '${(jsonDecode(tBfull.body) as Map)['itilcategories_id']}';
         // ignore: avoid_print
-        print('READBACK ticket=$tB grupo=$grp categoria=$cat '
-            'task_templates=$tasks');
+        print(
+          'READBACK ticket=$tB grupo=$grp categoria=$cat '
+          'task_templates=$tasks',
+        );
 
         // 3) PARA-TERCEIRO — beneficiario=requester, autor logado=observer.
         if (thirdPartyId != null && thirdPartyId != 2373) {
@@ -1025,9 +1071,11 @@ void main() {
             }
           }
           // ignore: avoid_print
-          print('PARA_TERCEIRO ticket=$tC beneficiario=$thirdPartyId '
-              'requester=$requester observer=$observer '
-              'OK=${requester == '$thirdPartyId' && observer == '2373'}');
+          print(
+            'PARA_TERCEIRO ticket=$tC beneficiario=$thirdPartyId '
+            'requester=$requester observer=$observer '
+            'OK=${requester == '$thirdPartyId' && observer == '2373'}',
+          );
         } else {
           // ignore: avoid_print
           print('PARA_TERCEIRO pulado (sem beneficiario de teste distinto)');
@@ -1088,7 +1136,8 @@ void main() {
               'Basic ${base64Encode(utf8.encode('$adminUser:$adminPassword'))}',
         },
       );
-      final adminToken = (jsonDecode(ai.body) as Map)['session_token'] as String;
+      final adminToken =
+          (jsonDecode(ai.body) as Map)['session_token'] as String;
 
       // Headers para o Worker: o Worker injeta o proprio App-Token.
       Map<String, String> wHeaders(String? t) => {
@@ -1098,6 +1147,7 @@ void main() {
       };
 
       var reverted = false;
+      var defaultChanged = false;
       String? createdViaWorker;
       try {
         // 1) Marca Solicitante/DTIC como perfil padrao.
@@ -1112,9 +1162,14 @@ void main() {
           Uri.parse('$base/Profile_User/$puId'),
           headers: headers(adminToken),
         );
+        final persistedDefault = jsonFieldValue(afterSet.body, 'is_default');
+        defaultChanged = set.statusCode == 200 && persistedDefault == '1';
         // ignore: avoid_print
-        print('SET_DEFAULT pu=$puId -> ${set.statusCode} '
-            'is_default_persistiu=${(jsonDecode(afterSet.body) as Map)['is_default']}');
+        print(
+          'SET_DEFAULT pu=$puId -> ${set.statusCode} '
+          'is_default_persistiu=${persistedDefault ?? 'indisponivel'} '
+          'alterou=$defaultChanged',
+        );
 
         // 2) Login da conta de teste VIA WORKER e confere o perfil ativo.
         final wInit = await http.get(
@@ -1139,13 +1194,17 @@ void main() {
           final perfil = '${sess['glpiactiveprofile']?['name']}';
           final ent = '${sess['glpiactive_entity']}';
           // ignore: avoid_print
-          print('WORKER perfil_ativo=$perfil entidade=$ent userId=${sess['glpiID']}');
+          print(
+            'WORKER perfil_ativo=$perfil entidade=$ent userId=${sess['glpiID']}',
+          );
 
           if (perfil.toLowerCase().contains('solicitante')) {
             // 3) Cria chamado COMO SOLICITANTE pelo Worker (caminho do APK).
             final payload = GlpiTicketSupport.buildCreateTicketPayload({
-              'assunto': '$ticketMarker WORKER ${DateTime.now().microsecondsSinceEpoch}',
-              'descricao': 'Validacao via Worker (caminho do APK). Descartavel.',
+              'assunto':
+                  '$ticketMarker WORKER ${DateTime.now().microsecondsSinceEpoch}',
+              'descricao':
+                  'Validacao via Worker (caminho do APK). Descartavel.',
               'serviceName': '',
               'governedCategoryId': categoryId,
               'entities_id': 28,
@@ -1159,7 +1218,8 @@ void main() {
             // ignore: avoid_print
             print('WORKER_CRIAR -> ${wCreate.statusCode}: ${wCreate.body}');
             if (wCreate.statusCode == 200 || wCreate.statusCode == 201) {
-              createdViaWorker = (jsonDecode(wCreate.body) as Map)['id'].toString();
+              createdViaWorker = (jsonDecode(wCreate.body) as Map)['id']
+                  .toString();
             }
             await http.get(
               Uri.parse('$workerBase/killSession'),
@@ -1168,23 +1228,33 @@ void main() {
           }
         }
       } finally {
-        // 4) REVERTE o default ao estado original (is_default=0).
-        final rev = await http.put(
-          Uri.parse('$base/Profile_User/$puId'),
-          headers: headers(adminToken),
-          body: jsonEncode({
-            'input': {'id': puId, 'is_default': 0},
-          }),
-        );
-        final check = await http.get(
-          Uri.parse('$base/Profile_User/$puId'),
-          headers: headers(adminToken),
-        );
-        final nowDef = '${(jsonDecode(check.body) as Map)['is_default']}';
-        reverted = rev.statusCode == 200 && (nowDef == '0' || nowDef == 'null');
-        // ignore: avoid_print
-        print('REVERT_DEFAULT pu=$puId put=${rev.statusCode} '
-            'is_default_agora=$nowDef revertido=$reverted');
+        if (defaultChanged) {
+          // 4) REVERTE o default ao estado original (is_default=0).
+          final rev = await http.put(
+            Uri.parse('$base/Profile_User/$puId'),
+            headers: headers(adminToken),
+            body: jsonEncode({
+              'input': {'id': puId, 'is_default': 0},
+            }),
+          );
+          final check = await http.get(
+            Uri.parse('$base/Profile_User/$puId'),
+            headers: headers(adminToken),
+          );
+          final nowDef = jsonFieldValue(check.body, 'is_default');
+          reverted =
+              rev.statusCode == 200 &&
+              (nowDef == null || nowDef == '0' || nowDef == 'null');
+          // ignore: avoid_print
+          print(
+            'REVERT_DEFAULT pu=$puId put=${rev.statusCode} '
+            'is_default_agora=${nowDef ?? 'indisponivel'} revertido=$reverted',
+          );
+        } else {
+          reverted = true;
+          // ignore: avoid_print
+          print('REVERT_DEFAULT pu=$puId ignorado: default nao foi alterado');
+        }
 
         // Cleanup do ticket criado via Worker (via admin: categoria + solucao + fechar).
         if (createdViaWorker != null) {
@@ -1214,8 +1284,11 @@ void main() {
           headers: headers(adminToken),
         );
       }
-      expect(reverted, isTrue,
-          reason: 'ATENCAO: reverter is_default do Profile_User $puId para 0');
+      expect(
+        reverted,
+        isTrue,
+        reason: 'ATENCAO: reverter is_default do Profile_User $puId para 0',
+      );
     },
   );
 
@@ -1288,8 +1361,10 @@ void main() {
 
       Future<String> criarViaWorker() async {
         final payload = GlpiTicketSupport.buildCreateTicketPayload({
-          'assunto': '$ticketMarker WKE2E ${DateTime.now().microsecondsSinceEpoch}',
-          'descricao': 'Validacao E2E via Worker (caminho do APK). Descartavel.',
+          'assunto':
+              '$ticketMarker WKE2E ${DateTime.now().microsecondsSinceEpoch}',
+          'descricao':
+              'Validacao E2E via Worker (caminho do APK). Descartavel.',
           'serviceName': '',
           'governedCategoryId': categoryId,
           'entities_id': 28,
@@ -1300,7 +1375,11 @@ void main() {
           headers: wH(wToken),
           body: jsonEncode(payload),
         );
-        expect(r.statusCode, anyOf(200, 201), reason: 'worker criar: ${r.body}');
+        expect(
+          r.statusCode,
+          anyOf(200, 201),
+          reason: 'worker criar: ${r.body}',
+        );
         return (jsonDecode(r.body) as Map)['id'].toString();
       }
 
@@ -1343,7 +1422,11 @@ void main() {
           Uri.parse('$workerBase/TicketFollowup'),
           headers: wH(wToken),
           body: jsonEncode({
-            'input': {'tickets_id': id1, 'content': 'msg teste', 'is_private': 0},
+            'input': {
+              'tickets_id': id1,
+              'content': 'msg teste',
+              'is_private': 0,
+            },
           }),
         );
         // ignore: avoid_print
@@ -1354,25 +1437,32 @@ void main() {
           'POST',
           Uri.parse('$workerBase/Ticket/$id1/Document'),
         );
-        mp.headers.addAll({'Accept': 'application/json', 'Session-Token': wToken});
-        mp.files.add(http.MultipartFile.fromString(
-          'uploadManifest',
-          jsonEncode({
-            'input': {
-              'name': 'a.txt',
-              '_filename': ['a.txt'],
-              'items_id': id1,
-              'itemtype': 'Ticket',
-            },
-          }),
-          contentType: MediaType('application', 'json'),
-        ));
-        mp.files.add(http.MultipartFile.fromBytes(
-          'filename[0]',
-          utf8.encode('x'),
-          filename: 'a.txt',
-          contentType: MediaType('text', 'plain'),
-        ));
+        mp.headers.addAll({
+          'Accept': 'application/json',
+          'Session-Token': wToken,
+        });
+        mp.files.add(
+          http.MultipartFile.fromString(
+            'uploadManifest',
+            jsonEncode({
+              'input': {
+                'name': 'a.txt',
+                '_filename': ['a.txt'],
+                'items_id': id1,
+                'itemtype': 'Ticket',
+              },
+            }),
+            contentType: MediaType('application', 'json'),
+          ),
+        );
+        mp.files.add(
+          http.MultipartFile.fromBytes(
+            'filename[0]',
+            utf8.encode('x'),
+            filename: 'a.txt',
+            contentType: MediaType('text', 'plain'),
+          ),
+        );
         final up = await http.Response.fromStream(await mp.send());
         final di = await http.get(
           Uri.parse('$base/Ticket/$id1/Document_Item'),
@@ -1398,8 +1488,10 @@ void main() {
         );
         final sa = await statusOf(id2);
         // ignore: avoid_print
-        print('WORKER_E2E_APROVAR http=${ap.statusCode} $sb->$sa '
-            'OK=${sb == '5' && sa == '6'}');
+        print(
+          'WORKER_E2E_APROVAR http=${ap.statusCode} $sb->$sa '
+          'OK=${sb == '5' && sa == '6'}',
+        );
 
         // RECUSAR via Worker (followup add_reopen).
         final id3 = await criarViaWorker();
@@ -1415,8 +1507,10 @@ void main() {
         );
         final sa3 = await statusOf(id3);
         // ignore: avoid_print
-        print('WORKER_E2E_RECUSAR http=${rj.statusCode} $sb3->$sa3 '
-            'OK=${sb3 == '5' && sa3 != '5'}');
+        print(
+          'WORKER_E2E_RECUSAR http=${rj.statusCode} $sb3->$sa3 '
+          'OK=${sb3 == '5' && sa3 != '5'}',
+        );
       } finally {
         // Cleanup via admin (categoria ja=47): solucao (tolerante) + fechar.
         for (final id in created) {
@@ -1441,7 +1535,10 @@ void main() {
           Uri.parse('$workerBase/killSession'),
           headers: wH(wToken),
         );
-        await http.get(Uri.parse('$base/killSession'), headers: headers(aToken));
+        await http.get(
+          Uri.parse('$base/killSession'),
+          headers: headers(aToken),
+        );
       }
     },
   );
@@ -1467,7 +1564,7 @@ void main() {
               'Basic ${base64Encode(utf8.encode('$adminUser:$adminPassword'))}',
         },
       );
-      final token = (jsonDecode(init.body) as Map)['session_token'] as String;
+      final token = tokenFromResponse(init);
       try {
         final r = await http.get(
           Uri.parse('$base/User/2373/Profile_User?range=0-50'),
@@ -1479,9 +1576,11 @@ void main() {
           for (final pu in (jsonDecode(r.body) as List)) {
             if (pu is! Map) continue;
             // ignore: avoid_print
-            print('  PU id=${pu['id']} profiles_id=${pu['profiles_id']} '
-                'entities_id=${pu['entities_id']} '
-                'is_default=${pu['is_default']} is_dynamic=${pu['is_dynamic']}');
+            print(
+              '  PU id=${pu['id']} profiles_id=${pu['profiles_id']} '
+              'entities_id=${pu['entities_id']} '
+              'is_default=${pu['is_default']} is_dynamic=${pu['is_dynamic']}',
+            );
           }
         }
       } finally {
@@ -1526,7 +1625,8 @@ void main() {
 
         Future<String> criar() async {
           final payload = GlpiTicketSupport.buildCreateTicketPayload({
-            'assunto': '$ticketMarker TEC ${DateTime.now().microsecondsSinceEpoch}',
+            'assunto':
+                '$ticketMarker TEC ${DateTime.now().microsecondsSinceEpoch}',
             'descricao': 'Validacao fluxos tecnicos. Descartavel.',
             'serviceName': '',
             'governedCategoryId': categoryId,
@@ -1553,13 +1653,19 @@ void main() {
         );
         final st = await statusOf(tA);
         // ignore: avoid_print
-        print('TEC_CRIAR id=$tA | TEC_STATUS http=${put.statusCode} '
-            'status=$st OK=${st == '2'}');
+        print(
+          'TEC_CRIAR id=$tA | TEC_STATUS http=${put.statusCode} '
+          'status=$st OK=${st == '2'}',
+        );
         final msg = await http.post(
           Uri.parse('$base/TicketFollowup'),
           headers: headers(token),
           body: jsonEncode({
-            'input': {'tickets_id': tA, 'content': 'andamento', 'is_private': 0},
+            'input': {
+              'tickets_id': tA,
+              'content': 'andamento',
+              'is_private': 0,
+            },
           }),
         );
         // ignore: avoid_print
@@ -1571,9 +1677,11 @@ void main() {
 
         // Ler fila operacional por status (search/Ticket).
         final fila = await http.get(
-          Uri.parse('$base/search/Ticket'
-              '?criteria[0][field]=12&criteria[0][searchtype]=equals'
-              '&criteria[0][value]=5&forcedisplay[0]=2&range=0-5'),
+          Uri.parse(
+            '$base/search/Ticket'
+            '?criteria[0][field]=12&criteria[0][searchtype]=equals'
+            '&criteria[0][value]=5&forcedisplay[0]=2&range=0-5',
+          ),
           headers: headers(token),
         );
         // ignore: avoid_print
@@ -1614,8 +1722,7 @@ void main() {
       final token = await initSession();
       try {
         final session = await activateProfileAndContext(token, profileId);
-        final userId =
-            session['glpiID'] is int
+        final userId = session['glpiID'] is int
             ? session['glpiID']
             : int.tryParse('${session['glpiID']}');
         const m = ticketMarker;

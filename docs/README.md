@@ -61,6 +61,9 @@ O fluxo operacional e hibrido: WSL para fonte, `analyze`, `test`, web local e Wi
   Regra da entidade do usuario e roteiro de teste Android.
 - `validation-and-testing-guide.md`
   Consolidacao da validacao atual do app.
+- `AUDITORIA_OPERACIONAL_TECNICOS_APK_PWA_ANEXOS_2026-06-25.md`
+  Auditoria funcional do fluxo dos tecnicos, consistencia APK/PWA, fila
+  operacional, assuncao/status e anexos.
 - `QUALITY_FOUNDATION_ADAPTACAO_FLUTTER.md`
   Registro da adaptacao do pacote externo de qualidade para a realidade Flutter/Dart/GLPI deste repo.
 - `domain/ticket/STATES.md`
