@@ -389,6 +389,8 @@ class GlpiClient {
       '&forcedisplay[4]=4'
       '&forcedisplay[5]=7'
       '&forcedisplay[6]=5'
+      '&forcedisplay[7]=8'
+      '&forcedisplay[8]=65'
       '&sort=15'
       '&order=DESC'
       '&range=0-$rangeEnd',

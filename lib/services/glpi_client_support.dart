@@ -339,6 +339,8 @@ class GlpiClientSupport {
       'forcedisplay[5]': '7',
       'forcedisplay[6]': '5',
       'forcedisplay[7]': '80',
+      'forcedisplay[8]': '8',
+      'forcedisplay[9]': '65',
       'sort': '15',
       'order': 'DESC',
     });
@@ -350,6 +352,8 @@ class GlpiClientSupport {
   static Map<String, dynamic> mapSearchTicketRow(Map<String, dynamic> row) {
     final requester = row['4'] ?? row['users_id_recipient'];
     final assignee = row['5'] ?? row['users_id_assign'];
+    final assignedGroupName = row['8']?.toString().trim();
+    final observerGroupName = row['65']?.toString().trim();
     return {
       'id': row['2'] ?? row['id'],
       'name': row['1'] ?? row['name'],
@@ -361,6 +365,10 @@ class GlpiClientSupport {
       if (assignee != null) 'users_id_assign': assignee,
       if (assignee != null) 'Users_id_assign': assignee,
       if (row['80'] != null) 'entities_id': row['80'],
+      if (assignedGroupName != null && assignedGroupName.isNotEmpty)
+        'assigned_group_name': assignedGroupName,
+      if (observerGroupName != null && observerGroupName.isNotEmpty)
+        'observer_group_name': observerGroupName,
     };
   }
 }

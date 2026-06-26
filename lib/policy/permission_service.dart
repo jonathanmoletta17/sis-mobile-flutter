@@ -31,10 +31,17 @@ class PermissionService {
 
     if (isRequester) reasons.add('Usuário é requerente do ticket');
 
+    // Verifica por ID (fetch direto) OU por nome (field 65 da busca, id=0 sentinela).
     final isGgShared =
         role == OperationalRole.ggConservationRequester &&
         ticketDomain == TicketDomain.ggConservationObserver &&
-        observerGroups.any((group) => group.id == ggConservationGroupId);
+        observerGroups.any(
+          (group) =>
+              group.id == ggConservationGroupId ||
+              (group.id == 0 &&
+                  normalizeGlpiText(group.name).contains('gg') &&
+                  normalizeGlpiText(group.name).contains('conservacao')),
+        );
     if (isGgShared) reasons.add('Ticket compartilhado com GG-CONSERVACAO');
 
     final technicalDomainAllowed = _roleCoversDomain(role, ticketDomain);

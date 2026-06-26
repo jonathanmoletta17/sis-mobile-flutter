@@ -118,11 +118,14 @@ class TicketQueueClassifier {
     required bool isAssign,
   }) {
     final parsedId = _numericId(id);
-    if (parsedId == null) return const [];
+    final nameText = name?.toString().trim() ?? '';
+    // Sem ID nem nome: nada a fazer.
+    if (parsedId == null && nameText.isEmpty) return const [];
+    // id=0 é sentinela: grupo veio por nome da busca (sem ID numérico disponível).
     return [
       GlpiGroupRef(
-        id: parsedId,
-        name: name?.toString().trim() ?? '',
+        id: parsedId ?? 0,
+        name: nameText,
         isAssign: isAssign,
       ),
     ];
