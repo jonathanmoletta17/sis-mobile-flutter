@@ -197,40 +197,9 @@ class AppStateMessageSupport {
         }
 
         if (successCount > 0) {
-          log?.call(
-            '$successCount anexo(s) enviado(s). Criar follow-up placeholder.',
-          );
-          final result = isSolution
-              ? await apiService.addTicketSolution(
-                  ticketId,
-                  '[Anexo enviado pelo aplicativo]',
-                  sessionToken,
-                )
-              : await apiService.addTicketMessage(
-                  ticketId,
-                  '[Anexo enviado pelo aplicativo]',
-                  sessionToken,
-                );
-
-          if (result['success'] != true) {
-            final err = _normalizeInteractionError(
-              result['error']?.toString() ?? 'Falha ao criar follow-up.',
-              isSolution: isSolution,
-            );
-            if (isSessionInvalidError(err)) {
-              await handleSessionInvalid(err);
-            }
-            return {
-              'success': false,
-              'error': err,
-              'attachmentsSuccess': successCount,
-              'attachmentsFail': failCount,
-            };
-          }
-
-          interactionId = result['entity_id']?.toString();
-          interactionType = isSolution ? 'ITILSolution' : 'ITILFollowup';
-          messageSent = false;
+          log?.call('$successCount anexo(s) enviado(s) com sucesso.');
+          // Documentos ficam vinculados ao Ticket e aparecem na conversa via
+          // getTicketDocuments — não é necessário criar follow-up placeholder.
         }
       } else if (mustCreateInteraction) {
         final result = isSolution
