@@ -60,6 +60,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
   Timer? _pollingTimer;
   bool _isFetching = false;
   final Map<String, Uint8List> _imageCache = {};
+  final Map<String, Future<Uint8List?>> _imageFutureCache = {};
   String _lastDataHash = '';
   bool _isFirstLoadComplete = false;
   bool _showScrollToBottomBtn = false;
@@ -321,10 +322,16 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     }
   }
 
-  Future<Uint8List?> _getCachedImage(String url) async {
+  // Retorna sempre a mesma instância de Future para evitar que o FutureBuilder
+  // reinicie a cada rebuild (piscamento causado pelo polling de 3 s).
+  Future<Uint8List?> _getCachedImage(String url) {
+    return _imageFutureCache.putIfAbsent(url, () => _fetchImage(url));
+  }
+
+  Future<Uint8List?> _fetchImage(String url) async {
     if (_imageCache.containsKey(url)) return _imageCache[url];
-    final appState = Provider.of<AppState>(context, listen: false);
     if (!mounted) return null;
+    final appState = Provider.of<AppState>(context, listen: false);
     final bytes = await appState.downloadImage(url);
     if (bytes != null && mounted) _imageCache[url] = bytes;
     return bytes;
