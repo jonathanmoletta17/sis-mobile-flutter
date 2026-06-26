@@ -57,8 +57,9 @@ class FileValidator {
     if (ext.endsWith('.mp4') ||
         ext.endsWith('.mov') ||
         ext.endsWith('.avi') ||
-        ext.endsWith('.webm'))
+        ext.endsWith('.webm')) {
       return '🎬';
+    }
     return '📎';
   }
 }

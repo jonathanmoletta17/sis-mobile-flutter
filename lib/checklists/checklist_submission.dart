@@ -57,8 +57,9 @@ class SisChecklistPreparedSubmission {
 
     final buffer = StringBuffer('<p>');
     if (formName != null) buffer.write('<b>Formulário:</b> $formName<br>');
-    if (targetName != null)
+    if (targetName != null) {
       buffer.write('<b>Local de aplicação:</b> $targetName<br>');
+    }
     buffer.write('</p>');
 
     int? currentSection;

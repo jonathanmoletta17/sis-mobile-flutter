@@ -518,10 +518,12 @@ bool _readBool(dynamic value, {bool fallback = false}) {
   if (value is bool) return value;
   if (value is num) return value != 0;
   final normalized = value.toString().trim().toLowerCase();
-  if (normalized == '1' || normalized == 'true' || normalized == 'yes')
+  if (normalized == '1' || normalized == 'true' || normalized == 'yes') {
     return true;
-  if (normalized == '0' || normalized == 'false' || normalized == 'no')
+  }
+  if (normalized == '0' || normalized == 'false' || normalized == 'no') {
     return false;
+  }
   return fallback;
 }
 

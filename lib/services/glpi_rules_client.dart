@@ -66,8 +66,9 @@ class GlpiRulesClient {
   // ---- Status (L3) ----
   String statusLabel(int statusId) {
     final entry = _statusLabels['$statusId'];
-    if (entry is Map && entry['label'] is String)
+    if (entry is Map && entry['label'] is String) {
       return entry['label'] as String;
+    }
     return 'Status $statusId';
   }
 

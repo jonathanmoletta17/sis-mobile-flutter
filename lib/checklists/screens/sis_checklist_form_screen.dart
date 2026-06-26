@@ -485,11 +485,12 @@ class _ItemSearchSheetState extends State<_ItemSearchSheet> {
     });
     try {
       final results = await widget.searcher(query);
-      if (mounted)
+      if (mounted) {
         setState(() {
           _results = results;
           _loading = false;
         });
+      }
     } catch (_) {
       if (mounted) {
         setState(() {
