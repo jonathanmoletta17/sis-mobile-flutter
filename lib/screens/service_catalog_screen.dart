@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../catalog/service_catalog_provider.dart';
+import '../checklists/widgets/sis_checklist_entry_card.dart';
 import '../state/app_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
@@ -326,6 +327,7 @@ class _ServiceCatalogScreenState extends State<ServiceCatalogScreen>
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),
+              SisChecklistEntryCard(appState: appState),
               const SisSectionHeader(
                 title: 'Categorias',
                 subtitle:

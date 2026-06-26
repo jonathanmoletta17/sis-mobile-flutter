@@ -5,6 +5,11 @@
   "compatibility_date": "2026-05-04",
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": true,
+  "vars": {
+    // Submissao FormCreator de checklist desligada por padrao. So habilitar em
+    // ambiente de sandbox/homologacao com aprovacao humana explicita (Phase 9).
+    "ALLOW_FORMCREATOR_SUBMISSION": "false"
+  },
   "observability": {
     "enabled": true,
     "head_sampling_rate": 0.1

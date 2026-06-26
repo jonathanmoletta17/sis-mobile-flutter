@@ -1,12 +1,14 @@
 import 'dart:io';
 
 class FileValidator {
-  // 10 MB (Ajuste conforme a configuração do seu PHP/GLPI 'upload_max_filesize')
-  static const int maxSizeInBytes = 10 * 1024 * 1024;
+  // 100 MB (Ajuste conforme a configuração do seu PHP/GLPI 'upload_max_filesize')
+  // Aumentado para acomodar vídeos; verifique upload_max_filesize no GLPI
+  static const int maxSizeInBytes = 100 * 1024 * 1024;
 
   static const List<String> allowedExtensions = [
     'jpg', 'jpeg', 'png', 'gif', 'webp', // Imagens
     'pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'csv', // Documentos
+    'mp4', 'mov', 'avi', 'webm', // Vídeos
   ];
 
   static String? validate(File file) {
@@ -52,6 +54,7 @@ class FileValidator {
     if (ext.endsWith('.doc') || ext.endsWith('.docx')) return '📝';
     if (ext.endsWith('.xls') || ext.endsWith('.xlsx')) return '📊';
     if (ext.endsWith('.txt') || ext.endsWith('.csv')) return '📋';
+    if (ext.endsWith('.mp4') || ext.endsWith('.mov') || ext.endsWith('.avi') || ext.endsWith('.webm')) return '🎬';
     return '📎';
   }
 }

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import 'dart:typed_data';
 import 'dart:async';
 import '../state/app_state.dart';
 import '../state/app_state_ticket_support.dart';
 import '../models/glpi_status.dart';
 import '../models/ticket_message.dart';
+import '../services/glpi_ticket_support.dart';
 import '../utils/avatar_colors.dart';
 import '../utils/attachment_display.dart';
+import '../utils/platform_attachment_opener.dart';
+import '../utils/platform_file_bytes.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:gal/gal.dart';
 
 import '../theme/app_colors.dart';
@@ -49,6 +49,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ImagePicker _imagePicker = ImagePicker();
   final List<String> _selectedFiles = [];
+  final List<GlpiTicketAttachment> _selectedAttachments = [];
 
   bool _isLoading = false;
   bool _isSending = false;
@@ -212,7 +213,11 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     }
   }
 
-  Future<void> _downloadAndOpenFile(String url, String fileName) async {
+  Future<void> _downloadAndOpenFile(
+    String url,
+    String fileName, {
+    String? mimeType,
+  }) async {
     _showSnackBar('Baixando $fileName...', color: Colors.blueAccent);
     try {
       final appState = Provider.of<AppState>(context, listen: false);
@@ -223,20 +228,22 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
         return;
       }
 
-      final safeFileName = fileName.replaceAll(RegExp(r'[\\/]'), '_');
-      final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/$safeFileName');
-      await file.writeAsBytes(bytes, flush: true);
-
       if (mounted) {
         _showSnackBar('Abrindo visualizador...', color: Colors.blueAccent);
       }
-      final result = await OpenFilex.open(file.path);
-      if (result.type != ResultType.done) {
+      final result = await openAttachmentBytes(
+        bytes: bytes,
+        filename: fileName,
+        mimeType: mimeType,
+      );
+      if (!mounted) return;
+      if (!result.success) {
         _showSnackBar(
           'Não foi possível abrir: ${result.message}',
           color: Colors.orange,
         );
+      } else if (result.message != null && result.message!.isNotEmpty) {
+        _showSnackBar(result.message!, color: Colors.blueAccent);
       }
     } catch (e) {
       _showSnackBar('Erro ao processar arquivo: $e', color: Colors.red);
@@ -254,7 +261,8 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     }
     if (messageText.isEmpty &&
         _selectedImage == null &&
-        _selectedFiles.isEmpty) {
+        _selectedFiles.isEmpty &&
+        _selectedAttachments.isEmpty) {
       return;
     }
     if (_isSending) {
@@ -266,12 +274,22 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     try {
       final appState = Provider.of<AppState>(context, listen: false);
       final filePaths = <String>[..._selectedFiles];
-      if (_selectedImage?.path != null) filePaths.add(_selectedImage!.path);
+      final attachments = <GlpiTicketAttachment>[..._selectedAttachments];
+      if (_selectedImage != null) {
+        attachments.add(
+          GlpiTicketAttachment(
+            bytes: await _selectedImage!.readAsBytes(),
+            filename: _selectedImage!.name,
+            mimeType: _selectedImage!.mimeType,
+          ),
+        );
+      }
 
       final result = await appState.sendTicketMessageWithAttachments(
         ticketId: widget.ticketId,
         messageContent: messageText,
         filePaths: filePaths,
+        attachments: attachments,
         isSolution: _isSolutionMode,
       );
 
@@ -279,11 +297,22 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
         _messageController.clear();
         _selectedImage = null;
         _selectedFiles.clear();
+        _selectedAttachments.clear();
         _lastDataHash = '';
         await _refreshTicketState();
         _scrollToBottom();
+        if (result['partialFailure'] == true && mounted) {
+          _showSnackBar(
+            result['warning']?.toString() ??
+                'Mensagem enviada, mas houve falha em anexo.',
+            color: Colors.orange,
+          );
+        }
       } else {
-        _showSnackBar(result['error'] ?? 'Falha ao enviar', color: Colors.red);
+        _showSnackBar(
+          result['error']?.toString() ?? 'Falha ao enviar',
+          color: Colors.red,
+        );
       }
     } catch (e) {
       _showSnackBar('Erro: $e', color: Colors.red);
@@ -319,7 +348,15 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
         source: ImageSource.camera,
         imageQuality: 80,
       );
-      if (img != null) setState(() => _addFileIfValid(img.path));
+      if (img != null) {
+        setState(() {
+          if (kIsWeb) {
+            _selectedImage = img;
+          } else {
+            _addFileIfValid(img.path);
+          }
+        });
+      }
     } catch (e) {
       debugPrint('Erro ao capturar foto: $e');
     }
@@ -329,13 +366,47 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowMultiple: true,
+        withData: true,
+        withReadStream: kIsWeb,
       );
       if (result != null) {
+        final newAttachments = <GlpiTicketAttachment>[];
+        final newPaths = <String>[];
+        final unreadable = <String>[];
+
+        for (final file in result.files) {
+          final bytes = await readPlatformFileBytes(file);
+          if (bytes != null) {
+            newAttachments.add(
+              GlpiTicketAttachment(
+                bytes: bytes,
+                filename: file.name,
+                mimeType: null,
+              ),
+            );
+          } else if (!kIsWeb && file.path != null) {
+            newPaths.add(file.path!);
+          } else {
+            unreadable.add(file.name);
+          }
+        }
+
+        if (!mounted) return;
         setState(() {
-          for (var p in result.paths) {
-            if (p != null) _addFileIfValid(p);
+          for (final attachment in newAttachments) {
+            _addAttachmentIfValid(attachment);
+          }
+          for (final path in newPaths) {
+            _addFileIfValid(path);
           }
         });
+
+        if (unreadable.isNotEmpty) {
+          _showSnackBar(
+            'Nao foi possivel ler: ${unreadable.join(', ')}',
+            color: AppColors.danger,
+          );
+        }
       }
     } catch (e) {
       debugPrint('Erro ao selecionar arquivo: $e');
@@ -346,8 +417,21 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
     if (!_selectedFiles.contains(path)) _selectedFiles.add(path);
   }
 
+  void _addAttachmentIfValid(GlpiTicketAttachment attachment) {
+    final exists = _selectedAttachments.any(
+      (current) =>
+          current.filename == attachment.filename &&
+          current.bytes.length == attachment.bytes.length,
+    );
+    if (!exists) _selectedAttachments.add(attachment);
+  }
+
   void _removeFile(int index) {
     setState(() => _selectedFiles.removeAt(index));
+  }
+
+  void _removeAttachment(int index) {
+    setState(() => _selectedAttachments.removeAt(index));
   }
 
   void _showSnackBar(String msg, {Color color = AppColors.danger}) {
@@ -544,8 +628,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
   void _showRejectDialog(String ticketId, String solutionId) {
     final TextEditingController justificationController =
         TextEditingController();
-    List<String> localImagePaths =
-        []; // AGORA É UMA LISTA (Múltiplas Imagens)
+    List<String> localImagePaths = []; // AGORA É UMA LISTA (Múltiplas Imagens)
 
     showDialog(
       context: context,
@@ -794,6 +877,7 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                           ? _downloadAndOpenFile(
                               message.documentUrl!,
                               message.content,
+                              mimeType: message.mimeType,
                             )
                           : null,
                       child: Container(
@@ -871,21 +955,40 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                   icon: const Icon(Icons.download, color: Colors.white),
                   onPressed: () async {
                     try {
-                      final hasAccess = await Gal.hasAccess();
-                      if (!hasAccess) {
-                        await Gal.requestAccess();
-                      }
-                      final fileName =
-                          'glpi_anexo_${DateTime.now().millisecondsSinceEpoch}';
-                      await Gal.putImageBytes(bytes, name: fileName);
-
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Imagem salva na galeria.'),
-                            backgroundColor: AppColors.success,
-                          ),
+                      if (kIsWeb) {
+                        final result = await openAttachmentBytes(
+                          bytes: bytes,
+                          filename:
+                              'glpi_anexo_${DateTime.now().millisecondsSinceEpoch}.png',
+                          mimeType: 'image/png',
                         );
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(result.message ?? 'Download iniciado.'),
+                              backgroundColor: result.success
+                                  ? AppColors.success
+                                  : AppColors.danger,
+                            ),
+                          );
+                        }
+                      } else {
+                        final hasAccess = await Gal.hasAccess();
+                        if (!hasAccess) {
+                          await Gal.requestAccess();
+                        }
+                        final fileName =
+                            'glpi_anexo_${DateTime.now().millisecondsSinceEpoch}';
+                        await Gal.putImageBytes(bytes, name: fileName);
+
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Imagem salva na galeria.'),
+                              backgroundColor: AppColors.success,
+                            ),
+                          );
+                        }
                       }
                     } catch (e) {
                       if (context.mounted) {
@@ -965,7 +1068,9 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
                   ),
           ),
 
-          if (_selectedImage != null || _selectedFiles.isNotEmpty)
+          if (_selectedImage != null ||
+              _selectedFiles.isNotEmpty ||
+              _selectedAttachments.isNotEmpty)
             _buildAttachmentPreview(),
           _buildInputArea(),
         ],
@@ -1229,7 +1334,9 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
   }
 
   Widget _buildAttachmentPreview() {
-    if (_selectedFiles.isEmpty && _selectedImage == null) {
+    if (_selectedFiles.isEmpty &&
+        _selectedAttachments.isEmpty &&
+        _selectedImage == null) {
       return const SizedBox.shrink();
     }
 
@@ -1259,6 +1366,13 @@ class _TicketMessageScreenState extends State<TicketMessageScreen> {
               avatar: const Icon(Icons.insert_drive_file_outlined, size: 16),
               label: Text('Arquivo ${entry.key + 1}'),
               onDeleted: () => _removeFile(entry.key),
+            );
+          }),
+          ..._selectedAttachments.asMap().entries.map((entry) {
+            return InputChip(
+              avatar: const Icon(Icons.insert_drive_file_outlined, size: 16),
+              label: Text(entry.value.filename),
+              onDeleted: () => _removeAttachment(entry.key),
             );
           }),
         ],

@@ -17,6 +17,7 @@ import 'previews/login_surface_preview.dart';
 import 'previews/my_tickets_surface_preview.dart';
 import 'previews/offline_queue_surface_preview.dart';
 import 'previews/service_catalog_surface_preview.dart';
+import 'previews/sis_checklist_surface_preview.dart';
 import 'previews/ticket_message_surface_preview.dart';
 import 'previews/ticket_detail_surface_preview.dart';
 import 'previews/workbench_fixtures.dart';
@@ -29,6 +30,29 @@ class SisMobileWidgetbookApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Widgetbook.material(
       directories: [
+        WidgetbookComponent(
+          name: 'SisChecklistSurface',
+          useCases: [
+            WidgetbookUseCase(
+              name: 'Catálogo · Super-Admin',
+              builder: (context) => const SisChecklistSurfacePreview(
+                variant: SisChecklistSurfaceVariant.catalogSuperAdmin,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Catálogo · Solicitante (oculto)',
+              builder: (context) => const SisChecklistSurfacePreview(
+                variant: SisChecklistSurfaceVariant.catalogSolicitante,
+              ),
+            ),
+            WidgetbookUseCase(
+              name: 'Formulário · obrigatório faltando',
+              builder: (context) => const SisChecklistSurfacePreview(
+                variant: SisChecklistSurfaceVariant.formMissingRequired,
+              ),
+            ),
+          ],
+        ),
         WidgetbookComponent(
           name: 'SisStatusChip',
           useCases: [
