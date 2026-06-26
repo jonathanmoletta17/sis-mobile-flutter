@@ -5,7 +5,10 @@ import 'dtic/dtic_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  const envFile = String.fromEnvironment('ENV_FILE', defaultValue: '.env');
+  const envFile = String.fromEnvironment(
+    'ENV_FILE',
+    defaultValue: '.env.public.dtic',
+  );
   await dotenv.load(fileName: envFile);
   runApp(const DticMobileApp());
 }

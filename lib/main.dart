@@ -11,7 +11,10 @@ import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  const envFile = String.fromEnvironment('ENV_FILE', defaultValue: '.env');
+  const envFile = String.fromEnvironment(
+    'ENV_FILE',
+    defaultValue: '.env.public',
+  );
   await dotenv.load(fileName: envFile);
   await initializeServiceCatalogRepository();
 

@@ -24,6 +24,23 @@ require_file() {
   fi
 }
 
+validate_no_credential_leak() {
+  local dest="$1"
+  local raw_env="$dest/assets/.env"
+  if [ -f "$raw_env" ]; then
+    echo "ERROR: assets/.env found in bundle — credential leak detected!" >&2
+    echo "  Remove .env from pubspec.yaml flutter.assets and rebuild." >&2
+    exit 5
+  fi
+  local js="$dest/main.dart.js"
+  if [ -f "$js" ]; then
+    grep -q 'GLPI_APP_TOKEN\|SIS_TEST_PASSWORD\|SIS_TEST_ADMIN_PASSWORD' "$js" && {
+      echo "ERROR: main.dart.js contains credential keys — possible leak!" >&2
+      exit 6
+    } || true
+  fi
+}
+
 validate_sis_bundle() {
   local dest="$1"
   local js="$dest/main.dart.js"
@@ -31,6 +48,8 @@ validate_sis_bundle() {
 
   require_file "$js"
   require_file "$env"
+
+  validate_no_credential_leak "$dest"
 
   grep -q 'SIS_METADATA_CATALOG_URL' "$js" || {
     echo "ERROR: SIS bundle main.dart.js does not contain SIS_METADATA_CATALOG_URL wiring" >&2
@@ -53,6 +72,8 @@ validate_dtic_bundle() {
 
   require_file "$js"
   require_file "$env"
+
+  validate_no_credential_leak "$dest"
 
   grep -q '.env.public.dtic' "$js" || {
     echo "ERROR: DTIC bundle main.dart.js does not reference .env.public.dtic; ENV_FILE was probably omitted" >&2

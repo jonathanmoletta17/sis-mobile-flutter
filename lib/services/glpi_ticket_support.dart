@@ -192,9 +192,22 @@ class GlpiTicketSupport {
     if (lower.endsWith('.png')) return 'image/png';
     if (lower.endsWith('.gif')) return 'image/gif';
     if (lower.endsWith('.webp')) return 'image/webp';
+    if (lower.endsWith('.avif')) return 'image/avif';
     if (lower.endsWith('.pdf')) return 'application/pdf';
     if (lower.endsWith('.txt')) return 'text/plain';
-    if (lower.endsWith('.avif')) return 'image/avif';
+    if (lower.endsWith('.csv')) return 'text/csv';
+    if (lower.endsWith('.doc')) return 'application/msword';
+    if (lower.endsWith('.docx')) {
+      return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    }
+    if (lower.endsWith('.xls')) return 'application/vnd.ms-excel';
+    if (lower.endsWith('.xlsx')) {
+      return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    }
+    if (lower.endsWith('.mp4')) return 'video/mp4';
+    if (lower.endsWith('.mov')) return 'video/quicktime';
+    if (lower.endsWith('.avi')) return 'video/x-msvideo';
+    if (lower.endsWith('.webm')) return 'video/webm';
     return null;
   }
 
@@ -272,12 +285,7 @@ class GlpiTicketSupport {
       final normalizedName = name.trim();
       if (normalizedName.isEmpty) return;
 
-      List<int>? bytes;
-      if (bytesAny is Uint8List) {
-        bytes = bytesAny;
-      } else if (bytesAny is List<int>) {
-        bytes = bytesAny;
-      }
+      List<int>? bytes = _coerceBytes(bytesAny);
 
       if ((bytes == null || bytes.isEmpty) &&
           path != null &&
@@ -330,6 +338,26 @@ class GlpiTicketSupport {
 
   static int getCategoryId(dynamic categoryName) {
     return resolveServiceCategoryId(categoryName);
+  }
+
+  static List<int>? _coerceBytes(dynamic bytesAny) {
+    if (bytesAny == null) return null;
+    if (bytesAny is Uint8List) return bytesAny.toList(growable: false);
+    if (bytesAny is List<int>) return List<int>.from(bytesAny);
+    if (bytesAny is List) {
+      final bytes = <int>[];
+      for (final item in bytesAny) {
+        final byte = item is int
+            ? item
+            : item is num
+            ? item.toInt()
+            : null;
+        if (byte == null || byte < 0 || byte > 255) return null;
+        bytes.add(byte);
+      }
+      return bytes;
+    }
+    return null;
   }
 
   static int getLocationId(dynamic location) {

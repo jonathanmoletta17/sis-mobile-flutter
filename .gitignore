@@ -122,6 +122,17 @@ android/keystore-secrets.txt
 /type_menu_*.xml
 /initSession_resp.bin
 /auditoria-automatica-sis.md
+
+# Relatórios e artefatos de sessão gerados por agentes (raiz do repo)
+/ANALISE_*.md
+/AUDITORIA_*.csv
+/HANDOFF-*.md
+/INVESTIGACAO_*.md
+/RELATORIO_*.md
+
+# Windows Zone.Identifier alternate data streams (criados ao copiar arquivos do Windows)
+*:Zone.Identifier
+
 .localappdata/
 .appdata/
 .gitconfig*

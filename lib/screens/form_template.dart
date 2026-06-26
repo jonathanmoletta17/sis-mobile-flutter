@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 import '../widgets/anexar_arquivo_widget.dart';
 import '../widgets/custom_dropdown_field.dart';
+import '../utils/attachment_opening_policy.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/searchable_select_field.dart';
 import '../widgets/ui/sis_page_scaffold.dart';
@@ -323,18 +325,10 @@ class _FormTemplateState extends State<FormTemplate> {
 
   String? _guessMimeType(String? filename) {
     if (filename == null || filename.trim().isEmpty) return null;
-    final lower = filename.toLowerCase();
-
-    if (lower.endsWith('.png')) return 'image/png';
-    if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) {
-      return 'image/jpeg';
-    }
-    if (lower.endsWith('.pdf')) return 'application/pdf';
-    if (lower.endsWith('.txt')) return 'text/plain';
-    if (lower.endsWith('.gif')) return 'image/gif';
-    if (lower.endsWith('.webp')) return 'image/webp';
-
-    return null;
+    final resolved = AttachmentOpeningPolicy.resolveMimeType(
+      filename: filename,
+    );
+    return resolved == 'application/octet-stream' ? null : resolved;
   }
 
   Future<void> _onAnexosSelected(List<PlatformFile> files) async {
@@ -357,7 +351,10 @@ class _FormTemplateState extends State<FormTemplate> {
     for (final file in files) {
       Uint8List? bytes = file.bytes;
 
-      if (bytes == null && file.path != null && file.path!.isNotEmpty) {
+      if (!kIsWeb &&
+          bytes == null &&
+          file.path != null &&
+          file.path!.isNotEmpty) {
         try {
           bytes = await File(file.path!).readAsBytes();
         } catch (e) {
@@ -537,6 +534,7 @@ class _FormTemplateState extends State<FormTemplate> {
         'attachmentBytesList': _anexoBytesList,
         'attachmentNameList': _anexoNames,
         'attachmentMimeList': _anexoMimeTypes,
+        'attachmentPathsList': _anexoPaths,
         'CampoExtra': widget.extraFieldsBuilder != null
             ? _extraDropdownValue
             : null,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sis_mobile_flutter/data/service_data.dart';
 import 'package:sis_mobile_flutter/models/glpi_ticket.dart';
@@ -112,26 +114,75 @@ void main() {
     expect(restored.governedActors.single['type'], 'question_person');
   });
 
-  test('payload "para mim": requerente = usuario logado, sem grupos/assign', () {
-    final payload = GlpiTicketSupport.buildCreateTicketPayload({
-      'assunto': 'Teste',
-      'descricao': 'Descricao',
+  test('ticket offline preserva bytes e metadados de anexos do PWA', () {
+    final restored = GlpiTicket.fromMap({
       'serviceName': 'Carregadores',
-      'localizacao': 'Local (Root 36): Armazem',
+      'atendimentoPara': 'Para mim',
       'entities_id': 24,
-      'loggedUserId': 1548,
+      'localizacao': 'Local (Root 36): Armazem',
+      'telefone': '51999999999',
+      'tipo': 'Solicitacao',
+      'assunto': 'Teste offline com anexo',
+      'descricao': 'Descricao',
+      'attachmentBytesList': [
+        [1, 2, 3],
+      ],
+      'attachmentNameList': ['evidencia.pdf'],
+      'attachmentMimeList': ['application/pdf'],
+      'attachmentPathsList': [''],
     });
 
-    final input = payload['input'] as Map<String, dynamic>;
+    final serialized = restored.toMap();
 
-    expect(input['_users_id_requester'], [1548]);
-    expect(input.containsKey('_users_id_observer'), isFalse);
-    // Perfil Solicitante nao pode atribuir grupo/tecnico: nunca emitir.
-    expect(input.containsKey('_groups_id_assign'), isFalse);
-    expect(input.containsKey('_groups_id_requester'), isFalse);
-    expect(input.containsKey('_groups_id_observer'), isFalse);
-    expect(input.containsKey('_users_id_assign'), isFalse);
+    expect(serialized['attachmentBytesList'], [
+      [1, 2, 3],
+    ]);
+    expect(serialized['attachmentNameList'], ['evidencia.pdf']);
+    expect(serialized['attachmentMimeList'], ['application/pdf']);
+    expect(serialized['attachmentPathsList'], isEmpty);
   });
+
+  test(
+    'normalizeAttachments aceita bytes restaurados de JSON offline',
+    () async {
+      final restoredBytes = jsonDecode('[[1,2,3,4]]');
+
+      final attachments = await GlpiTicketSupport.normalizeAttachments({
+        'attachmentBytesList': restoredBytes,
+        'attachmentNameList': ['evidencia.pdf'],
+        'attachmentMimeList': ['application/pdf'],
+      });
+
+      expect(attachments, hasLength(1));
+      expect(attachments.single.filename, 'evidencia.pdf');
+      expect(attachments.single.mimeType, 'application/pdf');
+      expect(attachments.single.bytes, [1, 2, 3, 4]);
+    },
+  );
+
+  test(
+    'payload "para mim": requerente = usuario logado, sem grupos/assign',
+    () {
+      final payload = GlpiTicketSupport.buildCreateTicketPayload({
+        'assunto': 'Teste',
+        'descricao': 'Descricao',
+        'serviceName': 'Carregadores',
+        'localizacao': 'Local (Root 36): Armazem',
+        'entities_id': 24,
+        'loggedUserId': 1548,
+      });
+
+      final input = payload['input'] as Map<String, dynamic>;
+
+      expect(input['_users_id_requester'], [1548]);
+      expect(input.containsKey('_users_id_observer'), isFalse);
+      // Perfil Solicitante nao pode atribuir grupo/tecnico: nunca emitir.
+      expect(input.containsKey('_groups_id_assign'), isFalse);
+      expect(input.containsKey('_groups_id_requester'), isFalse);
+      expect(input.containsKey('_groups_id_observer'), isFalse);
+      expect(input.containsKey('_users_id_assign'), isFalse);
+    },
+  );
 
   test(
     'payload "para outra pessoa": beneficiario requester, autor observer, sem grupos',
@@ -157,37 +208,34 @@ void main() {
     },
   );
 
-  test(
-    'regressao Henrique: Solicitante "para mim" nao envia _groups_id_assign '
-    '(causa do ERROR_GLPI_ADD) e mantem gatilhos da RuleTicket',
-    () {
-      for (final serviceName in const ['Limpeza', 'Jardinagem', 'Marcenaria']) {
-        final payload = GlpiTicketSupport.buildCreateTicketPayload({
-          'assunto': 'Limpar agua do chao',
-          'descricao': 'Teste',
-          'serviceName': serviceName,
-          'governedCategoryId': 7001,
-          'governedLocationId': 7002,
-          'governedEntityId': 81,
-          'entities_id': 81,
-          'loggedUserId': 2363, // henrique-missio
-        });
+  test('regressao Henrique: Solicitante "para mim" nao envia _groups_id_assign '
+      '(causa do ERROR_GLPI_ADD) e mantem gatilhos da RuleTicket', () {
+    for (final serviceName in const ['Limpeza', 'Jardinagem', 'Marcenaria']) {
+      final payload = GlpiTicketSupport.buildCreateTicketPayload({
+        'assunto': 'Limpar agua do chao',
+        'descricao': 'Teste',
+        'serviceName': serviceName,
+        'governedCategoryId': 7001,
+        'governedLocationId': 7002,
+        'governedEntityId': 81,
+        'entities_id': 81,
+        'loggedUserId': 2363, // henrique-missio
+      });
 
-        final input = payload['input'] as Map<String, dynamic>;
+      final input = payload['input'] as Map<String, dynamic>;
 
-        // Nenhum campo de atribuicao/grupo: o GLPI atribui via RuleTicket.
-        expect(input.containsKey('_groups_id_assign'), isFalse);
-        expect(input.containsKey('_groups_id_requester'), isFalse);
-        expect(input.containsKey('_groups_id_observer'), isFalse);
-        expect(input.containsKey('_users_id_assign'), isFalse);
-        // Gatilhos da RuleTicket presentes (categoria + entidade).
-        expect(input['entities_id'], 81);
-        expect(input['itilcategories_id'], 7001);
-        // Requerente = proprio usuario logado.
-        expect(input['_users_id_requester'], [2363]);
-      }
-    },
-  );
+      // Nenhum campo de atribuicao/grupo: o GLPI atribui via RuleTicket.
+      expect(input.containsKey('_groups_id_assign'), isFalse);
+      expect(input.containsKey('_groups_id_requester'), isFalse);
+      expect(input.containsKey('_groups_id_observer'), isFalse);
+      expect(input.containsKey('_users_id_assign'), isFalse);
+      // Gatilhos da RuleTicket presentes (categoria + entidade).
+      expect(input['entities_id'], 81);
+      expect(input['itilcategories_id'], 7001);
+      // Requerente = proprio usuario logado.
+      expect(input['_users_id_requester'], [2363]);
+    }
+  });
 
   test('default urgency labels are human-readable and hide GLPI ids', () {
     expect(serviceCategories.first.urgencyOptions, [
@@ -209,5 +257,58 @@ void main() {
     expect(GlpiTicketSupport.mapUrgency('3 - Média (Padrão)'), 3);
     expect(GlpiTicketSupport.mapUrgency('5 - Alta'), 4);
     expect(GlpiTicketSupport.mapUrgency(5), 5);
+  });
+
+  group('guessMimeFromFilename', () {
+    test('mapeia imagens comuns', () {
+      expect(GlpiTicketSupport.guessMimeFromFilename('foto.jpg'), 'image/jpeg');
+      expect(
+        GlpiTicketSupport.guessMimeFromFilename('foto.jpeg'),
+        'image/jpeg',
+      );
+      expect(GlpiTicketSupport.guessMimeFromFilename('img.png'), 'image/png');
+      expect(GlpiTicketSupport.guessMimeFromFilename('anim.gif'), 'image/gif');
+      expect(GlpiTicketSupport.guessMimeFromFilename('img.webp'), 'image/webp');
+    });
+
+    test('mapeia PDF', () {
+      expect(
+        GlpiTicketSupport.guessMimeFromFilename('doc.pdf'),
+        'application/pdf',
+      );
+    });
+
+    test('mapeia documentos Office', () {
+      expect(
+        GlpiTicketSupport.guessMimeFromFilename('planilha.xlsx'),
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      );
+      expect(
+        GlpiTicketSupport.guessMimeFromFilename('documento.docx'),
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      );
+      expect(GlpiTicketSupport.guessMimeFromFilename('dados.csv'), 'text/csv');
+    });
+
+    test('mapeia vídeos', () {
+      expect(GlpiTicketSupport.guessMimeFromFilename('video.mp4'), 'video/mp4');
+      expect(
+        GlpiTicketSupport.guessMimeFromFilename('clip.mov'),
+        'video/quicktime',
+      );
+      expect(
+        GlpiTicketSupport.guessMimeFromFilename('video.avi'),
+        'video/x-msvideo',
+      );
+      expect(
+        GlpiTicketSupport.guessMimeFromFilename('stream.webm'),
+        'video/webm',
+      );
+    });
+
+    test('retorna null para extensão desconhecida', () {
+      expect(GlpiTicketSupport.guessMimeFromFilename('arquivo.xyz'), isNull);
+      expect(GlpiTicketSupport.guessMimeFromFilename('sem_extensao'), isNull);
+    });
   });
 }

@@ -28,6 +28,11 @@ class AppSessionSnapshot {
 
 class AppStateStorage {
   static const String _pendingTicketsKey = 'pendingTickets';
+
+  // Bytes acima deste limite por ticket não são persistidos em SharedPreferences.
+  // No mobile, o sync relê o arquivo pelo path; na web, o anexo grande não pode
+  // ser salvo offline e o usuário deve reenviar quando houver conexão.
+  static const int maxOfflineAttachmentBytes = 10 * 1024 * 1024; // 10 MB
   static const String _sessionTokenKey = 'sessionToken';
   static const String _loggedUsernameKey = 'loggedUsername';
   static const String _activeProfileKey = 'activeProfile';
@@ -48,9 +53,20 @@ class AppStateStorage {
 
   static Future<void> savePendingTickets(List<GlpiTicket> tickets) async {
     final prefs = await SharedPreferences.getInstance();
-    final ticketsJson = tickets
-        .map((ticket) => json.encode(ticket.toMap()))
-        .toList();
+    final ticketsJson = tickets.map((ticket) {
+      final map = ticket.toMap();
+      final bytesList = map['attachmentBytesList'];
+      if (bytesList is List && bytesList.isNotEmpty) {
+        final totalBytes = bytesList.fold<int>(
+          0,
+          (sum, b) => sum + (b is List ? b.length : 0),
+        );
+        if (totalBytes > maxOfflineAttachmentBytes) {
+          map['attachmentBytesList'] = <List<int>>[];
+        }
+      }
+      return json.encode(map);
+    }).toList();
     await prefs.setStringList(_pendingTicketsKey, ticketsJson);
   }
 
