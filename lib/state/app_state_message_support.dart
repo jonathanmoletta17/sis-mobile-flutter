@@ -1,6 +1,7 @@
 import '../models/glpi_status.dart';
 import '../models/ticket_message.dart';
 import '../services/glpi_client.dart';
+import '../services/glpi_ticket_support.dart';
 
 class AppStateMessageSupport {
   static String _normalizeInteractionError(
@@ -99,6 +100,7 @@ class AppStateMessageSupport {
     required String ticketId,
     required String messageContent,
     List<String> filePaths = const [],
+    List<GlpiTicketAttachment> attachments = const [],
     bool isSolution = false,
     required Future<Map<String, dynamic>> Function(
       String ticketId,
@@ -132,26 +134,113 @@ class AppStateMessageSupport {
         'Enviando ${isSolution ? "SOLUCAO" : "MENSAGEM"} para ticket $ticketId...',
       );
 
-      final mustCreateInteraction =
-          trimmedMessage.isNotEmpty || filePaths.isNotEmpty;
+      final hasAttachments = filePaths.isNotEmpty || attachments.isNotEmpty;
+      final isAttachmentOnly = trimmedMessage.isEmpty && hasAttachments;
+      final mustCreateInteraction = trimmedMessage.isNotEmpty || hasAttachments;
       String? interactionId;
       String? interactionType;
       var messageSent = false;
 
-      if (mustCreateInteraction) {
-        final effectiveContent = trimmedMessage.isNotEmpty
-            ? trimmedMessage
-            : '[Anexo enviado pelo aplicativo]';
+      var successCount = 0;
+      var failCount = 0;
+      final errors = <String>[];
 
+      if (isAttachmentOnly) {
+        log?.call('Modo anexo-only: fazer upload dos anexos ANTES de criar follow-up');
+        for (final path in filePaths) {
+          final uploadResult = await uploadAndLinkImage(
+            ticketId,
+            path,
+          );
+          if (uploadResult['success'] == true) {
+            successCount++;
+          } else {
+            failCount++;
+            final errorMsg = uploadResult['error'] ?? 'Erro desconhecido';
+            errors.add('${path.split('/').last}: $errorMsg');
+          }
+        }
+
+        for (final attachment in attachments) {
+          final uploadResult = await _uploadAndLinkAttachment(
+            apiService: apiService,
+            sessionToken: sessionToken,
+            ticketId: ticketId,
+            attachment: attachment,
+            isSessionInvalidError: isSessionInvalidError,
+            handleSessionInvalid: handleSessionInvalid,
+            log: log,
+          );
+          if (uploadResult['success'] == true) {
+            successCount++;
+          } else {
+            failCount++;
+            final errorMsg = uploadResult['error'] ?? 'Erro desconhecido';
+            errors.add('${attachment.filename}: $errorMsg');
+          }
+        }
+
+        final allAttachmentsFailed = successCount == 0 && failCount > 0;
+        if (allAttachmentsFailed) {
+          log?.call('Todos os anexos falharam. Não criar follow-up vazio.');
+          final attachmentErrors = errors.join('; ');
+          return {
+            'success': false,
+            'messageSent': false,
+            'interactionCreated': false,
+            'attachmentsSuccess': successCount,
+            'attachmentsFail': failCount,
+            'errors': errors,
+            'error': attachmentErrors.isEmpty
+                ? 'Nenhum anexo foi enviado.'
+                : 'Nenhum anexo foi enviado: $attachmentErrors',
+          };
+        }
+
+        if (successCount > 0) {
+          log?.call('$successCount anexo(s) enviado(s). Criar follow-up placeholder.');
+          final result = isSolution
+              ? await apiService.addTicketSolution(
+                  ticketId,
+                  '[Anexo enviado pelo aplicativo]',
+                  sessionToken,
+                )
+              : await apiService.addTicketMessage(
+                  ticketId,
+                  '[Anexo enviado pelo aplicativo]',
+                  sessionToken,
+                );
+
+          if (result['success'] != true) {
+            final err = _normalizeInteractionError(
+              result['error']?.toString() ?? 'Falha ao criar follow-up.',
+              isSolution: isSolution,
+            );
+            if (isSessionInvalidError(err)) {
+              await handleSessionInvalid(err);
+            }
+            return {
+              'success': false,
+              'error': err,
+              'attachmentsSuccess': successCount,
+              'attachmentsFail': failCount,
+            };
+          }
+
+          interactionId = result['entity_id']?.toString();
+          interactionType = isSolution ? 'ITILSolution' : 'ITILFollowup';
+          messageSent = false;
+        }
+      } else if (mustCreateInteraction) {
         final result = isSolution
             ? await apiService.addTicketSolution(
                 ticketId,
-                effectiveContent,
+                trimmedMessage,
                 sessionToken,
               )
             : await apiService.addTicketMessage(
                 ticketId,
-                effectiveContent,
+                trimmedMessage,
                 sessionToken,
               );
 
@@ -168,38 +257,65 @@ class AppStateMessageSupport {
 
         interactionId = result['entity_id']?.toString();
         interactionType = isSolution ? 'ITILSolution' : 'ITILFollowup';
-        messageSent = trimmedMessage.isNotEmpty;
-      }
+        messageSent = true;
 
-      var successCount = 0;
-      var failCount = 0;
-      final errors = <String>[];
+        for (final path in filePaths) {
+          final uploadResult = await uploadAndLinkImage(
+            ticketId,
+            path,
+            targetItemType: interactionType,
+            targetItemId: interactionId,
+          );
+          if (uploadResult['success'] == true) {
+            successCount++;
+          } else {
+            failCount++;
+            final errorMsg = uploadResult['error'] ?? 'Erro desconhecido';
+            errors.add('${path.split('/').last}: $errorMsg');
+          }
+        }
 
-      for (final path in filePaths) {
-        final uploadResult = await uploadAndLinkImage(
-          ticketId,
-          path,
-          targetItemType: interactionType,
-          targetItemId: interactionId,
-        );
-        if (uploadResult['success'] == true) {
-          successCount++;
-        } else {
-          failCount++;
-          final errorMsg = uploadResult['error'] ?? 'Erro desconhecido';
-          errors.add('${path.split('/').last}: $errorMsg');
+        for (final attachment in attachments) {
+          final uploadResult = await _uploadAndLinkAttachment(
+            apiService: apiService,
+            sessionToken: sessionToken,
+            ticketId: ticketId,
+            attachment: attachment,
+            targetItemType: interactionType,
+            targetItemId: interactionId,
+            isSessionInvalidError: isSessionInvalidError,
+            handleSessionInvalid: handleSessionInvalid,
+            log: log,
+          );
+          if (uploadResult['success'] == true) {
+            successCount++;
+          } else {
+            failCount++;
+            final errorMsg = uploadResult['error'] ?? 'Erro desconhecido';
+            errors.add('${attachment.filename}: $errorMsg');
+          }
         }
       }
 
-      final isSuccess =
-          messageSent || successCount > 0 || mustCreateInteraction;
+      final attachmentErrors = errors.join('; ');
+      final interactionCreated =
+          interactionId != null && interactionId.trim().isNotEmpty;
+
+      final isSuccess = messageSent || successCount > 0;
       return {
         'success': isSuccess,
         'messageSent': messageSent,
+        'interactionCreated': interactionCreated,
         'interactionId': interactionId,
         'interactionType': interactionType,
         'attachmentsSuccess': successCount,
         'attachmentsFail': failCount,
+        'partialFailure': isSuccess && failCount > 0,
+        if (isSuccess && failCount > 0)
+          'warning': attachmentErrors.isEmpty
+              ? 'Mensagem enviada, mas houve falha em anexo.'
+              : 'Mensagem enviada, mas houve falha em anexo: $attachmentErrors',
+        if (!isSuccess) 'error': 'Nada foi enviado.',
         'errors': errors,
       };
     } catch (e) {
@@ -214,6 +330,72 @@ class AppStateMessageSupport {
           isSolution: isSolution,
         ),
       };
+    }
+  }
+
+  static Future<Map<String, dynamic>> _uploadAndLinkAttachment({
+    required GlpiClient apiService,
+    required String sessionToken,
+    required String ticketId,
+    required GlpiTicketAttachment attachment,
+    String? targetItemType,
+    String? targetItemId,
+    required bool Function(Object error) isSessionInvalidError,
+    required Future<void> Function(Object error) handleSessionInvalid,
+    void Function(String message)? log,
+  }) async {
+    final hasSpecificTarget =
+        targetItemType != null &&
+        targetItemType.trim().isNotEmpty &&
+        targetItemId != null &&
+        targetItemId.trim().isNotEmpty;
+
+    try {
+      if (hasSpecificTarget) {
+        await apiService.uploadAndAttachToItem(
+          sessionToken: sessionToken,
+          itemType: targetItemType,
+          itemId: targetItemId,
+          bytes: attachment.bytes,
+          filename: attachment.filename,
+          mimeType: attachment.mimeType,
+        );
+      } else {
+        await apiService.uploadAndAttachToTicket(
+          sessionToken: sessionToken,
+          ticketId: ticketId,
+          bytes: attachment.bytes,
+          filename: attachment.filename,
+          mimeType: attachment.mimeType,
+        );
+      }
+      return {'success': true};
+    } catch (uploadError) {
+      Object effectiveError = uploadError;
+
+      if (hasSpecificTarget) {
+        log?.call(
+          'Falha ao vincular anexo em $targetItemType/$targetItemId. '
+          'Aplicando fallback para Ticket/$ticketId: $uploadError',
+        );
+        try {
+          await apiService.uploadAndAttachToTicket(
+            sessionToken: sessionToken,
+            ticketId: ticketId,
+            bytes: attachment.bytes,
+            filename: attachment.filename,
+            mimeType: attachment.mimeType,
+          );
+          return {'success': true, 'fallback': true};
+        } catch (fallbackError) {
+          effectiveError = fallbackError;
+        }
+      }
+
+      if (isSessionInvalidError(effectiveError)) {
+        await handleSessionInvalid(effectiveError);
+      }
+      return {'success': false, 'error': effectiveError.toString()};
     }
   }
 
