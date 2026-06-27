@@ -1,8 +1,9 @@
 // GERADO por tool/checklists/build_sis_checklists_catalog.mjs. Nao editar a mao.
 export const SIS_CHECKLIST_CATALOG = {
   "schema_version": "1.0-readonly",
-  "generated_at": "2026-06-22T04:55:49.120Z",
-  "source_snapshot_sha256": "ad5a86f947a447e3778f7e8b4b0af8c46ee48515035b1d878c9ade1916fa66bf",
+  "generated_at": "2026-06-27T15:14:48.207Z",
+  "source_mode": "live-api",
+  "source_snapshot_sha256": "8078f934c4fda0a85f62567070c5de6ce18f778b3a6dcd4040561b8847e8337c",
   "active_form_ids": [
     48,
     49,
@@ -27,8 +28,19 @@ export const SIS_CHECKLIST_CATALOG = {
     365,
     366,
     367,
-    368
+    368,
+    369
   ],
+  "source_counts": {
+    "formcreator_forms": 41,
+    "formcreator_sections": 250,
+    "formcreator_questions": 7011,
+    "formcreator_conditions": 6598,
+    "formcreator_targettickets": 242,
+    "formcreator_forms_profiles": 52,
+    "formcreator_forms_groups": 5,
+    "categories": 109
+  },
   "forms": [
     {
       "id": 48,
@@ -101,145 +113,176 @@ export const SIS_CHECKLIST_CATALOG = {
       "id": 310,
       "form_id": 48,
       "name": "Dados Gerais",
-      "order": 1
+      "order": 1,
+      "show_rule": 1
     },
     {
       "id": 321,
       "form_id": 48,
       "name": "CHECKLIST AR-CONDICIONADO CENTRAL",
-      "order": 2
+      "order": 2,
+      "show_rule": 2
     },
     {
       "id": 322,
       "form_id": 48,
       "name": "CHECKLIST REFRIGERAÇÃO - 1005",
-      "order": 2
+      "order": 2,
+      "show_rule": 2
     },
     {
       "id": 323,
       "form_id": 48,
       "name": "CHECKLIST REFRIGERAÇÃO - 951",
-      "order": 2
+      "order": 2,
+      "show_rule": 2
     },
     {
       "id": 330,
       "form_id": 49,
       "name": "Dados Gerais",
-      "order": 1
+      "order": 1,
+      "show_rule": 1
     },
     {
       "id": 340,
       "form_id": 49,
       "name": "CALHAS E PLUVIAIS",
-      "order": 2
+      "order": 2,
+      "show_rule": 1
     },
     {
       "id": 350,
       "form_id": 50,
       "name": "Dados Gerais",
-      "order": 1
+      "order": 1,
+      "show_rule": 1
     },
     {
       "id": 365,
       "form_id": 50,
       "name": "CHECKLIST HIDRÁULICO 1005",
-      "order": 2
+      "order": 2,
+      "show_rule": 2
     },
     {
       "id": 366,
       "form_id": 50,
       "name": "CHECKLIST HIDRÁULICO ALA RESIDÊNCIAL",
-      "order": 2
+      "order": 2,
+      "show_rule": 2
     },
     {
       "id": 367,
       "form_id": 50,
       "name": "CHECKLIST HIDRÁULICO ALA GOVERNAMENTAL",
-      "order": 2
+      "order": 2,
+      "show_rule": 2
     },
     {
       "id": 368,
       "form_id": 50,
       "name": "CHECKLIST HIDRÁULICO GALPÃO",
-      "order": 2
+      "order": 2,
+      "show_rule": 2
     },
     {
       "id": 369,
       "form_id": 50,
       "name": "CHECKLIST HIDRÁULICO GARAGEM",
-      "order": 2
+      "order": 2,
+      "show_rule": 2
     },
     {
       "id": 370,
       "form_id": 51,
       "name": "Dados Gerais",
-      "order": 1
+      "order": 1,
+      "show_rule": 1
     },
     {
       "id": 384,
       "form_id": 51,
       "name": "CHECKLIST PEDRAS PORTUGUESAS",
-      "order": 2
+      "order": 2,
+      "show_rule": 1
     },
     {
       "id": 390,
       "form_id": 52,
       "name": "Dados Gerais",
-      "order": 1
+      "order": 1,
+      "show_rule": 1
     },
     {
       "id": 391,
       "form_id": 52,
       "name": "AR - 2° Pavimento",
-      "order": 4
+      "order": 4,
+      "show_rule": 2
     },
     {
       "id": 392,
       "form_id": 52,
       "name": "AR - 1º Pavimento",
-      "order": 3
+      "order": 3,
+      "show_rule": 2
     },
     {
       "id": 393,
       "form_id": 52,
       "name": "AR - 3° Pavimento",
-      "order": 5
+      "order": 5,
+      "show_rule": 2
     },
     {
       "id": 394,
       "form_id": 52,
       "name": "Ala Residencial",
-      "order": 2
+      "order": 2,
+      "show_rule": 2
     },
     {
       "id": 395,
       "form_id": 52,
       "name": "AG - 4º Pavimento",
-      "order": 10
+      "order": 10,
+      "show_rule": 2
     },
     {
       "id": 396,
       "form_id": 52,
       "name": "AG - 1º Pavimento",
-      "order": 7
+      "order": 7,
+      "show_rule": 2
     },
     {
       "id": 397,
       "form_id": 52,
       "name": "AG - 2º Pavimento",
-      "order": 8
+      "order": 8,
+      "show_rule": 2
     },
     {
       "id": 398,
       "form_id": 52,
       "name": "AG - 3º Pavimento",
-      "order": 9
+      "order": 9,
+      "show_rule": 2
     },
     {
       "id": 399,
       "form_id": 52,
       "name": "Ala Governamental",
-      "order": 6
+      "order": 6,
+      "show_rule": 2
+    },
+    {
+      "id": 400,
+      "form_id": 50,
+      "name": "CHECKLIST HIDRÁULICO 951",
+      "order": 3,
+      "show_rule": 2
     }
   ],
   "questions": [
@@ -2936,7 +2979,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "fieldtype": "multiselect",
       "itemtype": "Location",
       "required": false,
-      "values": "[\"Ala Governamental\",\"Ala Residencial\",\"Casa Civil 1005\",\"Galpão\",\"Garagem\"]",
+      "values": "[\"Ala Governamental\",\"Ala Residencial\",\"Casa Civil 1005\",\"Duque de Caxias 951\",\"Galpão\",\"Garagem\"]",
       "default_values": "[]",
       "show_rule": 1,
       "row": 1,
@@ -19022,6 +19065,291 @@ export const SIS_CHECKLIST_CATALOG = {
       "row": 192,
       "col": 0,
       "width": 4
+    },
+    {
+      "id": 16370,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "BANHEIRO FRENTE",
+      "fieldtype": "radios",
+      "itemtype": "ITILCategory",
+      "required": false,
+      "values": "[\"✅ OK\",\"❌ Ação - Reparo \\/ Reforma\"]",
+      "default_values": "✅ OK",
+      "show_rule": 1,
+      "row": 0,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16371,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Componentes Banheiro Frente",
+      "fieldtype": "multiselect",
+      "itemtype": "PluginGenericobjectConservacao",
+      "required": false,
+      "values": "[\"PIA\",\"TORNEIRA\",\"MICTÓRIO\",\"VASO\",\"SABONETEIRA\",\"PORTA PAPEL HIGIÊNICO\",\"PORTA PAPEL TOALHA\"]",
+      "default_values": "[]",
+      "show_rule": 2,
+      "row": 1,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16372,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Descrição Banheiro Frente",
+      "fieldtype": "textarea",
+      "itemtype": "",
+      "required": false,
+      "values": "",
+      "default_values": "",
+      "show_rule": 2,
+      "row": 2,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16373,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Anexar Arquivo Banheiro Frente",
+      "fieldtype": "file",
+      "itemtype": "",
+      "required": false,
+      "values": "",
+      "default_values": "",
+      "show_rule": 2,
+      "row": 3,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16374,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "BANHEIRO MASCULINO",
+      "fieldtype": "radios",
+      "itemtype": "ITILCategory",
+      "required": false,
+      "values": "[\"✅ OK\",\"❌ Ação - Reparo \\/ Reforma\"]",
+      "default_values": "✅ OK",
+      "show_rule": 1,
+      "row": 4,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16375,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Componentes Banheiro Masculino",
+      "fieldtype": "multiselect",
+      "itemtype": "PluginGenericobjectConservacao",
+      "required": false,
+      "values": "[\"PIA\",\"TORNEIRA\",\"MICTÓRIO\",\"VASO\",\"SABONETEIRA\",\"PORTA PAPEL HIGIÊNICO\",\"PORTA PAPEL TOALHA\"]",
+      "default_values": "[]",
+      "show_rule": 2,
+      "row": 5,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16376,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Descrição Banheiro Masculino",
+      "fieldtype": "textarea",
+      "itemtype": "",
+      "required": false,
+      "values": "",
+      "default_values": "",
+      "show_rule": 2,
+      "row": 6,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16377,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Anexar Arquivo Banheiro Masculino",
+      "fieldtype": "file",
+      "itemtype": "",
+      "required": false,
+      "values": "",
+      "default_values": "",
+      "show_rule": 2,
+      "row": 7,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16378,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "COPA",
+      "fieldtype": "radios",
+      "itemtype": "ITILCategory",
+      "required": false,
+      "values": "[\"✅ OK\",\"❌ Ação - Reparo \\/ Reforma\"]",
+      "default_values": "✅ OK",
+      "show_rule": 1,
+      "row": 8,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16379,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Componentes Copa",
+      "fieldtype": "multiselect",
+      "itemtype": "PluginGenericobjectConservacao",
+      "required": false,
+      "values": "[\"PIA\",\"TORNEIRA\",\"CAIXA DE GORDURA\"]",
+      "default_values": "[]",
+      "show_rule": 2,
+      "row": 9,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16380,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Descrição Copa",
+      "fieldtype": "textarea",
+      "itemtype": "",
+      "required": false,
+      "values": "",
+      "default_values": "",
+      "show_rule": 2,
+      "row": 10,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16381,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Anexar Arquivo Copa",
+      "fieldtype": "file",
+      "itemtype": "",
+      "required": false,
+      "values": "",
+      "default_values": "",
+      "show_rule": 2,
+      "row": 11,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16382,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "BANHEIRO FEMININO",
+      "fieldtype": "radios",
+      "itemtype": "ITILCategory",
+      "required": false,
+      "values": "[\"✅ OK\",\"❌ Ação - Reparo \\/ Reforma\"]",
+      "default_values": "✅ OK",
+      "show_rule": 1,
+      "row": 12,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16383,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Componentes Banheiro Feminino",
+      "fieldtype": "multiselect",
+      "itemtype": "PluginGenericobjectConservacao",
+      "required": false,
+      "values": "[\"PIA\",\"TORNEIRA\",\"VASO\",\"SABONETEIRA\",\"PORTA PAPEL HIGIÊNICO\",\"PORTA PAPEL TOALHA\"]",
+      "default_values": "[]",
+      "show_rule": 2,
+      "row": 13,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16384,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Descrição Banheiro Feminino",
+      "fieldtype": "textarea",
+      "itemtype": "",
+      "required": false,
+      "values": "",
+      "default_values": "",
+      "show_rule": 2,
+      "row": 14,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16385,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Anexar Arquivo Banheiro Feminino",
+      "fieldtype": "file",
+      "itemtype": "",
+      "required": false,
+      "values": "",
+      "default_values": "",
+      "show_rule": 2,
+      "row": 15,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16386,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "RALOS 951",
+      "fieldtype": "radios",
+      "itemtype": "ITILCategory",
+      "required": false,
+      "values": "[\"✅ OK\",\"❌ Ação - Reparo \\/ Reforma\"]",
+      "default_values": "✅ OK",
+      "show_rule": 1,
+      "row": 16,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16388,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Descrição Ralos 951",
+      "fieldtype": "textarea",
+      "itemtype": "",
+      "required": false,
+      "values": "",
+      "default_values": "",
+      "show_rule": 2,
+      "row": 17,
+      "col": 0,
+      "width": 4
+    },
+    {
+      "id": 16389,
+      "form_id": 50,
+      "section_id": 400,
+      "name": "Anexar Arquivo Ralos 951",
+      "fieldtype": "file",
+      "itemtype": "",
+      "required": false,
+      "values": "",
+      "default_values": "",
+      "show_rule": 2,
+      "row": 18,
+      "col": 0,
+      "width": 4
     }
   ],
   "conditions": [
@@ -30774,6 +31102,166 @@ export const SIS_CHECKLIST_CATALOG = {
       "show_value": "✅ OK",
       "show_logic": 1,
       "order": 1
+    },
+    {
+      "id": 20053,
+      "itemtype": "PluginFormcreatorTargetTicket",
+      "items_id": 369,
+      "source_question_id": 13077,
+      "show_condition": 1,
+      "show_value": "Duque de Caxias 951",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20061,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16380,
+      "source_question_id": 16378,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20062,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16381,
+      "source_question_id": 16378,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20073,
+      "itemtype": "PluginFormcreatorSection",
+      "items_id": 400,
+      "source_question_id": 13077,
+      "show_condition": 1,
+      "show_value": "Duque de Caxias 951",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20075,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16371,
+      "source_question_id": 16370,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20076,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16372,
+      "source_question_id": 16370,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20077,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16373,
+      "source_question_id": 16370,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20078,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16375,
+      "source_question_id": 16374,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20079,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16376,
+      "source_question_id": 16374,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20080,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16377,
+      "source_question_id": 16374,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20081,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16379,
+      "source_question_id": 16378,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20082,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16383,
+      "source_question_id": 16382,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20083,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16384,
+      "source_question_id": 16382,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20084,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16385,
+      "source_question_id": 16382,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20086,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16388,
+      "source_question_id": 16386,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
+    },
+    {
+      "id": 20087,
+      "itemtype": "PluginFormcreatorQuestion",
+      "items_id": 16389,
+      "source_question_id": 16386,
+      "show_condition": 2,
+      "show_value": "✅ OK",
+      "show_logic": 1,
+      "order": 1
     }
   ],
   "targets": [
@@ -30785,6 +31273,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 152,
       "location_rule": 2,
+      "location_question": 72,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30797,6 +31286,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 152,
       "location_rule": 2,
+      "location_question": 37,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30809,6 +31299,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 152,
       "location_rule": 2,
+      "location_question": 83,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30821,6 +31312,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 149,
       "location_rule": 2,
+      "location_question": 72,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 1
@@ -30833,6 +31325,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 151,
       "location_rule": 2,
+      "location_question": 74,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30845,6 +31338,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 151,
       "location_rule": 2,
+      "location_question": 73,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30857,6 +31351,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 151,
       "location_rule": 2,
+      "location_question": 73,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30869,6 +31364,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 151,
       "location_rule": 2,
+      "location_question": 84,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30881,6 +31377,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 151,
       "location_rule": 2,
+      "location_question": 71,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30893,6 +31390,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 150,
       "location_rule": 2,
+      "location_question": 72,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 1
@@ -30905,6 +31403,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 148,
       "location_rule": 2,
+      "location_question": 330,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30917,6 +31416,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 148,
       "location_rule": 2,
+      "location_question": 144,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30929,6 +31429,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 148,
       "location_rule": 2,
+      "location_question": 328,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30941,6 +31442,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 148,
       "location_rule": 2,
+      "location_question": 329,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30953,6 +31455,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 148,
       "location_rule": 2,
+      "location_question": 80,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30965,6 +31468,7 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 148,
       "location_rule": 2,
+      "location_question": 146,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2
@@ -30977,6 +31481,20 @@ export const SIS_CHECKLIST_CATALOG = {
       "category_rule": 2,
       "category_id": 148,
       "location_rule": 2,
+      "location_question": 161,
+      "urgency_rule": 1,
+      "type_rule": 1,
+      "show_rule": 2
+    },
+    {
+      "id": 369,
+      "form_id": 50,
+      "name": "HIDRÁULICO 951",
+      "destination_entity_value": 58,
+      "category_rule": 2,
+      "category_id": 151,
+      "location_rule": 2,
+      "location_question": 83,
       "urgency_rule": 1,
       "type_rule": 1,
       "show_rule": 2

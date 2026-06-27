@@ -18,13 +18,24 @@ void main() {
       catalog.forms.map((form) => form.id),
       containsAll(<int>[48, 49, 50, 51, 52]),
     );
-    expect(catalog.targets, hasLength(17));
-    expect(catalog.questions, hasLength(1252));
+    expect(catalog.sections, hasLength(25));
+    expect(catalog.targets, hasLength(18));
+    expect(catalog.questions, hasLength(1271));
+    expect(catalog.conditions, hasLength(1191));
     expect(catalog.formById(52)!.name, 'CHECKLIST ILUMINAÇÃO');
     expect(
       catalog.targetsForForm(50).map((target) => target.id),
-      containsAll(<int>[341, 342, 343, 344, 350]),
+      containsAll(<int>[341, 342, 343, 344, 350, 369]),
     );
+  });
+
+  test('preserves live GLPI section show_rule values', () {
+    final byRule = <int, int>{};
+    for (final section in catalog.sections) {
+      byRule[section.showRule] = (byRule[section.showRule] ?? 0) + 1;
+    }
+
+    expect(byRule, <int, int>{1: 7, 2: 18});
   });
 
   test('carries GLPI profile gate (formcreator_forms_profiles) per form', () {

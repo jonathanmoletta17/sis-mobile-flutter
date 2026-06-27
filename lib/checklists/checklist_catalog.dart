@@ -223,12 +223,14 @@ class SisChecklistSection {
     required this.formId,
     required this.name,
     required this.order,
+    required this.showRule,
   });
 
   final int id;
   final int formId;
   final String name;
   final int order;
+  final int showRule;
 
   factory SisChecklistSection.fromMap(Map<String, dynamic> map) {
     return SisChecklistSection(
@@ -236,6 +238,7 @@ class SisChecklistSection {
       formId: _readInt(map['form_id']),
       name: _readText(map['name']),
       order: _readInt(map['order']),
+      showRule: _readInt(map['show_rule'], fallback: 1),
     );
   }
 }

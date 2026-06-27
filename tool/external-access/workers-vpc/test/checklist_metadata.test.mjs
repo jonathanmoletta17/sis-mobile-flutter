@@ -10,8 +10,14 @@ test('SIS checklist metadata endpoint is read-only and returns checklist catalog
   assert.equal(response.status, 200);
   const body = await response.json();
   assert.equal(body.forms.length, 5);
-  assert.equal(body.targets.length, 17);
-  assert.equal(body.questions.length, 1252);
+  assert.equal(body.sections.length, 25);
+  assert.equal(body.targets.length, 18);
+  assert.equal(body.questions.length, 1271);
+  assert.equal(body.conditions.length, 1191);
+  assert.ok(
+    body.targets.some((target) => target.id === 369 && target.name === 'HIDRÁULICO 951'),
+    'live GLPI checklist target 369 must be present',
+  );
   assert.equal(response.headers.get('Cache-Control'), 'private, max-age=300');
   assert.ok(response.headers.get('ETag'));
   assert.ok(response.headers.get('X-GLPI-Snapshot-Hash'));

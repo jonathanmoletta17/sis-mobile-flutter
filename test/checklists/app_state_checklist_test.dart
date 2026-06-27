@@ -23,7 +23,7 @@ void main() {
     expect(appState.checklistCatalogError, isNull);
   });
 
-  test('catalog targets total 17 across all 5 forms', () async {
+  test('catalog targets total 18 across all 5 forms', () async {
     final appState = AppState(GlpiClient());
     await appState.loadChecklistCatalog();
 
@@ -32,7 +32,8 @@ void main() {
       0,
       (sum, form) => sum + catalog.targetsForForm(form.id).length,
     );
-    expect(totalTargets, 17);
+    expect(totalTargets, 18);
+    expect(catalog.targetById(369)?.name, 'HIDRÁULICO 951');
   });
 
   test('Super-Admin (profile 4) sees all 5 forms', () async {

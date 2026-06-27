@@ -8,6 +8,7 @@ SisChecklistCatalog _catalog({
   required List<Map<String, dynamic>> questions,
   List<Map<String, dynamic>> conditions = const [],
   List<Map<String, dynamic>> targets = const [],
+  int sectionShowRule = 1,
 }) {
   return SisChecklistCatalog.fromMap({
     'schema_version': 'test',
@@ -23,7 +24,13 @@ SisChecklistCatalog _catalog({
       },
     ],
     'sections': [
-      {'id': 10, 'form_id': 1, 'name': 'S', 'order': 1},
+      {
+        'id': 10,
+        'form_id': 1,
+        'name': 'S',
+        'order': 1,
+        'show_rule': sectionShowRule,
+      },
     ],
     'questions': questions,
     'conditions': conditions,
@@ -165,5 +172,60 @@ void main() {
     final question = catalog.questions.first;
     expect(engine.isQuestionVisible(question, {99: 'FALHA'}), isTrue);
     expect(engine.isQuestionVisible(question, {99: 'OK'}), isFalse);
+  });
+
+  test(
+    'section show rule 1 remains visible even when its condition does not match',
+    () {
+      final catalog = _catalog(
+        sectionShowRule: 1,
+        questions: [_q(1)],
+        conditions: [
+          _cond(
+            10,
+            99,
+            showValue: 'SIM',
+            itemType: SisChecklistCondition.sectionItemType,
+          ),
+        ],
+      );
+      final engine = SisChecklistConditionEngine(catalog);
+      final section = catalog.sections.first;
+      final question = catalog.questions.first;
+
+      expect(engine.isSectionVisible(section, {99: 'NAO'}), isTrue);
+      expect(engine.isQuestionVisible(question, {99: 'NAO'}), isTrue);
+    },
+  );
+
+  test('section show rule 2 follows matching conditions', () {
+    final catalog = _catalog(
+      sectionShowRule: 2,
+      questions: [_q(1)],
+      conditions: [
+        _cond(
+          10,
+          99,
+          showValue: 'SIM',
+          itemType: SisChecklistCondition.sectionItemType,
+        ),
+      ],
+    );
+    final engine = SisChecklistConditionEngine(catalog);
+    final section = catalog.sections.first;
+
+    expect(engine.isSectionVisible(section, {99: 'SIM'}), isTrue);
+    expect(engine.isSectionVisible(section, {99: 'NAO'}), isFalse);
+  });
+
+  test('section show rule 1 remains visible without conditions', () {
+    final catalog = _catalog(
+      sectionShowRule: 1,
+      questions: [_q(1)],
+    );
+    final engine = SisChecklistConditionEngine(catalog);
+    final section = catalog.sections.first;
+
+    expect(engine.isSectionVisible(section, {}), isTrue);
   });
 }

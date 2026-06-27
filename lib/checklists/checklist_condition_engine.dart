@@ -22,7 +22,7 @@ class SisChecklistConditionEngine {
     return _isItemVisible(
       itemType: SisChecklistCondition.sectionItemType,
       itemId: section.id,
-      showRule: 2, // secoes sao avaliadas por suas condicoes quando existem
+      showRule: section.showRule,
       answers: answers,
       defaultWhenNoConditions: true,
     );

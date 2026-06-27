@@ -46,7 +46,8 @@ void main() {
     );
     expect(catalog, isNotNull);
     expect(catalog!.forms, hasLength(5));
-    expect(catalog.questions, hasLength(1252));
+    expect(catalog.questions, hasLength(1271));
+    expect(catalog.targets, hasLength(18));
     expect(calls, 1);
 
     final prefs = await SharedPreferences.getInstance();
