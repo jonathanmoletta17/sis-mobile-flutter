@@ -90,6 +90,18 @@ O fluxo operacional e hibrido: WSL para fonte, `analyze`, `test`, web local e Wi
 - `AUTOPSIA_TICKET_FECHADO_STALE_STATE.md`
   Autopsia guiada do caso de ticket fechado com tela antiga expondo acoes inconsistentes.
 
+## Plataforma GLPI (fonte da verdade, reaplicavel a SIS/DTIC/novos)
+
+- `glpi/METODOLOGIA_DESCOBERTA_REGRAS_GLPI.md`
+  O modo de pensar: cadeia de 7 perguntas para achar onde mora qualquer regra/config do
+  GLPI (web -> BD -> API) e a distincao protocolo vs. configuracao de instancia.
+- `glpi/MAPA_FONTE_DA_VERDADE_GLPI.md`
+  Inventario mestre por dominio (Perfis/rights, Entidades, Regras, Templates, Categorias,
+  FormCreator, Dropdowns) com tela web, itemtype, tabela BD, endpoint e contrato do app.
+- `glpi/PORTABILIDADE_NOVA_INSTANCIA_GLPI.md`
+  Checklist para subir o app sobre um GLPI novo sem reescrever codigo, com mapa de debito
+  tecnico (hardcodes atuais vs. endpoint de origem).
+
 ## Documento exploratorio
 
 - `web-mobile-fallback-plan.md`
