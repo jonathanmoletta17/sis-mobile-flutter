@@ -179,9 +179,9 @@ void main() {
         expect(queue, TicketQueueType.maintenanceQueue);
       });
 
-      test('sem categoria + dois grupos -> nao classifica (Fila Operacional)', () {
-        // Ticket genuinamente ambíguo: sem categoria específica e com ambos os
-        // grupos. Correto ficar em "Fila Operacional" aguardando triagem.
+      test('sem categoria + dois grupos + hybrid -> fila manutencao (prioridade)', () {
+        // Ticket "Múltiplas Demandas": sem categoria mas com ambos os grupos.
+        // Hybrid vê em manutencao (prioridade maior na lista _priority).
         final queue = TicketQueueClassifier.primaryQueueForTicket(
           {
             'id': 10019,
@@ -194,7 +194,39 @@ void main() {
           loggedUserId: 2039,
         );
 
-        expect(queue, isNull);
+        expect(queue, TicketQueueType.maintenanceQueue);
+      });
+
+      test('sem categoria + dois grupos + conservationTechnician -> fila conservacao', () {
+        final queue = TicketQueueClassifier.primaryQueueForTicket(
+          {
+            'id': 10019,
+            '_source': 'operational',
+            'status': 2,
+            'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
+            'users_id_recipient': 2214,
+          },
+          role: OperationalRole.conservationTechnician,
+          loggedUserId: 2039,
+        );
+
+        expect(queue, TicketQueueType.conservationQueue);
+      });
+
+      test('sem categoria + dois grupos + maintenanceTechnician -> fila manutencao', () {
+        final queue = TicketQueueClassifier.primaryQueueForTicket(
+          {
+            'id': 10019,
+            '_source': 'operational',
+            'status': 2,
+            'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
+            'users_id_recipient': 2214,
+          },
+          role: OperationalRole.maintenanceTechnician,
+          loggedUserId: 2039,
+        );
+
+        expect(queue, TicketQueueType.maintenanceQueue);
       });
 
       test('categoria Conservacao ganha sobre grupos ambiguos -> fila conservacao', () {

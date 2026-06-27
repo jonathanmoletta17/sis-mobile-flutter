@@ -104,6 +104,10 @@ class PermissionService {
         true,
       (OperationalRole.hybrid, TicketDomain.maintenance) => true,
       (OperationalRole.hybrid, TicketDomain.conservation) => true,
+      // multiDomain: qualquer equipe técnica pode agir (fluxo "Múltiplas Demandas").
+      (OperationalRole.maintenanceTechnician, TicketDomain.multiDomain) => true,
+      (OperationalRole.conservationTechnician, TicketDomain.multiDomain) => true,
+      (OperationalRole.hybrid, TicketDomain.multiDomain) => true,
       (OperationalRole.admin, _) => true,
       _ => false,
     };

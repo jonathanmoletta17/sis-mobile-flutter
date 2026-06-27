@@ -45,6 +45,20 @@ class TicketQueueFilter {
         case TicketDomain.conservation:
           queues.add(TicketQueueType.conservationQueue);
           break;
+        case TicketDomain.multiDomain:
+          // Ticket "Múltiplas Demandas": roteia para a fila da equipe do usuário.
+          // Qualquer técnico pode fechar — comportamento validado nos históricos.
+          if (role == OperationalRole.maintenanceTechnician ||
+              role == OperationalRole.hybrid ||
+              role == OperationalRole.admin) {
+            queues.add(TicketQueueType.maintenanceQueue);
+          }
+          if (role == OperationalRole.conservationTechnician ||
+              role == OperationalRole.hybrid ||
+              role == OperationalRole.admin) {
+            queues.add(TicketQueueType.conservationQueue);
+          }
+          break;
         case TicketDomain.ggConservationObserver:
         case TicketDomain.dtic:
         case TicketDomain.unknown:

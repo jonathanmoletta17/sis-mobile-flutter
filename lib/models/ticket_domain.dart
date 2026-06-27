@@ -5,6 +5,9 @@ enum TicketDomain {
   conservation,
   ggConservationObserver,
   dtic,
+  // Ticket atribuído a ambas as equipes técnicas (CC-MANUTENCAO + CC-CONSERVACÃO)
+  // simultaneamente — formulário "Múltiplas Demandas". Cada técnico vê na sua fila.
+  multiDomain,
   unknown,
 }
 
@@ -14,11 +17,14 @@ extension TicketDomainSemantics on TicketDomain {
     TicketDomain.conservation => 'Conservação',
     TicketDomain.ggConservationObserver => 'GG Conservação',
     TicketDomain.dtic => 'DTIC',
+    TicketDomain.multiDomain => 'Múltiplas equipes',
     TicketDomain.unknown => 'Domínio desconhecido',
   };
 
   bool get isTechnicalExecution => switch (this) {
-    TicketDomain.maintenance || TicketDomain.conservation => true,
+    TicketDomain.maintenance ||
+    TicketDomain.conservation ||
+    TicketDomain.multiDomain => true,
     _ => false,
   };
 }
@@ -86,7 +92,20 @@ class TicketDomainResolver {
       ...technicalCategoryCandidates,
       ...technicalGroupCandidates,
     };
-    if (technicalCandidates.length > 1) return TicketDomain.unknown;
+    if (technicalCandidates.length > 1) {
+      // Distingue dois casos diferentes de ambiguidade:
+      // • multiDomain: AMBOS os grupos técnicos (CC-MANUTENCAO + CC-CONSERVACÃO)
+      //   estão atribuídos simultaneamente, sem categoria que disambigue. É o padrão
+      //   do formulário "Múltiplas Demandas" — fluxo validado nos históricos.
+      // • unknown: categoria aponta para um domínio, grupo aponta para outro. É
+      //   inconsistência de dados no GLPI; fica em Fila Operacional para triagem.
+      final groupsAmbiguous = technicalGroupCandidates.length > 1;
+      final noDisambiguatingCategory = technicalCategoryCandidates.isEmpty;
+      if (groupsAmbiguous && noDisambiguatingCategory) {
+        return TicketDomain.multiDomain;
+      }
+      return TicketDomain.unknown;
+    }
     if (technicalCandidates.length == 1) return technicalCandidates.single;
 
     // Grupo observador por ID.
