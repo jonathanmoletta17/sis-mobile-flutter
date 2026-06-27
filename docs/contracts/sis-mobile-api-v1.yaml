@@ -1,0 +1,976 @@
+openapi: 3.1.0
+info:
+  title: SIS Mobile API
+  version: 1.0.0
+  description: Contrato proposto para a API canonica do SIS Mobile sobre o GLPI.
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: /
+paths:
+  /mobile/config/snapshot:
+    get:
+      summary: Obter snapshot de configuracao
+      operationId: getConfigSnapshot
+      security:
+        - SessionToken: []
+      parameters:
+        - name: If-None-Match
+          in: header
+          schema:
+            type: string
+        - $ref: '#/components/parameters/AppVersion'
+      responses:
+        '200':
+          description: Snapshot atual
+          headers:
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigSnapshot'
+        '304':
+          description: Snapshot nao modificado
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '426':
+          $ref: '#/components/responses/UpgradeRequired'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+  /mobile/tickets/{ticket_id}/capabilities:
+    get:
+      summary: Obter capacidades efetivas do ticket
+      operationId: getTicketCapabilities
+      security:
+        - SessionToken: []
+      parameters:
+        - $ref: '#/components/parameters/TicketId'
+        - $ref: '#/components/parameters/AppVersion'
+      responses:
+        '200':
+          description: Capacidades avaliadas no estado remoto atual
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Capabilities'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '426':
+          $ref: '#/components/responses/UpgradeRequired'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+  /mobile/tickets:
+    post:
+      summary: Criar ticket
+      operationId: createTicket
+      security:
+        - SessionToken: []
+      parameters:
+        - $ref: '#/components/parameters/OperationId'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/AppVersion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketInput'
+      responses:
+        '201':
+          $ref: '#/components/responses/MutationCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '426':
+          $ref: '#/components/responses/UpgradeRequired'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+  /mobile/tickets/{ticket_id}/followups:
+    post:
+      summary: Adicionar followup
+      operationId: addFollowup
+      security:
+        - SessionToken: []
+      parameters:
+        - $ref: '#/components/parameters/TicketId'
+        - $ref: '#/components/parameters/OperationId'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/AppVersion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FollowupInput'
+      responses:
+        '201':
+          $ref: '#/components/responses/MutationCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '426':
+          $ref: '#/components/responses/UpgradeRequired'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+  /mobile/tickets/{ticket_id}/solutions:
+    post:
+      summary: Adicionar solucao
+      operationId: addSolution
+      security:
+        - SessionToken: []
+      parameters:
+        - $ref: '#/components/parameters/TicketId'
+        - $ref: '#/components/parameters/OperationId'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/AppVersion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SolutionInput'
+      responses:
+        '201':
+          $ref: '#/components/responses/MutationCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '426':
+          $ref: '#/components/responses/UpgradeRequired'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+  /mobile/tickets/{ticket_id}/status:
+    put:
+      summary: Alterar status
+      operationId: changeStatus
+      security:
+        - SessionToken: []
+      parameters:
+        - $ref: '#/components/parameters/TicketId'
+        - $ref: '#/components/parameters/OperationId'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/AppVersion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusChangeInput'
+      responses:
+        '200':
+          $ref: '#/components/responses/MutationSucceeded'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '426':
+          $ref: '#/components/responses/UpgradeRequired'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+  /mobile/tickets/{ticket_id}/claim:
+    post:
+      summary: Assumir ticket como tecnico autenticado
+      operationId: claimTicket
+      security:
+        - SessionToken: []
+      parameters:
+        - $ref: '#/components/parameters/TicketId'
+        - $ref: '#/components/parameters/OperationId'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/AppVersion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClaimInput'
+      responses:
+        '200':
+          $ref: '#/components/responses/MutationSucceeded'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '426':
+          $ref: '#/components/responses/UpgradeRequired'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+  /mobile/tickets/{ticket_id}/attachments:
+    post:
+      summary: Enviar anexo
+      operationId: uploadAttachment
+      description: O Worker deve provar que o item alvo pertence ao ticket da URL.
+      security:
+        - SessionToken: []
+      parameters:
+        - $ref: '#/components/parameters/TicketId'
+        - $ref: '#/components/parameters/OperationId'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/AppVersion'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttachmentUpload'
+      responses:
+        '201':
+          $ref: '#/components/responses/MutationCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '426':
+          $ref: '#/components/responses/UpgradeRequired'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+  /mobile/tickets/{ticket_id}/attachments/{document_item_id}/content:
+    get:
+      summary: Baixar anexo por proxy validado
+      operationId: downloadAttachment
+      security:
+        - SessionToken: []
+      parameters:
+        - $ref: '#/components/parameters/TicketId'
+        - name: document_item_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+        - name: Range
+          in: header
+          schema:
+            type: string
+        - $ref: '#/components/parameters/AppVersion'
+      responses:
+        '200':
+          description: Conteudo integral
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '206':
+          description: Conteudo parcial, somente quando suportado pelo upstream
+          headers:
+            Accept-Ranges:
+              schema:
+                type: string
+            Content-Range:
+              required: true
+              schema:
+                type: string
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '416':
+          $ref: '#/components/responses/RangeNotSatisfiable'
+        '426':
+          $ref: '#/components/responses/UpgradeRequired'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+  /mobile/operations/{operation_id}:
+    get:
+      summary: Consultar ou reconciliar uma operacao
+      operationId: checkOperation
+      description: A reconciliacao de UNKNOWN e read-only e nunca repete a mutacao.
+      security:
+        - SessionToken: []
+      parameters:
+        - $ref: '#/components/parameters/OperationIdPath'
+        - $ref: '#/components/parameters/AppVersion'
+      responses:
+        '200':
+          description: Estado conhecido da operacao
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '426':
+          $ref: '#/components/responses/UpgradeRequired'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+components:
+  securitySchemes:
+    SessionToken:
+      type: apiKey
+      in: header
+      name: Session-Token
+  parameters:
+    TicketId:
+      in: path
+      name: ticket_id
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    OperationId:
+      in: header
+      name: X-Operation-Id
+      required: true
+      description: UUID v4 gerado e persistido pelo App antes da primeira tentativa.
+      schema:
+        type: string
+        format: uuid
+    OperationIdPath:
+      in: path
+      name: operation_id
+      required: true
+      schema:
+        type: string
+        format: uuid
+    CorrelationId:
+      in: header
+      name: X-Correlation-Id
+      required: true
+      schema:
+        type: string
+        format: uuid
+    AppVersion:
+      in: header
+      name: X-App-Version
+      required: true
+      schema:
+        type: string
+        pattern: '^[0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$'
+  schemas:
+    ErrorEnvelope:
+      type: object
+      required:
+        - error
+      additionalProperties: false
+      properties:
+        operation_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+        correlation_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+        retryable:
+          type: boolean
+        error:
+          type: object
+          required:
+            - code
+            - message
+          additionalProperties: false
+          properties:
+            code:
+              $ref: '#/components/schemas/ErrorCode'
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
+    ErrorCode:
+      type: string
+      enum:
+        - BAD_REQUEST
+        - AUTH_REQUIRED
+        - FORBIDDEN
+        - NOT_FOUND
+        - OPERATION_IN_PROGRESS
+        - OPERATION_UNKNOWN
+        - OPERATION_ID_REUSED
+        - STATE_CONFLICT
+        - VALIDATION_FAILED
+        - UPGRADE_REQUIRED
+        - RATE_LIMITED
+        - CROSS_ACCESS_ATTEMPT
+        - RANGE_NOT_SATISFIABLE
+        - UPSTREAM_ERROR
+        - INTERNAL_ERROR
+    ConfigSnapshot:
+      type: object
+      required:
+        - contract_version
+        - schema_version
+        - generated_at
+        - source_snapshot_hash
+        - ttl_seconds
+        - entities
+        - categories
+        - statuses
+        - status_transitions
+        - formcreator_targets
+      additionalProperties: false
+      properties:
+        contract_version:
+          type: string
+          const: 1.0.0
+        schema_version:
+          type: string
+        generated_at:
+          type: string
+          format: date-time
+        source_snapshot_hash:
+          type: string
+          pattern: '^sha256:[a-fA-F0-9]{64}$'
+        ttl_seconds:
+          type: integer
+          minimum: 0
+        min_app_version:
+          type: string
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityConfig'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryConfig'
+        statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusConfig'
+        status_transitions:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusTransition'
+        formcreator_targets:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormcreatorTarget'
+    EntityConfig:
+      type: object
+      required:
+        - id
+        - name
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        name:
+          type: string
+    CategoryConfig:
+      type: object
+      required:
+        - id
+        - name
+        - entity_id
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        name:
+          type: string
+        entity_id:
+          type: integer
+          minimum: 1
+    StatusConfig:
+      type: object
+      required:
+        - id
+        - name
+        - terminal
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+        name:
+          type: string
+        terminal:
+          type: boolean
+    StatusTransition:
+      type: object
+      required:
+        - from_status
+        - to_status
+        - profile_id
+        - entity_id
+      additionalProperties: false
+      properties:
+        from_status:
+          type: integer
+        to_status:
+          type: integer
+        profile_id:
+          type: integer
+          minimum: 1
+        entity_id:
+          type: integer
+          minimum: 1
+    FormcreatorTarget:
+      type: object
+      required:
+        - service_id
+        - form_id
+        - target_id
+        - entity_id
+        - status
+      additionalProperties: false
+      properties:
+        service_id:
+          type: string
+        form_id:
+          type: integer
+          minimum: 1
+        target_id:
+          type: integer
+          minimum: 1
+        entity_id:
+          type: integer
+          minimum: 1
+        status:
+          type: string
+          enum:
+            - unsupported
+            - native_supported
+            - webview_supported
+            - discovery_required
+            - specialized_flow_required
+            - blocked
+    Capabilities:
+      type: object
+      required:
+        - ticket_id
+        - contract_version
+        - evaluated_at
+        - ticket_date_mod
+        - entity_id
+        - profile_id
+        - capabilities
+      additionalProperties: false
+      properties:
+        ticket_id:
+          type: integer
+          minimum: 1
+        contract_version:
+          type: string
+        evaluated_at:
+          type: string
+          format: date-time
+        ticket_date_mod:
+          type: string
+          description: Valor opaco retornado pelo GLPI.
+        entity_id:
+          type: integer
+          minimum: 1
+        profile_id:
+          type: integer
+          minimum: 1
+        capabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Capability'
+    Capability:
+      type: object
+      required:
+        - action_id
+        - allowed
+        - preconditions
+      additionalProperties: false
+      properties:
+        action_id:
+          type: string
+          enum:
+            - add_followup
+            - add_solution
+            - change_status
+            - claim_ticket
+            - upload_attachment
+            - download_attachment
+            - approve_solution
+            - reject_solution
+        allowed:
+          type: boolean
+        reason_code:
+          type:
+            - string
+            - 'null'
+        preconditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CapabilityPrecondition'
+    CapabilityPrecondition:
+      type: object
+      required:
+        - type
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+        values:
+          type: array
+          items:
+            oneOf:
+              - type: integer
+              - type: string
+    TicketInput:
+      type: object
+      required:
+        - name
+        - content
+        - entities_id
+        - itilcategories_id
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          minLength: 1
+        content:
+          type: string
+          minLength: 1
+        entities_id:
+          type: integer
+          minimum: 1
+        itilcategories_id:
+          type: integer
+          minimum: 1
+        locations_id:
+          type: integer
+          minimum: 1
+        _users_id_requester:
+          type: array
+          uniqueItems: true
+          items:
+            type: integer
+            minimum: 1
+        _users_id_observer:
+          type: array
+          uniqueItems: true
+          items:
+            type: integer
+            minimum: 1
+    FollowupInput:
+      type: object
+      required:
+        - content
+        - ticket_date_mod
+      additionalProperties: false
+      properties:
+        content:
+          type: string
+          minLength: 1
+        is_private:
+          type: boolean
+          default: false
+        ticket_date_mod:
+          type: string
+          description: Precondicao opaca obtida no ticket/capabilities.
+    SolutionInput:
+      type: object
+      required:
+        - content
+        - ticket_date_mod
+      additionalProperties: false
+      properties:
+        content:
+          type: string
+          minLength: 1
+        solutiontypes_id:
+          type: integer
+          minimum: 1
+        ticket_date_mod:
+          type: string
+          description: Precondicao opaca obtida no ticket/capabilities.
+    StatusChangeInput:
+      type: object
+      required:
+        - status
+        - ticket_date_mod
+      additionalProperties: false
+      properties:
+        status:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+        ticket_date_mod:
+          type: string
+          description: Precondicao opaca obtida no ticket/capabilities.
+    ClaimInput:
+      type: object
+      required:
+        - ticket_date_mod
+      additionalProperties: false
+      properties:
+        ticket_date_mod:
+          type: string
+          description: Precondicao opaca obtida no ticket/capabilities.
+    AttachmentUpload:
+      type: object
+      required:
+        - item_type
+        - target_item_id
+        - file
+        - ticket_date_mod
+      additionalProperties: false
+      properties:
+        item_type:
+          type: string
+          enum:
+            - Ticket
+            - ITILFollowup
+            - ITILSolution
+        target_item_id:
+          type: integer
+          minimum: 1
+        file:
+          type: string
+          format: binary
+        ticket_date_mod:
+          type: string
+          description: Precondicao opaca obtida no ticket/capabilities.
+    MutationResult:
+      type: object
+      required:
+        - operation_id
+        - action_type
+        - status
+        - result
+      additionalProperties: false
+      properties:
+        operation_id:
+          type: string
+          format: uuid
+        action_type:
+          type: string
+        status:
+          type: string
+          const: COMPLETED
+        result:
+          type: object
+          additionalProperties: true
+    OperationStatus:
+      type: object
+      required:
+        - operation_id
+        - action_type
+        - status
+        - updated_at
+      additionalProperties: false
+      properties:
+        operation_id:
+          type: string
+          format: uuid
+        action_type:
+          type: string
+        status:
+          type: string
+          enum:
+            - RECEIVED
+            - PROCESSING
+            - AUTH_REQUIRED
+            - RETRY_WAIT
+            - COMPLETED
+            - FAILED_TERMINAL
+            - UNKNOWN
+            - RECONCILING
+            - EXPIRED
+        updated_at:
+          type: string
+          format: date-time
+        result:
+          type: object
+          additionalProperties: true
+  responses:
+    MutationCreated:
+      description: Mutacao criada e confirmada
+      headers:
+        X-Operation-Id:
+          required: true
+          schema:
+            type: string
+            format: uuid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MutationResult'
+    MutationSucceeded:
+      description: Mutacao confirmada
+      headers:
+        X-Operation-Id:
+          required: true
+          schema:
+            type: string
+            format: uuid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MutationResult'
+    BadRequest:
+      description: Requisicao invalida
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    Unauthorized:
+      description: Sessao ausente ou expirada
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    Forbidden:
+      description: Acao ou acesso negado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    NotFound:
+      description: Recurso nao encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    Conflict:
+      description: Operacao em andamento/desconhecida, ID reutilizado ou estado divergente
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    UnprocessableEntity:
+      description: Payload semanticamente invalido
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    UpgradeRequired:
+      description: Versao do App abaixo do minimo
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    RateLimited:
+      description: Limite de requisicoes atingido
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    RangeNotSatisfiable:
+      description: Range invalido ou nao suportado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    DefaultError:
+      description: Falha inesperada ou do upstream
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'

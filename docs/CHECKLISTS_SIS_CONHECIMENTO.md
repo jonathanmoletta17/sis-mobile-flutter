@@ -155,7 +155,8 @@ Tabela consolidada dos 12 IDs:
 | 51 | sim | 1 | 2 | 20 | 0 | 1 | radios 6, file 6, textarea 6 |
 | 52 | sim | 1 | 10 | 819 | 684 | 7 | glpiselect 276, radios 136, multiselect 136 |
 
-Distribuicao dos 67 targets brutos:
+Distribuição dos 67 targets brutos no snapshot 2026-06-10 usado como base
+histórica desta seção:
 
 - `category_rule=1`: 50 targets
 - `category_rule=2`: 17 targets
@@ -188,10 +189,12 @@ Categorias de checklist na arvore SIS:
 | 151 | `Manutencao > Checklist > Hidraulico` |
 | 152 | `Manutencao > Checklist > Refrigeracao` |
 
-Nos 17 targets runtime, o campo historico `category_question` guarda esses IDs
-de categoria 148-152 quando `category_rule=2`. A propria secao
-`known_enum_semantics` do catalogo runtime marca `category_rule=2` como
-atipico/legado e exige validacao antes de uso vivo.
+Nos 17 targets runtime daquele snapshot, o campo historico `category_question`
+guarda esses IDs de categoria 148-152 quando `category_rule=2`. A propria
+secao `known_enum_semantics` do catalogo runtime marca `category_rule=2` como
+atipico/legado e exige validacao antes de uso vivo. Esse número ficou obsoleto
+em 2026-06-27: a validação live encontrou 18 targets ativos após a inclusão do
+target `369`.
 
 Leitura desse snapshot:
 
@@ -199,15 +202,17 @@ Leitura desse snapshot:
   propria em `formcreator_forms` no snapshot verificado;
 - forms 48-52 sao os checklists ativos com linha completa em
   `formcreator_forms`;
-- o runtime publicou exatamente os 17 targets com `category_rule=2`, que
-  correspondem aos forms 48-52;
+- o runtime daquele snapshot publicou exatamente os 17 targets com
+  `category_rule=2`, que correspondiam aos forms 48-52 antes da atualização
+  live de 2026-06-27;
 - os outros 50 targets brutos parecem historico/intermediario, variacoes de
   checklist total ou configuracoes que nao foram expostas como records
   runtime.
 
 ### Catalogo runtime do Worker
 
-`tool/external-access/workers-vpc/src/metadata_catalog.js` declara:
+`tool/external-access/workers-vpc/src/metadata_catalog.js` declara no snapshot
+gerado em 2026-06-12:
 
 - `generated_at`: `2026-06-12T11:25:56.689073+00:00`
 - source snapshot API: `2026-06-10`
@@ -226,7 +231,14 @@ Leitura desse snapshot:
 - portanto, no runtime atual, todos os fluxos especializados publicados sao
   checklists.
 
-Os 17 records runtime sao:
+Atualização live 2026-06-27: o GLPI vivo passou a ter 18 targets nos forms
+48-52. O target novo é `PluginFormcreatorTargetTicket.id=369`
+(`HIDRÁULICO 951`, form 50). O catálogo especializado embarcado e o endpoint
+`/metadata/mobile/sis/checklists` foram regenerados a partir da API live; o
+`metadata_catalog.js` governado normal continua sendo snapshot/draft de
+2026-06-12 e não é o renderer especializado de checklist.
+
+Os 17 records runtime do snapshot 2026-06-10 eram:
 
 | Form | Alvo | Sub-servico | Regras | Atores |
 | --- | --- | --- | --- | --- |
@@ -248,7 +260,7 @@ Os 17 records runtime sao:
 | 48 CHECKLIST REFRIGERACAO | 325 | REFRIGERACAO 1005 | cat 2, loc 2, type 1, urgency 1, show 2, entity 58 | observer validator; assigned group 22; observer group 49 |
 | 48 CHECKLIST REFRIGERACAO | 326 | REFRIGERACAO 951 | cat 2, loc 2, type 1, urgency 1, show 2, entity 58 | observer validator; assigned group 22; observer group 49 |
 
-Distribuicao dos atores nos 17 records:
+Distribuição dos atores nos 17 records do snapshot 2026-06-10:
 
 - `observer:validator:0`: 17
 - `assigned:group:22`: 16
@@ -259,7 +271,7 @@ Distribuicao dos atores nos 17 records:
 
 Visibilidade publicada:
 
-- todos os 17 records aparecem para `Super-Admin`;
+- todos os 17 records daquele snapshot aparecem para `Super-Admin`;
 - nenhum record de checklist runtime aparece para `Solicitante` comum na
   projecao atual.
 
@@ -267,8 +279,10 @@ Warnings runtime:
 
 - o catalogo tem 49 warnings de governanca no total;
 - 34 warnings recaem sobre records de checklist;
-- os 17 records de checklist tem warning de `category_rule=2` atipico;
-- os 17 records de checklist tem warning de `location_rule=2` atipico;
+- os 17 records de checklist daquele snapshot têm warning de
+  `category_rule=2` atípico;
+- os 17 records de checklist daquele snapshot têm warning de
+  `location_rule=2` atípico;
 - a leitura segura e que esses records nao devem ser liberados sem validacao
   viva e fluxo especializado.
 
@@ -408,10 +422,12 @@ Para checklists SIS, a evidencia atual responde:
 - sim, ha muitas perguntas alem de categoria/localizacao: nos 12 IDs brutos
   41-52 ha 6361 perguntas, 3897 obrigatorias e fieldtypes como `radios`,
   `multiselect`, `glpiselect`, `file` e `textarea`;
-- considerando apenas os forms ativos publicados no runtime, 48-52 somam 1252
-  perguntas e 685 obrigatorias;
+- considerando apenas os forms ativos publicados no catálogo especializado
+  regenerado em 2026-06-27, 48-52 somam 1271 perguntas;
 - sim, ha `validator`: todos os 67 targets brutos de checklist carregam
-  `observer:validator:0`, e todos os 17 records runtime tambem;
+  `observer:validator:0`, e todos os 17 records runtime do snapshot antigo
+  também; para o target novo 369, atores não foram inferidos no catálogo
+  especializado regenerado porque esse catálogo não exporta atores;
 - `question_group` nao apareceu nos atores de checklist verificados; os atores
   brutos encontrados foram `author`, `validator` e `group`.
 
@@ -515,20 +531,22 @@ nao como extensao pequena do formulario atual.
 
 ## Respostas operacionais as perguntas abertas
 
-Estas respostas usam evidencia local: `assets/glpi_rules_sis.json`, snapshot API
-`2026-06-10`, `metadata_catalog.js`, codigo Dart e testes. Nao houve validacao
-mutavel contra GLPI real.
+Estas respostas começaram com evidencia local: `assets/glpi_rules_sis.json`,
+snapshot API `2026-06-10`, `metadata_catalog.js`, codigo Dart e testes. Em
+2026-06-27 houve validação live read-only Web/Admin + API e regeneração do
+catálogo especializado. Não houve validação mutável contra GLPI real.
 
 ### 1. Quais target tickets ainda parecem ativos e relevantes?
 
-Confianca alta para o estado local: os 17 targets publicados no runtime sao os
-ativos/relevantes para uma futura superficie especializada.
+Confianca alta para o estado live read-only de 2026-06-27: os 18 targets
+publicados no catálogo especializado regenerado são os ativos/relevantes para
+uma futura superfície especializada.
 
 | Grupo | Targets | Evidencia |
 | --- | --- | --- |
 | Refrigeração | 316, 325, 326 | form 48 ativo, visivel, `helpdesk_home=1`, publicado no runtime |
 | Calhas e Pluviais | 337 | form 49 ativo, visivel, `helpdesk_home=1`, publicado no runtime |
-| Hidraulico | 341, 342, 343, 344, 350 | form 50 ativo, visivel, `helpdesk_home=1`, publicado no runtime |
+| Hidraulico | 341, 342, 343, 344, 350, 369 | form 50 ativo, visivel, `helpdesk_home=1`, publicado no runtime |
 | Pedras Portuguesas | 359 | form 51 ativo, visivel, `helpdesk_home=1`, publicado no runtime |
 | Iluminacao | 362, 363, 364, 365, 366, 367, 368 | form 52 ativo, visivel, `helpdesk_home=1`, publicado no runtime |
 
@@ -544,13 +562,15 @@ contraria:
   `CHECKLIST teste somente mostrar equipamentos com erro`;
 - nenhum desses 50 aparece como record runtime.
 
-### 2. Por que o runtime publica 17 records a partir dos 67?
+### 2. Por que o snapshot runtime publicava 17 records a partir dos 67?
 
 Confianca alta por inferencia de dados; o script gerador exato nao esta
 versionado no repo.
 
-O runtime publica exatamente os targets dos forms 48-52 porque eles tem o
-conjunto que parece representar a configuracao viva:
+O runtime daquele snapshot publicava exatamente os targets dos forms 48-52
+porque eles tinham o conjunto que parecia representar a configuração viva. Em
+2026-06-27, a configuração viva ainda é forms 48-52, mas com 18 targets por
+causa do target `369`:
 
 - form row existente em `formcreator_forms`;
 - `is_active=1`, `is_visible=1`, `helpdesk_home=1`;
@@ -571,7 +591,7 @@ Os outros 50 targets ficam fora porque caem em uma destas categorias:
 ### 3. Qual perfil real deve usar checklist no app?
 
 Estado atual confirmado: apenas `Super-Admin` aparece na visibilidade
-FormCreator dos forms 41-52 e nos 17 records runtime.
+FormCreator dos forms 41-52 e nos records especializados de checklist.
 
 Nota de evidencia (verificada em `formcreator_forms_profiles` do snapshot
 `2026-06-10`): existe no GLPI o perfil `Manutencao e Conservacao`
@@ -729,12 +749,25 @@ Relatório completo: `/home/jonathan/.brain/glpi-governance/checklists-discovery
 
 ### Impacto no app Flutter
 
-O catálogo embarcado `assets/sis_checklists_catalog.json` está **atualizado** —
-não há alterações desde o snapshot de 2026-06-10. Nenhuma regeneração necessária.
+Atualização live 2026-06-27: a afirmação de 2026-06-22 de que não havia
+alterações ficou obsoleta. A validação Web/Admin + API live encontrou:
+
+- 25 seções;
+- 1271 perguntas;
+- 18 targets;
+- 1191 condições;
+- target novo `369` (`HIDRÁULICO 951`, form 50).
+
+O catálogo embarcado `assets/sis_checklists_catalog.json`, a fixture
+`test/fixtures/sis_checklists_catalog.json` e o Worker
+`tool/external-access/workers-vpc/src/checklist_catalog.js` foram regenerados
+com esses números live.
 
 Antes de habilitar submissão (Fase 9), ações pendentes no GLPI (não no app):
 1. Decidir se profile 11 (Manutenção e Conservação) deve ser adicionado aos forms 48-52
 2. Confirmar se target 364 com group 21 é intencional
+3. Confirmar se o target 369 (`HIDRÁULICO 951`) deve seguir o mesmo contrato de
+   validação/read-back dos demais targets hidráulicos
 
 O app permanece correto com `SIS_ENABLE_CHECKLISTS_SUBMISSION=false`.
 

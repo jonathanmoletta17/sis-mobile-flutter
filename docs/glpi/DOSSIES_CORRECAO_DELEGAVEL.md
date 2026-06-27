@@ -5,17 +5,22 @@
 > NÃO invente operadores/campos sem evidência — os números aqui vieram da API real do SIS
 > (GLPI 10.0.2), registrados em `docs/discovery/glpi-live/`.
 >
-> **Fronteira da delegação (importante):** você faz a **implementação**. A **validação** (gate
-> dos 6 verdes) roda na máquina do usuário, que tem VPN/acesso ao GLPI. Não pule o gate —
-> apenas não é você quem o roda ao vivo.
+> **Status Codex 2026-06-27:** a validação Web/Admin + API live foi executada
+> em modo read-only com credenciais do `.env`. O catálogo especializado foi
+> regenerado para 25 sections, 1271 questions, 18 targets e 1191 conditions.
+> O dossiê 1.3 foi aplicado. O dossiê 1.2 não foi aplicado nesta rodada porque
+> os checklists ativos 48-52 validados ao vivo usam apenas `show_condition`
+> 1/2; operadores 7/8 continuam como hardening futuro, não bug ativo
+> comprovado nesse catálogo especializado.
 >
 > **Base de código:** branch `fix/onda0-rede-seguranca` (a partir do código vivo `1b94b12`).
-> Baseline verde: `flutter analyze` limpo, `flutter test` = 333 testes.
+> Baseline verde esperado: `flutter analyze` limpo e `flutter test` com todos
+> os testes do repo, incluindo os testes novos do dossiê aplicado.
 
 ## Gate de aceite (comum a todos) — os 6 verdes
 
 1. `/opt/flutter/bin/flutter analyze` → **No issues found**
-2. `/opt/flutter/bin/flutter test` → todos verdes (333 + os testes novos do dossiê)
+2. `/opt/flutter/bin/flutter test` → todos verdes, incluindo os testes novos do dossiê
 3. Teste novo cobrindo a mudança, com os casos especificados
 4. (quando aplicável) validação ao vivo: `tool/glpi-discovery/` confirma os números citados
 5. Diff revisado — sem tocar nada fora do escopo do dossiê
@@ -23,7 +28,12 @@
 
 ---
 
-## DOSSIÊ 1.2 — Operadores `show_condition` 7 (visível) e 8 (invisível)  ⭐ ALTO VALOR
+## DOSSIÊ 1.2 — Operadores `show_condition` 7 (visível) e 8 (invisível)  ⭐ HARDENING FUTURO
+
+Status 2026-06-27: não aplicado. A contagem 7/8 existe no universo
+FormCreator/API global, mas a validação live dos checklists ativos 48-52
+encontrou apenas operadores 1/2. Não tratar como correção de bug ativo sem
+novo checklist vivo ou novo escopo explícito.
 
 ### Problema (com evidência)
 Os formulários SIS usam estes operadores de condição (amostra de 800 condições reais):
@@ -83,31 +93,28 @@ ajustar o comentário explicando que 7/8 agora são resolvidos pelo engine, não
 
 ---
 
-## DOSSIÊ 1.3 — Seção respeita o próprio `show_rule`  (impacto baixo, correção trivial)
+## DOSSIÊ 1.3 — Seção respeita o próprio `show_rule`  ✅ APLICADO EM 2026-06-27
 
-### Problema (com evidência)
+### Problema original (com evidência)
 `PluginFormcreatorSection.show_rule` real no SIS: **1 (sempre)=166, 2 (condicional)=84**.
-O engine **ignora** esse campo: em `isSectionVisible` o `showRule` é **hardcoded como `2`**
-(`lib/checklists/checklist_condition_engine.dart:25`). Efeito: uma seção `show_rule=1`
+O engine ignorava esse campo: em `isSectionVisible` o `showRule` era **hardcoded como `2`**.
+Efeito: uma seção `show_rule=1`
 (sempre visível) que tenha condições configuradas seria avaliada como condicional e poderia
 sumir. Caso raro hoje, mas é hardcode de algo que o GLPI entrega.
 
-### Arquivo e ponto exato
-`lib/checklists/checklist_condition_engine.dart`, método `isSectionVisible` (linha ~18-29):
+### Arquivo e ponto corrigido
+`lib/checklists/checklist_condition_engine.dart`, método `isSectionVisible`:
 ```dart
-showRule: 2, // <- hardcoded; trocar por section.showRule
+showRule: section.showRule,
 ```
 
-### Mudança especificada
-```dart
-showRule: section.showRule,                 // reflete o GLPI (1=sempre,2=cond,3=cond-oculto)
-defaultWhenNoConditions: section.showRule != 1 ? true : true, // manter visível sem condição
-```
-`SisChecklistSection` **já expõe `showRule`** (catalog `final int showRule;`, lido de
-`show_rule`). `_isItemVisible` já trata `showRule==1 → true` e `==3 → !match`. Só parar de
-forçar `2`.
+### Mudança executada
+- `tool/checklists/build_sis_checklists_catalog.mjs` exporta `show_rule` de sections.
+- `SisChecklistSection` expõe `showRule` (catalog `final int showRule;`, lido de `show_rule`).
+- `_isItemVisible` já trata `showRule==1 → true` e `==3 → !match`.
+- `isSectionVisible` deixou de forçar `2` e passou a usar `section.showRule`.
 
-### Teste a escrever
+### Testes escritos
 - seção `show_rule=1` **com** condição que não casaria → continua **visível**;
 - seção `show_rule=2` com condição que casa → visível; que não casa → oculta;
 - seção `show_rule=1` sem condição → visível (não regredir).

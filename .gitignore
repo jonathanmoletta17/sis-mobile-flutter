@@ -150,3 +150,7 @@ test/lab_fixtures/
 .env.bak*
 .hermes/
 glpi_api_doc*.html
+
+# Evidência live GLPI (dumps read-only com PII/infra: bind DN LDAP, usuários reais,
+# sessão/config). NUNCA versionar — é fonte de discovery, não artefato canônico.
+docs/discovery/glpi-live/evidence/

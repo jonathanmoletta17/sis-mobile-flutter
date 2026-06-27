@@ -16,7 +16,7 @@
 5. Flags ligadas **somente durante o teste**:
    - app: `SIS_ENABLE_CHECKLISTS_SUBMISSION=true`
    - Worker: `ALLOW_FORMCREATOR_SUBMISSION=true`
-6. Alvo de checklist sintético: um dos 17 targets ativos (forms 48-52).
+6. Alvo de checklist sintético: um dos 18 targets ativos (forms 48-52).
 7. Submissão **sem anexo** primeiro (o caminho com `file` permanece bloqueado no
    app até o contrato de arquivo ser validado).
 
