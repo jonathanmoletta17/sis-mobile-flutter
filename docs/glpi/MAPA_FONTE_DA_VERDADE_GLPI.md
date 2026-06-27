@@ -14,6 +14,14 @@
 código). **I** = configuração de instância (muda por instalação/web; **proibido**
 hardcodar — buscar de endpoint e projetar).
 
+> **✅ Validado ao vivo (2026-06-27, SIS 10.0.2):** todos os domínios abaixo foram batidos na
+> API real (read-only) e confirmados legíveis dinamicamente — exceto `DisplayPreference` (403).
+> Régua = schema oficial (390 tabelas). Relatório + evidência + scripts reauditáveis:
+> `docs/discovery/glpi-live/` e `tool/glpi-discovery/`. **Achado central:** a visibilidade é
+> 100% controlada pelo **rights do perfil ativo** — com perfil técnico (id 11) tudo dá
+> `403 ERROR_RIGHT_MISSING`; com Super-Admin (id 4) tudo abre. Prova de que o app deve **ler
+> rights**, não codar regras.
+
 ---
 
 ## 0. Inventário de telas a varrer
@@ -46,6 +54,10 @@ Tudo abaixo é uma fatia desse inventário.
 `STEAL=16384`, `OWN=32768`, `CHANGEPRIORITY=65536`, `SURVEY=131072`. Os rights genéricos
 (`READ=1`, `UPDATE=2`, `CREATE=4`, `DELETE=8`, `PURGE=16`...) aplicam-se a outros itemtypes.
 Verificar valores contra a versão exata do GLPI da instância antes de tratar como fixos.
+
+**Validado ao vivo (SIS 10.0.2):** `Profile`=11, `ProfileRight`=**1166**, `Profile_User`=1445,
+`Entity`=85, `Rule`=171 (Criteria=262, Action=297). Com Super-Admin todos retornam 206;
+com perfil técnico (11), 403. A conta de teste tem os perfis 4/6/9/11/28 (ator universal).
 
 ---
 
@@ -121,12 +133,29 @@ instância e são descobertos, não fixados.
 | **Classe** | **I** |
 | **Contrato do app** | Buscar catálogo por API e renderizar dinamicamente (é o que `lib/dtic/services/dtic_glpi_client.dart` já faz — **o padrão certo**). Aplicar `Condition` para visibilidade condicional; `TargetTicket` para mapear form→categoria/entidade. |
 
-**"Limitar sub-níveis" (a evidência que originou a investigação):** numa **questão de
-dropdown do itemtype `Location`**, os parâmetros da questão (profundidade da árvore,
-raiz, restrição por entidade) ficam na configuração da própria questão em
-`glpi_plugin_formcreator_questions`, legível via `GET /PluginFormcreatorQuestion/:id`.
-Por isso existem **formulários duplicados por perfil**: mesma pergunta, parâmetros
-diferentes. O app deve **ler esses parâmetros**, não recriar a regra de poda da árvore.
+**"Limitar sub-níveis" (a evidência que originou a investigação) — VALIDADO AO VIVO
+(2026-06-27, SIS 10.0.2):** numa questão `fieldtype="dropdown"` do itemtype `Location`,
+os parâmetros ficam no campo **`values` (JSON)** da questão, em
+`glpi_plugin_formcreator_questions`. Confirmado pela API com dados reais:
+
+| Questão | `show_tree_depth` | `show_tree_root` | `selectable_tree_root` | `entity_restrict` |
+|---|---|---|---|---|
+| id=3  "Localização" | **2** | 70 | 0 | 2 |
+| id=20 "Localização" | 0  | 36 | 0 | 2 |
+| id=29 "Localização" | **-3** | 27 | 0 | 2 |
+| id=37/46 "Localização" | 2 | 70 | 0 | 2 |
+
+`show_tree_depth=2` é exatamente o "Limitar Sub níveis = 2" da UI; `selectable_tree_root=0`
+= "Raiz selecionável: Não"; `entity_restrict=2` = "Restrição de entidade: Formulário".
+**Valores variam por formulário** (2, 0, -3...) — é a causa raiz dos **formulários
+duplicados por perfil**: mesma pergunta, regra de poda da árvore diferente.
+
+- **Leitura:** usar **listagem** `GET /PluginFormcreatorQuestion?searchText[name]=...` (ou por
+  seção). **NÃO** usar `GET /PluginFormcreatorQuestion/:id` para dropdown/glpiselect — retorna
+  HTTP 500 (bug FormCreator [#3400](https://github.com/pluginsGLPI/formcreator/issues/3400)).
+- **Contrato do app:** parsear `values` e aplicar `show_tree_depth`/`show_tree_root` ao podar a
+  árvore de `Location`. **Hoje o app descarta esse JSON** — débito técnico registrado.
+  Evidência: `docs/discovery/glpi-live/COBERTURA_VALIDADA_GLPI_SIS.md`.
 
 ---
 
