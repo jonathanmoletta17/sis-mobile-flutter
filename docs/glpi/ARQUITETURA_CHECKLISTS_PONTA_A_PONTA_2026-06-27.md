@@ -217,6 +217,23 @@ mantendo o asset como rede de segurança offline.** Justificativa:
 - Operacional: documentar que atualizar checklists = rodar builder `--live` + redeploy
   do Worker; APK só muda quando muda código.
 
+### Decisão tomada (2026-06-27) — papel do asset
+
+Premissa confirmada pelo dono do produto: **o técnico sempre tem sinal pelo menos
+uma vez antes de ir a campo.** Logo o cache (`SharedPreferences`) sempre esquenta na
+primeira abertura e cobre todo o uso offline de campo.
+
+Decisão:
+
+- **Não** construir tela "fail-loud / conecte-se uma vez" — seria necessária só se o
+  técnico pudesse cair em campo sem nunca ter sincronizado, o que não é o caso.
+- **Manter o asset embarcado**, porém **repaginado como semente de instalação**, não
+  como fallback offline. Razão: o "sempre tem sinal" elimina o cenário de
+  *dispositivo sem rede*, mas NÃO elimina a *primeira busca falhar por outro motivo*
+  (URL mal configurada, janela de deploy, bug de parse/ETag). A semente garante que o
+  app nunca fica sem catálogo desde o minuto zero; custo zero, sem UI nova.
+- Precedência final: **Worker fresco → cache → asset (semente)**.
+
 ### Limite remanescente (honesto)
 
 `activeFormIds = {48,49,50,51,52}` e `checklistCategoryIds = {147..152}` no builder
