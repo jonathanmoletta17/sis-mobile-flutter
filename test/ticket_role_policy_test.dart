@@ -131,14 +131,18 @@ void main() {
           role: OperationalRole.ggConservationRequester,
           ticketDomain: TicketDomain.ggConservationObserver,
           loggedUserId: 2039,
-          observerGroups: const [GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO')],
+          observerGroups: const [
+            GlpiGroupRef(id: 10049, name: 'GG-CONSERVACAO'),
+          ],
         );
         final queues = AppStateTicketSupport.resolveTicketQueues(
           ticket,
           role: OperationalRole.ggConservationRequester,
           ticketDomain: TicketDomain.ggConservationObserver,
           loggedUserId: 2039,
-          observerGroups: const [GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO')],
+          observerGroups: const [
+            GlpiGroupRef(id: 10049, name: 'GG-CONSERVACAO'),
+          ],
         );
 
         expect(decision.canView, isTrue);

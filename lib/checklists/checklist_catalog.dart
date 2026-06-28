@@ -106,7 +106,7 @@ class SisChecklistCatalog {
   }
 
   /// Forms que o usuario GLPI pode ver: perfil OU grupo (OR semantico, espelhando
-  /// `access_rights=2` do FormCreator). Fonte dinamica: sem nomes hardcoded.
+  /// `access_rights=2` do FormCreator). Fonte dinamica: sem nomes fixos.
   /// Requer ao menos um target ativo para o form aparecer.
   List<SisChecklistForm> formsVisibleToUser(
     int? profileId,

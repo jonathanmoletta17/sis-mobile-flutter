@@ -457,8 +457,8 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
   }
 
   /// Botões de próximo status derivados do contrato (transições permitidas por
-  /// perfil). Usa fallback hardcoded se o contrato ainda não foi carregado ou
-  /// o profileId não está disponível.
+  /// perfil). Usa fallback local se o contrato ainda não foi carregado ou o
+  /// profileId não está disponível.
   /// Transições de status permitidas para o perfil ativo (via contrato), já
   /// excluindo o status atual. Fallback básico se o contrato não carregou.
   List<GlpiStatus> _allowedStatusTargets(BuildContext context) {

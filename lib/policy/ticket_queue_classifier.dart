@@ -1,4 +1,5 @@
 import '../models/glpi_identity.dart';
+import '../models/glpi_group_semantics.dart';
 import '../models/operational_role.dart';
 import '../models/ticket_domain.dart';
 import '../models/ticket_queue_type.dart';
@@ -102,9 +103,7 @@ class TicketQueueClassifier {
     if (refs.isNotEmpty) return refs;
 
     return sessionGroups
-        .where(
-          (group) => group.id == TicketDomainResolver.ggConservationGroupId,
-        )
+        .where(GlpiGroupSemantics.isGgConservation)
         .map(
           (group) =>
               GlpiGroupRef(id: group.id, name: group.name, isAssign: false),

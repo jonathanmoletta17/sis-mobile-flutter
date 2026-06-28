@@ -1,4 +1,5 @@
 import 'glpi_identity.dart';
+import 'glpi_group_semantics.dart';
 
 enum OperationalRole {
   standardRequester,
@@ -54,19 +55,14 @@ extension OperationalRoleSemantics on OperationalRole {
 }
 
 class OperationalRoleResolver {
-  static const int conservationGroupId = 21;
-  static const int maintenanceGroupId = 22;
-  static const int ggConservationGroupId = 49;
-
   static OperationalRole resolve({
     required GlpiProfileRef? activeProfile,
     required List<GlpiGroupRef> groups,
   }) {
     final profileName = normalizeGlpiText(activeProfile?.name);
-    final groupIds = groups.map((group) => group.id).toSet();
-    final hasConservation = groupIds.contains(conservationGroupId);
-    final hasMaintenance = groupIds.contains(maintenanceGroupId);
-    final hasGgConservation = groupIds.contains(ggConservationGroupId);
+    final hasConservation = groups.any(GlpiGroupSemantics.isConservation);
+    final hasMaintenance = groups.any(GlpiGroupSemantics.isMaintenance);
+    final hasGgConservation = groups.any(GlpiGroupSemantics.isGgConservation);
 
     if (profileName.isEmpty) return OperationalRole.unknown;
 

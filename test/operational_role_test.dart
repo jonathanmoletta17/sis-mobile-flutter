@@ -4,6 +4,10 @@ import 'package:sis_mobile_flutter/models/operational_role.dart';
 
 void main() {
   group('OperationalRoleResolver', () {
+    const nonSisConservationGroupId = 10021;
+    const nonSisMaintenanceGroupId = 10022;
+    const nonSisGgConservationGroupId = 10049;
+
     test('classifies standard requester without technical groups', () {
       final role = OperationalRoleResolver.resolve(
         activeProfile: const GlpiProfileRef(id: 9, name: 'Solicitante'),
@@ -24,7 +28,11 @@ void main() {
             name: 'Solicitante-GG-Conservação',
           ),
           groups: const [
-            GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO', isAssign: false),
+            GlpiGroupRef(
+              id: nonSisGgConservationGroupId,
+              name: 'GG-CONSERVACAO',
+              isAssign: false,
+            ),
           ],
         );
 
@@ -47,7 +55,11 @@ void main() {
           OperationalRoleResolver.resolve(
             activeProfile: profile,
             groups: const [
-              GlpiGroupRef(id: 21, name: 'CC-CONSERVACÃO', isAssign: true),
+              GlpiGroupRef(
+                id: nonSisConservationGroupId,
+                name: 'CC-CONSERVACÃO',
+                isAssign: true,
+              ),
             ],
           ),
           OperationalRole.conservationTechnician,
@@ -56,7 +68,11 @@ void main() {
           OperationalRoleResolver.resolve(
             activeProfile: profile,
             groups: const [
-              GlpiGroupRef(id: 22, name: 'CC-MANUTENCAO', isAssign: true),
+              GlpiGroupRef(
+                id: nonSisMaintenanceGroupId,
+                name: 'CC-MANUTENCAO',
+                isAssign: true,
+              ),
             ],
           ),
           OperationalRole.maintenanceTechnician,
@@ -86,12 +102,32 @@ void main() {
             name: 'Manutenção e Conservação',
           ),
           groups: const [
-            GlpiGroupRef(id: 21, name: 'CC-CONSERVACÃO', isAssign: true),
-            GlpiGroupRef(id: 22, name: 'CC-MANUTENCAO', isAssign: true),
+            GlpiGroupRef(
+              id: nonSisConservationGroupId,
+              name: 'CC-CONSERVACÃO',
+              isAssign: true,
+            ),
+            GlpiGroupRef(
+              id: nonSisMaintenanceGroupId,
+              name: 'CC-MANUTENCAO',
+              isAssign: true,
+            ),
           ],
         ),
         OperationalRole.hybrid,
       );
+    });
+
+    test('does not classify technical role from numeric group id alone', () {
+      final role = OperationalRoleResolver.resolve(
+        activeProfile: const GlpiProfileRef(
+          id: 11,
+          name: 'Manutenção e Conservação',
+        ),
+        groups: const [GlpiGroupRef(id: 22, name: '', isAssign: true)],
+      );
+
+      expect(role, OperationalRole.ineligible);
     });
   });
 }

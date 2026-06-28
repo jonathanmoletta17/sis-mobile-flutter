@@ -629,9 +629,7 @@ class GlpiClient {
       final groupId = assignedGroupRelation['groups_id']?.toString();
       if (groupId == null || groupId.isEmpty) return;
 
-      final groupName =
-          await _resolveGroupDisplayName(groupId, headers) ??
-          _knownAssignmentGroupLabel(groupId);
+      final groupName = await _resolveGroupDisplayName(groupId, headers);
       ticket['assigned_group_id'] = groupId;
       if (groupName != null && groupName.trim().isNotEmpty) {
         ticket['assigned_group_name'] = groupName.trim();
@@ -670,18 +668,6 @@ class GlpiClient {
       if (_isSessionInvalidException(e)) rethrow;
       return null;
     }
-  }
-
-  String? _knownAssignmentGroupLabel(String groupId) {
-    switch (groupId) {
-      case '21':
-        return 'CC-CONSERVAÇÃO';
-      case '22':
-        return 'CC-MANUTENÇÃO';
-      case '49':
-        return 'GG-CONSERVAÇÃO';
-    }
-    return null;
   }
 
   Future<String?> _resolveUserDisplayName(

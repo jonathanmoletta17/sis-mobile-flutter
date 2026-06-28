@@ -6,6 +6,10 @@ import 'fixtures/sis_instance_groups.dart';
 
 void main() {
   group('TicketDomainResolver', () {
+    const nonSisConservationGroupId = 10021;
+    const nonSisMaintenanceGroupId = 10022;
+    const nonSisGgConservationGroupId = 10049;
+
     test(
       'infers maintenance and conservation from root category or assignment groups',
       () {
@@ -24,7 +28,11 @@ void main() {
         expect(
           TicketDomainResolver.resolve(
             assignedGroups: [
-              GlpiGroupRef(id: sisMaintenanceGroupId, name: 'CC-MANUTENCAO', isAssign: true),
+              GlpiGroupRef(
+                id: nonSisMaintenanceGroupId,
+                name: 'CC-MANUTENCAO',
+                isAssign: true,
+              ),
             ],
           ),
           TicketDomain.maintenance,
@@ -32,7 +40,11 @@ void main() {
         expect(
           TicketDomainResolver.resolve(
             assignedGroups: [
-              GlpiGroupRef(id: sisConservationGroupId, name: 'CC-CONSERVACÃO', isAssign: true),
+              GlpiGroupRef(
+                id: nonSisConservationGroupId,
+                name: 'CC-CONSERVACÃO',
+                isAssign: true,
+              ),
             ],
           ),
           TicketDomain.conservation,
@@ -45,7 +57,11 @@ void main() {
       () {
         final domain = TicketDomainResolver.resolve(
           observerGroups: [
-            GlpiGroupRef(id: sisGgConservationGroupId, name: 'GG-CONSERVACAO', isAssign: false),
+            GlpiGroupRef(
+              id: nonSisGgConservationGroupId,
+              name: 'GG-CONSERVACAO',
+              isAssign: false,
+            ),
           ],
         );
 
@@ -58,11 +74,38 @@ void main() {
       final domain = TicketDomainResolver.resolve(
         categoryCompletename: 'Manutenção > Elétrica',
         assignedGroups: [
-          GlpiGroupRef(id: sisConservationGroupId, name: 'CC-CONSERVACÃO', isAssign: true),
+          GlpiGroupRef(
+            id: nonSisConservationGroupId,
+            name: 'CC-CONSERVACÃO',
+            isAssign: true,
+          ),
         ],
       );
 
       expect(domain, TicketDomain.unknown);
+    });
+
+    test('does not infer domain from SIS numeric ids without group names', () {
+      expect(
+        TicketDomainResolver.resolve(
+          assignedGroups: const [
+            GlpiGroupRef(id: sisMaintenanceGroupId, name: '', isAssign: true),
+          ],
+        ),
+        TicketDomain.unknown,
+      );
+      expect(
+        TicketDomainResolver.resolve(
+          observerGroups: const [
+            GlpiGroupRef(
+              id: sisGgConservationGroupId,
+              name: '',
+              isAssign: false,
+            ),
+          ],
+        ),
+        TicketDomain.unknown,
+      );
     });
   });
 }

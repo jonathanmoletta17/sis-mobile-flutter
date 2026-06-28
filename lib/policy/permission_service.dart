@@ -1,4 +1,5 @@
 import '../models/glpi_identity.dart';
+import '../models/glpi_group_semantics.dart';
 import '../models/glpi_status.dart';
 import '../models/operational_role.dart';
 import '../models/ticket_domain.dart';
@@ -6,11 +7,8 @@ import 'ticket_permission_decision.dart';
 
 class PermissionService {
   // NOTA (2026-06-14): Regras de permissão são institucionais e raramente mudam.
-  // Se precisar alterar (ex: quem pode validar solução, quem pode mudar status),
-  // edite as condições abaixo + execute `flutter test` + redistribua APK.
-  // Decisão: MANTER HARDCODED (não implementar dinâmico) por pragmatismo/MVP.
-  static const int ggConservationGroupId = 49;
-
+  // Se precisar alterar quem pode validar solução ou mudar status, preserve a
+  // resolução por semântica de perfil/grupo e execute `flutter test`.
   static TicketPermissionDecision evaluate({
     required OperationalRole role,
     required TicketDomain ticketDomain,
@@ -35,13 +33,7 @@ class PermissionService {
     final isGgShared =
         role == OperationalRole.ggConservationRequester &&
         ticketDomain == TicketDomain.ggConservationObserver &&
-        observerGroups.any(
-          (group) =>
-              group.id == ggConservationGroupId ||
-              (group.id == 0 &&
-                  normalizeGlpiText(group.name).contains('gg') &&
-                  normalizeGlpiText(group.name).contains('conservacao')),
-        );
+        observerGroups.any(GlpiGroupSemantics.isGgConservation);
     if (isGgShared) reasons.add('Ticket compartilhado com GG-CONSERVACAO');
 
     final technicalDomainAllowed = _roleCoversDomain(role, ticketDomain);
@@ -106,7 +98,8 @@ class PermissionService {
       (OperationalRole.hybrid, TicketDomain.conservation) => true,
       // multiDomain: qualquer equipe técnica pode agir (fluxo "Múltiplas Demandas").
       (OperationalRole.maintenanceTechnician, TicketDomain.multiDomain) => true,
-      (OperationalRole.conservationTechnician, TicketDomain.multiDomain) => true,
+      (OperationalRole.conservationTechnician, TicketDomain.multiDomain) =>
+        true,
       (OperationalRole.hybrid, TicketDomain.multiDomain) => true,
       (OperationalRole.admin, _) => true,
       _ => false,

@@ -45,6 +45,23 @@ void main() {
       expect(queue, TicketQueueType.assignedToMe);
     });
 
+    test('nao classifica fila operacional apenas por ID numerico SIS', () {
+      final queue = TicketQueueClassifier.primaryQueueForTicket(
+        {
+          'id': 9279,
+          '_source': 'operational',
+          'status': 1,
+          'itilcategories_id': 'Múltiplas Demandas',
+          'assigned_group_id': '$sisMaintenanceGroupId',
+          'users_id_recipient': 2214,
+        },
+        role: OperationalRole.maintenanceTechnician,
+        loggedUserId: 2039,
+      );
+
+      expect(queue, isNull);
+    });
+
     test('reconhece fila compartilhada GG por grupo observador', () {
       final queue = TicketQueueClassifier.primaryQueueForTicket(
         {
@@ -58,7 +75,9 @@ void main() {
         },
         role: OperationalRole.ggConservationRequester,
         loggedUserId: 2039,
-        sessionGroups: [GlpiGroupRef(id: sisGgConservationGroupId, name: 'GG-CONSERVACAO')],
+        sessionGroups: [
+          GlpiGroupRef(id: sisGgConservationGroupId, name: 'GG-CONSERVACAO'),
+        ],
       );
 
       expect(queue, TicketQueueType.ggConservationShared);
@@ -138,115 +157,138 @@ void main() {
         expect(queue, isNull);
       });
 
-      test('GG-CONSERVACAO no grupo observador por nome -> fila gg compartilhada', () {
-        final queue = TicketQueueClassifier.primaryQueueForTicket(
-          {
-            'id': 9304,
-            '_source': 'operational',
-            'status': 1,
-            'itilcategories_id': 'Múltiplas Demandas',
-            // Sem observer_group_id — apenas o nome vindo do field 65
-            'observer_group_name': 'GG-CONSERVAÇÃO',
-            'users_id_recipient': 2214,
-          },
-          role: OperationalRole.ggConservationRequester,
-          loggedUserId: 2214,
-          sessionGroups: [GlpiGroupRef(id: sisGgConservationGroupId, name: 'GG-CONSERVAÇÃO')],
-        );
+      test(
+        'GG-CONSERVACAO no grupo observador por nome -> fila gg compartilhada',
+        () {
+          final queue = TicketQueueClassifier.primaryQueueForTicket(
+            {
+              'id': 9304,
+              '_source': 'operational',
+              'status': 1,
+              'itilcategories_id': 'Múltiplas Demandas',
+              // Sem observer_group_id — apenas o nome vindo do field 65
+              'observer_group_name': 'GG-CONSERVAÇÃO',
+              'users_id_recipient': 2214,
+            },
+            role: OperationalRole.ggConservationRequester,
+            loggedUserId: 2214,
+            sessionGroups: [
+              GlpiGroupRef(
+                id: sisGgConservationGroupId,
+                name: 'GG-CONSERVAÇÃO',
+              ),
+            ],
+          );
 
-        expect(queue, TicketQueueType.ggConservationShared);
-      });
+          expect(queue, TicketQueueType.ggConservationShared);
+        },
+      );
     });
 
     // Cenários de múltiplos grupos: GLPI retorna field 8 como array quando o
     // ticket tem CC-MANUTENCAO E CC-CONSERVACAO atribuídos simultaneamente.
     // O app serializa como 'CC-CONSERVACÃO|CC-MANUTENCAO' no assigned_group_name.
     group('tickets com dois grupos atribuidos (Multiplas Demandas)', () {
-      test('categoria Manutencao ganha sobre grupos ambiguos -> fila manutencao', () {
-        // Caso real: ticket #8942 tem categoria "Manutenção > Pintura" mas
-        // ambos CC-CONSERVACÃO e CC-MANUTENCAO atribuídos. Categoria vence.
-        final queue = TicketQueueClassifier.primaryQueueForTicket(
-          {
-            'id': 8942,
-            '_source': 'operational',
-            'status': 2,
-            'itilcategories_id': 'Manutenção > Pintura',
-            'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
-            'users_id_recipient': 2214,
-          },
-          role: OperationalRole.maintenanceTechnician,
-          loggedUserId: 2039,
-        );
+      test(
+        'categoria Manutencao ganha sobre grupos ambiguos -> fila manutencao',
+        () {
+          // Caso real: ticket #8942 tem categoria "Manutenção > Pintura" mas
+          // ambos CC-CONSERVACÃO e CC-MANUTENCAO atribuídos. Categoria vence.
+          final queue = TicketQueueClassifier.primaryQueueForTicket(
+            {
+              'id': 8942,
+              '_source': 'operational',
+              'status': 2,
+              'itilcategories_id': 'Manutenção > Pintura',
+              'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
+              'users_id_recipient': 2214,
+            },
+            role: OperationalRole.maintenanceTechnician,
+            loggedUserId: 2039,
+          );
 
-        expect(queue, TicketQueueType.maintenanceQueue);
-      });
+          expect(queue, TicketQueueType.maintenanceQueue);
+        },
+      );
 
-      test('sem categoria + dois grupos + hybrid -> fila manutencao (prioridade)', () {
-        // Ticket "Múltiplas Demandas": sem categoria mas com ambos os grupos.
-        // Hybrid vê em manutencao (prioridade maior na lista _priority).
-        final queue = TicketQueueClassifier.primaryQueueForTicket(
-          {
-            'id': 10019,
-            '_source': 'operational',
-            'status': 2,
-            'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
-            'users_id_recipient': 2214,
-          },
-          role: OperationalRole.hybrid,
-          loggedUserId: 2039,
-        );
+      test(
+        'sem categoria + dois grupos + hybrid -> fila manutencao (prioridade)',
+        () {
+          // Ticket "Múltiplas Demandas": sem categoria mas com ambos os grupos.
+          // Hybrid vê em manutencao (prioridade maior na lista _priority).
+          final queue = TicketQueueClassifier.primaryQueueForTicket(
+            {
+              'id': 10019,
+              '_source': 'operational',
+              'status': 2,
+              'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
+              'users_id_recipient': 2214,
+            },
+            role: OperationalRole.hybrid,
+            loggedUserId: 2039,
+          );
 
-        expect(queue, TicketQueueType.maintenanceQueue);
-      });
+          expect(queue, TicketQueueType.maintenanceQueue);
+        },
+      );
 
-      test('sem categoria + dois grupos + conservationTechnician -> fila conservacao', () {
-        final queue = TicketQueueClassifier.primaryQueueForTicket(
-          {
-            'id': 10019,
-            '_source': 'operational',
-            'status': 2,
-            'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
-            'users_id_recipient': 2214,
-          },
-          role: OperationalRole.conservationTechnician,
-          loggedUserId: 2039,
-        );
+      test(
+        'sem categoria + dois grupos + conservationTechnician -> fila conservacao',
+        () {
+          final queue = TicketQueueClassifier.primaryQueueForTicket(
+            {
+              'id': 10019,
+              '_source': 'operational',
+              'status': 2,
+              'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
+              'users_id_recipient': 2214,
+            },
+            role: OperationalRole.conservationTechnician,
+            loggedUserId: 2039,
+          );
 
-        expect(queue, TicketQueueType.conservationQueue);
-      });
+          expect(queue, TicketQueueType.conservationQueue);
+        },
+      );
 
-      test('sem categoria + dois grupos + maintenanceTechnician -> fila manutencao', () {
-        final queue = TicketQueueClassifier.primaryQueueForTicket(
-          {
-            'id': 10019,
-            '_source': 'operational',
-            'status': 2,
-            'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
-            'users_id_recipient': 2214,
-          },
-          role: OperationalRole.maintenanceTechnician,
-          loggedUserId: 2039,
-        );
+      test(
+        'sem categoria + dois grupos + maintenanceTechnician -> fila manutencao',
+        () {
+          final queue = TicketQueueClassifier.primaryQueueForTicket(
+            {
+              'id': 10019,
+              '_source': 'operational',
+              'status': 2,
+              'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
+              'users_id_recipient': 2214,
+            },
+            role: OperationalRole.maintenanceTechnician,
+            loggedUserId: 2039,
+          );
 
-        expect(queue, TicketQueueType.maintenanceQueue);
-      });
+          expect(queue, TicketQueueType.maintenanceQueue);
+        },
+      );
 
-      test('categoria Conservacao ganha sobre grupos ambiguos -> fila conservacao', () {
-        final queue = TicketQueueClassifier.primaryQueueForTicket(
-          {
-            'id': 9999,
-            '_source': 'operational',
-            'status': 2,
-            'itilcategories_id': 'Conservação > Limpeza',
-            'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
-            'users_id_recipient': 2214,
-          },
-          role: OperationalRole.conservationTechnician,
-          loggedUserId: 2039,
-        );
+      test(
+        'categoria Conservacao ganha sobre grupos ambiguos -> fila conservacao',
+        () {
+          final queue = TicketQueueClassifier.primaryQueueForTicket(
+            {
+              'id': 9999,
+              '_source': 'operational',
+              'status': 2,
+              'itilcategories_id': 'Conservação > Limpeza',
+              'assigned_group_name': 'CC-CONSERVACÃO|CC-MANUTENCAO',
+              'users_id_recipient': 2214,
+            },
+            role: OperationalRole.conservationTechnician,
+            loggedUserId: 2039,
+          );
 
-        expect(queue, TicketQueueType.conservationQueue);
-      });
+          expect(queue, TicketQueueType.conservationQueue);
+        },
+      );
     });
   });
 }

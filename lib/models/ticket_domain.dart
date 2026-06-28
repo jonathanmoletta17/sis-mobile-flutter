@@ -1,4 +1,5 @@
 import 'glpi_identity.dart';
+import 'glpi_group_semantics.dart';
 
 enum TicketDomain {
   maintenance,
@@ -30,10 +31,6 @@ extension TicketDomainSemantics on TicketDomain {
 }
 
 class TicketDomainResolver {
-  static const int conservationGroupId = 21;
-  static const int maintenanceGroupId = 22;
-  static const int ggConservationGroupId = 49;
-
   static TicketDomain resolve({
     String? categoryCompletename,
     List<GlpiGroupRef> assignedGroups = const [],
@@ -42,32 +39,30 @@ class TicketDomainResolver {
     final category = normalizeGlpiText(categoryCompletename);
 
     final categoryCandidates = <TicketDomain>{};
-    if (category.startsWith('manutencao') || category.contains('> manutencao')) {
+    if (category.startsWith('manutencao') ||
+        category.contains('> manutencao')) {
       categoryCandidates.add(TicketDomain.maintenance);
     }
-    if (category.startsWith('conservacao') || category.contains('> conservacao')) {
+    if (category.startsWith('conservacao') ||
+        category.contains('> conservacao')) {
       categoryCandidates.add(TicketDomain.conservation);
     }
 
     final groupCandidates = <TicketDomain>{};
 
-    // Classificação por ID de grupo (precisa; vem do endpoint /Ticket/ID/Group_Ticket).
-    final assignedIds = assignedGroups.map((group) => group.id).toSet();
-    if (assignedIds.contains(maintenanceGroupId)) {
-      groupCandidates.add(TicketDomain.maintenance);
-    }
-    if (assignedIds.contains(conservationGroupId)) {
-      groupCandidates.add(TicketDomain.conservation);
-    }
-
-    // Classificação por nome de grupo (fallback; vem do field 8 da busca /search/Ticket
-    // onde o GLPI devolve completename em vez de ID). id==0 é o sentinela nome-only.
+    // Classificação por nome de grupo vindo do GLPI. IDs variam por instância e
+    // não são regra de domínio.
     for (final group in assignedGroups) {
-      if (group.id != 0) continue;
-      final norm = normalizeGlpiText(group.name);
-      if (norm.contains('manutencao')) groupCandidates.add(TicketDomain.maintenance);
-      if (norm.contains('conservacao') && !norm.contains('gg')) {
-        groupCandidates.add(TicketDomain.conservation);
+      switch (GlpiGroupSemantics.classify(group)) {
+        case GlpiGroupSemantic.maintenance:
+          groupCandidates.add(TicketDomain.maintenance);
+          break;
+        case GlpiGroupSemantic.conservation:
+          groupCandidates.add(TicketDomain.conservation);
+          break;
+        case GlpiGroupSemantic.ggConservation:
+        case GlpiGroupSemantic.unknown:
+          break;
       }
     }
 
@@ -108,17 +103,8 @@ class TicketDomainResolver {
     }
     if (technicalCandidates.length == 1) return technicalCandidates.single;
 
-    // Grupo observador por ID.
-    final observerIds = observerGroups.map((group) => group.id).toSet();
-    if (observerIds.contains(ggConservationGroupId)) {
-      return TicketDomain.ggConservationObserver;
-    }
-
-    // Grupo observador por nome (fallback id==0).
     for (final group in observerGroups) {
-      if (group.id != 0) continue;
-      final norm = normalizeGlpiText(group.name);
-      if (norm.contains('gg') && norm.contains('conservacao')) {
+      if (GlpiGroupSemantics.isGgConservation(group)) {
         return TicketDomain.ggConservationObserver;
       }
     }
