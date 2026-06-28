@@ -610,14 +610,23 @@ class AppState extends ChangeNotifier {
 
     if (_isAuthenticated && _sessionToken != null) {
       try {
+        await _tryLoadRules();
         if (_loggedUserId == null || _loggedUserId! <= 0) {
           _loggedUserId = await _apiService.getMyUserId(_sessionToken!);
+        }
+
+        final actorFieldIds = _rulesClient.myTicketsActorFields;
+        if (actorFieldIds.isEmpty) {
+          throw StateError(
+            'Contrato GLPI sem search_options.my_tickets_criteria.fields_or',
+          );
         }
 
         final rawTickets = await _apiService.getTickets(
           _sessionToken!,
           requesterUsername: _loggedUsername,
           requesterUserId: _loggedUserId,
+          actorFieldIds: actorFieldIds,
         );
         final personalTickets = rawTickets
             .where(_ticketBelongsToLoggedUser)

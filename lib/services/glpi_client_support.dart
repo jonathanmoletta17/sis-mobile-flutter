@@ -302,6 +302,7 @@ class GlpiClientSupport {
     String baseUrl, {
     int? requesterUserId,
     String? requesterUsername,
+    List<int> actorFieldIds = const [],
     int rangeEnd = 500,
   }) {
     final hasId = requesterUserId != null && requesterUserId > 0;
@@ -313,10 +314,17 @@ class GlpiClientSupport {
     }
 
     final params = <String, String>{};
+    final actorFields = actorFieldIds
+        .where((field) => field > 0)
+        .map((field) => field.toString())
+        .toList(growable: false);
+    if (actorFields.isEmpty) {
+      throw ArgumentError(
+        'actorFieldIds must be provided from the governed GLPI contract',
+      );
+    }
 
     if (hasId) {
-      // OR de atores: requerente(4) OR autor/recipient(22) OR observador(66)
-      const actorFields = ['4', '22', '66'];
       for (var i = 0; i < actorFields.length; i++) {
         if (i > 0) params['criteria[$i][link]'] = 'OR';
         params['criteria[$i][field]'] = actorFields[i];
@@ -325,7 +333,7 @@ class GlpiClientSupport {
       }
     } else {
       // Sem ID: fallback por nome do requerente (degradado).
-      params['criteria[0][field]'] = '4';
+      params['criteria[0][field]'] = actorFields.first;
       params['criteria[0][searchtype]'] = 'contains';
       params['criteria[0][value]'] = value;
     }

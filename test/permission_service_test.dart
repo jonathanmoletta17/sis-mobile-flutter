@@ -34,7 +34,7 @@ void main() {
           loggedUserId: 20,
           requesterUserId: 99,
           observerGroups: const [
-            GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO', isAssign: false),
+            GlpiGroupRef(id: 10049, name: 'GG-CONSERVACAO', isAssign: false),
           ],
           status: 2,
         );

@@ -8,6 +8,7 @@ void main() {
         'https://sis.example/apirest.php',
         requesterUserId: 2373,
         requesterUsername: 'gabriel-conceicao',
+        actorFieldIds: const [4, 22, 66],
       );
 
       expect(uri.path, '/apirest.php/search/Ticket');
@@ -29,6 +30,7 @@ void main() {
         final uri = GlpiClientSupport.buildRequesterTicketSearchUri(
           'https://sis.example/apirest.php',
           requesterUsername: 'gabriel-conceicao',
+          actorFieldIds: const [4, 22, 66],
         );
 
         expect(uri.queryParameters['criteria[0][field]'], '4');
@@ -36,6 +38,17 @@ void main() {
         expect(uri.queryParameters['criteria[0][value]'], 'gabriel-conceicao');
       },
     );
+
+    test('requires actor fields from governed contract', () {
+      expect(
+        () => GlpiClientSupport.buildRequesterTicketSearchUri(
+          'https://sis.example/apirest.php',
+          requesterUserId: 2373,
+          requesterUsername: 'gabriel-conceicao',
+        ),
+        throwsArgumentError,
+      );
+    });
   });
 
   group('GlpiClientSupport.mapSearchTicketRow', () {

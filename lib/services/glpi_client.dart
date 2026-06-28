@@ -275,6 +275,7 @@ class GlpiClient {
     String sessionToken, {
     String? requesterUsername,
     int? requesterUserId,
+    List<int> actorFieldIds = const [],
   }) async {
     _debugLog('Buscando tickets...');
 
@@ -292,6 +293,7 @@ class GlpiClient {
           GlpiConfig.baseUrl,
           requesterUserId: requesterUserId,
           requesterUsername: normalizedRequester,
+          actorFieldIds: actorFieldIds,
         );
         _debugLog('GET: $searchUri');
 

@@ -57,16 +57,16 @@ void main() {
         'glpiactive_entity_name': 'Manutenção',
         'glpiactiveprofile': {'id': '11', 'name': 'Manutenção e Conservação'},
         'glpigroups': {
-          '21': {'id': '21', 'name': 'CC-CONSERVACAO'},
-          '22': 'CC-MANUTENCAO',
-          '49': {'name': 'GG-CONSERVACAO'},
+          '101': {'id': '101', 'name': 'CC-CONSERVACAO'},
+          '102': 'CC-MANUTENCAO',
+          '149': {'name': 'GG-CONSERVACAO'},
         },
       });
 
       expect(context.activeProfile?.id, 11);
       expect(
         context.groups.map((group) => group.id),
-        containsAll([21, 22, 49]),
+        containsAll([101, 102, 149]),
       );
       expect(
         context.groups.map((group) => group.name),

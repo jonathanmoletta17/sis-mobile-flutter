@@ -107,16 +107,17 @@ class GlpiRulesClient {
   }
 
   // ---- SearchOptions: "meus chamados" ----
-  /// Campos de ator (OR) para a busca de "meus chamados". Default seguro [4,22,66]
-  /// caso o contrato não traga (requerente, autor/recipient, observador).
+  /// Campos de ator (OR) para a busca de "meus chamados".
+  /// Devem vir do contrato governado; sem contrato, não inventa fallback.
   List<int> get myTicketsActorFields {
     final crit = _searchOptions['my_tickets_criteria'];
     if (crit is Map && crit['fields_or'] is List) {
       return (crit['fields_or'] as List)
           .map((e) => (e as num).toInt())
+          .where((field) => field > 0)
           .toList();
     }
-    return const [4, 22, 66];
+    return const [];
   }
 
   // ---- FormCreator ----

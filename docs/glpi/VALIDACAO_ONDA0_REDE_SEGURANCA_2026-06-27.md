@@ -97,6 +97,23 @@ rg -n "conservationGroupId|maintenanceGroupId|ggConservationGroupId|==\s*21|==\s
 
 Resultado: sem ocorrencias.
 
+### SearchOptions de "Meus chamados" sem fallback embutido
+
+A revisao separou o numero `22` de SearchOption GLPI do grupo SIS `22`. Para
+evitar um segundo hardcode silencioso, a busca de "Meus chamados" deixou de
+assumir `[4,22,66]` no cliente:
+
+- `GlpiRulesClient.myTicketsActorFields` agora retorna somente os campos vindos
+  de `assets/glpi_rules_sis.json` (`search_options.my_tickets_criteria`);
+- `GlpiClientSupport.buildRequesterTicketSearchUri` exige `actorFieldIds`
+  fornecidos pelo contrato governado;
+- `AppState.fetchTickets` carrega o contrato antes de montar a busca pessoal;
+- testes cobrem a falha explicita quando os campos nao sao fornecidos.
+
+Conclusao: `22` ainda aparece como SearchOption documentado/contratado para
+autor/recipient, mas nao como grupo de manutencao nem como fallback fixo no
+runtime.
+
 ### CORS do Worker para metadata ETag
 
 Durante o smoke web autenticado, o Worker publicado retornou preflight sem
@@ -175,7 +192,10 @@ IDs para limpeza manual posterior: nenhum.
    - adiciona testes contra classificacao por ID numerico isolado.
 2. `fix(worker): permitir If-None-Match no preflight de metadata`
    - corrige CORS para refresh/cache do catalogo no web.
-3. Opcionalmente, consolidar este relatorio e o ajuste do documento de
+3. `fix(search): usar SearchOptions governados em meus chamados`
+   - remove fallback embutido `[4,22,66]` do cliente;
+   - mantem os campos vindo do contrato GLPI versionado.
+4. Opcionalmente, consolidar este relatorio e o ajuste do documento de
    acoplamento no mesmo commit de documentacao.
 
 ## Gates executados
@@ -191,7 +211,7 @@ node --test tool/external-access/workers-vpc/test/*.mjs
 Resultados:
 
 - `flutter analyze`: sem issues;
-- `flutter test`: `340` testes passaram, `15` skipped por flags de validacao
+- `flutter test`: `341` testes passaram, `15` skipped por flags de validacao
   live/mutavel desabilitadas;
 - `flutter build web`: `Built build/web`;
 - Worker tests: `23` testes passaram;

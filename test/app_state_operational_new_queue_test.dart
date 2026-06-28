@@ -8,6 +8,8 @@ import 'package:sis_mobile_flutter/services/glpi_client.dart';
 import 'fixtures/sis_instance_groups.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test(
     'technical/admin session includes operational New queue beyond requester tickets',
     () async {
@@ -214,6 +216,7 @@ class _OperationalQueueGlpiClient extends GlpiClient {
     String sessionToken, {
     String? requesterUsername,
     int? requesterUserId,
+    List<int> actorFieldIds = const [],
   }) async {
     this.requesterUsername = requesterUsername;
     this.requesterUserId = requesterUserId;
@@ -280,6 +283,7 @@ class _RequesterWithoutSessionIdGlpiClient extends GlpiClient {
     String sessionToken, {
     String? requesterUsername,
     int? requesterUserId,
+    List<int> actorFieldIds = const [],
   }) async {
     this.requesterUsername = requesterUsername;
     this.requesterUserId = requesterUserId;
