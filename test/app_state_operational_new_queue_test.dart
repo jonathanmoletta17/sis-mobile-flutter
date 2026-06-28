@@ -5,6 +5,8 @@ import 'package:sis_mobile_flutter/models/operational_role.dart';
 import 'package:sis_mobile_flutter/state/app_state.dart';
 import 'package:sis_mobile_flutter/services/glpi_client.dart';
 
+import 'fixtures/sis_instance_groups.dart';
+
 void main() {
   test(
     'technical/admin session includes operational New queue beyond requester tickets',
@@ -197,8 +199,8 @@ class _OperationalQueueGlpiClient extends GlpiClient {
       'profileId': profile == 'Solicitante' ? 12 : 11,
       'groups': profile == 'Solicitante'
           ? const []
-          : const [
-              {'id': 22, 'name': 'CC-MANUTENCAO'},
+          : [
+              {'id': sisMaintenanceGroupId, 'name': 'CC-MANUTENCAO'},
             ],
       'activeEntityId': 1,
       'activeEntityName': 'Origem > PIRATINI',

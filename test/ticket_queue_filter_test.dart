@@ -5,6 +5,8 @@ import 'package:sis_mobile_flutter/models/ticket_domain.dart';
 import 'package:sis_mobile_flutter/models/ticket_queue_type.dart';
 import 'package:sis_mobile_flutter/policy/ticket_queue_filter.dart';
 
+import 'fixtures/sis_instance_groups.dart';
+
 void main() {
   group('TicketQueueFilter', () {
     test('standard requester only receives requested-by-me queue', () {
@@ -27,7 +29,7 @@ void main() {
           ticketDomain: TicketDomain.ggConservationObserver,
           loggedUserId: 20,
           requesterUserId: 99,
-          observerGroups: const [GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO')],
+          observerGroups: [GlpiGroupRef(id: sisGgConservationGroupId, name: 'GG-CONSERVACAO')],
           status: 2,
         );
 

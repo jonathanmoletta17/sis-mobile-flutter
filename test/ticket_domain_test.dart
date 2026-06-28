@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sis_mobile_flutter/models/glpi_identity.dart';
 import 'package:sis_mobile_flutter/models/ticket_domain.dart';
 
+import 'fixtures/sis_instance_groups.dart';
+
 void main() {
   group('TicketDomainResolver', () {
     test(
@@ -21,16 +23,16 @@ void main() {
         );
         expect(
           TicketDomainResolver.resolve(
-            assignedGroups: const [
-              GlpiGroupRef(id: 22, name: 'CC-MANUTENCAO', isAssign: true),
+            assignedGroups: [
+              GlpiGroupRef(id: sisMaintenanceGroupId, name: 'CC-MANUTENCAO', isAssign: true),
             ],
           ),
           TicketDomain.maintenance,
         );
         expect(
           TicketDomainResolver.resolve(
-            assignedGroups: const [
-              GlpiGroupRef(id: 21, name: 'CC-CONSERVACÃO', isAssign: true),
+            assignedGroups: [
+              GlpiGroupRef(id: sisConservationGroupId, name: 'CC-CONSERVACÃO', isAssign: true),
             ],
           ),
           TicketDomain.conservation,
@@ -42,8 +44,8 @@ void main() {
       'treats GG-CONSERVACAO as observer domain, not technical execution',
       () {
         final domain = TicketDomainResolver.resolve(
-          observerGroups: const [
-            GlpiGroupRef(id: 49, name: 'GG-CONSERVACAO', isAssign: false),
+          observerGroups: [
+            GlpiGroupRef(id: sisGgConservationGroupId, name: 'GG-CONSERVACAO', isAssign: false),
           ],
         );
 
@@ -55,8 +57,8 @@ void main() {
     test('returns unknown when category and assignment group conflict', () {
       final domain = TicketDomainResolver.resolve(
         categoryCompletename: 'Manutenção > Elétrica',
-        assignedGroups: const [
-          GlpiGroupRef(id: 21, name: 'CC-CONSERVACÃO', isAssign: true),
+        assignedGroups: [
+          GlpiGroupRef(id: sisConservationGroupId, name: 'CC-CONSERVACÃO', isAssign: true),
         ],
       );
 
