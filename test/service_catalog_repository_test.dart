@@ -391,10 +391,12 @@ void main() {
         (service) => service.name == 'MANUTENÇÃO',
       );
       expect(manutencao.governedRecords, hasLength(2));
-      expect(
-        manutencao.typeOptions,
-        containsAll(['Ar Condicionado', 'Instalação', 'Pintura', 'Retoque']),
-      );
+      // Só folhas selecionáveis: os nós-pai "Ar Condicionado" (id==root_id=1) e
+      // "Pintura" (id==root_id=85), que são ancestrais das folhas, NÃO aparecem
+      // como opção de tipo (semântica de árvore ITILCategory).
+      expect(manutencao.typeOptions, containsAll(['Instalação', 'Retoque']));
+      expect(manutencao.typeOptions, isNot(contains('Ar Condicionado')));
+      expect(manutencao.typeOptions, isNot(contains('Pintura')));
 
       final solicitante = repository.servicesForProfile('Solicitante');
       expect(

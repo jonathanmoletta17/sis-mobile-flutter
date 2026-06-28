@@ -30,6 +30,7 @@ class GlpiTicketSupport {
     final urgencia = (formData['urgencia'] ?? '').toString().trim();
     final tipo = (formData['tipo'] ?? '').toString().trim();
     final servico = (formData['serviceName'] ?? '').toString().trim();
+    final subServico = (formData['subServico'] ?? '').toString().trim();
     final campoExtra = (formData['CampoExtra'] ?? '').toString().trim();
 
     final buffer = StringBuffer();
@@ -43,6 +44,9 @@ class GlpiTicketSupport {
 
     if (servico.isNotEmpty) {
       buffer.writeln('Serviço: $servico');
+    }
+    if (subServico.isNotEmpty) {
+      buffer.writeln('Sub-serviço: $subServico');
     }
     if (atendimentoPara.isNotEmpty) {
       buffer.writeln('Atendimento para: $atendimentoPara');

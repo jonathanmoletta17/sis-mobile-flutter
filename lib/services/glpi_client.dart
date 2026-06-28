@@ -7,6 +7,7 @@ import '../catalog/governed_service_catalog.dart';
 import '../checklists/checklist_catalog.dart';
 import '../checklists/checklist_submission.dart';
 import '../config/glpi_config.dart';
+import '../formcreator/formcreator_aggregate_schema.dart';
 import '../models/glpi_status.dart';
 import '../models/glpi_user_ref.dart';
 import '../utils/glpi_name_formatter.dart';
@@ -74,6 +75,153 @@ class GlpiClient {
 
   Map<String, dynamic> _mapSearchTicketRow(Map<String, dynamic> row) =>
       GlpiClientSupport.mapSearchTicketRow(row);
+
+  // ====================================================================
+  // FORMCREATOR DYNAMIC READ MODEL
+  // ====================================================================
+
+  Future<FormCreatorAggregateSchema?> loadFormCreatorAggregateSchema({
+    required int formId,
+    required String sessionToken,
+  }) async {
+    final headers = {..._headers, 'Session-Token': sessionToken};
+
+    final sections =
+        (await _getFormCreatorList(
+            itemType: 'PluginFormcreatorSection',
+            queryParameters: {
+              'searchText[plugin_formcreator_forms_id]': '$formId',
+              'range': '0-200',
+            },
+            headers: headers,
+            label: 'FORMCREATOR_SECTIONS',
+          )).map(FormCreatorSection.fromMap).toList(growable: false)
+          ..sort((a, b) {
+            final orderCompare = a.order.compareTo(b.order);
+            if (orderCompare != 0) return orderCompare;
+            return a.id.compareTo(b.id);
+          });
+
+    if (sections.isEmpty) return null;
+
+    final questionsBySection = <int, List<FormCreatorQuestion>>{};
+    final conditionsBySection = <int, List<FormCreatorCondition>>{};
+    var conditionsLookupBlocked = false;
+
+    for (final section in sections) {
+      final questions =
+          (await _getFormCreatorList(
+              itemType: 'PluginFormcreatorQuestion',
+              queryParameters: {
+                'searchText[plugin_formcreator_sections_id]': '${section.id}',
+                'range': '0-200',
+              },
+              headers: headers,
+              label: 'FORMCREATOR_QUESTIONS',
+            )).map(FormCreatorQuestion.fromMap).toList(growable: false)
+            ..sort((a, b) {
+              final rowCompare = a.row.compareTo(b.row);
+              if (rowCompare != 0) return rowCompare;
+              final colCompare = a.col.compareTo(b.col);
+              if (colCompare != 0) return colCompare;
+              return a.id.compareTo(b.id);
+            });
+      questionsBySection[section.id] = questions;
+
+      if (conditionsLookupBlocked) {
+        conditionsBySection[section.id] = const [];
+        continue;
+      }
+
+      try {
+        final conditions =
+            (await _getFormCreatorList(
+                itemType: 'PluginFormcreatorCondition',
+                queryParameters: {
+                  'searchText[itemtype]': 'PluginFormcreatorSection',
+                  'searchText[items_id]': '${section.id}',
+                  'range': '0-50',
+                },
+                headers: headers,
+                label: 'FORMCREATOR_CONDITIONS',
+              )).map(FormCreatorCondition.fromMap).toList(growable: false)
+              ..sort((a, b) {
+                final orderCompare = a.order.compareTo(b.order);
+                if (orderCompare != 0) return orderCompare;
+                return a.id.compareTo(b.id);
+              });
+        conditionsBySection[section.id] = conditions;
+      } catch (e) {
+        if (!_isBlockedFormCreatorConditionLookup(e)) rethrow;
+        conditionsLookupBlocked = true;
+        conditionsBySection[section.id] = const [];
+      }
+    }
+
+    return FormCreatorAggregateSchema.fromRaw(
+      formId: formId,
+      sections: sections,
+      questionsBySection: questionsBySection,
+      conditionsBySection: conditionsBySection,
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> _getFormCreatorList({
+    required String itemType,
+    required Map<String, String> queryParameters,
+    required Map<String, String> headers,
+    required String label,
+  }) async {
+    final uri = Uri.parse(
+      '${GlpiConfig.baseUrl}/$itemType',
+    ).replace(queryParameters: queryParameters);
+
+    final response = await http
+        .get(uri, headers: headers)
+        .timeout(GlpiConfig.requestTimeout);
+
+    _logResponse(label, response);
+
+    if (response.statusCode == 200 || response.statusCode == 206) {
+      final decoded = jsonDecode(response.body);
+      if (decoded is List) {
+        return decoded
+            .whereType<Map>()
+            .map((item) => Map<String, dynamic>.from(item))
+            .toList(growable: false);
+      }
+      throw Exception('$itemType retornou formato inesperado.');
+    }
+
+    if (_isBlockedFormCreatorConditionResponse(itemType, response)) {
+      throw Exception(
+        'Falha ao carregar $itemType: [${response.statusCode}] ${response.body}',
+      );
+    }
+
+    if (_isAuthError(response.statusCode)) {
+      throw _authException(response);
+    }
+
+    throw Exception(
+      'Falha ao carregar $itemType: [${response.statusCode}] ${response.body}',
+    );
+  }
+
+  bool _isBlockedFormCreatorConditionLookup(Object error) {
+    final text = error.toString();
+    return text.contains('PluginFormcreatorCondition') &&
+        text.contains('Endpoint blocked by SIS Worker allowlist');
+  }
+
+  bool _isBlockedFormCreatorConditionResponse(
+    String itemType,
+    http.Response response,
+  ) {
+    return itemType == 'PluginFormcreatorCondition' &&
+        response.statusCode == 403 &&
+        response.body.contains('Endpoint blocked by SIS Worker allowlist');
+  }
 
   // ====================================================================
   // AUTH
@@ -290,10 +438,7 @@ class GlpiClient {
   /// Operação de sessão, não-destrutiva: o usuário alterna entre perfis que já
   /// lhe são atribuídos. Após a troca, o chamador deve recarregar o contexto
   /// (getSessionContext) pois perfil/grupos/entidade ativa mudam.
-  Future<void> changeActiveProfile(
-    String sessionToken,
-    int profilesId,
-  ) async {
+  Future<void> changeActiveProfile(String sessionToken, int profilesId) async {
     final headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -301,7 +446,11 @@ class GlpiClient {
     };
     final uri = Uri.parse('${GlpiConfig.baseUrl}/changeActiveProfile');
     final response = await http
-        .post(uri, headers: headers, body: jsonEncode({'profiles_id': profilesId}))
+        .post(
+          uri,
+          headers: headers,
+          body: jsonEncode({'profiles_id': profilesId}),
+        )
         .timeout(GlpiConfig.requestTimeout);
     _logResponse('CHANGE_ACTIVE_PROFILE', response);
 

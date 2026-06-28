@@ -395,10 +395,13 @@ class ServiceCatalogRepository {
     Map<int, String> groupLabelIndex,
   ) {
     final representative = _preferredGovernedRecord(records);
+    // Categoria/Tipo é árvore ITILCategory: só folhas selecionáveis (exclui o
+    // nó-pai não-selecionável). Mesma semântica de GovernedQuestion.selectableOptions.
     final categoryOptions = _mergedOptions(
       records
           .map((record) => record.categoryQuestion)
           .whereType<GovernedQuestion>(),
+      selectableOnly: true,
     );
     final locationQuestions = records
         .map((record) => record.locationQuestion)
@@ -491,11 +494,13 @@ class ServiceCatalogRepository {
   }
 
   static List<GovernedOption> _mergedOptions(
-    Iterable<GovernedQuestion> questions,
-  ) {
+    Iterable<GovernedQuestion> questions, {
+    bool selectableOnly = false,
+  }) {
     final byId = <int, GovernedOption>{};
     for (final question in questions) {
-      for (final option in question.options) {
+      final source = selectableOnly ? question.selectableOptions : question.options;
+      for (final option in source) {
         if (option.id <= 0) continue;
         byId.putIfAbsent(option.id, () => option);
       }

@@ -12,6 +12,7 @@ import '../catalog/governed_entity_resolver.dart';
 import '../catalog/governed_service_catalog.dart';
 import '../catalog/governed_submission_contract.dart';
 import '../data/service_data.dart';
+import '../formcreator/formcreator_aggregate_schema.dart';
 import '../models/glpi_user_ref.dart';
 import '../services/glpi_ticket_support.dart';
 import '../state/app_state.dart';
@@ -94,6 +95,67 @@ class _FormTemplateState extends State<FormTemplate> {
   final List<String> _anexoNames = [];
   final List<Uint8List> _anexoBytesList = [];
   final List<String?> _anexoMimeTypes = [];
+
+  FormCreatorAggregateSchema? _aggregateSchema;
+  bool _loadingAggregateSchema = false;
+  String? _aggregateSchemaError;
+  int? _aggregateSchemaFormId;
+  final Set<String> _selectedAggregateServices = <String>{};
+  final Map<String, _AggregateServiceAnswer> _aggregateAnswers =
+      <String, _AggregateServiceAnswer>{};
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final appState = Provider.of<AppState>(context, listen: false);
+    final formId = _candidateAggregateFormId(appState);
+    if (formId == null ||
+        _aggregateSchemaFormId == formId ||
+        _loadingAggregateSchema) {
+      return;
+    }
+    _aggregateSchemaFormId = formId;
+    _loadAggregateSchema(appState, formId);
+  }
+
+  int? _candidateAggregateFormId(AppState appState) {
+    final candidates = _candidateGovernedRecords(
+      appState,
+    ).where((record) => record.isAggregateForm).toList(growable: false);
+    if (candidates.isEmpty) return null;
+    final formIds = candidates.map((record) => record.formId).toSet();
+    if (formIds.length != 1) return null;
+    final formId = formIds.single;
+    return formId > 0 ? formId : null;
+  }
+
+  Future<void> _loadAggregateSchema(AppState appState, int formId) async {
+    setState(() {
+      _loadingAggregateSchema = true;
+      _aggregateSchemaError = null;
+      _aggregateSchema = null;
+      _selectedAggregateServices.clear();
+      _disposeAggregateAnswers();
+    });
+
+    try {
+      final schema = await appState.loadFormCreatorAggregateSchema(formId);
+      if (!mounted || _aggregateSchemaFormId != formId) return;
+      setState(() {
+        _aggregateSchema = schema?.isMultiService == true ? schema : null;
+        _loadingAggregateSchema = false;
+      });
+    } catch (e) {
+      if (!mounted || _aggregateSchemaFormId != formId) return;
+      setState(() {
+        _aggregateSchema = null;
+        _loadingAggregateSchema = false;
+        _aggregateSchemaError =
+            'Não foi possível carregar as regras dinâmicas do formulário.';
+      });
+      debugPrint('Falha ao carregar schema FormCreator agregado $formId: $e');
+    }
+  }
 
   dynamic _selectedLocationPayload() {
     if (!widget.includeLocalizacao) return 'Não Aplicável';
@@ -184,6 +246,13 @@ class _FormTemplateState extends State<FormTemplate> {
 
   int? _selectedCategoryIdForRecords(List<GovernedServiceRecord> records) {
     final selected = _tipoDetalhamento?.trim();
+    return _selectedCategoryIdForValue(records, selected);
+  }
+
+  int? _selectedCategoryIdForValue(
+    List<GovernedServiceRecord> records,
+    String? selected,
+  ) {
     if (selected == null || selected.isEmpty) return null;
     for (final record in records) {
       final question = record.categoryQuestion;
@@ -198,6 +267,27 @@ class _FormTemplateState extends State<FormTemplate> {
       }
     }
     return null;
+  }
+
+  GovernedServiceRecord? _recordForSubService(
+    AppState appState,
+    String serviceLabel,
+  ) {
+    final normalized = _normalizeGoverned(serviceLabel);
+    final candidates = _candidateGovernedRecords(appState)
+        .where(
+          (record) =>
+              _normalizeGoverned(record.subService ?? '') == normalized ||
+              _normalizeGoverned(record.targetTicketName ?? '') == normalized,
+        )
+        .toList(growable: false);
+    if (candidates.isEmpty) return null;
+    candidates.sort((a, b) {
+      final formCompare = a.formId.compareTo(b.formId);
+      if (formCompare != 0) return formCompare;
+      return a.targetTicketId.compareTo(b.targetTicketId);
+    });
+    return candidates.first;
   }
 
   int? _selectedLocationId() {
@@ -311,6 +401,10 @@ class _FormTemplateState extends State<FormTemplate> {
         .replaceAll(RegExp(r'[óòôõö]'), 'o')
         .replaceAll(RegExp(r'[úùûü]'), 'u')
         .replaceAll('ç', 'c')
+        // Hífen/underscore equivalem a espaço: o multiselect do FormCreator usa
+        // "Ar-Condicionado" enquanto o sub_service do catálogo usa "Ar
+        // Condicionado". Sem isto o matching de record falha (record nulo).
+        .replaceAll(RegExp(r'[-_]'), ' ')
         .replaceAll(RegExp(r'\s+'), ' ');
   }
 
@@ -320,7 +414,29 @@ class _FormTemplateState extends State<FormTemplate> {
     _telefoneController.dispose();
     _assuntoController.dispose();
     _descricaoController.dispose();
+    _disposeAggregateAnswers();
     super.dispose();
+  }
+
+  void _disposeAggregateAnswers() {
+    for (final answer in _aggregateAnswers.values) {
+      answer.dispose();
+    }
+    _aggregateAnswers.clear();
+  }
+
+  _AggregateServiceAnswer _answerForService(String label) {
+    return _aggregateAnswers.putIfAbsent(
+      label,
+      () => _AggregateServiceAnswer(),
+    );
+  }
+
+  void _removeAggregateService(String label) {
+    setState(() {
+      _selectedAggregateServices.remove(label);
+      _aggregateAnswers.remove(label)?.dispose();
+    });
   }
 
   String? _guessMimeType(String? filename) {
@@ -332,16 +448,40 @@ class _FormTemplateState extends State<FormTemplate> {
   }
 
   Future<void> _onAnexosSelected(List<PlatformFile> files) async {
-    if (files.isEmpty) {
-      if (!mounted) return;
-      setState(() {
-        _anexoPaths.clear();
-        _anexoNames.clear();
-        _anexoBytesList.clear();
-        _anexoMimeTypes.clear();
-      });
-      return;
-    }
+    final selection = await _normalizeSelectedFiles(files);
+    if (!mounted) return;
+    setState(() {
+      _anexoPaths
+        ..clear()
+        ..addAll(selection.paths);
+      _anexoNames
+        ..clear()
+        ..addAll(selection.names);
+      _anexoBytesList
+        ..clear()
+        ..addAll(selection.bytes);
+      _anexoMimeTypes
+        ..clear()
+        ..addAll(selection.mimeTypes);
+    });
+  }
+
+  Future<void> _onAggregateAnexosSelected(
+    String serviceLabel,
+    List<PlatformFile> files,
+  ) async {
+    final selection = await _normalizeSelectedFiles(files);
+    if (!mounted) return;
+    final answer = _answerForService(serviceLabel);
+    setState(() {
+      answer.setAttachments(selection);
+    });
+  }
+
+  Future<_AttachmentSelection> _normalizeSelectedFiles(
+    List<PlatformFile> files,
+  ) async {
+    if (files.isEmpty) return const _AttachmentSelection();
 
     final List<String> newPaths = [];
     final List<String> newNames = [];
@@ -370,21 +510,12 @@ class _FormTemplateState extends State<FormTemplate> {
       newMimes.add(_guessMimeType(file.name));
     }
 
-    if (!mounted) return;
-    setState(() {
-      _anexoPaths
-        ..clear()
-        ..addAll(newPaths);
-      _anexoNames
-        ..clear()
-        ..addAll(newNames);
-      _anexoBytesList
-        ..clear()
-        ..addAll(newBytes);
-      _anexoMimeTypes
-        ..clear()
-        ..addAll(newMimes);
-    });
+    return _AttachmentSelection(
+      paths: newPaths,
+      names: newNames,
+      bytes: newBytes,
+      mimeTypes: newMimes,
+    );
   }
 
   Future<void> _enviarFormulario() async {
@@ -420,6 +551,15 @@ class _FormTemplateState extends State<FormTemplate> {
       }
 
       final governedLocationId = _selectedLocationId();
+      if (_aggregateSchema?.isMultiService == true) {
+        await _enviarFormularioAgregado(
+          appState: appState,
+          hasThirdPartyOption: hasThirdPartyOption,
+          governedLocationId: governedLocationId,
+        );
+        return;
+      }
+
       GovernedSubmissionContract? governedContract;
       if (widget.governedRecords.isNotEmpty) {
         final selectedAudience = _effectiveSubmissionAudience();
@@ -634,6 +774,399 @@ class _FormTemplateState extends State<FormTemplate> {
     }
   }
 
+  Future<void> _enviarFormularioAgregado({
+    required AppState appState,
+    required bool hasThirdPartyOption,
+    required int? governedLocationId,
+  }) async {
+    final schema = _aggregateSchema;
+    if (schema == null || !schema.isMultiService) return;
+
+    if (_selectedAggregateServices.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Selecione ao menos um serviço antes de enviar.'),
+          backgroundColor: AppColors.danger,
+        ),
+      );
+      return;
+    }
+
+    final orderedLabels = schema.serviceLabels
+        .where(_selectedAggregateServices.contains)
+        .toList(growable: false);
+    final selectedAudience = _effectiveSubmissionAudience();
+    final selectedContracts = <String, GovernedSubmissionContract>{};
+
+    for (final serviceLabel in orderedLabels) {
+      final answer = _answerForService(serviceLabel);
+      final record = _recordForSubService(appState, serviceLabel);
+      if (record == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Serviço "$serviceLabel" sem contrato governado no catálogo.',
+            ),
+            backgroundColor: AppColors.danger,
+          ),
+        );
+        return;
+      }
+
+      final governedCategoryId = _selectedCategoryIdForValue([
+        record,
+      ], answer.tipoDetalhamento);
+      if (record.categoryQuestion?.required == true &&
+          governedCategoryId == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Selecione um tipo válido em "$serviceLabel".'),
+            backgroundColor: AppColors.danger,
+          ),
+        );
+        return;
+      }
+      if (record.locationQuestion?.required == true &&
+          governedLocationId == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Selecione uma localização válida antes de enviar.'),
+            backgroundColor: AppColors.danger,
+          ),
+        );
+        return;
+      }
+
+      final resolution = GovernedSubmissionResolver.resolve(
+        GovernedSubmissionInput(
+          records: widget.governedRecords,
+          profileName: appState.activeProfile ?? 'Solicitante',
+          audience: selectedAudience,
+          selectedCategoryId: governedCategoryId,
+          selectedLocationId: governedLocationId,
+          selectedSubService: serviceLabel,
+          entityContext: GovernedEntityContext(
+            selectedTicketEntityId: appState.selectedTicketEntityId,
+            activeEntityId: appState.activeEntityId,
+            beneficiaryEntityId: _beneficiaryEntityId,
+          ),
+        ),
+      );
+      if (!resolution.ok || resolution.contract == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              resolution.blocker ??
+                  'Não foi possível resolver o contrato de "$serviceLabel".',
+            ),
+            backgroundColor: AppColors.danger,
+          ),
+        );
+        return;
+      }
+      selectedContracts[serviceLabel] = resolution.contract!;
+    }
+
+    final labPreview =
+        (dotenv.maybeGet('SIS_LAB_PREVIEW') ?? '').toLowerCase() == 'true';
+    if (labPreview) {
+      await showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('LAB · Múltiplas Demandas (sem criar chamado)'),
+          content: SingleChildScrollView(
+            child: Text(
+              orderedLabels
+                  .map((label) {
+                    final contract = selectedContracts[label]!;
+                    final record = contract.record;
+                    return [
+                      'Serviço: $label',
+                      'Form: ${record.formId} · Alvo: ${record.targetTicketId}',
+                      'Categoria id: ${contract.categoryId ?? '(nenhuma)'}',
+                      'Entidade id: ${contract.entityId}',
+                    ].join('\n');
+                  })
+                  .join('\n────────────\n'),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('Fechar'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    final messages = <String>[];
+    for (final serviceLabel in orderedLabels) {
+      final answer = _answerForService(serviceLabel);
+      final governedContract = selectedContracts[serviceLabel]!;
+      final governedRecord = governedContract.record;
+      final governedActors = _governedActorMaps(governedRecord);
+
+      final dados = {
+        'serviceName': widget.serviceName,
+        'subServico': serviceLabel,
+        'atendimentoPara': _atendimentoPara ?? 'Para mim',
+        'nomePessoa':
+            _atendimentoPara == 'Para outra Pessoa' && hasThirdPartyOption
+            ? _nomePessoaController.text
+            : null,
+        'beneficiaryUserId': _beneficiaryUser?.id,
+        'beneficiaryUserName': _beneficiaryUser?.label,
+        'beneficiaryEntityId': _beneficiaryEntityId,
+        'loggedUserId': appState.loggedUserId,
+        'localizacao': _selectedLocationPayload(),
+        'telefone': _telefoneController.text,
+        'urgencia': widget.includeUrgencia
+            ? (_urgencia ?? 'Média (padrão)')
+            : null,
+        'tipo': answer.tipoDetalhamento ?? '',
+        'assunto': answer.assuntoController.text,
+        'descricao': answer.descricaoController.text,
+        'anexoPath': answer.paths.isNotEmpty ? answer.paths.first : null,
+        'anexoName': answer.names.isNotEmpty ? answer.names.first : null,
+        'attachmentBytes': answer.bytes.isNotEmpty ? answer.bytes.first : null,
+        'attachmentName': answer.names.isNotEmpty ? answer.names.first : null,
+        'attachmentMime': answer.mimeTypes.isNotEmpty
+            ? answer.mimeTypes.first
+            : null,
+        'attachmentBytesList': answer.bytes,
+        'attachmentNameList': answer.names,
+        'attachmentMimeList': answer.mimeTypes,
+        'attachmentPathsList': answer.paths,
+        'governedCatalogRecordId': governedRecord.catalogRecordId,
+        'governedServiceId': governedRecord.serviceId,
+        'governedFormId': governedRecord.formId,
+        'governedTargetTicketId': governedRecord.targetTicketId,
+        'governedAudience': governedRecord.audience,
+        'governedEntityMode': governedRecord.destinationEntityMode,
+        'governedEntityCode': governedRecord.destinationEntityCode,
+        'governedEntityValue': governedRecord.destinationEntityValue,
+        'governedEntityId': governedContract.entityId,
+        'entities_id': governedContract.entityId,
+        'governedCategoryId': governedContract.categoryId,
+        'governedLocationId': governedLocationId,
+        'governedContract': governedContract,
+        'governedRecord': governedRecord,
+        'governedActors': governedActors,
+        'governedReadbackExpectation': governedContract.readbackExpectation,
+      };
+
+      final message = await appState.submitTicket(dados);
+      messages.add('$serviceLabel: $message');
+    }
+
+    if (!mounted) return;
+
+    final allSuccess = messages.every((message) => message.contains('sucesso'));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          orderedLabels.length == 1
+              ? messages.single
+              : '${orderedLabels.length} solicitações processadas.',
+        ),
+        backgroundColor: allSuccess ? AppColors.success : AppColors.warning,
+        duration: const Duration(seconds: 4),
+      ),
+    );
+
+    Navigator.of(context).pop();
+  }
+
+  Widget _buildAggregateMultiSection(
+    FormCreatorAggregateSchema schema,
+    AppState appState,
+  ) {
+    final selectedLabels = schema.serviceLabels
+        .where(_selectedAggregateServices.contains)
+        .toList(growable: false);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          '${schema.controlQuestion.name} *',
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.copyWith(color: AppColors.textStrong),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          'Selecione um ou mais serviços. Cada serviço abre uma seção própria.',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Wrap(
+          spacing: AppSpacing.xs,
+          runSpacing: AppSpacing.xs,
+          children: schema.serviceLabels
+              .map((label) {
+                final selected = _selectedAggregateServices.contains(label);
+                return FilterChip(
+                  key: ValueKey('aggregate-filter-$label'),
+                  label: Text(label),
+                  selected: selected,
+                  onSelected: (value) {
+                    setState(() {
+                      if (value) {
+                        _selectedAggregateServices.add(label);
+                        _answerForService(label);
+                      } else {
+                        _selectedAggregateServices.remove(label);
+                        _aggregateAnswers.remove(label)?.dispose();
+                      }
+                    });
+                  },
+                );
+              })
+              .toList(growable: false),
+        ),
+        if (selectedLabels.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.md),
+          Text(
+            'Selecionados',
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(color: AppColors.textStrong),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Wrap(
+            spacing: AppSpacing.xs,
+            runSpacing: AppSpacing.xs,
+            children: selectedLabels
+                .map(
+                  (label) => InputChip(
+                    key: ValueKey('aggregate-selected-$label'),
+                    label: Text(label),
+                    onDeleted: () => _removeAggregateService(label),
+                  ),
+                )
+                .toList(growable: false),
+          ),
+        ],
+        const SizedBox(height: AppSpacing.md),
+        for (final label in selectedLabels)
+          _buildAggregateServiceCard(schema, appState, label),
+      ],
+    );
+  }
+
+  Widget _buildAggregateServiceCard(
+    FormCreatorAggregateSchema schema,
+    AppState appState,
+    String serviceLabel,
+  ) {
+    final section = schema.sectionForLabel(serviceLabel);
+    final answer = _answerForService(serviceLabel);
+    final record = _recordForSubService(appState, serviceLabel);
+    final typeItems = _aggregateTypeItems(record, section);
+    final typeQuestion = section?.typeQuestion;
+    final subjectQuestion = section?.subjectQuestion;
+    final descriptionQuestion = section?.descriptionQuestion;
+
+    return Card(
+      key: ValueKey('aggregate-service-card-$serviceLabel'),
+      margin: const EdgeInsets.only(bottom: AppSpacing.md),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    serviceLabel,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: AppColors.textStrong,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  tooltip: 'Remover serviço',
+                  onPressed: () => _removeAggregateService(serviceLabel),
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            if (typeItems.isNotEmpty)
+              CustomDropdownField(
+                key: ValueKey('aggregate-type-$serviceLabel'),
+                label: typeQuestion?.name ?? 'Tipo de serviço',
+                items: typeItems,
+                isRequired: typeQuestion?.required ?? true,
+                initialValue: answer.tipoDetalhamento,
+                onChanged: (newValue) {
+                  setState(() {
+                    answer.tipoDetalhamento = newValue;
+                  });
+                },
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                child: Text(
+                  'Não há opções de tipo publicadas para este serviço.',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: AppColors.warning),
+                ),
+              ),
+            CustomTextField(
+              key: ValueKey('aggregate-subject-$serviceLabel'),
+              label: subjectQuestion?.name ?? 'Assunto',
+              controller: answer.assuntoController,
+              isRequired: subjectQuestion?.required ?? true,
+            ),
+            CustomTextField(
+              key: ValueKey('aggregate-description-$serviceLabel'),
+              label: descriptionQuestion?.name ?? 'Descrição',
+              controller: answer.descricaoController,
+              helperText: '(Indicar o local e o ocorrido)',
+              isRequired: descriptionQuestion?.required ?? true,
+              maxLines: 5,
+            ),
+            if (widget.includeAnexo && section?.fileQuestion != null)
+              AnexarArquivoWidget(
+                key: ValueKey('aggregate-attachments-$serviceLabel'),
+                onFilesSelected: (files) =>
+                    _onAggregateAnexosSelected(serviceLabel, files),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<String> _aggregateTypeItems(
+    GovernedServiceRecord? record,
+    FormCreatorServiceSection? section,
+  ) {
+    // Questão de árvore (ITILCategory): só as FOLHAS selecionáveis do catálogo
+    // governado (exclui o nó-pai não-selecionável). Ver
+    // GovernedQuestion.selectableOptions.
+    final governed = record?.categoryQuestion?.selectableOptions
+        .map(
+          (option) => (option.label?.trim().isNotEmpty == true
+              ? option.label!.trim()
+              : option.fullLabel?.trim() ?? ''),
+        )
+        .where((label) => label.isNotEmpty)
+        .toList(growable: false);
+    if (governed != null && governed.isNotEmpty) return governed;
+    // Questão de lista literal (ex.: Elevadores, fieldtype=select): valores
+    // diretos da questão da seção.
+    return section?.typeQuestion?.optionValues ?? const <String>[];
+  }
+
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
@@ -642,6 +1175,8 @@ class _FormTemplateState extends State<FormTemplate> {
         ? const ['Para mim', 'Para outra Pessoa']
         : const ['Para mim'];
     final subOptions = _subServiceOptions(appState);
+    final aggregateSchema = _aggregateSchema;
+    final useAggregateMulti = aggregateSchema?.isMultiService == true;
     final hasSubSelected = (_subServico?.trim().isNotEmpty ?? false);
     final subRecord = hasSubSelected ? _selectGovernedRecord(appState) : null;
     // Em cards agregados, as opções de Tipo vêm do alvo do sub-serviço
@@ -649,7 +1184,7 @@ class _FormTemplateState extends State<FormTemplate> {
     // primeiro). Em forms por-serviço, mantém as opções do catálogo mesclado.
     final tipoItems = subOptions.isEmpty
         ? widget.tipoServicoOptions
-        : (subRecord?.categoryQuestion?.options
+        : (subRecord?.categoryQuestion?.selectableOptions
                   .map(
                     (option) => (option.label?.trim().isNotEmpty == true
                         ? option.label!.trim()
@@ -750,44 +1285,63 @@ class _FormTemplateState extends State<FormTemplate> {
                 subtitle: 'Detalhe o atendimento',
               ),
               const SizedBox(height: AppSpacing.md),
-              if (subOptions.isNotEmpty)
-                CustomDropdownField(
-                  label: 'Qual serviço?',
-                  items: subOptions,
-                  isRequired: true,
-                  initialValue: _subServico,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _subServico = newValue;
-                      _tipoDetalhamento = null;
-                    });
-                  },
+              if (_loadingAggregateSchema)
+                const Padding(
+                  padding: EdgeInsets.only(bottom: AppSpacing.md),
+                  child: LinearProgressIndicator(),
                 ),
-              CustomDropdownField(
-                label: 'Tipo de serviço',
-                items: tipoItems,
-                isRequired: true,
-                initialValue: _tipoDetalhamento,
-                onChanged: (newValue) => _tipoDetalhamento = newValue,
-              ),
-              CustomTextField(
-                label: 'Assunto',
-                controller: _assuntoController,
-                isRequired: true,
-              ),
-              CustomTextField(
-                label: 'Descrição',
-                controller: _descricaoController,
-                helperText: '(Indicar o local e o ocorrido)',
-                isRequired: true,
-                maxLines: 5,
-              ),
-              if (widget.extraFieldsBuilder != null)
-                widget.extraFieldsBuilder!(context, (newValue) {
-                  _extraDropdownValue = newValue;
-                }),
-              if (widget.includeAnexo)
-                AnexarArquivoWidget(onFilesSelected: _onAnexosSelected),
+              if (_aggregateSchemaError != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                  child: Text(
+                    _aggregateSchemaError!,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: AppColors.warning),
+                  ),
+                ),
+              if (useAggregateMulti)
+                _buildAggregateMultiSection(aggregateSchema!, appState)
+              else ...[
+                if (subOptions.isNotEmpty)
+                  CustomDropdownField(
+                    label: 'Qual serviço?',
+                    items: subOptions,
+                    isRequired: true,
+                    initialValue: _subServico,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _subServico = newValue;
+                        _tipoDetalhamento = null;
+                      });
+                    },
+                  ),
+                CustomDropdownField(
+                  label: 'Tipo de serviço',
+                  items: tipoItems,
+                  isRequired: true,
+                  initialValue: _tipoDetalhamento,
+                  onChanged: (newValue) => _tipoDetalhamento = newValue,
+                ),
+                CustomTextField(
+                  label: 'Assunto',
+                  controller: _assuntoController,
+                  isRequired: true,
+                ),
+                CustomTextField(
+                  label: 'Descrição',
+                  controller: _descricaoController,
+                  helperText: '(Indicar o local e o ocorrido)',
+                  isRequired: true,
+                  maxLines: 5,
+                ),
+                if (widget.extraFieldsBuilder != null)
+                  widget.extraFieldsBuilder!(context, (newValue) {
+                    _extraDropdownValue = newValue;
+                  }),
+                if (widget.includeAnexo)
+                  AnexarArquivoWidget(onFilesSelected: _onAnexosSelected),
+              ],
               const SizedBox(height: AppSpacing.xl),
               ElevatedButton(
                 onPressed: _enviarFormulario,
@@ -799,6 +1353,50 @@ class _FormTemplateState extends State<FormTemplate> {
       ),
     );
   }
+}
+
+class _AggregateServiceAnswer {
+  final TextEditingController assuntoController = TextEditingController();
+  final TextEditingController descricaoController = TextEditingController();
+  String? tipoDetalhamento;
+  final List<String> paths = [];
+  final List<String> names = [];
+  final List<Uint8List> bytes = [];
+  final List<String?> mimeTypes = [];
+
+  void setAttachments(_AttachmentSelection selection) {
+    paths
+      ..clear()
+      ..addAll(selection.paths);
+    names
+      ..clear()
+      ..addAll(selection.names);
+    bytes
+      ..clear()
+      ..addAll(selection.bytes);
+    mimeTypes
+      ..clear()
+      ..addAll(selection.mimeTypes);
+  }
+
+  void dispose() {
+    assuntoController.dispose();
+    descricaoController.dispose();
+  }
+}
+
+class _AttachmentSelection {
+  final List<String> paths;
+  final List<String> names;
+  final List<Uint8List> bytes;
+  final List<String?> mimeTypes;
+
+  const _AttachmentSelection({
+    this.paths = const [],
+    this.names = const [],
+    this.bytes = const [],
+    this.mimeTypes = const [],
+  });
 }
 
 class _GlpiUserSearchField extends StatefulWidget {

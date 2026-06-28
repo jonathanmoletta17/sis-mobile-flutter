@@ -14,7 +14,8 @@ Use antes de implementar feature ou correcao nao trivial.
 - altera origem de dados, cache ou refresh;
 - altera comportamento offline/online;
 - altera acesso externo, `.env`, build Android ou distribuicao;
-- toca mais de uma superficie relevante, como detalhe + conversa + lista.
+- toca mais de uma superficie relevante, como detalhe + conversa + lista;
+- consome questao/opcoes de FormCreator (categoria, tipo, localizacao, multiselect).
 
 Nao e obrigatorio para:
 
@@ -90,6 +91,25 @@ Declarar pelo menos uma coisa adjacente que nao sera resolvida nesta entrega.
 
 Uma frase objetiva indicando o que precisa estar verdadeiro para considerar a entrega pronta.
 ```
+
+## Contrato FormCreator → render (obrigatorio quando consome questao FormCreator)
+
+Toda superficie que renderiza opcoes de uma questao FormCreator deve declarar e
+testar o mapeamento `fieldtype` → fonte → resolucao. Erros recorrentes vieram de
+ignorar isto (ex.: "Tipo" de arvore mostrando "Nao ha opcoes").
+
+| `fieldtype` | Fonte da verdade | Resolucao |
+|---|---|---|
+| `select` / `multiselect` / `radios` | `values` (lista JSON literal) | usar os valores diretamente (`optionValues`) |
+| `dropdown` / `glpiselect` (arvore ITILCategory) | catalogo governado pre-resolvido (`options_sample` + `root_id` + `raw_values.selectable_tree_root`) | **somente folhas selecionaveis** via `GovernedQuestion.selectableOptions`; **nao** chamar `/ITILCategory` em runtime (perfil Solicitante/GG = `ERROR_RIGHT_MISSING`) |
+| `glpiselect` pessoa/usuario | busca dedicada (`searchGlpiUsers`) | nunca lista estatica |
+
+Checklist:
+- [ ] Declarei o `fieldtype` de cada questao tocada e sua resolucao.
+- [ ] Para arvore: ofereco so folhas; o no-pai/raiz nao-selecionavel nunca aparece.
+- [ ] Matching de rotulo trata hifen↔espaco↔underscore como equivalentes.
+- [ ] Ha teste de characterization comparando o resolver com a verdade capturada
+      ao vivo (fixture versionada; revalidavel com `--live`).
 
 ## Regra pratica
 

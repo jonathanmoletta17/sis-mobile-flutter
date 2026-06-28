@@ -6,6 +6,9 @@ paths:
   - "lib/checklists/**"
   - "lib/state/app_state_ticket_support.dart"
   - "lib/dtic/models/dtic_formcreator_models.dart"
+  - "lib/catalog/**"
+  - "lib/formcreator/**"
+  - "lib/screens/form_template.dart"
 ---
 
 # Regra: nunca hardcodar o que o GLPI já expõe
@@ -26,8 +29,17 @@ Fontes corretas (validadas ao vivo — `docs/discovery/glpi-live/COBERTURA_VALID
 - **Domínio de grupo** → `GET /Group`. **Perfis disponíveis / troca** → `getMyProfiles` +
   `changeActiveProfile`.
 - **Config de questão FormCreator** (ex.: "limitar sub-níveis") → campo `values` (JSON):
-  `show_tree_depth`, `show_tree_root`, `selectable_tree_root`, `entity_restrict`. **NÃO**
-  descartar esse JSON (hoje o app descarta — é débito técnico ativo).
+  `show_tree_depth`, `show_tree_root`, `selectable_tree_root`, `entity_restrict`.
+- **Opções de árvore (categoria/tipo/localização)** → oferecer **apenas folhas
+  selecionáveis**. O nó raiz (`id == root_id`) não é opção quando
+  `selectable_tree_root="0"`; nós intermédios (ancestrais de outra opção via
+  `full_label` "X > …") são cabeçalhos, não opções. Usar
+  `GovernedQuestion.selectableOptions` (`lib/catalog/governed_service_catalog.dart`) —
+  **nunca** mapear `options`/`options_sample` cru. **Fonte runtime = catálogo
+  governado pré-resolvido**, NÃO chamada live a `/ITILCategory`: perfis
+  Solicitante/GG recebem `ERROR_RIGHT_MISSING` ao ler ITILCategory (validado ao
+  vivo 2026-06-28). Matching de serviço/sub-serviço deve tratar hífen↔espaço como
+  equivalentes (`_normalizeGoverned`).
 - **Condições FormCreator** → `show_condition` tem **9 operadores** (1=igual … 9=regex), não
   só igualdade; `show_logic` 1=AND/2=OR; `show_rule` também na **seção**.
 

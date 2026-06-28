@@ -276,6 +276,36 @@ class GovernedQuestion {
     return GovernedQuestion.fromMap(Map<String, dynamic>.from(raw));
   }
 
+  /// Opções realmente SELECIONÁVEIS de uma questão de árvore (ITILCategory),
+  /// fiel à semântica do GLPI: o nó raiz (`id == rootId`) não é selecionável
+  /// quando `selectableTreeRoot == false`, e nós intermédios (que são ancestrais
+  /// de outra opção via `fullLabel` "X > ...") são apenas agrupadores. Sobram as
+  /// folhas. Para listas planas (sem hierarquia em `fullLabel`) todas as opções
+  /// são folhas. A fonte é o catálogo governado (pré-resolvido), pois perfis
+  /// Solicitante/GG não têm direito de ler /ITILCategory em runtime.
+  List<GovernedOption> get selectableOptions {
+    if (options.isEmpty) return const [];
+    final fullLabels = options
+        .map((o) => o.fullLabel?.trim() ?? '')
+        .where((f) => f.isNotEmpty)
+        .toList(growable: false);
+
+    bool isAncestor(GovernedOption option) {
+      final full = option.fullLabel?.trim() ?? '';
+      if (full.isEmpty) return false;
+      final prefix = '$full > ';
+      return fullLabels.any((other) => other != full && other.startsWith(prefix));
+    }
+
+    return options.where((option) {
+      if (!selectableTreeRoot && rootId != null && option.id == rootId) {
+        return false;
+      }
+      if (isAncestor(option)) return false;
+      return true;
+    }).toList(growable: false);
+  }
+
   factory GovernedQuestion.fromMap(Map<String, dynamic> map) {
     final rawValues = _asMap(map['raw_values']);
     return GovernedQuestion(

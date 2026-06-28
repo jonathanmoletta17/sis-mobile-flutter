@@ -5,6 +5,7 @@ import 'package:sis_mobile_flutter/utils/glpi_name_formatter.dart';
 import '../services/glpi_client.dart';
 import '../services/glpi_client_support.dart';
 import '../services/glpi_ticket_support.dart';
+import '../formcreator/formcreator_aggregate_schema.dart';
 import '../models/glpi_ticket.dart';
 import '../models/glpi_status.dart';
 import '../models/glpi_identity.dart';
@@ -567,6 +568,26 @@ class AppState extends ChangeNotifier {
 
     try {
       return await _apiService.getUserById(userId, _sessionToken!);
+    } catch (e) {
+      if (_isSessionInvalidError(e)) {
+        await _handleSessionInvalid(e);
+      }
+      rethrow;
+    }
+  }
+
+  Future<FormCreatorAggregateSchema?> loadFormCreatorAggregateSchema(
+    int formId,
+  ) async {
+    if (!_isAuthenticated || _sessionToken == null) {
+      return null;
+    }
+
+    try {
+      return await _apiService.loadFormCreatorAggregateSchema(
+        formId: formId,
+        sessionToken: _sessionToken!,
+      );
     } catch (e) {
       if (_isSessionInvalidError(e)) {
         await _handleSessionInvalid(e);

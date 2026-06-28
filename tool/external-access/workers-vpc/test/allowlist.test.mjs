@@ -154,6 +154,21 @@ test('SIS worker allows login, session close and read-only ticket endpoints', ()
   assert.equal(__test.isAllowedRequest('GET', '/Document/456'), true);
 });
 
+test('SIS worker allows read-only FormCreator condition lookup', () => {
+  assert.equal(__test.isAllowedRequest('GET', '/PluginFormcreatorCondition'), true);
+  assert.equal(__test.isAllowedRequest('GET', '/PluginFormcreatorCondition/771'), true);
+  assert.equal(
+    __test.isAllowedRequest(
+      'GET',
+      '/PluginFormcreatorCondition?searchText[itemtype]=PluginFormcreatorSection&searchText[items_id]=166',
+    ),
+    true,
+  );
+  assert.equal(__test.isAllowedRequest('POST', '/PluginFormcreatorCondition'), false);
+  assert.equal(__test.isAllowedRequest('PUT', '/PluginFormcreatorCondition/771'), false);
+  assert.equal(__test.isAllowedRequest('DELETE', '/PluginFormcreatorCondition/771'), false);
+});
+
 test('SIS worker allows app operational writes but only on known routes', () => {
   assert.equal(__test.isAllowedRequest('POST', '/Ticket'), true);
   assert.equal(__test.isAllowedRequest('POST', '/TicketFollowup'), true);
