@@ -170,6 +170,7 @@ class ServiceCatalogRepository {
     DateTime? fetchedAt,
   }) {
     final governedCatalog = GovernedServiceCatalog.fromJson(rawJson);
+    final groupLabelIndex = _buildGroupLabelIndex(governedCatalog.records);
     final recordsByService = <String, List<GovernedServiceRecord>>{};
     for (final record in governedCatalog.records) {
       for (final key in [record.serviceLabel, record.serviceId]) {
@@ -190,7 +191,7 @@ class ServiceCatalogRepository {
         for (final record in records) record.catalogRecordId: record,
       }.values.toList(growable: false);
       if (uniqueRecords.isEmpty) continue;
-      parsed.add(_mergeGovernedService(fallback, uniqueRecords));
+      parsed.add(_mergeGovernedService(fallback, uniqueRecords, groupLabelIndex));
     }
 
     if (parsed.isEmpty) {
@@ -223,6 +224,7 @@ class ServiceCatalogRepository {
     // (evita um perfil ver serviços de outro, ex.: GG vendo "Ar-Condicionado").
     if (normalizedProfile.isEmpty) return const [];
 
+    final groupLabelIndex = _buildGroupLabelIndex(catalog.records);
     final recordsByService = <String, List<GovernedServiceRecord>>{};
     for (final record in catalog.records) {
       if (!_recordVisibleForProfile(record, normalizedProfile)) continue;
@@ -252,7 +254,7 @@ class ServiceCatalogRepository {
             categoryId: representative.categoryQuestion?.rootId ?? 0,
             domainLabel: representative.expectedDomain,
           );
-      projected.add(_mergeGovernedService(fallback, records));
+      projected.add(_mergeGovernedService(fallback, records, groupLabelIndex));
     }
 
     projected.sort(
@@ -347,9 +349,50 @@ class ServiceCatalogRepository {
     );
   }
 
+  /// Mapa id-de-grupo -> label, construído a partir de TODOS os registros que
+  /// resolveram `expected_result.assignment_group` (id + label). Usado para
+  /// derivar o label de registros cujo grupo ficou nulo no catálogo.
+  static Map<int, String> _buildGroupLabelIndex(
+    Iterable<GovernedServiceRecord> records,
+  ) {
+    final index = <int, String>{};
+    for (final record in records) {
+      final group = record.expectedAssignmentGroup;
+      final id = group?.id;
+      final label = group?.label?.trim();
+      if (id != null && id > 0 && label != null && label.isNotEmpty) {
+        index.putIfAbsent(id, () => label);
+      }
+    }
+    return index;
+  }
+
+  /// Deriva o label do grupo de atribuição. Preferência: o label já resolvido
+  /// no `expected_result`. Fallback: o grupo `assigned` listado nos `actors[]`
+  /// do form, mapeado pelo índice id->label. Não inventa dado — usa o grupo que
+  /// o próprio catálogo declara no form e um label já presente em outro registro.
+  static String? _deriveAssignmentGroupLabel(
+    GovernedServiceRecord representative,
+    Map<int, String> groupLabelIndex,
+  ) {
+    final resolved = representative.expectedAssignmentGroup?.label?.trim();
+    if (resolved != null && resolved.isNotEmpty) return resolved;
+
+    for (final actor in representative.actors) {
+      if (actor.role == 'assigned' &&
+          actor.type == 'group' &&
+          actor.value != null) {
+        final label = groupLabelIndex[actor.value];
+        if (label != null && label.isNotEmpty) return label;
+      }
+    }
+    return null;
+  }
+
   static ServiceCategory _mergeGovernedService(
     ServiceCategory fallback,
     List<GovernedServiceRecord> records,
+    Map<int, String> groupLabelIndex,
   ) {
     final representative = _preferredGovernedRecord(records);
     final categoryOptions = _mergedOptions(
@@ -431,7 +474,7 @@ class ServiceCatalogRepository {
           : fallback.includeLocalizacao,
       domainLabel: representative.expectedDomain ?? fallback.domainLabel,
       assignmentGroupLabel:
-          representative.expectedAssignmentGroup?.label ??
+          _deriveAssignmentGroupLabel(representative, groupLabelIndex) ??
           fallback.assignmentGroupLabel,
       runtimeFormStatus: representative.formName,
       uiSchemaSource: 'governed_v2_records',

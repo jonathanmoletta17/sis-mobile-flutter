@@ -181,6 +181,64 @@ void main() {
     },
   );
 
+  test(
+    'derives assignment group from actors[] when expected_result group is null',
+    () {
+      // Ar-Condicionado resolve o grupo (id 22 -> CC-MANUTENCAO). Elevadores tem
+      // expected_result.assignment_group null, mas actors[] declara o grupo 22.
+      // A derivação deve mapear 22 -> "CC-MANUTENCAO" usando o índice global.
+      const governedRuntimeCatalogJson = '''
+{
+  "schema_version": "2.0-readonly-draft",
+  "consumer_id": "sis-mobile-flutter",
+  "instance": "sis",
+  "source_snapshot": {"sha256": "snapshot-derive"},
+  "records": [
+    {
+      "catalog_record_id": "sis:ar-condicionado:form-1:target-1",
+      "service_id": "ar-condicionado",
+      "service_label": "Ar-Condicionado",
+      "profile_visibility": [{"id": 9, "name": "Solicitante"}],
+      "form": {"id": 1, "name": "Ar-Condicionado"},
+      "targetticket": {"id": 1, "name": "Ar-Condicionado", "audience": "para_mim"},
+      "actors": [{"role": "assigned", "type": "group", "value": 22}],
+      "expected_result": {
+        "domain": "Manutenção",
+        "assignment_group": {"id": 22, "label": "CC-MANUTENCAO"}
+      }
+    },
+    {
+      "catalog_record_id": "sis:elevadores:form-2:target-2",
+      "service_id": "elevadores",
+      "service_label": "Elevadores",
+      "profile_visibility": [{"id": 9, "name": "Solicitante"}],
+      "form": {"id": 2, "name": "Elevadores"},
+      "targetticket": {"id": 2, "name": "Elevadores", "audience": "para_mim"},
+      "actors": [{"role": "assigned", "type": "group", "value": 22}],
+      "expected_result": {"domain": null, "assignment_group": null}
+    }
+  ]
+}
+''';
+
+      final repository = ServiceCatalogRepository.fromRuntimeCatalogJson(
+        governedRuntimeCatalogJson,
+        staticFallback: serviceCategories,
+      );
+
+      // Controle: registro resolvido mantém seu label.
+      expect(
+        repository.findByName('Ar-Condicionado')!.assignmentGroupLabel,
+        'CC-MANUTENCAO',
+      );
+      // Derivação: Elevadores (grupo nulo) deriva do actor group 22.
+      expect(
+        repository.findByName('Elevadores')!.assignmentGroupLabel,
+        'CC-MANUTENCAO',
+      );
+    },
+  );
+
   test('invalid runtime catalog falls back to static bootstrap explicitly', () {
     final repository = ServiceCatalogRepository.fromRuntimeCatalogJson(
       '{not-json',

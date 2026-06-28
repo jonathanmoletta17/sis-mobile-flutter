@@ -14,11 +14,6 @@ class ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final totalOptions = service.typeOptions.length;
-    final subtitle = totalOptions == 1
-        ? '1 tipo de atendimento'
-        : '$totalOptions tipos de atendimento';
-
     return Card(
       child: InkWell(
         borderRadius: BorderRadius.circular(AppRadius.md),
@@ -36,14 +31,8 @@ class ServiceCard extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(AppSpacing.md),
               child: useWideLayout
-                  ? _WideServiceCardContent(
-                      service: service,
-                      subtitle: subtitle,
-                    )
-                  : _CompactServiceCardContent(
-                      service: service,
-                      subtitle: subtitle,
-                    ),
+                  ? _WideServiceCardContent(service: service)
+                  : _CompactServiceCardContent(service: service),
             );
           },
         ),
@@ -54,12 +43,8 @@ class ServiceCard extends StatelessWidget {
 
 class _WideServiceCardContent extends StatelessWidget {
   final ServiceCategory service;
-  final String subtitle;
 
-  const _WideServiceCardContent({
-    required this.service,
-    required this.subtitle,
-  });
+  const _WideServiceCardContent({required this.service});
 
   @override
   Widget build(BuildContext context) {
@@ -82,15 +67,6 @@ class _WideServiceCardContent extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    subtitle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: AppColors.textMuted),
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   _ServiceGovernanceBadges(service: service),
@@ -123,12 +99,8 @@ class _WideServiceCardContent extends StatelessWidget {
 
 class _CompactServiceCardContent extends StatelessWidget {
   final ServiceCategory service;
-  final String subtitle;
 
-  const _CompactServiceCardContent({
-    required this.service,
-    required this.subtitle,
-  });
+  const _CompactServiceCardContent({required this.service});
 
   @override
   Widget build(BuildContext context) {
@@ -142,15 +114,6 @@ class _CompactServiceCardContent extends StatelessWidget {
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: AppSpacing.xs),
-        Text(
-          subtitle,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: AppColors.textMuted),
         ),
         const SizedBox(height: AppSpacing.xs),
         _ServiceGovernanceBadges(service: service),
@@ -177,43 +140,28 @@ class _ServiceGovernanceBadges extends StatelessWidget {
 
   const _ServiceGovernanceBadges({required this.service});
 
-  bool _isUsefulBadge(String label) {
-    final normalized = label.trim().toLowerCase();
-    return normalized.isNotEmpty &&
-        normalized != 'catálogo estático' &&
-        normalized != 'catalogo estatico';
-  }
-
   @override
   Widget build(BuildContext context) {
-    final chips = <String>[
-      if (_isUsefulBadge(service.domainLabel)) service.domainLabel,
-      if (service.assignmentGroupLabel != null) service.assignmentGroupLabel!,
-    ];
+    // Exibe apenas o grupo de atribuição (ex.: CC-MANUTENCAO). O domínio
+    // (ex.: "Manutenção") foi removido por ser redundante com o grupo.
+    final group = service.assignmentGroupLabel?.trim();
+    if (group == null || group.isEmpty) return const SizedBox.shrink();
 
-    if (chips.isEmpty) return const SizedBox.shrink();
-
-    return Wrap(
-      spacing: AppSpacing.xs,
-      runSpacing: AppSpacing.xs,
-      children: chips.map((chip) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: service.color.withValues(alpha: 0.10),
-            borderRadius: BorderRadius.circular(AppRadius.pill),
-          ),
-          child: Text(
-            chip,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: AppColors.textStrong,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        );
-      }).toList(),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: service.color.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+      ),
+      child: Text(
+        group,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+          color: AppColors.textStrong,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
     );
   }
 }
