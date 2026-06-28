@@ -1,6 +1,6 @@
 # Validacao Onda0 rede seguranca - estado atual
 
-Data local: 2026-06-27 22h (-03)
+Data local: 2026-06-27 23h45 (-03)
 Branch: `fix/onda0-rede-seguranca`
 Base: `ffc246c`
 Escopo: build, probes read-only contra GLPI SIS vivo, smoke visual web local e
@@ -13,6 +13,9 @@ checagem das correcoes necessarias para remover acoplamento por IDs de grupo.
 - Nenhum ticket real de usuario foi alterado.
 - Nenhum `DELETE /Ticket`, usuario, grupo ou entidade foi executado.
 - Nenhum ticket de teste foi criado nesta rodada.
+- `changeActiveProfile` foi usado apenas em sessoes da propria conta de teste,
+  para validar UI com perfis GLPI reais. Isso altera somente o contexto da
+  sessao GLPI e as sessoes foram encerradas com `killSession`.
 - `https://app.glpi.sis.rs.gov.br` nao resolveu DNS a partir desta WSL; a
   confrontacao live possivel nesta rodada foi via API GLPI direta
   `SIS_TEST_BASE_URL`.
@@ -23,14 +26,16 @@ Probe read-only via `initSession`, `getFullSession`, `getMyProfiles` e
 `killSession`:
 
 - usuario GLPI: `glpiID=2373`, `glpiname=teste`;
-- perfil ativo: `id=9`, `name=Solicitante`, `interface=helpdesk`;
-- perfis disponiveis: somente `9/Solicitante`;
-- grupos da sessao: `[12]`;
+- perfil ativo padrao: `id=9`, `name=Solicitante`, `interface=helpdesk`;
+- perfis disponiveis: `11/Manutenção e Conservação`, `9/Solicitante`,
+  `12/Solicitante-GG-Conservação`;
+- grupos da sessao: `[12, 21, 22, 49]`;
 - leitura direta `Group/21`, `Group/22`, `Group/49`: HTTP `403` para a conta de
   teste.
 
-Conclusao: a conta de teste atual nao prova cenario tecnico/co-requerente. Com
-essa credencial, ausencia de botoes tecnicos na UI e esperada e nao valida P-6.
+Conclusao: a conta de teste atual permite validar UI com perfis tecnico e GG por
+`changeActiveProfile` na propria sessao. O P-6 ainda depende de existir um ticket
+onde o usuario `2373` seja co-requerente junto de outro usuario.
 
 ## Evidencia dos grupos SIS
 
@@ -50,7 +55,7 @@ de verdade da instancia, nao regra de runtime do app.
 ## Evidencia de Meus chamados / Ticket_User
 
 Busca read-only direta em `search/Ticket` com criterio `field=4` para o usuario
-`2373` retornou HTTP `206` e `totalcount=88` tickets como requerente. Amostra
+`2373` retornou `87` tickets como requerente na varredura mais recente. Amostra
 mais recente:
 
 | Ticket | Nome | Status | `Ticket_User type=1` |
@@ -59,9 +64,15 @@ mais recente:
 | 10012 | `[TESTE-AUTOMATIZADO SIS] [E2E-CONTROLADO] APROVAR 1782413027939` | 6 | usuario `2373`, requester unico |
 | 10011 | `[TESTE-AUTOMATIZADO SIS] [E2E-CONTROLADO] MAIN 1782413027939` | 6 | usuario `2373`, requester unico; `actorsCount=2` |
 
+Varredura completa salva em
+`output/playwright/onda0-rede-seguranca/p6-multiple-requester-scan.json`:
+
+- tickets varridos: `87`;
+- `multipleRequesterMatches`: `[]`.
+
 Conclusao: a API real confirma a forma `Ticket_User type=1` para a conta de
-teste e explica a visibilidade em "Meus chamados". A amostra nao contem tecnico
-co-requerente nem multiplos requesters, portanto nao valida P-6.
+teste e explica a visibilidade em "Meus chamados". Nao existe, hoje, ticket da
+conta `2373` com multiplos requerentes para provar P-6 na UI real.
 
 ## Correcoes aplicadas no codigo
 
@@ -128,14 +139,17 @@ mas o refresh do runtime catalog falhou por CORS. Correcoes locais:
 
 | Cenario | Status | Evidencia | Observacao |
 | --- | --- | --- | --- |
-| Pull/build web | PASS | `git pull origin fix/onda0-rede-seguranca`; `/opt/flutter/bin/flutter build web` -> `Built build/web` | Build web recompilado apos as alteracoes. |
-| Smoke UI web local | PASS com divergencia de Worker publicado | screenshots `/tmp/sis-mobile-validation/artifacts/11-current-build-login.png` e `/tmp/sis-mobile-validation/artifacts/12-current-build-after-login.png` | Login com conta de teste renderizou home `Serviços`/`Meus chamados`; console confirmou CORS em `If-None-Match`, entao a UI usou catalogo em cache. |
-| P-6 tecnico co-requerente | BLOCKED | conta teste so possui perfil `9/Solicitante` e grupo `[12]`; API confirma tickets da conta como `Ticket_User type=1`, mas amostra tem requester unico | Necessita conta de teste com perfil/grupo tecnico e ticket onde ela seja co-requerente, ou ajuste reversivel da propria conta de teste aprovado explicitamente. |
-| OperationalRole/fila por grupos 21/22/49 | PASS no codigo e fonte GLPI; BLOCKED na UI live | `rg` sem IDs fixos em `lib/`; testes de role/domain/queue passam; Worker `GET /Group/{id}` confirma 21/22/49 no GLPI real | UI live tecnica nao validavel com a conta atual. |
-| GG observador sem acoes tecnicas | PASS no codigo e fonte GLPI; BLOCKED na UI live | `ticket_role_policy_test` cobre GG observador por nome; `Group/49` confirma `is_assign=0` | UI live GG nao validavel com a conta atual. |
-| Checklist catalogo target 369 | PASS read-only | GLPI bruto `PluginFormcreatorTargetTicket/369`: form `50`, nome `HIDRÁULICO 951`, `category_question=151`, `destination_entity_value=58`, `show_rule=2`; asset local mostra target como 6o item do form 50 | Submissao UI nao executada porque a conta teste nao ve checklists. |
-| Checklist submissao e ticket GLPI criado | BLOCKED | conta teste sem perfil/grupo de checklist; nenhum ticket criado | Requer perfil/grupo tecnico na conta de teste e aprovacao de mutacao sintetica. |
-| `show_rule` de sections | PASS read-only + testes | asset local: `show_rule=1 count=7`, `show_rule=2 count=18`; testes `checklist_condition_engine_test` cobrem regra 1 sempre visivel e regra 2 condicional | UI live de checklist com conta teste nao disponivel. |
+| Pull/build web | PASS | `git fetch origin fix/onda0-rede-seguranca`; branch limpa e `ahead 4`; `/opt/flutter/bin/flutter build web` -> `Built build/web` | `git pull` nao foi repetido porque ha commits locais a frente; remoto nao esta a frente apos `fetch`. |
+| `flutter run -d chrome` | PASS | `/opt/flutter/bin/flutter run -d chrome --web-hostname 127.0.0.1 --web-port 8099` | Porta 8080 ja estava ocupada por um `flutter_tool` antigo deste workspace; a instancia limpa foi aberta em 8099. |
+| Smoke UI web local | PASS com divergencia de Worker publicado | screenshots `output/playwright/onda0-rede-seguranca/03-login-current-flutter-run-8099.png`, `05-after-login-current-flutter-run-8099.png` | Login com conta de teste renderizou home `Serviços`/`Meus chamados`; console confirmou CORS em `If-None-Match`, entao a UI usou catalogo em cache. |
+| P-6 tecnico co-requerente | BLOCKED | perfil 11 real disponivel, mas scan de `87` tickets do usuario `2373` encontrou `multipleRequesterMatches=[]` | Necessita ticket sintetico seguro com outro requerente de teste ou outro dado GLPI existente. Nao foi criado/alterado ticket com usuario real. |
+| OperationalRole tecnico perfil 11 | PASS parcial na UI live | `changeActiveProfile(11)` na sessao da conta de teste; screenshots `09-home-profile-11-manutencao-conservacao-8099.png`, `10-chamados-profile-11-manutencao-conservacao-8099.png` | UI mostrou `Fila Operacional` com `107` itens. A conta tem simultaneamente grupos 21 e 22, entao nao separa manutencao vs conservacao por grupo isolado. |
+| Grupos 21/22/49 ativos no GLPI | PASS fonte GLPI | Worker `GET /Group/{id}`: 21=`CC-CONSERVACÃO`, 22=`CC-MANUTENCAO`, 49=`GG-CONSERVACAO`; direto com usuario teste segue 403 | Fonte live confirma os IDs, mas runtime do app nao classifica por ID numerico. |
+| GG observador sem acoes tecnicas | PASS na UI live | `changeActiveProfile(12)`; screenshot `12-chamados-profile-12-gg-conservacao-8099.png`; `Group/49 is_assign=0` | UI mostrou apenas `Fechado` com `3` itens, sem `Fila Operacional`, coerente com GG observador sem acoes tecnicas. |
+| Checklist catalogo target 369 | PASS UI + read-only | screenshot `07-checklists-catalog-8099.png`; GLPI bruto `PluginFormcreatorTargetTicket/369`: form `50`, nome `HIDRÁULICO 951`, `category_question=151`, `destination_entity_value=58`, `show_rule=2` | UI mostra `CHECKLIST HIDRÁULICO` e `HIDRÁULICO 951` como 6o item. |
+| Checklist formulario HIDRÁULICO 951 | PASS UI read-only | screenshot `08-checklist-hidraulico-951-form-8099.png`; `PluginFormcreatorSection/400 -> CHECKLIST HIDRÁULICO 951, show_rule=2` | Form abriu com target `Duque de Caxias 951` pre-selecionado. |
+| Checklist submissao e ticket GLPI criado | BLOCKED | `SisChecklistPreparedSubmission.toTicketInput()` gera nome `Checklist <target>` sem prefixo inicial `[TESTE-AUTOMATIZADO SIS]`; nenhum ticket criado | Submeter agora violaria a restricao de prefixo obrigatorio no ticket de teste. |
+| `show_rule` de sections | PASS UI + read-only + testes | `Section/350 Dados Gerais show_rule=1` aparece no formulario; `Section/400 CHECKLIST HIDRÁULICO 951 show_rule=2` aparece quando target 369 e selecionado; asset local: `show_rule=1 count=7`, `show_rule=2 count=18` | Testes `checklist_condition_engine_test` cobrem regra 1 sempre visivel e regra 2 condicional. |
 
 ## Evidencia GLPI checklist
 
@@ -150,6 +164,7 @@ PluginFormcreatorTargetTicket/369 raw:
   destination_entity=7
   destination_entity_value=58
   show_rule=2
+PluginFormcreatorSection/350 -> Dados Gerais, show_rule=1
 PluginFormcreatorSection/400 -> CHECKLIST HIDRÁULICO 951, show_rule=2
 ```
 
@@ -173,16 +188,20 @@ IDs para limpeza manual posterior: nenhum.
 
 ## Divergencias e bloqueios
 
-1. Conta de teste atual e apenas `Solicitante`. Isso bloqueia validacao real de
-   P-6 tecnico/co-requerente, filas tecnicas 21/22, GG observador e submissao de
-   checklist por tecnico.
-2. `https://app.glpi.sis.rs.gov.br` nao resolve DNS nesta WSL. A validacao Web
+1. Nao ha ticket atual da conta `2373` com multiplos requerentes. Isso bloqueia
+   a validacao P-6 real sem criar/alterar ticket envolvendo outro usuario.
+2. A conta de teste possui grupos 21 e 22 simultaneamente. Isso valida o fluxo
+   tecnico hibrido na UI, mas nao isola manutencao versus conservacao sem mudar
+   a configuracao da propria conta.
+3. A submissao de checklist real esta bloqueada por seguranca: o nome gerado
+   pelo fluxo atual nao comeca com `[TESTE-AUTOMATIZADO SIS]`.
+4. `https://app.glpi.sis.rs.gov.br` nao resolve DNS nesta WSL. A validacao Web
    Admin existente em `docs/glpi/VALIDACAO_GLPI_LIVE_2026-06-27.md` permanece
    historica; esta rodada usou API direta e Worker read-only como fonte live.
-3. Worker publicado ainda bloqueia `If-None-Match` no preflight do catalogo
+5. Worker publicado ainda bloqueia `If-None-Match` no preflight do catalogo
    metadata. A correcao esta no worktree, mas precisa ser publicada no Worker.
-4. A ausencia de botoes tecnicos com a conta `Solicitante` nao deve ser usada
-   como evidencia de P-6.
+6. A ausencia de botoes tecnicos com a conta no perfil `Solicitante` nao deve
+   ser usada como evidencia de P-6.
 
 ## Commits necessarios
 
