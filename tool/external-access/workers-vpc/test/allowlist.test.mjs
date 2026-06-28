@@ -27,6 +27,24 @@ test('SIS worker answers browser CORS preflight for JSON login', async () => {
   assert.match(response.headers.get('Access-Control-Allow-Methods'), /POST/);
 });
 
+test('SIS worker allows metadata ETag preflight headers', async () => {
+  const response = await __test.fetch(
+    new Request('https://example.test/metadata/mobile/sis/catalog', {
+      method: 'OPTIONS',
+      headers: {
+        Origin: 'http://127.0.0.1:8081',
+        'Access-Control-Request-Method': 'GET',
+        'Access-Control-Request-Headers': 'if-none-match',
+      },
+    }),
+    {},
+  );
+
+  assert.equal(response.status, 204);
+  assert.match(response.headers.get('Access-Control-Allow-Headers'), /If-None-Match/);
+  assert.match(response.headers.get('Access-Control-Allow-Methods'), /GET/);
+});
+
 test('SIS worker serves mobile metadata catalog read-only without VPC binding', async () => {
   const response = await __test.fetch(
     new Request('https://example.test/metadata/mobile/sis/catalog', {method: 'GET'}),

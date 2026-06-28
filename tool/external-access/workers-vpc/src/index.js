@@ -292,7 +292,7 @@ function withCors(response) {
   headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
   headers.set(
     'Access-Control-Allow-Headers',
-    'Accept, Authorization, Content-Type, App-Token, Session-Token',
+    'Accept, Authorization, Content-Type, App-Token, Session-Token, If-None-Match',
   );
   headers.set('Access-Control-Expose-Headers', 'Content-Range, Accept-Range, ETag, X-GLPI-Snapshot-Hash, X-Consumer-Id');
   headers.set('Vary', 'Origin');
