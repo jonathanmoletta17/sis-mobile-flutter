@@ -2198,6 +2198,7 @@ class GlpiClient {
         catalog: catalog,
         formName: formName,
         targetName: targetName,
+        ticketNamePrefix: GlpiConfig.sisChecklistTicketNamePrefix,
       );
       final response = await http
           .post(

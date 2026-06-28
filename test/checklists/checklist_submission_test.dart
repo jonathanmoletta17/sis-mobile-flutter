@@ -311,6 +311,24 @@ void main() {
     expect(input['name'], 'Checklist HIDRAULICO ALA RESIDENCIAL');
   });
 
+  test('toTicketInput aplica prefixo opcional de validacao no nome', () {
+    final result = _preparer().prepare(
+      formId: 50,
+      targetId: 341,
+      answers: {0: 'PREVENTIVA', 1: 'A'},
+    );
+    final input = result.toTicketInput(
+      catalog: _catalog(),
+      targetName: 'HIDRAULICO ALA RESIDENCIAL',
+      ticketNamePrefix: '[TESTE-AUTOMATIZADO SIS]',
+    );
+
+    expect(
+      input['name'],
+      '[TESTE-AUTOMATIZADO SIS] Checklist HIDRAULICO ALA RESIDENCIAL',
+    );
+  });
+
   test('glpiselect nao bloqueia review (campo nao obrigatorio)', () {
     // Q4 "Checklist Programada" e opcional — form pode ser revisado sem ela
     final result = _preparer().prepare(

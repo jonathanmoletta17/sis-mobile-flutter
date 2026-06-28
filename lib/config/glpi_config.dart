@@ -2,6 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GlpiConfig {
+  static const String _checklistSubmissionDefine = String.fromEnvironment(
+    'SIS_ENABLE_CHECKLISTS_SUBMISSION',
+  );
+  static const String _checklistTicketNamePrefixDefine = String.fromEnvironment(
+    'SIS_CHECKLIST_TICKET_NAME_PREFIX',
+  );
+
   /// URL base da API GLPI (com /apirest.php incluído)
   static String get baseUrl {
     final url =
@@ -50,7 +57,17 @@ class GlpiConfig {
   /// Default desligado; so executa de fato quando o Worker tambem permite
   /// (`ALLOW_FORMCREATOR_SUBMISSION=true` no Worker) e em ambiente autorizado.
   static bool get sisChecklistSubmissionEnabled =>
-      _flag('SIS_ENABLE_CHECKLISTS_SUBMISSION');
+      _flag('SIS_ENABLE_CHECKLISTS_SUBMISSION') ||
+      _isTruthy(_checklistSubmissionDefine);
+
+  /// Prefixo opcional para rodadas mutaveis de validacao. Em producao fica
+  /// vazio; em teste controlado pode ser `[TESTE-AUTOMATIZADO SIS]`.
+  static String get sisChecklistTicketNamePrefix {
+    final raw =
+        _env('SIS_CHECKLIST_TICKET_NAME_PREFIX') ??
+        _checklistTicketNamePrefixDefine;
+    return raw.trim();
+  }
 
   static String? _env(String key) {
     if (!dotenv.isInitialized) return null;
@@ -60,6 +77,10 @@ class GlpiConfig {
   static bool _flag(String key) {
     final raw = _env(key);
     if (raw == null) return false;
+    return _isTruthy(raw);
+  }
+
+  static bool _isTruthy(String raw) {
     final normalized = raw.trim().toLowerCase();
     return normalized == 'true' || normalized == '1' || normalized == 'yes';
   }

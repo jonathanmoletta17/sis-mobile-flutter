@@ -93,12 +93,19 @@ class SisChecklistPreparedSubmission {
     required SisChecklistCatalog catalog,
     String? formName,
     String? targetName,
+    String? ticketNamePrefix,
   }) {
     final baseName = targetName != null
         ? 'Checklist $targetName'
         : 'Checklist SIS';
     final programada = _findProgramadaAnswer(catalog);
-    final name = programada.isNotEmpty ? '$baseName - $programada' : baseName;
+    final rawName = programada.isNotEmpty
+        ? '$baseName - $programada'
+        : baseName;
+    final prefix = ticketNamePrefix?.trim() ?? '';
+    final name = prefix.isEmpty || rawName.startsWith(prefix)
+        ? rawName
+        : '$prefix $rawName';
     return {
       'name': name,
       'content': toTicketContent(

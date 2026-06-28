@@ -25,4 +25,20 @@ void main() {
     );
     expect(GlpiConfig.sisChecklistSubmissionEnabled, isFalse);
   });
+
+  test('checklist ticket name prefix defaults to empty', () {
+    dotenv.testLoad(mergeWith: const <String, String>{});
+
+    expect(GlpiConfig.sisChecklistTicketNamePrefix, isEmpty);
+  });
+
+  test('checklist ticket name prefix reads env value', () {
+    dotenv.testLoad(
+      mergeWith: const <String, String>{
+        'SIS_CHECKLIST_TICKET_NAME_PREFIX': '[TESTE-AUTOMATIZADO SIS]',
+      },
+    );
+
+    expect(GlpiConfig.sisChecklistTicketNamePrefix, '[TESTE-AUTOMATIZADO SIS]');
+  });
 }
