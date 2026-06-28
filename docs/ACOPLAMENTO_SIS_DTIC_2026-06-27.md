@@ -2,7 +2,9 @@
 
 Data: 2026-06-27  
 Branch: `fix/onda0-rede-seguranca`  
-Contexto: refatoração de testes para eliminar IDs hardcoded (21/22/49) e preparar para integração agnóstica de múltiplas instâncias GLPI.
+Contexto: refatoração para eliminar IDs hardcoded (21/22/49) do runtime e
+preparar integração agnóstica de múltiplas instâncias GLPI. Fixtures de teste
+podem continuar registrando IDs reais da SIS, mas não como regra de runtime.
 
 ---
 
@@ -35,50 +37,63 @@ lib/
 
 → **Conclusão:** esses componentes são reutilizáveis porque não assumem IDs/perfis específicos.
 
-### 1.2 Acoplamento problemático (documentado)
+### 1.2 Acoplamento problemático original (corrigido no runtime)
 
 | Arquivo | Código | Problema | Impacto |
 |---|---|---|---|
-| `lib/models/ticket_domain.dart` | `resolve()` usa `group.id in {21, 22, 49}` | IDs cravados da SIS | DTIC falha se grupos tiverem IDs diferentes |
-| `lib/models/operational_role.dart` | `OperationalRoleResolver.conservationGroupId = 21` | Constantes estáticas | Mesmo problema |
-| `lib/policy/permission_service.dart` | Usa `OperationalRoleResolver` | Depende de OperationalRole.resolve() | Transitivo |
-| Testes (`test/ticket_domain_test.dart`, etc.) | Hardcodam `21`, `22`, `49` | Não refletem dinâmica | Falham em DTIC; não guiam refatoração |
+| `lib/models/ticket_domain.dart` | antes inferia domínio por `group.id in {21, 22, 49}` | IDs cravados da SIS | Corrigido: usa `GlpiGroupSemantics` por nome de grupo |
+| `lib/models/operational_role.dart` | antes tinha constantes estáticas `21/22/49` | Mesmo problema | Corrigido: role técnico depende de semântica do nome do grupo |
+| `lib/policy/permission_service.dart` | dependia da resolução acima | Transitivo | Corrigido junto com role/domain |
+| Testes (`test/ticket_domain_test.dart`, etc.) | antes aceitavam `21`, `22`, `49` como prova suficiente | Não guiavam portabilidade | Corrigido: testes garantem que ID numérico isolado não classifica |
 
 ---
 
 ## 2. Por que isso importa
 
-### 2.1 O aplicativo é agnóstico, mas os testes não
+### 2.1 Risco original: o aplicativo parecia dinâmico, mas dependia de IDs
 
-**App:**
+**Antes:**
 ```dart
-// lib/models/ticket_domain.dart — resolve() lê grupos dinamicamente
 final groupIds = groups.map((g) => g.id).toSet();
 final hasConservation = groupIds.contains(21); // ← problema aqui
 ```
 
-**Testes (antes):**
+**Agora:**
 ```dart
-// test/ticket_domain_test.dart
-final groups = [GlpiGroupRef(id: 21, name: 'CC-Conservação')]; // ← hardcoded
-expect(TicketDomain.resolve(...groups...), equals(TicketDomain.conservation));
+final hasConservation = groups.any(GlpiGroupSemantics.isConservation);
 ```
 
-**Problema:** testes passam na SIS (grupo 21 existe), falham em DTIC (grupo 21 não existe).
+**Decisão atual:** IDs SIS podem existir em fixtures de teste e documentação de
+fonte da verdade da instância, mas não podem ser a regra de classificação do
+runtime.
 
-### 2.2 Efeito cascata
+### 2.2 Efeito cascata original, agora evitado
 
-1. DTIC herda `OperationalRole` com `conservationGroupId = 21`
-2. Servidor DTIC retorna `glpigroups = [id: 105, name: 'DTIC-Conservação']`
-3. App tenta `groupIds.contains(21)` → não acha → role = `unknown`
-4. Telas técnicas ficam invisíveis
-5. Usuário DTIC vê só "Meus Chamados"
+1. DTIC herdaria `OperationalRole` com uma constante numerica da SIS.
+2. Servidor DTIC retornaria `glpigroups = [id: 105, name: 'DTIC-Conservação']`.
+3. App tentaria `groupIds.contains(21)` -> não acharia -> role = `unknown`.
+4. Telas técnicas ficariam invisíveis.
+5. Usuário DTIC veria só "Meus Chamados".
 
 ---
 
 ## 3. Refatoração — o que foi feito
 
-### 3.1 Fixtures dinâmicas (source of truth)
+### 3.1 Semântica de grupo no runtime
+
+Foi criada a classe `GlpiGroupSemantics`, que classifica grupos por nome
+normalizado:
+
+- `CC-MANUTENCAO` -> manutenção;
+- `CC-CONSERVACAO` -> conservação;
+- `GG-CONSERVACAO` -> observador GG;
+- nome vazio/desconhecido -> `unknown`.
+
+Com isso, os IDs reais da SIS deixam de ser regra de runtime. Testes novos
+garantem que `id=21`, `id=22` ou `id=49` sem nome de grupo não classificam
+papel, domínio ou fila.
+
+### 3.2 Fixtures dinâmicas (source of truth de teste)
 
 Criamos **`test/fixtures/sis_instance_groups.dart`** e **`test/fixtures/dtic_instance_groups.dart`**:
 
@@ -95,9 +110,11 @@ const int sisGgConservationGroupId = 49;
 // const int dticConservationGroupId = ???;
 ```
 
-**Benefício:** um lugar para atualizar IDs. Quando SIS muda (grupo 21 → 23), atualizamos a fixture e todos os testes refletem.
+**Uso correto:** fixtures registram os IDs reais da instância SIS para testes que
+precisam representar dados GLPI vivos. Elas não são mais usadas como regra de
+classificação do app.
 
-### 3.2 Testes refatorados
+### 3.3 Testes refatorados
 
 Eliminamos 11 literais (`21`, `22`, `49`) de 4 arquivos de teste:
 
@@ -108,52 +125,32 @@ Eliminamos 11 literais (`21`, `22`, `49`) de 4 arquivos de teste:
 | `test/ticket_queue_filter_test.dart` | `22` hardcoded | `sisMaintenanceGroupId` |
 | `test/app_state_operational_new_queue_test.dart` | `49` hardcoded | `sisGgConservationGroupId` |
 
-**Benefício:** intenção clara (semântica, não número) + centralizado + fácil de refatorar para DTIC.
+**Benefício:** intenção clara e cobertura contra regressão de ID fixo.
 
 ---
 
 ## 4. Proposta: InstanceConfig (Onda futura)
 
-Para eliminar completamente o acoplamento, propõe-se **injetar a configuração da instância**:
+Para contratos que ainda sejam de instância, ainda pode fazer sentido injetar
+configuração. Para grupos técnicos, a regra atual preferida é semântica por nome
+de grupo, não ID numérico.
 
 ```dart
 /// lib/config/instance_config.dart
 abstract class InstanceConfig {
   String get baseUrl;
-  int get conservationGroupId;
-  int get maintenanceGroupId;
-  int get ggConservationGroupId;
-  // ... outros configs
-}
-
-/// lib/config/sis_instance_config.dart
-class SisInstanceConfig implements InstanceConfig {
-  @override
-  int get conservationGroupId => 21;
-  // ...
-}
-
-/// lib/config/dtic_instance_config.dart
-class DticInstanceConfig implements InstanceConfig {
-  @override
-  int get conservationGroupId => 105; // diferente!
-  // ...
-}
-
-/// lib/main.dart ou lib/dtic/dtic_main.dart
-void main() {
-  final config = Environment.isDtic ? DticInstanceConfig() : SisInstanceConfig();
-  runApp(MyApp(instanceConfig: config));
+  // Ex.: flags, capacidades, manifests e contratos de catalogo.
 }
 ```
 
 **Vantagens:**
-- Zero hardcodes no código de produção
+- Zero hardcodes de grupos no código de produção
 - Ambas as instâncias usam a mesma lógica
 - Testes usam configs mock (`MockInstanceConfig`)
 - Fácil adicionar 3ª, 4ª instância
 
-**Investimento:** médio (refatorar `TicketDomain`, `OperationalRole`, `PermissionService` para receber injeção).
+**Investimento:** depende dos demais contratos de instância; para grupos
+operacionais, a refatoração já foi aplicada por `GlpiGroupSemantics`.
 
 ---
 
@@ -163,11 +160,11 @@ void main() {
 ✅ Fixtures criadas  
 ✅ 11 literais eliminados de testes  
 ✅ Intenção semântica clara  
+✅ Runtime sem classificação por IDs fixos `21/22/49`
 
 ### 5.2 Onda futura
-- [ ] Implementar `InstanceConfig` injetável
-- [ ] Remover constantes estáticas de `OperationalRole` / `TicketDomain`
-- [ ] Mapear IDs da instância DTIC e popular `dtic_instance_groups.dart`
+- [ ] Implementar `InstanceConfig` injetável para contratos que ainda forem de instância
+- [ ] Mapear IDs da instância DTIC e popular `dtic_instance_groups.dart` apenas para testes de dados vivos
 - [ ] Validar contra GLPI DTIC ao vivo
 
 ---
@@ -176,11 +173,11 @@ void main() {
 
 | Item | Ação |
 |---|---|
-| **IDs de grupo mudam** | Atualize `test/fixtures/sis_instance_groups.dart` (um arquivo, criptografia central) |
-| **DTIC ganha IDs** | Preencha `test/fixtures/dtic_instance_groups.dart` e implemente `InstanceConfig` |
-| **App continua agnóstico** | Sim — `TicketDomain.resolve()` lê `groups` dinamicamente, nunca hardcoda |
+| **IDs de grupo mudam** | Atualize fixtures/testes que representam a instância, mas o runtime deve continuar por nome/semântica |
+| **DTIC ganha IDs** | Preencha `test/fixtures/dtic_instance_groups.dart` apenas para testes de dados vivos |
+| **App continua agnóstico** | Sim — `TicketDomain.resolve()` e `OperationalRoleResolver` leem `groups` dinamicamente por nome/semântica |
 | **Testes refletem mudanças** | Sim — fixtures são source of truth |
-| **Novo app (3ª instância)** | Criar `novo_instance_groups.dart`, estender `InstanceConfig`, pronto |
+| **Novo app (3ª instância)** | Criar fixtures se houver testes com dados vivos, manter classificação por semântica de grupo e estender `InstanceConfig` só para contratos realmente de instância |
 
 ---
 
@@ -188,6 +185,7 @@ void main() {
 
 - [[consolidacao-p1-p5-roadmap]] — princípios de governança GLPI
 - [[dtic_conceptual_model]] — modelo conceitual extraído do SIS para DTIC
-- `lib/models/operational_role.dart` (constantes a refatorar)
+- `lib/models/glpi_group_semantics.dart` (semântica de grupo)
+- `lib/models/operational_role.dart` (resolução de papel)
 - `lib/models/ticket_domain.dart` (lógica de domínio)
 - `test/fixtures/sis_instance_groups.dart` (nova fixture)
