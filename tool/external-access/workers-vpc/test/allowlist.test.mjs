@@ -166,6 +166,13 @@ test('SIS worker allows app operational writes but only on known routes', () => 
   assert.equal(__test.isAllowedRequest('PUT', '/ITILSolution/123'), true);
 });
 
+test('SIS worker allows session profile switching for the user', () => {
+  // getMyProfiles (GET) via padrão read-only; changeActiveProfile (POST) na
+  // sessão do próprio usuário — operação de sessão, não-destrutiva.
+  assert.equal(__test.isAllowedRequest('GET', '/getMyProfiles'), true);
+  assert.equal(__test.isAllowedRequest('POST', '/changeActiveProfile'), true);
+});
+
 test('SIS worker blocks destructive and orphan-prone routes', () => {
   assert.equal(__test.isAllowedRequest('DELETE', '/Ticket/123'), false);
   assert.equal(__test.isAllowedRequest('DELETE', '/Document/6530'), false);

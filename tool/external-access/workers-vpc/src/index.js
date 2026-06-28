@@ -21,6 +21,10 @@ const POST_ALLOWLIST = new Set([
   '/TicketFollowup',
   '/ITILSolution',
   '/Ticket_User',
+  // Troca de perfil ativo da PRÓPRIA sessão do usuário (Session-Token repassado).
+  // Operação de sessão, não-destrutiva: o usuário alterna entre os perfis que já
+  // lhe são atribuídos no GLPI. Distinto da chamada interna de serviço do Worker.
+  '/changeActiveProfile',
 ]);
 const GET_ALLOWLIST = new Set(['/killSession']);
 const SIS_ACTION_POST_PATTERNS = [
