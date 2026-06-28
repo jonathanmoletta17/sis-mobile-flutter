@@ -107,17 +107,39 @@ class GlpiRulesClient {
   }
 
   // ---- SearchOptions: "meus chamados" ----
-  /// Campos de ator (OR) para a busca de "meus chamados".
-  /// Devem vir do contrato governado; sem contrato, não inventa fallback.
+  /// Campos de ator (OR) de PROTOCOLO do GLPI core para a busca de "meus
+  /// chamados": requerente(4), autor/recipient(22), observador(66). São
+  /// SearchOptions do próprio GLPI (iguais em qualquer instância — SIS, DTIC),
+  /// NÃO config de instância. Por isso é seguro mantê-los como fallback de
+  /// protocolo, distinto dos IDs de grupo (21/22/49) que são config de instância
+  /// e NÃO podem ser cravados (ver .claude/rules/no-hardcode-glpi.md).
+  static const List<int> protocolActorFields = [4, 22, 66];
+
+  /// Campos de ator (OR) para a busca de "meus chamados". Prefere o contrato
+  /// governado (asset); na ausência da chave, cai no protocolo do GLPI core em
+  /// vez de quebrar — "Meus Chamados" nunca deve falhar por contrato incompleto.
   List<int> get myTicketsActorFields {
+    final crit = _searchOptions['my_tickets_criteria'];
+    if (crit is Map && crit['fields_or'] is List) {
+      final fromContract = (crit['fields_or'] as List)
+          .map((e) => (e as num).toInt())
+          .where((field) => field > 0)
+          .toList();
+      if (fromContract.isNotEmpty) return fromContract;
+    }
+    return protocolActorFields;
+  }
+
+  /// Indica se os campos de ator vieram do contrato (asset) ou do fallback de
+  /// protocolo. Usado para registrar aviso quando o contrato está incompleto.
+  bool get hasContractActorFields {
     final crit = _searchOptions['my_tickets_criteria'];
     if (crit is Map && crit['fields_or'] is List) {
       return (crit['fields_or'] as List)
           .map((e) => (e as num).toInt())
-          .where((field) => field > 0)
-          .toList();
+          .any((field) => field > 0);
     }
-    return const [];
+    return false;
   }
 
   // ---- FormCreator ----

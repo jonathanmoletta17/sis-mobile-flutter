@@ -314,15 +314,15 @@ class GlpiClientSupport {
     }
 
     final params = <String, String>{};
-    final actorFields = actorFieldIds
-        .where((field) => field > 0)
-        .map((field) => field.toString())
-        .toList(growable: false);
-    if (actorFields.isEmpty) {
-      throw ArgumentError(
-        'actorFieldIds must be provided from the governed GLPI contract',
-      );
-    }
+    // Campos de ator de PROTOCOLO do GLPI core (requerente/autor/observador),
+    // iguais em qualquer instância. Fallback quando o chamador não fornece os
+    // campos do contrato — nunca deixa a busca sem critério de ator.
+    const protocolActorFields = [4, 22, 66];
+    final resolvedFieldIds = actorFieldIds.where((field) => field > 0).toList();
+    final actorFields =
+        (resolvedFieldIds.isNotEmpty ? resolvedFieldIds : protocolActorFields)
+            .map((field) => field.toString())
+            .toList(growable: false);
 
     if (hasId) {
       for (var i = 0; i < actorFields.length; i++) {

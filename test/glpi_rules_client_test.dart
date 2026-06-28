@@ -49,8 +49,25 @@ void main() {
       expect(rules.myTicketsActorFields, <int>[4, 22, 66]);
     });
 
+    test('asset real tem os campos de ator no contrato', () {
+      expect(rules.hasContractActorFields, isTrue);
+    });
+
     test('catálogo de formulários não vazio', () {
       expect(rules.formCatalog, isNotEmpty);
+    });
+  });
+
+  group('GlpiRulesClient sem contrato carregado (fallback de protocolo)', () {
+    test('cai nos campos de protocolo do GLPI core, não quebra', () {
+      // Instância sem load() = contrato ausente/incompleto. "Meus Chamados" não
+      // pode quebrar: usa os SearchOptions de protocolo [4,22,66] (iguais em
+      // qualquer instância GLPI), distintos de config de instância.
+      final empty = GlpiRulesClient();
+
+      expect(empty.hasContractActorFields, isFalse);
+      expect(empty.myTicketsActorFields, GlpiRulesClient.protocolActorFields);
+      expect(empty.myTicketsActorFields, <int>[4, 22, 66]);
     });
   });
 }

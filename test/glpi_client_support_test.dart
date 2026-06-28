@@ -39,15 +39,20 @@ void main() {
       },
     );
 
-    test('requires actor fields from governed contract', () {
-      expect(
-        () => GlpiClientSupport.buildRequesterTicketSearchUri(
-          'https://sis.example/apirest.php',
-          requesterUserId: 2373,
-          requesterUsername: 'gabriel-conceicao',
-        ),
-        throwsArgumentError,
+    test('falls back to GLPI core protocol actor fields when none provided', () {
+      // [4,22,66] são SearchOptions de protocolo do GLPI core (requerente/autor/
+      // observador), iguais em qualquer instância — não config de instância. Sem
+      // campos do contrato, a busca usa o protocolo em vez de quebrar.
+      final uri = GlpiClientSupport.buildRequesterTicketSearchUri(
+        'https://sis.example/apirest.php',
+        requesterUserId: 2373,
+        requesterUsername: 'gabriel-conceicao',
       );
+
+      expect(uri.queryParameters['criteria[0][field]'], '4');
+      expect(uri.queryParameters['criteria[0][value]'], '2373');
+      expect(uri.queryParameters['criteria[1][field]'], '22');
+      expect(uri.queryParameters['criteria[2][field]'], '66');
     });
   });
 

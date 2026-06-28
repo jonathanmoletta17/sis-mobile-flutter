@@ -616,9 +616,10 @@ class AppState extends ChangeNotifier {
         }
 
         final actorFieldIds = _rulesClient.myTicketsActorFields;
-        if (actorFieldIds.isEmpty) {
-          throw StateError(
-            'Contrato GLPI sem search_options.my_tickets_criteria.fields_or',
+        if (!_rulesClient.hasContractActorFields) {
+          debugPrint(
+            'AVISO: contrato GLPI sem search_options.my_tickets_criteria.fields_or; '
+            'usando campos de protocolo do GLPI core $actorFieldIds para "Meus Chamados".',
           );
         }
 
