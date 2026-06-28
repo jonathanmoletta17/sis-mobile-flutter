@@ -46,6 +46,10 @@ class AppState extends ChangeNotifier {
   String? _selectedTicketEntityName;
   List<Map<String, dynamic>> _availableEntities = const [];
 
+  // --- Perfis disponíveis (troca de perfil ativo) ---
+  List<Map<String, dynamic>> _availableProfiles = const [];
+  bool _isSwitchingProfile = false;
+
   // --- Estado de Tickets Offline ---
   List<GlpiTicket> _pendingTickets = [];
 
@@ -60,6 +64,10 @@ class AppState extends ChangeNotifier {
   int? get activeProfileId => _activeProfileId;
   GlpiRulesClient get rulesClient => _rulesClient;
   List<GlpiGroupRef> get groups => List.unmodifiable(_groups);
+  List<Map<String, dynamic>> get availableProfiles =>
+      List.unmodifiable(_availableProfiles);
+  bool get isSwitchingProfile => _isSwitchingProfile;
+  bool get canSwitchProfile => _availableProfiles.length > 1;
   int? get activeEntityId => _activeEntityId;
   String? get activeEntityName => _activeEntityName;
   int? get selectedTicketEntityId => _selectedTicketEntityId;
@@ -270,6 +278,7 @@ class AppState extends ChangeNotifier {
         _isAuthenticated = true;
         _applySessionContext(sessionContext, fallbackUsername: _loggedUsername);
         await _tryLoadRules();
+        unawaited(_loadAvailableProfiles());
         unawaited(loadChecklistCatalog());
         _reconcileSelectedTicketEntity(
           preferredId: snapshot.selectedTicketEntityId,
@@ -326,6 +335,7 @@ class AppState extends ChangeNotifier {
     _activeProfile = null;
     _activeProfileId = null;
     _groups = const [];
+    _availableProfiles = const [];
     _activeEntityId = null;
     _activeEntityName = null;
     _defaultEntityId = null;
@@ -413,6 +423,7 @@ class AppState extends ChangeNotifier {
         _reconcileSelectedTicketEntity();
         _isAuthenticated = true;
         await _tryLoadRules();
+        unawaited(_loadAvailableProfiles());
 
         await AppStateStorage.saveSessionSnapshot(
           sessionToken: token,
@@ -457,6 +468,7 @@ class AppState extends ChangeNotifier {
     _activeProfile = null;
     _activeProfileId = null;
     _groups = const [];
+    _availableProfiles = const [];
     _activeEntityId = null;
     _activeEntityName = null;
     _defaultEntityId = null;
@@ -1225,6 +1237,54 @@ class AppState extends ChangeNotifier {
             .map((entity) => Map<String, dynamic>.from(entity))
             .toList();
     _availableEntities = entities;
+  }
+
+  /// Carrega os perfis atribuídos ao usuário (para o seletor de troca de perfil).
+  /// Fail-safe: nunca lança para a UI; em erro, mantém a lista anterior.
+  Future<void> _loadAvailableProfiles() async {
+    final token = _sessionToken;
+    if (token == null || token.isEmpty) return;
+    try {
+      _availableProfiles = await _apiService.getMyProfiles(token);
+    } catch (e) {
+      debugPrint('Falha ao carregar perfis disponíveis: $e');
+    }
+  }
+
+  /// Troca o perfil ativo da sessão para [profilesId], recarrega o contexto
+  /// (perfil/grupos/entidade ativa) e re-busca os tickets. Operação de sessão,
+  /// não-destrutiva, sobre os perfis já atribuídos ao usuário.
+  Future<bool> switchActiveProfile(int profilesId) async {
+    final token = _sessionToken;
+    if (token == null || token.isEmpty) return false;
+    if (profilesId <= 0 || profilesId == _activeProfileId) return false;
+
+    _isSwitchingProfile = true;
+    notifyListeners();
+    try {
+      await _apiService.changeActiveProfile(token, profilesId);
+      final sessionContext = await _apiService.getSessionContext(token);
+      _applySessionContext(sessionContext, fallbackUsername: _loggedUsername);
+      _reconcileSelectedTicketEntity();
+
+      await AppStateStorage.saveSessionSnapshot(
+        sessionToken: token,
+        loggedUsername: _loggedUsername ?? '',
+        activeProfile: _activeProfile,
+        activeEntityId: _activeEntityId,
+        activeEntityName: _activeEntityName,
+        defaultEntityId: _defaultEntityId,
+        selectedTicketEntityId: _selectedTicketEntityId,
+        selectedTicketEntityName: _selectedTicketEntityName,
+      );
+      return true;
+    } catch (e) {
+      debugPrint('❌ Falha ao trocar perfil ativo: $e');
+      return false;
+    } finally {
+      _isSwitchingProfile = false;
+      notifyListeners();
+    }
   }
 
   Map<String, dynamic> _stampEntityContext(Map<String, dynamic> formData) {

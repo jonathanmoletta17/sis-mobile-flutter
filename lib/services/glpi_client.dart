@@ -247,6 +247,74 @@ class GlpiClient {
   }
 
   // ====================================================================
+  // PERFIS (troca de perfil ativo da própria sessão)
+  // ====================================================================
+
+  /// Lista os perfis atribuídos ao usuário autenticado (GET /getMyProfiles).
+  /// Retorna [{id, name}], ordem preservada do GLPI. Read-only.
+  Future<List<Map<String, dynamic>>> getMyProfiles(String sessionToken) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+    };
+    final uri = Uri.parse('${GlpiConfig.baseUrl}/getMyProfiles');
+    final response = await http
+        .get(uri, headers: headers)
+        .timeout(GlpiConfig.requestTimeout);
+    _logResponse('GET_MY_PROFILES', response);
+
+    if (_isAuthError(response.statusCode)) throw _authException(response);
+    if (response.statusCode != 200) {
+      throw Exception(
+        'Erro ao listar perfis: ${response.statusCode} - ${response.body}',
+      );
+    }
+
+    final data = jsonDecode(response.body);
+    final raw = data is Map ? data['myprofiles'] : data;
+    final profiles = <Map<String, dynamic>>[];
+    if (raw is List) {
+      for (final entry in raw) {
+        if (entry is! Map) continue;
+        final id = int.tryParse('${entry['id'] ?? ''}');
+        final name = entry['name']?.toString().trim();
+        if (id == null || id <= 0 || name == null || name.isEmpty) continue;
+        profiles.add({'id': id, 'name': name});
+      }
+    }
+    return profiles;
+  }
+
+  /// Troca o perfil ativo da PRÓPRIA sessão (POST /changeActiveProfile).
+  /// Operação de sessão, não-destrutiva: o usuário alterna entre perfis que já
+  /// lhe são atribuídos. Após a troca, o chamador deve recarregar o contexto
+  /// (getSessionContext) pois perfil/grupos/entidade ativa mudam.
+  Future<void> changeActiveProfile(
+    String sessionToken,
+    int profilesId,
+  ) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      if (sessionToken.isNotEmpty) 'Session-Token': sessionToken,
+    };
+    final uri = Uri.parse('${GlpiConfig.baseUrl}/changeActiveProfile');
+    final response = await http
+        .post(uri, headers: headers, body: jsonEncode({'profiles_id': profilesId}))
+        .timeout(GlpiConfig.requestTimeout);
+    _logResponse('CHANGE_ACTIVE_PROFILE', response);
+
+    if (_isAuthError(response.statusCode)) throw _authException(response);
+    // GLPI responde 200/204 sem corpo significativo em sucesso.
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception(
+        'Erro ao trocar perfil: ${response.statusCode} - ${response.body}',
+      );
+    }
+  }
+
+  // ====================================================================
   // MÉTODOS QUE O APP PRECISA (categorias/tickets/status)
   // ====================================================================
 

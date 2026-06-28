@@ -120,6 +120,48 @@ class SisShellDrawer extends StatelessWidget {
               ),
             ),
             const SizedBox(height: AppSpacing.sm),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(AppSpacing.md),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceMuted,
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  border: Border.all(color: AppColors.border),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Perfil ativo',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      appState.activeProfile ?? 'Não definido',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textMuted,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    if (appState.canSwitchProfile)
+                      OutlinedButton.icon(
+                        onPressed: appState.isSwitchingProfile
+                            ? null
+                            : () => _showProfileSelector(context, appState),
+                        icon: const Icon(Icons.badge_outlined),
+                        label: Text(
+                          appState.isSwitchingProfile
+                              ? 'Trocando…'
+                              : 'Trocar perfil',
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.sm),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
@@ -161,6 +203,71 @@ class SisShellDrawer extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showProfileSelector(
+    BuildContext context,
+    AppState appState,
+  ) async {
+    final selectedId = await showModalBottomSheet<int>(
+      context: context,
+      builder: (sheetContext) {
+        final profiles = appState.availableProfiles;
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  AppSpacing.md,
+                  AppSpacing.md,
+                  AppSpacing.sm,
+                ),
+                child: Text(
+                  'Selecionar perfil',
+                  style: Theme.of(sheetContext).textTheme.titleMedium,
+                ),
+              ),
+              ...profiles.map((profile) {
+                final id = profile['id'] as int;
+                final name = profile['name']?.toString() ?? 'Perfil $id';
+                final isActive = id == appState.activeProfileId;
+                return ListTile(
+                  leading: Icon(
+                    isActive
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                    color: isActive ? AppColors.brandDark : AppColors.textMuted,
+                  ),
+                  title: Text(name),
+                  enabled: !isActive,
+                  onTap: () => Navigator.pop(sheetContext, id),
+                );
+              }),
+              const SizedBox(height: AppSpacing.sm),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (selectedId == null) return;
+    if (!context.mounted) return;
+
+    final messenger = ScaffoldMessenger.of(context);
+    Navigator.pop(context); // fecha o drawer
+    final ok = await appState.switchActiveProfile(selectedId);
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          ok
+              ? 'Perfil ativo alterado para ${appState.activeProfile ?? ''}.'
+              : 'Não foi possível trocar de perfil.',
         ),
       ),
     );
