@@ -37,6 +37,26 @@ void main() {
   );
 
   test(
+    'requester_context_para_mim prioriza a entidade PADRÃO do requerente (FormCreator code 2)',
+    () {
+      // Regra real do FormCreator code 2 (REQUESTER): a entidade do chamado é a
+      // entidade PADRÃO do requerente (User.entities_id), NÃO a entidade ativa
+      // da sessão. Era o bug relatado (chamado nascia na entidade ativa errada).
+      final resolved = GovernedEntityResolver.resolve(
+        record: record(mode: 'requester_context_para_mim', value: 0, code: 2),
+        context: const GovernedEntityContext(
+          requesterDefaultEntityId: 99, // padrão do requerente -> deve vencer
+          selectedTicketEntityId: 24,
+          activeEntityId: 58, // ativa diferente -> NÃO deve ser usada
+        ),
+      );
+
+      expect(resolved.ok, isTrue);
+      expect(resolved.entityId, 99);
+    },
+  );
+
+  test(
     'maintenance_context_para_mim prioriza destination_entity_value positivo',
     () {
       final resolved = GovernedEntityResolver.resolve(

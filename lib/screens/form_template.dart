@@ -620,6 +620,7 @@ class _FormTemplateState extends State<FormTemplate> {
               selectedTicketEntityId: appState.selectedTicketEntityId,
               activeEntityId: appState.activeEntityId,
               beneficiaryEntityId: _beneficiaryEntityId,
+              requesterDefaultEntityId: appState.defaultEntityId,
             ),
           ),
         );
@@ -849,6 +850,7 @@ class _FormTemplateState extends State<FormTemplate> {
             selectedTicketEntityId: appState.selectedTicketEntityId,
             activeEntityId: appState.activeEntityId,
             beneficiaryEntityId: _beneficiaryEntityId,
+            requesterDefaultEntityId: appState.defaultEntityId,
           ),
         ),
       );

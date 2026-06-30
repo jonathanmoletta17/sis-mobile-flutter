@@ -71,6 +71,9 @@ class AppState extends ChangeNotifier {
   bool get canSwitchProfile => _availableProfiles.length > 1;
   int? get activeEntityId => _activeEntityId;
   String? get activeEntityName => _activeEntityName;
+  // Entidade PADRÃO do usuário logado (glpidefault_entity / User.entities_id).
+  // Usada para resolver a entidade de forms FormCreator code 2 (REQUESTER).
+  int? get defaultEntityId => _defaultEntityId;
   int? get selectedTicketEntityId => _selectedTicketEntityId;
   String? get selectedTicketEntityName => _selectedTicketEntityName;
   List<Map<String, dynamic>> get availableEntities =>

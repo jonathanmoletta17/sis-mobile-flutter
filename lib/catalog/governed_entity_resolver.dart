@@ -5,10 +5,17 @@ class GovernedEntityContext {
   final int? activeEntityId;
   final int? beneficiaryEntityId;
 
+  /// Entidade PADRÃO do requerente (`User.entities_id` / `glpidefault_entity`).
+  /// FormCreator `destination_entity` code 2 (REQUESTER) usa esta entidade, NÃO
+  /// a entidade ativa da sessão. Sem isto, chamados de forms "para mim" iam para
+  /// a entidade ativa (errada quando ativa != padrão).
+  final int? requesterDefaultEntityId;
+
   const GovernedEntityContext({
     this.selectedTicketEntityId,
     this.activeEntityId,
     this.beneficiaryEntityId,
+    this.requesterDefaultEntityId,
   });
 }
 
@@ -39,14 +46,19 @@ class GovernedEntityResolver {
     final selectedEntityId = _positiveInt(context.selectedTicketEntityId);
     final activeEntityId = _positiveInt(context.activeEntityId);
     final beneficiaryEntityId = _positiveInt(context.beneficiaryEntityId);
+    final requesterDefaultEntityId = _positiveInt(
+      context.requesterDefaultEntityId,
+    );
     final targetValue = _positiveInt(record.destinationEntityValue);
     final mode = record.destinationEntityMode?.trim();
 
     switch (mode) {
       case 'requester_context_para_mim':
+        // FormCreator code 2 (REQUESTER) = entidade PADRÃO do requerente
+        // (User.entities_id), e SÓ cai para a ativa se a padrão não existir.
         return _resolveFirst(
           mode: mode!,
-          candidates: [selectedEntityId, activeEntityId],
+          candidates: [requesterDefaultEntityId, selectedEntityId, activeEntityId],
         );
       case 'maintenance_context_para_mim':
         return _resolveFirst(
