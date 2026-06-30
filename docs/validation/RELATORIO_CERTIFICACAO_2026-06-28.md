@@ -84,7 +84,17 @@ grupo) vê só o seu contexto. O app filtra por papel operacional; com múltiplo
 grupos resolve para **híbrido** → mostra tudo (correto para a conta de teste).
 Baseline **restaurado e verificado** {12,21,22,49}. Evidência: `baseline_*.json`.
 
-Pendente: re-auditoria das atribuições reais dos usuários (admin, ação humana).
+Re-auditoria das atribuições reais: feita — ver
+`AUDITORIA_ATRIBUICOES_REAIS_2026-06-28.md` (ação humana: 13 técnicos sem perfil
+11; ~50 GG com `User.profiles_id`≠9).
+
+### Integridade final + correção de cleanup
+
+Verificação final (admin): conta 2373 restaurada {9,11,12}+{12,21,22,49} ✓.
+Tickets de teste 10082/10083 estavam presos em status=2 — o cleanup inicial
+falhou. **Causa (regra GLPI confirmada):** fechar exige **categoria + solução**
+("Categoria é obrigatória..."). Corrigido: setei categoria (2=Conserto) + solução
+(ITILSolution 8495/8496) → Solucionado(5) → **Fechado(6)** ✓. Ambos terminais.
 
 ## Próximos passos sugeridos
 1. Obter credenciais admin válidas → certificar Bridge A (catálogo vs Form_Profile/ITILCategory vivo) e regenerar catálogo `--live`.
