@@ -41,6 +41,28 @@ de OUTROS, ✅ para o PRÓPRIO; "GG muda status ✅" → ✅ só dentro do escop
   screenshots anteriores + testes unit/widget; o launch web local ficou instável
   nesta sessão (processo vivo, HTTP 000). Não é problema de código.
 
+## Validações adicionais (parte 3 — entidade prática, anexo, conversa, navegação)
+
+- **Entidade E2E (prova prática).** Mudei a entidade ativa da conta e criei chamados
+  reais: ativa=28→ticket 10084 nasceu na **28**; ativa=1→10085 na **1**; atribuí a
+  entidade **58** (admin, reversível) e ativa=58→10086 na **58**. **Prova: a
+  entidade do chamado = a entidade ativa da sessão** (modo `requester_context`).
+  Baseline da conta restaurado. Todos fechados.
+- **Anexo.** Upload via `POST /Ticket/{id}/Document` (multipart) → documento 7647
+  **vinculado** (Document_Item confirma 2 docs). O app verifica o vínculo no
+  read-back (`verifiesDocumentUploadLink`). ✅
+- **Conversa user↔técnico.** Followup do solicitante (201) + followup do técnico
+  (201) aparecem na conversa **ordenados**; leitura via `getTicketDocuments`/
+  followups. ✅ (mecanismo bidirecional; em produção autores distintos).
+- **Meus Chamados — separação para navegação do técnico.** ✅ chamados operacionais
+  agrupados por **FILA** (`TicketQueueClassifier`: Atribuídos a mim, Pendente
+  validação, Fila Manutenção, Fila Conservação, GG Compartilhada) com ordenação
+  (`_groupSortWeight`); próprios por **STATUS**; + filtro por status. Lógica sólida
+  (`lib/screens/my_tickets_screen.dart`); confirmação visual depende do app rodando.
+
+Auditoria final: tickets de teste 10082–10087 **todos Fechados (6)**; conta 2373 no
+baseline {9,11,12}+{12,21,22,49}.
+
 ## Conclusão
 
 O **núcleo de direitos, visibilidade, fluxos de ação e troca de perfil** está
