@@ -100,6 +100,42 @@ Restricao GLPI:
 - validacao mutavel exige aprovacao humana explicita, ambiente de homologacao/sandbox ou ticket sintetico isolado, credencial apropriada e criterio de parada
 - o Worker SIS pass-through deve ser tratado como superficie sensivel ate existir allowlist/bloqueio tecnico de metodos destrutivos
 
+## Regras compartilhadas de consumo do GLPI (CRITICO para qualquer agente)
+
+Estas regras valem para TODOS os agentes (Codex, Claude, Gemini, Hermes). Foram
+fonte de erros recorrentes (app divergindo da verdade do GLPI). Leia antes de
+tocar em permissao, visibilidade, classificacao ou render de formulario:
+
+- `.claude/rules/no-hardcode-glpi.md` e a regra normativa. Apesar do prefixo
+  `.claude/`, o conteudo vale para qualquer agente. Resumo:
+  - Permissao/visibilidade vem do BITMASK de rights em
+    `getFullSession.session.glpiactiveprofile['ticket']`, NUNCA de string-match
+    de nome de perfil nem de IDs de grupo cravados.
+  - Opcoes de arvore (categoria/tipo/localizacao) oferecem SO folhas
+    selecionaveis. O no-pai/raiz nao e opcao quando `selectable_tree_root="0"`;
+    nos intermedios (ancestrais via `full_label` "X > ...") sao cabecalho, nao
+    opcao. Usar `GovernedQuestion.selectableOptions`
+    (`lib/catalog/governed_service_catalog.dart`), nunca mapear options cru.
+  - Fonte runtime das arvores = catalogo governado pre-resolvido. NAO chamar
+    `/ITILCategory` em runtime: perfis Solicitante (9) e GG-Conservacao (12)
+    recebem `ERROR_RIGHT_MISSING` (validado ao vivo 2026-06-28).
+  - Matching de servico/sub-servico trata hifen<->espaco<->underscore como
+    equivalentes.
+- `docs/quality/DOR.md` tem o contrato `fieldtype -> fonte -> resolucao` para
+  qualquer questao FormCreator. Toda superficie que consome FormCreator declara o
+  mapeamento e tem teste de characterization contra a verdade capturada ao vivo.
+- Regra de ouro: toda decisao de regra GLPI precisa de EVIDENCIA (JSON real ou
+  validacao ao vivo read-only), nunca "eu acho que o GLPI faz X". Em duvida,
+  rodar a descoberta read-only, nao supor, nao criar contorno.
+
+## Divisao de trabalho entre agentes
+
+- Ver `docs/AGENT_DIVISION_OF_LABOR.md`: o que cabe ao Codex (implementacao
+  mecanica a partir de dossie, refactor repetitivo, rodar analyze/test/build) vs
+  ao Claude Code (diagnostico, validacao ao vivo contra GLPI, decisao de
+  arquitetura, revisao antes de commit). Implementacao delegada parte sempre de
+  um dossie escrito; nunca de suposicao.
+
 ## Regras de edicao
 
 - Nao reverta mudancas do usuario sem pedido explicito.

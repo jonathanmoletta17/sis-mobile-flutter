@@ -147,6 +147,50 @@ void main() {
   }
 
   test(
+    'certificacao F1/F2 (read-only): bitmask de direitos e ordenacao de '
+    'visibilidade por perfil',
+    () async {
+      if (!ready) {
+        markTestSkipped('SIS_VALIDATION_ENABLE!=true');
+        return;
+      }
+      // F1: rights bitmask do ticket por perfil ativo (verdade Camada 1).
+      // Estavel e identico ao contrato (re-certificado 2026-06-28).
+      const expectedTicketRights = {9: 5, 11: 260102, 12: 145411};
+      final token = await initSession();
+      final counts = <int, int>{};
+      for (final pid in const [9, 11, 12]) {
+        final session = await activateProfileAndContext(token, pid);
+        final active = (session['glpiactiveprofile'] as Map?) ?? const {};
+        final rights = int.tryParse(active['ticket']?.toString() ?? '');
+        expect(
+          rights,
+          expectedTicketRights[pid],
+          reason: 'F1 perfil $pid: ticket rights esperado '
+              '${expectedTicketRights[pid]}, veio $rights',
+        );
+        final r = await http.get(
+          Uri.parse('$base/search/Ticket?is_deleted=0&range=0-0'),
+          headers: headers(token, json: false),
+        );
+        counts[pid] =
+            int.tryParse(jsonFieldValue(r.body, 'totalcount') ?? '') ?? 0;
+        // ignore: avoid_print
+        print('perfil $pid: rights=$rights totalcount=${counts[pid]}');
+      }
+      // F2: ordenacao semantica de scope 9 (OWN_ONLY) < 12 (GG) < 11 (tecnico).
+      // Os counts driftam no tempo; certifica-se a ORDENACAO, nao o numero.
+      expect(
+        counts[9]! < counts[12]! && counts[12]! < counts[11]!,
+        isTrue,
+        reason: 'F2 ordenacao esperada 9<12<11; veio $counts',
+      );
+      // reverte ao perfil 9 (estado original da conta).
+      await activateProfileAndContext(token, 9);
+    },
+  );
+
+  test(
     'cleanup (APPLY): fecha tickets [TESTE-AUTOMATIZADO SIS] ainda abertos',
     () async {
       if (!ready) {
