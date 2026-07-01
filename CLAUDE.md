@@ -2,6 +2,29 @@
 
 **Constituicao objetiva:** este repositorio e a interface Flutter multiplataforma do ecossistema SIS para chamados GLPI. A fonte canonica nesta maquina fica em `/home/jonathan/projects/work/mobile/sis-mobile-flutter`; referencias `C:\Users\...` nos docs existem como camada host ou historico operacional, nao como raiz de codigo-fonte para este workspace.
 
+## Protocolo de inicio de sessao (obrigatorio)
+
+Este arquivo carrega sozinho em toda sessao neste repo; `AGENTS.md`,
+`BOOTSTRAP.md`, `HERMES.md` e os docs em `docs/` NAO carregam sozinhos — sao
+apenas referenciados aqui, e so entram no contexto se forem lidos. Por isso,
+antes de qualquer acao nao trivial (qualquer coisa alem de uma pergunta
+pontual ou edicao trivial), leia nesta ordem:
+
+1. O indice de memoria (`MEMORY.md`, ja injetado automaticamente) — verifique
+   se ja existe decisao, auditoria ou feedback registrado relevante para a
+   tarefa antes de reanalisar do zero. Em especial, a memoria de tipo
+   `feedback` sobre fluxo de trabalho (avaliacao critica, gate de confirmacao
+   antes de mudar codigo/arquitetura/regra de negocio) e o padrao vigente
+   neste projeto ate o usuario dizer o contrario — nao depende de ele repetir
+   essas instrucoes a cada sessao.
+2. `AGENTS.md` inteiro.
+3. `BOOTSTRAP.md` e os docs listados em "O que consultar antes de mudar algo"
+   abaixo, conforme o tipo de mudanca.
+
+Se a auditoria completa do projeto ja foi feita e aceita pelo usuario como
+contexto oficial em alguma sessao anterior (verificavel pela memoria), nao
+reinicie essa auditoria do zero — so refaca se o usuario pedir explicitamente.
+
 ## Papel do Claude aqui
 
 - Operar este repo como agente de codigo, documentacao e consolidacao local.
