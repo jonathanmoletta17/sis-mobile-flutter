@@ -280,7 +280,10 @@ class AppState extends ChangeNotifier {
         final sessionContext = await _apiService.getSessionContext(storedToken);
         _sessionToken = storedToken;
         _isAuthenticated = true;
-        _applySessionContext(sessionContext, fallbackUsername: _loggedUsername);
+        await _applySessionContext(
+          sessionContext,
+          fallbackUsername: _loggedUsername,
+        );
         await _tryLoadRules();
         unawaited(_loadAvailableProfiles());
         unawaited(loadChecklistCatalog());
@@ -423,7 +426,7 @@ class AppState extends ChangeNotifier {
       try {
         final sessionContext = await _apiService.getSessionContext(token);
         _sessionToken = token;
-        _applySessionContext(sessionContext, fallbackUsername: user);
+        await _applySessionContext(sessionContext, fallbackUsername: user);
         _reconcileSelectedTicketEntity();
         _isAuthenticated = true;
         await _tryLoadRules();
@@ -1204,10 +1207,10 @@ class AppState extends ChangeNotifier {
     );
   }
 
-  void _applySessionContext(
+  Future<void> _applySessionContext(
     Map<String, dynamic> sessionContext, {
     String? fallbackUsername,
-  }) {
+  }) async {
     _loggedUserId = sessionContext['userId'] as int?;
 
     final profileFromApi = sessionContext['profile']?.toString();
@@ -1251,8 +1254,11 @@ class AppState extends ChangeNotifier {
     }
 
     final defaultEntityId = sessionContext['defaultEntityId'] as int?;
-    if (defaultEntityId != null && defaultEntityId > 0) {
-      _defaultEntityId = defaultEntityId;
+    final resolvedDefaultEntityId = await _resolveAuthoritativeDefaultEntityId(
+      defaultEntityId,
+    );
+    if (resolvedDefaultEntityId != null && resolvedDefaultEntityId > 0) {
+      _defaultEntityId = resolvedDefaultEntityId;
     }
 
     final entities =
@@ -1261,6 +1267,32 @@ class AppState extends ChangeNotifier {
             .map((entity) => Map<String, dynamic>.from(entity))
             .toList();
     _availableEntities = entities;
+  }
+
+  /// `glpidefault_entity` da sessão retorna 0 para usuários com múltiplos
+  /// `Profile_User` sem nenhum marcado `is_default` (padrão real observado na
+  /// população GG-Conservação). Nesse caso cai para `User.entities_id` — campo
+  /// autoritativo e estável do usuário, independente de perfil ativo — em vez
+  /// de deixar o resolver de entidade cair silenciosamente para a entidade
+  /// ATIVA da sessão (errada quando ativa != padrão real do requerente).
+  Future<int?> _resolveAuthoritativeDefaultEntityId(int? fromSession) async {
+    if (fromSession != null && fromSession > 0) return fromSession;
+
+    final userId = _loggedUserId;
+    final token = _sessionToken;
+    if (userId == null || userId <= 0 || token == null || token.isEmpty) {
+      return null;
+    }
+
+    try {
+      final userRef = await _apiService.getUserById(userId, token);
+      return userRef?.defaultEntityId;
+    } catch (e) {
+      debugPrint(
+        'Falha ao buscar entidade padrão autoritativa (User.entities_id): $e',
+      );
+      return null;
+    }
   }
 
   /// Carrega os perfis atribuídos ao usuário (para o seletor de troca de perfil).
@@ -1288,7 +1320,10 @@ class AppState extends ChangeNotifier {
     try {
       await _apiService.changeActiveProfile(token, profilesId);
       final sessionContext = await _apiService.getSessionContext(token);
-      _applySessionContext(sessionContext, fallbackUsername: _loggedUsername);
+      await _applySessionContext(
+        sessionContext,
+        fallbackUsername: _loggedUsername,
+      );
       _reconcileSelectedTicketEntity();
 
       await AppStateStorage.saveSessionSnapshot(

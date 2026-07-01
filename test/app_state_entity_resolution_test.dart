@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:sis_mobile_flutter/models/glpi_user_ref.dart';
 import 'package:sis_mobile_flutter/services/glpi_client.dart';
 import 'package:sis_mobile_flutter/state/app_state.dart';
 
@@ -92,6 +93,35 @@ void main() {
     },
   );
 
+  test(
+    'falls back to User.entities_id when glpidefault_entity session field is 0/ausente '
+    '(padrão observado em usuários GG-Conservação sem Profile_User.is_default)',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final api = _EntityResolutionGlpiClient(
+        activeEntityId: 59,
+        defaultEntityId: null,
+        availableEntities: const [
+          {'id': 59, 'name': 'Divisão de Conservação do Patrimônio'},
+          {'id': 58, 'name': 'Departamento de Conservação e Memória'},
+        ],
+        userEntitiesIdFallback: 58,
+      );
+      final appState = AppState(api);
+      await pumpEventQueue();
+
+      expect(await appState.authenticate('gg-conservacao', 'senha'), isTrue);
+      await appState.submitTicket({
+        'assunto': 'Teste fallback entidade autoritativa',
+        'descricao': 'Descricao',
+        'serviceName': 'Carregadores',
+      });
+
+      expect(api.lastCreatedFormData?['entities_id'], 58);
+      expect(appState.selectedTicketEntityId, 58);
+    },
+  );
+
   test('GLPI permission/add errors are not saved as offline tickets', () async {
     SharedPreferences.setMockInitialValues({});
     final api = _EntityResolutionGlpiClient(
@@ -125,6 +155,7 @@ class _EntityResolutionGlpiClient extends GlpiClient {
     required this.availableEntities,
     this.createTicketError,
     this.createTicketResult,
+    this.userEntitiesIdFallback,
   });
 
   final int? activeEntityId;
@@ -132,11 +163,26 @@ class _EntityResolutionGlpiClient extends GlpiClient {
   final List<Map<String, dynamic>> availableEntities;
   final String? createTicketError;
   final Map<String, dynamic>? createTicketResult;
+
+  /// Simula `User.entities_id` retornado por `GET /User/{id}` — usado como
+  /// fallback quando `defaultEntityId` (sessão `glpidefault_entity`) é nulo.
+  final int? userEntitiesIdFallback;
   Map<String, dynamic>? lastCreatedFormData;
 
   @override
   Future<String?> authenticate(String username, String password) async {
     return 'fake-session-token';
+  }
+
+  @override
+  Future<GlpiUserRef?> getUserById(int userId, String sessionToken) async {
+    final fallback = userEntitiesIdFallback;
+    if (fallback == null) return null;
+    return GlpiUserRef(
+      id: userId,
+      displayName: 'Usuário Teste',
+      defaultEntityId: fallback,
+    );
   }
 
   @override
