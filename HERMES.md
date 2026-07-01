@@ -71,9 +71,7 @@ Arquivos de user-scope do Hermes NAO pertencem a este repo:
 ## Regras locais
 
 - Nao materialize memorias, sessoes ou configs globais do Hermes dentro do repo.
-- Nao versionar `.env`, variantes locais de `.env`, `android/key.properties`, keystores, secrets, caches, build outputs ou runtime artifacts.
 - Se o objetivo for preparar este projeto para command center ou control plane, use `docs/CONTROL_PLANE_LOCAL.md` como mapa local de superficies.
 - Nao trate bridge USB/LAN, `adb reverse` ou proxy local de notebook como superficie operacional suportada.
-- preservar funcionalidades reais de producao do app; nao remover capacidades funcionais por causa de riscos de validacao
-- Hermes/agentes nao devem executar validacoes mutaveis contra tickets reais de usuarios, nem usar Worker SIS pass-through para metodo destrutivo, `DELETE /Ticket`, purge ou cleanup automatizado sem aprovacao humana explicita e ambiente isolado
+- Regras de seguranca GLPI, nao-versionamento de secrets e proibicoes de mutacao: ver secao "Regras de seguranca GLPI para agentes (fonte unica)" em `AGENTS.md` — nao duplicadas aqui.
 - qualquer orquestracao de validacao mutavel precisa confirmar ambiente nao-producao e alvo sintetico antes da execucao

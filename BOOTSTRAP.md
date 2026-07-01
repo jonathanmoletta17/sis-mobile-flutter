@@ -122,12 +122,9 @@ Modelo B, avancado e nao padrao:
 
 - O GLPI da SIS e interno. Teste direto contra o endpoint interno depende de rede interna ou VPN.
 - Acesso externo em celular para usuarios finais deve usar endpoint externo controlado; a primeira fase sem dominio proprio e Worker `workers.dev` + Workers VPC + Tunnel.
-- Nao versionar `.env`, variantes locais de `.env`, `android/key.properties`, keystores, secrets, caches, build outputs ou runtime artifacts.
 - APKs em `Downloads` e logs XML/PNG/TXT sao evidencia operacional, nao fonte normativa.
 - O fallback web mobile-first existe como plano exploratorio; nao e o runtime canonico atual.
 - O Widgetbook e a baseline Alchemist sao a guarda local para UI; Android continua sendo prova final, nao laboratorio de primeira tentativa.
 - Contexto cross-project externo so deve ser usado se existir no filesystem atual e for explicitamente relevante.
 - Se esse contexto externo nao existir, registre a indisponibilidade e siga pelos contratos locais deste repo.
-- preservar funcionalidades reais de producao do app; abertura, follow-up, anexo, solucao, status, atribuicao e sincronizacao offline continuam validos para usuarios autorizados
-- agentes nao devem executar validacoes mutaveis contra tickets reais de usuarios, nem usar Worker SIS pass-through para metodo destrutivo, `DELETE /Ticket`, purge ou cleanup automatizado sem aprovacao humana explicita, ambiente isolado e alvo sintetico confirmado
-- por padrao, validacao assistida por agente contra GLPI real deve ser read-only
+- Regras de seguranca GLPI, nao-versionamento de secrets e proibicoes de mutacao: ver secao "Regras de seguranca GLPI para agentes (fonte unica)" em `AGENTS.md` — nao duplicadas aqui.

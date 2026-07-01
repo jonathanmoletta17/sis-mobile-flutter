@@ -6,7 +6,7 @@ Commit auditado: `1c52d78`
 Modo: read-only sobre runtime/código; este arquivo é documentação de auditoria.
 
 > Complemento live: após esta auditoria preparatória, foi executada validação
-> direta Web/Admin + API em `docs/glpi/VALIDACAO_GLPI_LIVE_2026-06-27.md`.
+> direta Web/Admin + API em `docs/audits/VALIDACAO_GLPI_LIVE_2026-06-27.md`.
 > Essa validação encontrou divergência real: o GLPI vivo tem 25 sections,
 > 1271 questions, 18 targets e 1191 conditions nos checklists 48-52, enquanto
 > asset/fixture/Worker locais tinham 24/1252/17/1175. O target vivo `369`
