@@ -95,7 +95,6 @@
       ".env.prod",
       ".env.*.prod",
       "tool/external-access/pass-through/.env.host",
-      ".claude/settings.json",
       ".claude/settings.local.json",
       ".mcp.json",
       "android/key.properties",

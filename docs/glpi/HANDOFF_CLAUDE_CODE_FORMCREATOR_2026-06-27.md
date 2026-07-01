@@ -9,7 +9,7 @@ auditoria preparatória, mas os trechos abaixo já refletem o estado pós-execu�
 quando citam `showRule`/`show_rule`.
 
 > Complemento live: ler também
-> `docs/glpi/VALIDACAO_GLPI_LIVE_2026-06-27.md`. A validação Web/Admin + API
+> `docs/audits/VALIDACAO_GLPI_LIVE_2026-06-27.md`. A validação Web/Admin + API
 > encontrou o catálogo especializado local stale: target vivo `369`
 > (`HIDRÁULICO 951`) e contagens live 25/1271/18/1191 para
 > sections/questions/targets/conditions. O catálogo especializado foi
@@ -30,7 +30,7 @@ Branch: fix/onda0-rede-seguranca
 
 Leia, nesta ordem:
 1. AGENTS.md
-2. docs/glpi/AUDITORIA_FORMCREATOR_RUNTIME_2026-06-27.md
+2. docs/audits/AUDITORIA_FORMCREATOR_RUNTIME_2026-06-27.md
 3. docs/glpi/DOSSIES_CORRECAO_DELEGAVEL.md
 4. docs/CHECKLISTS_SIS_CONHECIMENTO.md
 

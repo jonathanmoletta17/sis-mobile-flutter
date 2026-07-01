@@ -196,7 +196,7 @@ IDs para limpeza manual posterior: nenhum.
 3. A submissao de checklist real esta bloqueada por seguranca: o nome gerado
    pelo fluxo atual nao comeca com `[TESTE-AUTOMATIZADO SIS]`.
 4. `https://app.glpi.sis.rs.gov.br` nao resolve DNS nesta WSL. A validacao Web
-   Admin existente em `docs/glpi/VALIDACAO_GLPI_LIVE_2026-06-27.md` permanece
+   Admin existente em `docs/audits/VALIDACAO_GLPI_LIVE_2026-06-27.md` permanece
    historica; esta rodada usou API direta e Worker read-only como fonte live.
 5. Worker publicado ainda bloqueia `If-None-Match` no preflight do catalogo
    metadata. A correcao esta no worktree, mas precisa ser publicada no Worker.
