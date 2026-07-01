@@ -177,6 +177,7 @@ class _ServiceIcon extends StatelessWidget {
     return Container(
       width: 56,
       height: 56,
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(AppRadius.sm),

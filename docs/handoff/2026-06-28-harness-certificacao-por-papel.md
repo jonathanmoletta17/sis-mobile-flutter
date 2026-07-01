@@ -2,8 +2,8 @@
 
 ## Leia primeiro
 - `AGENTS.md` (seção "Regras compartilhadas de consumo do GLPI")
-- `docs/validation/CERTIFICACAO_PERFIS_REGRAS_2026-06-28.md` (matriz mestre)
-- `docs/validation/RELATORIO_CERTIFICACAO_2026-06-28.md` (resultados + regras R1/R2)
+- `docs/audits/CERTIFICACAO_PERFIS_REGRAS_2026-06-28.md` (matriz mestre)
+- `docs/audits/RELATORIO_CERTIFICACAO_2026-06-28.md` (resultados + regras R1/R2)
 - `test/validation/sis_mutable_validation_test.dart` (harness existente a estender)
 
 ## Contexto

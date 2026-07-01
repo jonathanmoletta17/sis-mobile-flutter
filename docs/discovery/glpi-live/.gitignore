@@ -1,0 +1,3 @@
+# Evidências brutas da API contêm PII real (usuários, sessão, config) — NÃO versionar.
+# Mantidas localmente para auditoria. Regeneráveis via tool/glpi-discovery/*.sh
+evidence/

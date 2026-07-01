@@ -39,6 +39,32 @@ reinicie essa auditoria do zero — so refaca se o usuario pedir explicitamente.
 4. `docs/README.md`
 5. `docs/RUNTIME_CANONICO_E_VALIDACAO.md`
 6. `docs/CONTROL_PLANE_LOCAL.md`
+7. `docs/glpi/METODOLOGIA_DESCOBERTA_REGRAS_GLPI.md`
+8. `docs/glpi/MAPA_FONTE_DA_VERDADE_GLPI.md`
+9. `docs/glpi/PORTABILIDADE_NOVA_INSTANCIA_GLPI.md`
+
+## Principio de Projecao Dinamica (GLPI como fonte da verdade)
+
+O app deve **refletir** o GLPI, nao re-implementar um palpite dele. Toda informacao do
+GLPI cai em duas classes; confundi-las e a causa-raiz de retrabalho neste projeto:
+
+- **Protocolo / esquema** (estavel por versao do GLPI): nomes de itemtype, valores de
+  bitmask de rights (`Ticket::READMY=1`...), os 6 status, field-IDs de search, formato de
+  `getFullSession`. **Pode** ser constante no codigo, desde que rotulado como protocolo.
+- **Configuracao de instancia** (muda por instalacao e a qualquer momento na web): quais
+  perfis existem, quais rights cada perfil tem, categorias, grupos, localizacoes,
+  templates, formularios, RuleTicket, limite de sub-niveis. **Nunca** pode ser hardcoded;
+  tem que ser buscado de um endpoint e projetado.
+
+**Regra de revisao (obrigatoria antes de introduzir qualquer constante ligada a
+perfil/grupo/categoria/status/regra):** classifique-a. Se for configuracao de instancia,
+ela tem que vir de um endpoint da API. Sem excecao silenciosa. Em duvida, siga a cadeia
+de 7 perguntas de `docs/glpi/METODOLOGIA_DESCOBERTA_REGRAS_GLPI.md` e registre o achado em
+`docs/glpi/MAPA_FONTE_DA_VERDADE_GLPI.md`.
+
+Exemplo canonico: "tecnico ve os proprios tickets como requerente" nao e bug nem regra a
+codar; e o bit `READMY` do perfil em `getFullSession.session.glpiactiveprofile['ticket']`.
+Ler o bitmask, nao o nome do perfil.
 
 ## Constituicao operacional do projeto
 

@@ -209,15 +209,16 @@ class GovernedSubmissionResolver {
   }) {
     if (selectedId == null || selectedId <= 0) return candidates;
 
-    final withMatchingOption = candidates
+    // Fail-closed: se o usuário selecionou um id que não corresponde a
+    // nenhuma opção do catálogo governado, bloqueia (via candidates.isEmpty
+    // em resolve()) em vez de devolver os candidatos originais sem filtro.
+    return candidates
         .where((record) {
           final question = selector(record);
           if (question == null || question.options.isEmpty) return true;
           return question.options.any((option) => option.id == selectedId);
         })
         .toList(growable: false);
-
-    return withMatchingOption.isEmpty ? candidates : withMatchingOption;
   }
 
   static String _normalize(String value) {

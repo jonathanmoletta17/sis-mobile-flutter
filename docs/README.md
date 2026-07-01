@@ -61,9 +61,6 @@ O fluxo operacional e hibrido: WSL para fonte, `analyze`, `test`, web local e Wi
   Regra da entidade do usuario e roteiro de teste Android.
 - `validation-and-testing-guide.md`
   Consolidacao da validacao atual do app.
-- `AUDITORIA_OPERACIONAL_TECNICOS_APK_PWA_ANEXOS_2026-06-25.md`
-  Auditoria funcional do fluxo dos tecnicos, consistencia APK/PWA, fila
-  operacional, assuncao/status e anexos.
 - `QUALITY_FOUNDATION_ADAPTACAO_FLUTTER.md`
   Registro da adaptacao do pacote externo de qualidade para a realidade Flutter/Dart/GLPI deste repo.
 - `domain/ticket/STATES.md`
@@ -93,12 +90,38 @@ O fluxo operacional e hibrido: WSL para fonte, `analyze`, `test`, web local e Wi
 - `AUTOPSIA_TICKET_FECHADO_STALE_STATE.md`
   Autopsia guiada do caso de ticket fechado com tela antiga expondo acoes inconsistentes.
 
+## Plataforma GLPI (fonte da verdade, reaplicavel a SIS/DTIC/novos)
+
+- `glpi/METODOLOGIA_DESCOBERTA_REGRAS_GLPI.md`
+  O modo de pensar: cadeia de 7 perguntas para achar onde mora qualquer regra/config do
+  GLPI (web -> BD -> API) e a distincao protocolo vs. configuracao de instancia.
+- `glpi/MAPA_FONTE_DA_VERDADE_GLPI.md`
+  Inventario mestre por dominio (Perfis/rights, Entidades, Regras, Templates, Categorias,
+  FormCreator, Dropdowns) com tela web, itemtype, tabela BD, endpoint e contrato do app.
+- `glpi/PORTABILIDADE_NOVA_INSTANCIA_GLPI.md`
+  Checklist para subir o app sobre um GLPI novo sem reescrever codigo, com mapa de debito
+  tecnico (hardcodes atuais vs. endpoint de origem).
+
 ## Documento exploratorio
 
 - `web-mobile-fallback-plan.md`
   Direcao futura para fallback web mobile-first.
 
 Esse documento nao altera o runtime canonico atual do app Flutter.
+
+## docs/decisions/ — decisoes arquiteturais (ADR-lite)
+
+Registro curto, datado e imutavel de decisoes ("por que decidimos X"), separado dos
+documentos operacionais detalhados que as sustentam. Ver `decisions/README.md` para o
+formato e o indice completo. Existe porque memoria do harness e vinculada a
+usuario/ambiente, nao ao repositorio — decisao relevante sempre tambem vira arquivo
+aqui, nao so memoria de sessao.
+
+## docs/audits/ — evidencia historica (nao normativa)
+
+Auditorias, relatorios de execucao e certificacoes datados, cada um amarrado ao
+estado do projeto naquele momento. Ver `audits/README.md`. Em caso de conflito com
+documento normativo, o normativo vence.
 
 ## Regra editorial
 
@@ -120,12 +143,16 @@ Nao promova para `docs/`:
 Em caso de conflito, a ordem pratica e:
 
 1. codigo e scripts atuais do repo
-2. `../README.md`
-3. `RUNTIME_CANONICO_E_VALIDACAO.md`
-4. docs operacionais especializados desta pasta
+2. `AGENTS.md` (regra normativa unica compartilhada entre agentes)
+3. `../README.md`
+4. `RUNTIME_CANONICO_E_VALIDACAO.md`
+5. docs operacionais especializados desta pasta
+6. `decisions/` (por que uma decisao foi tomada, imutavel e datado)
+7. `audits/` (evidencia historica, nao normativa)
 
 ## Seguranca GLPI para agentes
 
-- preservar funcionalidades reais de producao do app; abertura, follow-up, anexo, solucao, status, atribuicao e sincronizacao offline continuam sendo capacidades funcionais para usuarios autorizados
-- agentes nao devem executar validacoes mutaveis contra tickets reais de usuarios, nem usar Worker SIS pass-through para metodo destrutivo, `DELETE /Ticket`, purge ou cleanup automatizado sem aprovacao humana explicita, ambiente isolado e alvo sintetico confirmado
-- docs historicos de validacao real devem ser lidos como evidencia, nao como permissao operacional permanente
+Regra de seguranca GLPI (producao real, proibicao de mutacao/`DELETE`, read-only por
+padrao): ver secao "Regras de seguranca GLPI para agentes (fonte unica)" em
+`../AGENTS.md` — nao duplicada aqui. Docs historicos de validacao (`audits/`) devem ser
+lidos como evidencia, nunca como permissao operacional permanente.

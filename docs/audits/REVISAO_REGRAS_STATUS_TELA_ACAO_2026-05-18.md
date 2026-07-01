@@ -284,7 +284,7 @@ Evidencias:
 Relatorio completo:
 
 ```text
-docs/RELATORIO_SIS_MOBILE_E2E_MUTAVEL_CONTROLADO_2026-05-18.md
+docs/audits/RELATORIO_SIS_MOBILE_E2E_MUTAVEL_CONTROLADO_2026-05-18.md
 ```
 
 Achados:

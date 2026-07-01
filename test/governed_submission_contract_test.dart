@@ -257,6 +257,39 @@ void main() {
     );
 
     test(
+      'bloqueia selecao de categoria que nao corresponde a nenhuma opcao '
+      '(fail-closed, nao mais fail-open)',
+      () {
+        final resolved = GovernedSubmissionResolver.resolve(
+          GovernedSubmissionInput(
+            records: [
+              record(
+                id: 'target-eletrica',
+                profile: 'Manutenção e Conservação',
+                audience: 'para_mim',
+                mode: 'maintenance_context_para_mim',
+                destinationValue: 58,
+                categoryOptions: const [
+                  GovernedOption(id: 501, label: 'Elétrica'),
+                ],
+              ),
+            ],
+            profileName: 'Manutenção e Conservação',
+            audience: GovernedTicketAudience.paraMim,
+            selectedCategoryId: 999,
+            entityContext: const GovernedEntityContext(activeEntityId: 58),
+          ),
+        );
+
+        expect(resolved.ok, isFalse);
+        expect(
+          resolved.blocker,
+          contains('nenhum contrato governado compatível'),
+        );
+      },
+    );
+
+    test(
       'bloqueia formulário de checklist sem resolver como formulário comum',
       () {
         final resolved = GovernedSubmissionResolver.resolve(

@@ -20,10 +20,22 @@
 - Ausencia de PowerShell, Android SDK ou `ANDROID_HOME` dentro da WSL nao torna o projeto quebrado; apenas indica que a validacao Android deve ocorrer na camada Windows ou em um modelo hibrido explicitamente configurado.
 - Para distribuicao externa com "somente o APK", nao trate VPN por aparelho como primeira fase; use endpoint externo controlado, preferencialmente Worker `workers.dev` + Workers VPC + Tunnel quando nao houver dominio proprio.
 - Configuracao runtime local usa `.env` na raiz; mantenha `.env.example` como exemplo versionado.
+
+## Regras de seguranca GLPI para agentes (fonte unica)
+
+Esta secao e a fonte normativa unica destas regras para TODOS os agentes (Codex,
+Claude, Gemini, Hermes). `BOOTSTRAP.md`, `HERMES.md`, `GEMINI.md` e `docs/README.md`
+apontam para aqui em vez de repetir o texto — mudar uma regra de seguranca exige
+editar so este bloco, nao 5 arquivos em paralelo.
+
 - Nao versionar `.env`, variantes locais de `.env`, `android/key.properties`, keystores, secrets, caches, build outputs ou runtime artifacts.
-- preservar funcionalidades reais de producao do app; abertura de chamado, follow-up, anexo, solucao, status, atribuicao e sincronizacao offline continuam sendo capacidades funcionais para usuarios autorizados
-- agentes nao devem executar validacoes mutaveis contra tickets reais de usuarios, nem usar Worker SIS pass-through para metodo destrutivo, `DELETE /Ticket`, purge ou cleanup automatizado sem aprovacao humana explicita, ambiente isolado e alvo sintetico confirmado
-- quando validar contra GLPI real, separar leitura/verificacao de mutacao; por padrao, agentes devem usar fluxo read-only
+- Preservar funcionalidades reais de producao do app; abertura de chamado, follow-up, anexo, solucao, status, atribuicao e sincronizacao offline continuam sendo capacidades funcionais para usuarios autorizados.
+- Agentes nao devem executar validacoes mutaveis contra tickets reais de usuarios, nem usar Worker SIS pass-through para metodo destrutivo, `DELETE /Ticket`, purge ou cleanup automatizado sem aprovacao humana explicita, ambiente isolado e alvo sintetico confirmado.
+- Quando validar contra GLPI real, separar leitura/verificacao de mutacao; por padrao, agentes devem usar fluxo read-only.
+
+Para a politica detalhada de conta de teste (criacao/mutacao de tickets sinteticos,
+marcacao `[TESTE-AUTOMATIZADO SIS]`, cleanup, simulacao de papel via
+`changeActiveProfile`), ver `CLAUDE.md` — que aprofunda esta base sem contradize-la.
 
 ## Pontos de entrada
 
@@ -50,6 +62,9 @@ Leia tambem conforme o tipo de mudanca:
 - `docs/domain/ticket/TRANSITIONS.md`
 - `docs/domain/ticket/INVARIANTS.md`
 - `docs/domain/ticket/SOURCES_OF_TRUTH.md`
+- `docs/glpi/METODOLOGIA_DESCOBERTA_REGRAS_GLPI.md`
+- `docs/glpi/MAPA_FONTE_DA_VERDADE_GLPI.md`
+- `docs/glpi/PORTABILIDADE_NOVA_INSTANCIA_GLPI.md`
 - `docs/quality/DOR.md`
 - `docs/quality/DOD.md`
 - `docs/quality/BUG_AUTOPSY_TEMPLATE.md`
@@ -72,6 +87,25 @@ Leia tambem conforme o tipo de mudanca:
 - Use contexto externo somente quando ele existir no filesystem atual e for explicitamente relevante.
 - Se contexto externo estiver indisponivel, registre isso objetivamente e siga pela alternativa mais conservadora.
 - Nenhum indice externo substitui a leitura do repo atual.
+
+## Principio de Projecao Dinamica (GLPI como fonte da verdade)
+
+- O app deve **refletir** o GLPI, nao re-implementar um palpite dele. Classifique toda
+  informacao do GLPI em: **protocolo/esquema** (estavel por versao; ex.: itemtypes,
+  bitmask de rights `Ticket::READMY=1`, status 1-6, field-IDs de search; pode ser
+  constante rotulada) vs. **configuracao de instancia** (muda por instalacao/web; ex.:
+  nomes de perfil, IDs de grupo/categoria, templates, formularios, RuleTicket, limite de
+  sub-niveis; nunca hardcodar, sempre buscar de endpoint e projetar).
+- Regra de revisao: antes de introduzir constante ligada a perfil/grupo/categoria/status/
+  regra, classifique-a; se for de instancia, ela tem que vir de um endpoint da API.
+- Para descobrir onde mora qualquer regra, use a cadeia de 7 perguntas de
+  `docs/glpi/METODOLOGIA_DESCOBERTA_REGRAS_GLPI.md` e registre o achado em
+  `docs/glpi/MAPA_FONTE_DA_VERDADE_GLPI.md`. Para subir o app sobre um GLPI novo (DTIC e
+  proximos), siga `docs/glpi/PORTABILIDADE_NOVA_INSTANCIA_GLPI.md`.
+- Caveat de API: nao presuma reaplicacao da logica de web num `POST`. Ha relato nao
+  confirmado de templates de categoria nao aplicados via API (GLPI #15225, stale; nao cobre
+  RuleTicket); o comportamento de RuleTicket deve ser confirmado empiricamente. Validar
+  read-back apos criar.
 
 ## Protocolo investigativo para bugs
 
