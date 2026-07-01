@@ -50,6 +50,9 @@ Leia tambem conforme o tipo de mudanca:
 - `docs/domain/ticket/TRANSITIONS.md`
 - `docs/domain/ticket/INVARIANTS.md`
 - `docs/domain/ticket/SOURCES_OF_TRUTH.md`
+- `docs/glpi/METODOLOGIA_DESCOBERTA_REGRAS_GLPI.md`
+- `docs/glpi/MAPA_FONTE_DA_VERDADE_GLPI.md`
+- `docs/glpi/PORTABILIDADE_NOVA_INSTANCIA_GLPI.md`
 - `docs/quality/DOR.md`
 - `docs/quality/DOD.md`
 - `docs/quality/BUG_AUTOPSY_TEMPLATE.md`
@@ -72,6 +75,25 @@ Leia tambem conforme o tipo de mudanca:
 - Use contexto externo somente quando ele existir no filesystem atual e for explicitamente relevante.
 - Se contexto externo estiver indisponivel, registre isso objetivamente e siga pela alternativa mais conservadora.
 - Nenhum indice externo substitui a leitura do repo atual.
+
+## Principio de Projecao Dinamica (GLPI como fonte da verdade)
+
+- O app deve **refletir** o GLPI, nao re-implementar um palpite dele. Classifique toda
+  informacao do GLPI em: **protocolo/esquema** (estavel por versao; ex.: itemtypes,
+  bitmask de rights `Ticket::READMY=1`, status 1-6, field-IDs de search; pode ser
+  constante rotulada) vs. **configuracao de instancia** (muda por instalacao/web; ex.:
+  nomes de perfil, IDs de grupo/categoria, templates, formularios, RuleTicket, limite de
+  sub-niveis; nunca hardcodar, sempre buscar de endpoint e projetar).
+- Regra de revisao: antes de introduzir constante ligada a perfil/grupo/categoria/status/
+  regra, classifique-a; se for de instancia, ela tem que vir de um endpoint da API.
+- Para descobrir onde mora qualquer regra, use a cadeia de 7 perguntas de
+  `docs/glpi/METODOLOGIA_DESCOBERTA_REGRAS_GLPI.md` e registre o achado em
+  `docs/glpi/MAPA_FONTE_DA_VERDADE_GLPI.md`. Para subir o app sobre um GLPI novo (DTIC e
+  proximos), siga `docs/glpi/PORTABILIDADE_NOVA_INSTANCIA_GLPI.md`.
+- Caveat de API: nao presuma reaplicacao da logica de web num `POST`. Ha relato nao
+  confirmado de templates de categoria nao aplicados via API (GLPI #15225, stale; nao cobre
+  RuleTicket); o comportamento de RuleTicket deve ser confirmado empiricamente. Validar
+  read-back apos criar.
 
 ## Protocolo investigativo para bugs
 
