@@ -87,9 +87,16 @@ Ler o bitmask, nao o nome do perfil.
 
 Artefatos que nao devem ser criados sem caso de uso concreto:
 
-- `.claude/settings.json`
 - `.claude/settings.local.json`
 - `.mcp.json`
+
+Excecao ja aprovada e materializada (2026-07-01, estudo estrategico de uso do
+Claude Code no projeto): `.claude/settings.json` existe hoje com um unico hook
+`SessionStart` puramente informativo (`.claude/hooks/session-start-env-banner.sh`,
+nao muta nada, nao roda git, nao chama rede) e `.claude/commands/{dor,handoff,
+autopsia-rapida,autopsia-completa}.md`, que so materializam protocolos ja
+normativos deste arquivo e do `AGENTS.md`. Qualquer novo hook ou comando alem
+desses continua exigindo caso de uso concreto confirmado antes de ser criado.
 
 ## Validacao recomendada
 
