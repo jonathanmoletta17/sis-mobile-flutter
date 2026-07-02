@@ -8,6 +8,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:sis_mobile_flutter/checklists/checklist_catalog.dart';
+import 'package:sis_mobile_flutter/checklists/checklist_condition_engine.dart';
+import 'package:sis_mobile_flutter/checklists/checklist_submission.dart';
+import 'package:sis_mobile_flutter/models/glpi_ticket.dart';
+import 'package:sis_mobile_flutter/services/glpi_client.dart';
 import 'package:sis_mobile_flutter/services/glpi_ticket_support.dart';
 
 /// Harness de validacao mutavel controlada contra o GLPI SIS real.
@@ -34,6 +39,21 @@ import 'package:sis_mobile_flutter/services/glpi_ticket_support.dart';
 /// Execucao com mutacao real:
 ///   SIS_VALIDATION_ENABLE=true SIS_VALIDATION_APPLY=true \
 ///     flutter test --tags mutable-validation
+///
+/// IMPORTANTE para os testes 'P6 (APPLY)' e 'P1 (APPLY)' (validacao end-to-end
+/// dos fixes de checklist/offline, criam via GlpiClient real): exporte as
+/// variaveis do `.env` no shell primeiro (`set -a; source .env; set +a`) —
+/// `dotenv.load()` sempre falha em `flutter test` porque `.env` nao e um
+/// asset declarado no pubspec (nao pode ser, contem segredo), e o fallback
+/// via `testLoad` so cobre o helper `envOf` deste arquivo, nao
+/// `GlpiConfig`/`GlpiClient` (que so leem `dotenv.env`, sem fallback a
+/// `Platform.environment`). Alem disso, o teste P6 (checklist) exige o
+/// prefixo de marcacao via dart-define, pois `GlpiConfig.sisChecklistTicketNamePrefix`
+/// nao tem fallback a `Platform.environment`:
+///   SIS_VALIDATION_ENABLE=true SIS_VALIDATION_APPLY=true flutter test \
+///     --tags mutable-validation --plain-name "(APPLY)" \
+///     --dart-define="SIS_CHECKLIST_TICKET_NAME_PREFIX=[TESTE-AUTOMATIZADO SIS]" \
+///     test/validation/sis_mutable_validation_test.dart
 void main() {
   const ticketMarker = '[TESTE-AUTOMATIZADO SIS]';
 
@@ -55,7 +75,22 @@ void main() {
     try {
       await dotenv.load(fileName: '.env');
     } catch (_) {
-      // Sem .env: cai para Platform.environment; pode ainda ser skip.
+      // dotenv.load() busca `.env` via asset bundle, mas `.env` nao e um
+      // asset declarado no pubspec.yaml (nao pode ser: contem segredo, nunca
+      // versionado) — em flutter test isso sempre lanca FileNotFoundError.
+      // Fallback: le o arquivo direto do disco e usa testLoad (API oficial
+      // do pacote para popular dotenv fora do asset bundle). Sem isso,
+      // GlpiConfig/GlpiClient (que so leem via dotenv, sem fallback a
+      // Platform.environment como o envOf() deste harness tem) nunca veem
+      // as variaveis, mesmo com o .env exportado no shell.
+      try {
+        final envFile = File('.env');
+        if (envFile.existsSync()) {
+          dotenv.testLoad(fileInput: envFile.readAsStringSync());
+        }
+      } catch (_) {
+        // Ainda assim sem .env: cai para Platform.environment; pode ser skip.
+      }
     }
     final enabled = envOf('SIS_VALIDATION_ENABLE').toLowerCase() == 'true';
     base = envOf('SIS_TEST_BASE_URL');
@@ -1838,6 +1873,325 @@ void main() {
           }
         }
       } finally {
+        await http.get(Uri.parse('$base/killSession'), headers: headers(token));
+      }
+    },
+  );
+
+  // --- Validacao end-to-end dos fixes P1 (offline preserva IDs governados) e
+  // P6 (upload de anexo em checklist), contra o GLPI real, usando as classes
+  // de PRODUCAO (GlpiClient/GlpiTicket/checklist_submission), nao reimplementacao.
+
+  // As duas validacoes abaixo criam SOMENTE como uma conta de teste dedicada
+  // (SIS_TEST_CONSERVACAO_USER) — nunca como admin, conforme CLAUDE.md
+  // ("Claude/agentes... criar tickets de teste... como a conta de teste";
+  // admin fica restrito a ajuste de atribuicoes da propria conta de teste).
+  // Usa o perfil 11 "Manutencao e Conservacao" (rights=260102: inclui CREATE
+  // e UPDATE), com entidade PIRATINI recursiva — unico perfil desta conta com
+  // alcance sobre a entidade 58 (todos os targets de checklist sao entidade
+  // 58; perfil 9/Solicitante desta conta so alcanca a entidade 25 e devolve
+  // ERROR_GLPI_ADD para entidade 58). Simulacao de papel via
+  // changeActiveProfile, permitida pelo CLAUDE.md sobre a propria conta de
+  // teste. UPDATE real permite fechar o ticket de verdade no cleanup, em vez
+  // de so registrar para limpeza humana.
+  Future<String> conservacaoTecnicoToken() async {
+    final user = envOf('SIS_TEST_CONSERVACAO_USER');
+    final password = envOf('SIS_TEST_CONSERVACAO_PASSWORD');
+    final init = await http.get(
+      Uri.parse('$base/initSession'),
+      headers: {
+        ...headers(null),
+        'Authorization':
+            'Basic ${base64Encode(utf8.encode('$user:$password'))}',
+      },
+    );
+    final token = tokenFromResponse(init);
+    final cap = await http.post(
+      Uri.parse('$base/changeActiveProfile'),
+      headers: headers(token),
+      body: jsonEncode({'profiles_id': 11}),
+    );
+    expect(
+      cap.statusCode,
+      anyOf(200, 201),
+      reason: 'changeActiveProfile(11) falhou: ${cap.body}',
+    );
+    return token;
+  }
+
+  Future<void> closeAndReport(
+    String label,
+    String token,
+    String ticketId,
+  ) async {
+    await http.post(
+      Uri.parse('$base/ITILSolution'),
+      headers: headers(token),
+      body: jsonEncode({
+        'input': {
+          'itemtype': 'Ticket',
+          'items_id': ticketId,
+          'content': 'Encerramento de ticket de teste automatizado ($label).',
+        },
+      }),
+    );
+    final close = await http.put(
+      Uri.parse('$base/Ticket/$ticketId'),
+      headers: headers(token),
+      body: jsonEncode({
+        'input': {'id': ticketId, 'status': 6},
+      }),
+    );
+    final after = await http.get(
+      Uri.parse('$base/Ticket/$ticketId'),
+      headers: headers(token),
+    );
+    // Defensivo: apos status=6 a visibilidade direta do proprio ticket pode
+    // mudar de escopo para um perfil sem READALL (achado real, nao falha de
+    // teste) — nesse caso o body vem como lista de erro, nao Map.
+    final afterDecoded = jsonDecode(after.body);
+    final statusAfter = afterDecoded is Map
+        ? '${afterDecoded['status']}'
+        : 'indisponivel(${after.statusCode}): $afterDecoded';
+    // ignore: avoid_print
+    print(
+      '$label cleanup -> ticket $ticketId put_close=${close.statusCode} '
+      'status_final=$statusAfter'
+      '${statusAfter == '6' ? ' (FECHADO)' : ' (NAO CONFIRMADO FECHADO — REGISTRAR PARA LIMPEZA/AUDITORIA: ticket $ticketId)'}',
+    );
+  }
+
+  test(
+    'P6 (APPLY): checklist com anexo real via GlpiClient.submitChecklistAsTicket',
+    () async {
+      final conservacaoUser = envOf('SIS_TEST_CONSERVACAO_USER');
+      final conservacaoPassword = envOf('SIS_TEST_CONSERVACAO_PASSWORD');
+      if (conservacaoUser.isEmpty || conservacaoPassword.isEmpty) {
+        markTestSkipped(
+          'sem SIS_TEST_CONSERVACAO_USER/SIS_TEST_CONSERVACAO_PASSWORD',
+        );
+        return;
+      }
+      if (envOf('SIS_VALIDATION_APPLY').toLowerCase() != 'true') {
+        markTestSkipped('SIS_VALIDATION_APPLY!=true');
+        return;
+      }
+
+      // Catalogo real embarcado; target 316 "REFRIGERACAO AR CENTRAL" (form 48,
+      // categoria 152, entidade 58) tem uma pergunta `file` (11482) que so fica
+      // visivel quando a sala 11480 e marcada como problema, nao OK.
+      final catalogJson =
+          jsonDecode(
+                File('assets/sis_checklists_catalog.json').readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      final catalog = SisChecklistCatalog.fromMap(catalogJson);
+      final preparer = SisChecklistSubmissionPreparer(
+        catalog: catalog,
+        conditionEngine: SisChecklistConditionEngine(catalog),
+      );
+      final submission = preparer.prepare(
+        formId: 48,
+        targetId: 316,
+        answers: {
+          10599: 'PREVENTIVA',
+          10604: ['AR CENTRAL'],
+          11480: '❌ Ação - Reparo / Reforma',
+          11482: [
+            GlpiTicketAttachment(
+              bytes: utf8.encode(
+                'evidencia de teste automatizado P6 $ticketMarker',
+              ),
+              filename: 'evidencia_p6.txt',
+            ),
+          ],
+        },
+      );
+      expect(submission.canReview, isTrue);
+      expect(submission.fileQuestionIds, contains(11482));
+      expect(submission.attachedFileCount, 1);
+
+      final token = await conservacaoTecnicoToken();
+      String? ticketId;
+      try {
+        final result = await GlpiClient().submitChecklistAsTicket(
+          submission: submission,
+          sessionToken: token,
+          catalog: catalog,
+          formName: catalog.formById(48)?.name,
+          targetName: catalog.targetById(316)?.name,
+        );
+        // ignore: avoid_print
+        print('P6_SUBMIT -> $result');
+        expect(result['success'], isTrue, reason: 'submissao falhou: $result');
+        ticketId = result['ticket_id']?.toString();
+        expect(ticketId, isNotNull);
+        expect(
+          result['attachments_success'],
+          greaterThanOrEqualTo(1),
+          reason: 'anexo nao foi enviado: $result',
+        );
+        expect(
+          result.containsKey('attachment_warning'),
+          isFalse,
+          reason: 'upload de anexo reportou falha: $result',
+        );
+
+        // Read-back: confirma o Document_Item de fato vinculado (nao so o
+        // upload retornar sucesso local). Achado real: perfil 11 (sem
+        // READALL) recebe 403 em GET .../Document_Item sobre um ticket que
+        // criou mas nao esta atribuido a si — direto E via Worker, mesmo
+        // token. Ortogonal ao fix P6 (a propria uploadAndAttachToTicket ja
+        // fez essa mesma checagem internamente, com sucesso, antes de
+        // retornar attachments_success). Verificacao aqui usa leitura
+        // READ-ONLY via admin (nao cria nem muta nada) — mesmo padrao ja
+        // estabelecido nos testes ANEXO_EFEITO/READBACK deste arquivo.
+        final adminUser = envOf('SIS_TEST_ADMIN_USER');
+        final adminPassword = envOf('SIS_TEST_ADMIN_PASSWORD');
+        if (adminUser.isNotEmpty && adminPassword.isNotEmpty) {
+          final ai = await http.get(
+            Uri.parse('$base/initSession'),
+            headers: {
+              ...headers(null),
+              'Authorization':
+                  'Basic ${base64Encode(utf8.encode('$adminUser:$adminPassword'))}',
+            },
+          );
+          final at = tokenFromResponse(ai);
+          final di = await http.get(
+            Uri.parse('$base/Ticket/$ticketId/Document_Item'),
+            headers: headers(at),
+          );
+          var linked = 0;
+          if (di.statusCode == 200 || di.statusCode == 206) {
+            linked = (jsonDecode(di.body) as List).length;
+          }
+          // ignore: avoid_print
+          print(
+            'P6_READBACK(admin, read-only) ticket=$ticketId '
+            'document_item_http=${di.statusCode} vinculados=$linked',
+          );
+          expect(
+            linked,
+            greaterThanOrEqualTo(1),
+            reason: 'Document_Item nao encontrado para o ticket $ticketId',
+          );
+          await http.get(Uri.parse('$base/killSession'), headers: headers(at));
+        } else {
+          // ignore: avoid_print
+          print(
+            'P6_READBACK pulado: sem admin para verificacao read-only '
+            '(attachments_success ja confirmado pelo codigo real: $result)',
+          );
+        }
+
+        // Confirma tambem que categoria/entidade do target continuam corretas
+        // (o resto do fluxo de checklist nao regrediu).
+        final full = await http.get(
+          Uri.parse('$base/Ticket/$ticketId'),
+          headers: headers(token),
+        );
+        final fullData = jsonDecode(full.body) as Map;
+        // ignore: avoid_print
+        print(
+          'P6_TICKET categoria=${fullData['itilcategories_id']} '
+          'entidade=${fullData['entities_id']}',
+        );
+        expect(fullData['itilcategories_id'], 152);
+        expect(fullData['entities_id'], 58);
+      } finally {
+        if (ticketId != null) {
+          await closeAndReport('P6', token, ticketId);
+        }
+        await http.get(Uri.parse('$base/killSession'), headers: headers(token));
+      }
+    },
+  );
+
+  test(
+    'P1 (APPLY): resync offline via GlpiTicket round-trip preserva categoria governada',
+    () async {
+      final conservacaoUser = envOf('SIS_TEST_CONSERVACAO_USER');
+      final conservacaoPassword = envOf('SIS_TEST_CONSERVACAO_PASSWORD');
+      if (conservacaoUser.isEmpty || conservacaoPassword.isEmpty) {
+        markTestSkipped(
+          'sem SIS_TEST_CONSERVACAO_USER/SIS_TEST_CONSERVACAO_PASSWORD',
+        );
+        return;
+      }
+      if (envOf('SIS_VALIDATION_APPLY').toLowerCase() != 'true') {
+        markTestSkipped('SIS_VALIDATION_APPLY!=true');
+        return;
+      }
+      final categoryId = int.parse(envOf('SIS_TEST_CATEGORY_ID'));
+      final entityId = int.parse(envOf('SIS_TEST_ENTITY_ID'));
+
+      final token = await conservacaoTecnicoToken();
+      final fullSession = await http.get(
+        Uri.parse('$base/getFullSession'),
+        headers: headers(token),
+      );
+      final loggedUserId =
+          ((jsonDecode(fullSession.body) as Map)['session']
+              as Map)['glpiID'];
+
+      // Simula EXATAMENTE o momento em que o app salva offline apos falha de
+      // rede: stampedFormData (com campos governed*) -> GlpiTicket.fromMap.
+      final originalFormData = <String, dynamic>{
+        'serviceName': '',
+        'atendimentoPara': 'Para mim',
+        'localizacao': '',
+        'telefone': '',
+        'tipo': '',
+        'assunto':
+            '$ticketMarker P1 resync ${DateTime.now().microsecondsSinceEpoch}',
+        'descricao':
+            'Valida que categoria governada sobrevive ao ciclo '
+            'offline->resync. Descartavel.',
+        'entities_id': entityId,
+        'loggedUserId': loggedUserId,
+        'governedCategoryId': categoryId,
+      };
+      final ticket = GlpiTicket.fromMap(originalFormData);
+      // Simula synchronizeTickets(): reconstroi o payload via toMap().
+      final resyncMap = ticket.toMap();
+      expect(
+        resyncMap['governedCategoryId'],
+        categoryId,
+        reason:
+            'fix P1 quebrou: campo governado nao sobreviveu ao round-trip local',
+      );
+
+      String? ticketId;
+      try {
+        final result = await GlpiClient().createTicket(resyncMap, token);
+        // ignore: avoid_print
+        print('P1_RESYNC -> $result');
+        expect(result['success'], isTrue, reason: 'resync falhou: $result');
+        ticketId = result['ticket_id']?.toString();
+        expect(ticketId, isNotNull);
+
+        final full = await http.get(
+          Uri.parse('$base/Ticket/$ticketId'),
+          headers: headers(token),
+        );
+        final fullData = jsonDecode(full.body) as Map;
+        // ignore: avoid_print
+        print(
+          'P1_TICKET categoria=${fullData['itilcategories_id']} '
+          'esperado=$categoryId',
+        );
+        expect(
+          fullData['itilcategories_id'],
+          categoryId,
+          reason:
+              'GLPI recebeu categoria diferente da governada originalmente '
+              '- fix P1 nao esta funcionando no caminho real',
+        );
+      } finally {
+        if (ticketId != null) {
+          await closeAndReport('P1', token, ticketId);
+        }
         await http.get(Uri.parse('$base/killSession'), headers: headers(token));
       }
     },
