@@ -413,6 +413,10 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
                   filename: file.name,
                 ),
               )
+              // Backstop: AnexarArquivoWidget já rejeita/avisa arquivo com
+              // bytes vazio antes de chamar onFilesSelected — este filtro só
+              // protege contra o contrato do widget mudar sem este código
+              // acompanhar.
               .where((attachment) => attachment.bytes.isNotEmpty)
               .toList(),
         );

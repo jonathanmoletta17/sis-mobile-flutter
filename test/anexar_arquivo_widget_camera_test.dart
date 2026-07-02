@@ -43,4 +43,38 @@ void main() {
       expect(find.textContaining(file.name), findsOneWidget);
     },
   );
+
+  testWidgets(
+    'foto com bytes vazios mostra aviso visível em vez de falhar em silêncio',
+    (tester) async {
+      final selectedFiles = <List<PlatformFile>>[];
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: AnexarArquivoWidget(
+              pickImageFromCamera: () async => XFile.fromData(
+                Uint8List(0),
+                name: 'foto-vazia.jpg',
+                mimeType: 'image/jpeg',
+              ),
+              onFilesSelected: (files) {
+                selectedFiles.add(files);
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.camera_alt_outlined));
+      await tester.pumpAndSettle();
+
+      expect(selectedFiles, isEmpty);
+      expect(find.textContaining('Arquivos selecionados'), findsNothing);
+      expect(
+        find.textContaining('Não foi possível processar a foto'),
+        findsOneWidget,
+      );
+    },
+  );
 }

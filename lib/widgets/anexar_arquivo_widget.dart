@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -7,15 +10,18 @@ import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 
 typedef CameraImagePicker = Future<XFile?> Function();
+typedef FilesPicker = Future<FilePickerResult?> Function();
 
 class AnexarArquivoWidget extends StatefulWidget {
   final ValueChanged<List<PlatformFile>> onFilesSelected;
   final CameraImagePicker? pickImageFromCamera;
+  final FilesPicker? pickFiles;
 
   const AnexarArquivoWidget({
     super.key,
     required this.onFilesSelected,
     this.pickImageFromCamera,
+    this.pickFiles,
   });
 
   @override
@@ -27,17 +33,49 @@ class _AnexarArquivoWidgetState extends State<AnexarArquivoWidget> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _selecionarArquivos() async {
-    final resultado = await FilePicker.platform.pickFiles(
-      type: FileType.any,
-      allowMultiple: true,
-      withData: true,
-    );
+    final resultado = widget.pickFiles != null
+        ? await widget.pickFiles!()
+        : await FilePicker.platform.pickFiles(
+            type: FileType.any,
+            allowMultiple: true,
+            withData: true,
+          );
+
+    if (!mounted || resultado == null || resultado.files.isEmpty) return;
+
+    // Nem todo arquivo devolvido pelo picker vem com `bytes` populado (ex.:
+    // arquivo de provedor de nuvem que falha ao baixar, arquivo grande em
+    // certas plataformas) mesmo com `withData: true`. Sem essa checagem, o
+    // arquivo entrava na lista visível como "selecionado" com o tamanho real
+    // do arquivo, mas sem dado nenhum para enviar depois — o usuário via
+    // confirmação na tela para um anexo que nunca seria enviado.
+    final validos = <PlatformFile>[];
+    final rejeitados = <String>[];
+    for (final arquivo in resultado.files) {
+      if (arquivo.bytes != null && arquivo.bytes!.isNotEmpty) {
+        validos.add(arquivo);
+        continue;
+      }
+      final recovered = await _recoverBytesFromDisk(arquivo);
+      if (recovered == null || recovered.isEmpty) {
+        rejeitados.add(arquivo.name);
+        continue;
+      }
+      validos.add(
+        PlatformFile(
+          name: arquivo.name,
+          path: arquivo.path,
+          size: recovered.length,
+          bytes: recovered,
+        ),
+      );
+    }
 
     if (!mounted) return;
 
-    if (resultado != null && resultado.files.isNotEmpty) {
+    if (validos.isNotEmpty) {
       setState(() {
-        for (final arquivo in resultado.files) {
+        for (final arquivo in validos) {
           final alreadyExists = _arquivosSelecionados.any((existente) {
             final existingPath = existente.path ?? '';
             final selectedPath = arquivo.path ?? '';
@@ -53,6 +91,32 @@ class _AnexarArquivoWidgetState extends State<AnexarArquivoWidget> {
 
       widget.onFilesSelected(List<PlatformFile>.from(_arquivosSelecionados));
     }
+
+    if (rejeitados.isNotEmpty) {
+      _avisarArquivosRejeitados(rejeitados);
+    }
+  }
+
+  Future<Uint8List?> _recoverBytesFromDisk(PlatformFile arquivo) async {
+    if (kIsWeb || arquivo.path == null || arquivo.path!.isEmpty) return null;
+    try {
+      return await File(arquivo.path!).readAsBytes();
+    } catch (e) {
+      debugPrint('Falha ao ler bytes do anexo (${arquivo.name}): $e');
+      return null;
+    }
+  }
+
+  void _avisarArquivosRejeitados(List<String> nomes) {
+    if (!mounted) return;
+    final mensagem = nomes.length == 1
+        ? 'Não foi possível ler o arquivo "${nomes.first}". Tente selecionar '
+              'novamente.'
+        : 'Não foi possível ler ${nomes.length} arquivo(s): '
+              '${nomes.join(", ")}.';
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(mensagem), backgroundColor: AppColors.danger),
+    );
   }
 
   Future<void> _tirarFoto() async {
@@ -64,7 +128,10 @@ class _AnexarArquivoWidgetState extends State<AnexarArquivoWidget> {
 
     try {
       final bytes = await foto.readAsBytes();
-      if (bytes.isEmpty) return;
+      if (bytes.isEmpty) {
+        _avisarFalhaFoto();
+        return;
+      }
 
       final arquivoFoto = PlatformFile(
         name: foto.name.isNotEmpty ? foto.name : 'foto.jpg',
@@ -91,7 +158,18 @@ class _AnexarArquivoWidgetState extends State<AnexarArquivoWidget> {
       widget.onFilesSelected(List<PlatformFile>.from(_arquivosSelecionados));
     } catch (e) {
       debugPrint('Erro ao processar foto: $e');
+      _avisarFalhaFoto();
     }
+  }
+
+  void _avisarFalhaFoto() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Não foi possível processar a foto. Tente novamente.'),
+        backgroundColor: AppColors.danger,
+      ),
+    );
   }
 
   void _removerArquivo(int index) {
