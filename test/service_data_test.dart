@@ -66,20 +66,29 @@ void main() {
     );
   });
 
-  test('exposes extra field config only for matching services', () {
-    final projeto = findServiceCategoryByName('Projeto');
-    final vidracaria = findServiceCategoryByName('Vidracaria');
-    final limpeza = findServiceCategoryByName('Limpeza');
+  test(
+    'extra field label existe mas fica bloqueado sem fonte dinâmica real '
+    '(varredura 2026-07-02: nem "Divisão/Departamento" da Projeto nem '
+    '"Tipo de Atendimento" da Vidraçaria têm opções reais do GLPI ainda — '
+    'nunca inventar valores, bloquear em vez de oferecer opções falsas)',
+    () {
+      final projeto = findServiceCategoryByName('Projeto');
+      final vidracaria = findServiceCategoryByName('Vidracaria');
+      final limpeza = findServiceCategoryByName('Limpeza');
 
-    expect(projeto, isNotNull);
-    expect(projeto!.hasExtraField, isTrue);
-    expect(projeto.extraFieldLabel, 'Divisao / Departamento');
+      expect(projeto, isNotNull);
+      expect(projeto!.hasExtraField, isFalse);
+      expect(projeto.extraFieldPendingDynamicSource, isTrue);
+      expect(projeto.extraFieldLabel, 'Divisão / Departamento');
 
-    expect(vidracaria, isNotNull);
-    expect(vidracaria!.hasExtraField, isTrue);
-    expect(vidracaria.extraFieldLabel, 'Tipo de Atendimento');
+      expect(vidracaria, isNotNull);
+      expect(vidracaria!.hasExtraField, isFalse);
+      expect(vidracaria.extraFieldPendingDynamicSource, isTrue);
+      expect(vidracaria.extraFieldLabel, 'Tipo de Atendimento');
 
-    expect(limpeza, isNotNull);
-    expect(limpeza!.hasExtraField, isFalse);
-  });
+      expect(limpeza, isNotNull);
+      expect(limpeza!.hasExtraField, isFalse);
+      expect(limpeza.extraFieldPendingDynamicSource, isFalse);
+    },
+  );
 }

@@ -42,6 +42,18 @@ class ServiceCategory {
   final List<String> locations;
   final int? staticLocationRootId;
   final List<LocationOption> locationOptions;
+
+  /// Opções de "Tipo" para o subtipo de detalhamento (pergunta FormCreator
+  /// `fieldtype=select` com lista literal, ex.: `["Iluminação","Parado",...]`
+  /// — diferente do "Tipo" ligado a ITILCategory, esse já é dinâmico via
+  /// catálogo governado). Risco conhecido, sem correção ainda (varredura
+  /// 2026-07-02): valores hoje batem com o GLPI real por terem sido copiados
+  /// manualmente na criação de cada `ServiceCategory`, mas não há verificação
+  /// automática — se o GLPI mudar essa lista, o app não vai saber. Corrigir
+  /// exigiria mapear qual pergunta literal corresponde à seção/sub-serviço
+  /// selecionado dinamicamente (mais arquitetura que os outros 2 achados
+  /// desta varredura); não implementado agora para não arriscar um mapeamento
+  /// errado sob pressa — ver memória do projeto para o achado completo.
   final List<String> typeOptions;
   final List<String> urgencyOptions;
   final bool includeNomePessoa;
@@ -83,6 +95,17 @@ class ServiceCategory {
 
   bool get hasExtraField =>
       extraFieldLabel != null && extraFieldOptions.isNotEmpty;
+
+  /// Verdadeiro quando o GLPI real exige uma pergunta extra (ex.: "Divisão /
+  /// Departamento", `glpiselect`/Entity) mas este app ainda não tem uma fonte
+  /// dinâmica pra ela (o pipeline de catálogo governado só pré-resolve
+  /// categoria/localização hoje, e leitura ao vivo de `/Entity` devolve
+  /// `ERROR_RIGHT_MISSING` pros perfis Solicitante/GG, além de `/search/Entity`
+  /// estar bloqueado no allowlist do Worker). Nunca preencher
+  /// [extraFieldOptions] com valores inventados pra "resolver" isso — a tela
+  /// deve bloquear o envio até existir fonte real.
+  bool get extraFieldPendingDynamicSource =>
+      extraFieldLabel != null && extraFieldOptions.isEmpty;
 
   List<LocationOption> get effectiveLocationOptions {
     if (locationOptions.isNotEmpty) return locationOptions;
@@ -414,12 +437,12 @@ const List<ServiceCategory> serviceCategories = [
       'Outras atividades',
     ],
     includeNomePessoa: false,
-    extraFieldLabel: 'Divisao / Departamento',
-    extraFieldOptions: [
-      'Divisao/Departamento 1',
-      'Divisao/Departamento 2',
-      'Outro',
-    ],
+    // GLPI real (form "Projeto") exige uma pergunta "Divisão / Departamento"
+    // (glpiselect/Entity, obrigatória) que este app ainda não resolve
+    // dinamicamente — ver ServiceCategory.extraFieldPendingDynamicSource.
+    // Sem opções aqui de propósito: nunca inventar valores fixos pra uma
+    // árvore de entidade real do GLPI.
+    extraFieldLabel: 'Divisão / Departamento',
   ),
   ServiceCategory(
     name: 'Tecnico de Redes',
@@ -460,8 +483,12 @@ const List<ServiceCategory> serviceCategories = [
       'Troca de Borracha/Vedacao',
       'Outro',
     ],
+    // "Tipo de Atendimento" NÃO corresponde a nenhuma pergunta real em
+    // nenhum dos 41 formulários FormCreator do GLPI (varredura completa
+    // 2026-07-02) — diferente do caso "Projeto", este campo é inteiramente
+    // inventado, sem contrapartida real nenhuma. Removidas as opções
+    // fabricadas; ver ServiceCategory.extraFieldPendingDynamicSource.
     extraFieldLabel: 'Tipo de Atendimento',
-    extraFieldOptions: ['Instalacao', 'Medicao', 'Remocao', 'Troca'],
     aliases: ['vidracaria'],
   ),
 ];

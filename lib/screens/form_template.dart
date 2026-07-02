@@ -48,6 +48,11 @@ class FormTemplate extends StatefulWidget {
   final List<GovernedServiceRecord> governedRecords;
   final Widget Function(BuildContext, Function(String?))? extraFieldsBuilder;
 
+  /// Quando true, o campo extra (ex.: "Divisão / Departamento") é exigido
+  /// pelo GLPI real mas este app ainda não tem fonte dinâmica pra ele —
+  /// bloqueia o envio em vez de aceitar submissão sem essa informação.
+  final bool extraFieldBlocked;
+
   const FormTemplate({
     super.key,
     required this.serviceName,
@@ -65,6 +70,7 @@ class FormTemplate extends StatefulWidget {
     this.runtimeFormStatus,
     this.governedRecords = const [],
     this.extraFieldsBuilder,
+    this.extraFieldBlocked = false,
   });
 
   @override
@@ -104,10 +110,17 @@ class _FormTemplateState extends State<FormTemplate> {
   final Map<String, _AggregateServiceAnswer> _aggregateAnswers =
       <String, _AggregateServiceAnswer>{};
 
+  // Confirmação ao vivo de que o formulário real tem a pergunta "Este
+  // atendimento é para quem?" — null enquanto não confirmado (fail-closed:
+  // trata como false até a resposta chegar).
+  bool? _hasThirdPartyAudienceLive;
+  int? _thirdPartyAudienceFormId;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final appState = Provider.of<AppState>(context, listen: false);
+    _maybeLoadThirdPartyAudienceQuestion(appState);
     final formId = _candidateAggregateFormId(appState);
     if (formId == null ||
         _aggregateSchemaFormId == formId ||
@@ -116,6 +129,26 @@ class _FormTemplateState extends State<FormTemplate> {
     }
     _aggregateSchemaFormId = formId;
     _loadAggregateSchema(appState, formId);
+  }
+
+  int? _primaryFormId(AppState appState) {
+    if (widget.governedRecords.isEmpty) return null;
+    final formIds = widget.governedRecords
+        .map((record) => record.formId)
+        .toSet();
+    if (formIds.length != 1) return null;
+    final formId = formIds.single;
+    return formId > 0 ? formId : null;
+  }
+
+  void _maybeLoadThirdPartyAudienceQuestion(AppState appState) {
+    final formId = _primaryFormId(appState);
+    if (formId == null || _thirdPartyAudienceFormId == formId) return;
+    _thirdPartyAudienceFormId = formId;
+    appState.hasThirdPartyAudienceQuestion(formId).then((result) {
+      if (!mounted || _thirdPartyAudienceFormId != formId) return;
+      setState(() => _hasThirdPartyAudienceLive = result);
+    });
   }
 
   int? _candidateAggregateFormId(AppState appState) {
@@ -194,11 +227,14 @@ class _FormTemplateState extends State<FormTemplate> {
         : 'para_mim';
   }
 
+  // Oferece "Para outra Pessoa" quando o FORMULÁRIO REAL tem essa pergunta
+  // (confirmado ao vivo, ver _maybeLoadThirdPartyAudienceQuestion) — não
+  // quando algum alvo tem targetticket.audience=para_terceiro, que é um
+  // conceito diferente (roteamento do alvo, não a pergunta em si; achado ao
+  // vivo 2026-07-02: existem formulários com a pergunta onde TODOS os alvos
+  // roteiam como "para mim" mesmo assim). Fail-closed enquanto não confirmado.
   bool _hasThirdPartyRecords(AppState appState) {
-    return GovernedSubmissionResolver.hasThirdPartyOption(
-      records: widget.governedRecords,
-      profileName: appState.activeProfile ?? 'Solicitante',
-    );
+    return _hasThirdPartyAudienceLive ?? false;
   }
 
   GovernedTicketAudience _effectiveSubmissionAudience() {
@@ -520,6 +556,19 @@ class _FormTemplateState extends State<FormTemplate> {
 
   Future<void> _enviarFormulario() async {
     if (_formKey.currentState!.validate()) {
+      if (widget.extraFieldBlocked) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Este tipo de solicitação exige uma informação que o app '
+              'ainda não consegue buscar do GLPI dinamicamente. Abra este '
+              'chamado pelo GLPI web.',
+            ),
+            backgroundColor: AppColors.danger,
+          ),
+        );
+        return;
+      }
       final appState = Provider.of<AppState>(context, listen: false);
       final hasThirdPartyOption = _hasThirdPartyRecords(appState);
       final isThirdParty =

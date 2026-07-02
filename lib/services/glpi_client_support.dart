@@ -395,4 +395,36 @@ class GlpiClientSupport {
         'observer_group_name': observerGroupName,
     };
   }
+
+  /// Reconhece a pergunta real "Este atendimento é para quem?" do FormCreator
+  /// (fieldtype `select`, valores contendo "Para mim" e uma opção de terceiro
+  /// tipo "Para outra Pessoa") por conteúdo, não por nome exato — o texto da
+  /// pergunta pode variar entre formulários, o padrão de valores não.
+  static bool isThirdPartyAudienceQuestion(Map<String, dynamic> question) {
+    final fieldtype = (question['fieldtype'] ?? '').toString().toLowerCase();
+    if (fieldtype != 'select') return false;
+
+    final rawValues = question['values'];
+    List<dynamic> values;
+    try {
+      final decoded = rawValues is String
+          ? jsonDecode(rawValues)
+          : rawValues;
+      if (decoded is! List) return false;
+      values = decoded;
+    } catch (_) {
+      return false;
+    }
+
+    final normalized = values
+        .map((value) => value.toString().trim().toLowerCase())
+        .toSet();
+    final hasParaMim = normalized.any(
+      (value) => value == 'para mim' || value.contains('para mim'),
+    );
+    final hasParaOutro = normalized.any(
+      (value) => value.contains('outra') || value.contains('terceir'),
+    );
+    return hasParaMim && hasParaOutro;
+  }
 }

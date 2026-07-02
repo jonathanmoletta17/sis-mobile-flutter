@@ -62,20 +62,6 @@ class GovernedSubmissionResolution {
 class GovernedSubmissionResolver {
   const GovernedSubmissionResolver._();
 
-  static bool hasThirdPartyOption({
-    required List<GovernedServiceRecord> records,
-    required String profileName,
-  }) {
-    final profile = _normalize(profileName);
-    return records.any(
-      (record) =>
-          record.audience == 'para_terceiro' &&
-          record.profileVisibility.any(
-            (visibleProfile) => _normalize(visibleProfile.name) == profile,
-          ),
-    );
-  }
-
   static GovernedSubmissionResolution resolve(GovernedSubmissionInput input) {
     if (input.records.isEmpty) {
       return GovernedSubmissionResolution.blocked(

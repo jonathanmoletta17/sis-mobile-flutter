@@ -86,6 +86,10 @@ class AppState extends ChangeNotifier {
   SisChecklistCatalog? _checklistCatalog;
   String? _checklistCatalogError;
 
+  // Cache por formId: existe pergunta real "Este atendimento é para quem?"
+  // nesse formulário FormCreator? Evita re-buscar a cada rebuild da tela.
+  final Map<int, bool> _thirdPartyAudienceQuestionCache = {};
+
   SisChecklistCatalog? get checklistCatalog => _checklistCatalog;
   String? get checklistCatalogError => _checklistCatalogError;
 
@@ -600,6 +604,23 @@ class AppState extends ChangeNotifier {
       }
       rethrow;
     }
+  }
+
+  /// Confirma ao vivo (com cache por formId) se o formulário tem a pergunta
+  /// real "Este atendimento é para quem?" — fonte da verdade pra oferecer a
+  /// opção de atendimento para terceiro. Fail-closed: sem sessão ou em erro,
+  /// retorna false (não oferece a opção sem confirmação).
+  Future<bool> hasThirdPartyAudienceQuestion(int formId) async {
+    final cached = _thirdPartyAudienceQuestionCache[formId];
+    if (cached != null) return cached;
+    if (!_isAuthenticated || _sessionToken == null) return false;
+
+    final result = await _apiService.formHasThirdPartyAudienceQuestion(
+      formId: formId,
+      sessionToken: _sessionToken!,
+    );
+    _thirdPartyAudienceQuestionCache[formId] = result;
+    return result;
   }
 
   bool _isGovernedSubmitBlocker(Object error) {

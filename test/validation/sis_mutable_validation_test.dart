@@ -2196,4 +2196,63 @@ void main() {
       }
     },
   );
+
+  test(
+    'read-only: formHasThirdPartyAudienceQuestion confirma a pergunta real '
+    '"Este atendimento é para quem?" nos 4 formulários visíveis ao GG '
+    '(achado varredura 2026-07-02)',
+    () async {
+      final ggUser = envOf('SIS_TEST_GG_USER');
+      final ggPassword = envOf('SIS_TEST_GG_PASSWORD');
+      if (ggUser.isEmpty || ggPassword.isEmpty) {
+        markTestSkipped('sem SIS_TEST_GG_USER/SIS_TEST_GG_PASSWORD');
+        return;
+      }
+      final workerBase = envOf('GLPI_BASE_URL');
+      if (workerBase.isEmpty) {
+        markTestSkipped('sem GLPI_BASE_URL (Worker)');
+        return;
+      }
+
+      final init = await http.get(
+        Uri.parse('$workerBase/initSession'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization':
+              'Basic ${base64Encode(utf8.encode('$ggUser:$ggPassword'))}',
+        },
+      );
+      expect(init.statusCode, 200, reason: 'GG init via worker: ${init.body}');
+      final token = tokenFromResponse(init);
+
+      try {
+        final client = GlpiClient();
+        // Os 4 formularios visiveis ao perfil GG (confirmado via catalogo
+        // governado): CONSERVAÇÃO, MANUTENÇÃO, Multiplas Demandas, Projeto.
+        for (final formId in const [38, 39, 40, 36]) {
+          final hasQuestion = await client.formHasThirdPartyAudienceQuestion(
+            formId: formId,
+            sessionToken: token,
+          );
+          // ignore: avoid_print
+          print(
+            'form $formId: pergunta "para quem" confirmada ao vivo = $hasQuestion',
+          );
+          expect(
+            hasQuestion,
+            isTrue,
+            reason:
+                'form $formId deveria ter a pergunta real "Este atendimento '
+                'é para quem?" (confirmado manualmente ao vivo antes do fix)',
+          );
+        }
+      } finally {
+        await http.get(
+          Uri.parse('$workerBase/killSession'),
+          headers: {'Session-Token': token},
+        );
+      }
+    },
+  );
 }

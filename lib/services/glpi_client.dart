@@ -166,6 +166,44 @@ class GlpiClient {
     );
   }
 
+  /// Verifica ao vivo se o formulário FormCreator tem a pergunta real "Este
+  /// atendimento é para quem?" (fieldtype select, valores "Para mim"/"Para
+  /// outra Pessoa"). Fonte da verdade sobre oferecer ou não a opção de
+  /// atendimento para terceiro — NÃO usar `targetticket.audience` pra isso,
+  /// que é sobre roteamento do alvo, um conceito diferente e independente
+  /// (achado ao vivo 2026-07-02: formulários com essa pergunta podem ter
+  /// todos os alvos roteando como "para mim" mesmo assim).
+  /// Fail-closed: qualquer erro (permissão, rede, formato) retorna false —
+  /// nunca oferece a opção sem confirmação real de que ela existe.
+  Future<bool> formHasThirdPartyAudienceQuestion({
+    required int formId,
+    required String sessionToken,
+  }) async {
+    try {
+      final headers = {..._headers, 'Session-Token': sessionToken};
+      final uri = Uri.parse(
+        '${GlpiConfig.baseUrl}/PluginFormcreatorForm/$formId/PluginFormcreatorQuestion',
+      );
+      final response = await http
+          .get(uri, headers: headers)
+          .timeout(GlpiConfig.requestTimeout);
+      _logResponse('FORMCREATOR_AUDIENCE_QUESTION', response);
+      if (response.statusCode != 200 && response.statusCode != 206) {
+        return false;
+      }
+      final decoded = jsonDecode(response.body);
+      if (decoded is! List) return false;
+      return decoded.whereType<Map>().any(
+        (raw) => GlpiClientSupport.isThirdPartyAudienceQuestion(
+          Map<String, dynamic>.from(raw),
+        ),
+      );
+    } catch (e) {
+      _debugLog('formHasThirdPartyAudienceQuestion($formId) falhou: $e');
+      return false;
+    }
+  }
+
   Future<List<Map<String, dynamic>>> _getFormCreatorList({
     required String itemType,
     required Map<String, String> queryParameters,

@@ -1,89 +1,88 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sis_mobile_flutter/catalog/governed_service_catalog.dart';
-import 'package:sis_mobile_flutter/catalog/governed_submission_contract.dart';
+import 'package:sis_mobile_flutter/services/glpi_client_support.dart';
 
+// Historico deste arquivo: originalmente testava
+// GovernedSubmissionResolver.hasThirdPartyOption (targetticket.audience),
+// que codificava um bug como comportamento esperado — "GG desabilita Para
+// outra Pessoa quando nao ha para_terceiro" partia da premissa errada de
+// que a visibilidade da opcao vem do roteamento do alvo. Achado ao vivo
+// 2026-07-02 (GLPI real, formularios 38/39/40/36): existe uma pergunta
+// FormCreator real "Este atendimento e para quem?" (fieldtype select,
+// valores "Para mim"/"Para outra Pessoa"), independente de
+// targetticket.audience, que e a fonte da verdade correta — inclusive para
+// o perfil GG, que tem essa pergunta em todos os formularios que enxerga.
+// A funcao antiga foi removida (nao tinha mais uso em lib/); este arquivo
+// agora testa GlpiClientSupport.isThirdPartyAudienceQuestion, que e o
+// reconhecedor real usado por form_template.dart via
+// AppState.hasThirdPartyAudienceQuestion.
 void main() {
-  GovernedServiceRecord record({
-    required String id,
-    required String profile,
-    required String audience,
-    int destinationValue = 28,
-  }) {
-    return GovernedServiceRecord(
-      catalogRecordId: id,
-      serviceId: 'pintura',
-      serviceLabel: 'Pintura',
-      profileVisibility: [GovernedProfile(name: profile)],
-      formId: 1,
-      targetTicketId: 1,
-      audience: audience,
-      destinationEntityMode: audience == 'para_terceiro'
-          ? 'third_party_question'
-          : 'requester_context_para_mim',
-      destinationEntityValue: destinationValue,
-      expectedBaseTaskTemplates: const [],
-      readbackContract: const [],
-    );
-  }
-
-  final records = [
-    record(
-      id: 'solicitante:para-mim',
-      profile: 'Solicitante',
-      audience: 'para_mim',
-    ),
-    record(
-      id: 'solicitante:para-terceiro',
-      profile: 'Solicitante',
-      audience: 'para_terceiro',
-      destinationValue: 371,
-    ),
-    record(
-      id: 'gg:para-mim',
-      profile: 'Solicitante-GG-Conservação',
-      audience: 'para_mim',
-      destinationValue: 58,
-    ),
-    record(
-      id: 'super-admin:para-mim',
-      profile: 'Super-Admin',
-      audience: 'para_mim',
-      destinationValue: 58,
-    ),
-  ];
-
-  group('third-party visibility from governed catalog', () {
-    test('Solicitante habilita Para outra Pessoa quando ha para_terceiro', () {
+  group('isThirdPartyAudienceQuestion (reconhece a pergunta real do GLPI)', () {
+    test('reconhece o padrao exato observado ao vivo nos forms 38/39/40/36', () {
       expect(
-        GovernedSubmissionResolver.hasThirdPartyOption(
-          records: records,
-          profileName: 'Solicitante',
-        ),
+        GlpiClientSupport.isThirdPartyAudienceQuestion({
+          'fieldtype': 'select',
+          'values': '["Para mim","Para outra Pessoa"]',
+        }),
         isTrue,
       );
     });
 
-    test('GG desabilita Para outra Pessoa quando nao ha para_terceiro', () {
+    test('e insensivel a maiusculas/minusculas e espacos', () {
       expect(
-        GovernedSubmissionResolver.hasThirdPartyOption(
-          records: records,
-          profileName: 'Solicitante-GG-Conservação',
-        ),
+        GlpiClientSupport.isThirdPartyAudienceQuestion({
+          'fieldtype': 'select',
+          'values': '[" para mim ", "PARA OUTRA PESSOA"]',
+        }),
+        isTrue,
+      );
+    });
+
+    test('aceita variante "para terceiro" no lugar de "para outra pessoa"', () {
+      expect(
+        GlpiClientSupport.isThirdPartyAudienceQuestion({
+          'fieldtype': 'select',
+          'values': '["Para mim","Para um terceiro"]',
+        }),
+        isTrue,
+      );
+    });
+
+    test('rejeita fieldtype diferente de select (ex.: glpiselect do beneficiario)', () {
+      expect(
+        GlpiClientSupport.isThirdPartyAudienceQuestion({
+          'fieldtype': 'glpiselect',
+          'itemtype': 'User',
+          'values': '',
+        }),
         isFalse,
       );
     });
 
-    test(
-      'Super-Admin desabilita Para outra Pessoa quando nao ha para_terceiro',
-      () {
-        expect(
-          GovernedSubmissionResolver.hasThirdPartyOption(
-            records: records,
-            profileName: 'Super-Admin',
-          ),
-          isFalse,
-        );
-      },
-    );
+    test('rejeita select com valores que nao formam o par mim/terceiro', () {
+      expect(
+        GlpiClientSupport.isThirdPartyAudienceQuestion({
+          'fieldtype': 'select',
+          'values': '["Iluminação","Parado","Ventilação"]',
+        }),
+        isFalse,
+      );
+    });
+
+    test('rejeita values malformado sem lancar excecao', () {
+      expect(
+        GlpiClientSupport.isThirdPartyAudienceQuestion({
+          'fieldtype': 'select',
+          'values': 'nao e json valido',
+        }),
+        isFalse,
+      );
+    });
+
+    test('rejeita values ausente', () {
+      expect(
+        GlpiClientSupport.isThirdPartyAudienceQuestion({'fieldtype': 'select'}),
+        isFalse,
+      );
+    });
   });
 }
