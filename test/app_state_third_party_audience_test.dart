@@ -32,6 +32,29 @@ void main() {
     expect(await appState.hasThirdPartyAudienceQuestion(38), isFalse);
     expect(api.callCountByForm.containsKey(38), isFalse);
   });
+
+  test(
+    'clearThirdPartyAudienceCache força nova busca ao vivo no próximo call '
+    '(mesmo gatilho de refresh do catálogo governado ao voltar do background)',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final api = _AudienceGlpiClient(resultForForm: {38: true});
+      final appState = AppState(api);
+      await pumpEventQueue();
+      expect(await appState.authenticate('gg', 'senha'), isTrue);
+
+      expect(await appState.hasThirdPartyAudienceQuestion(38), isTrue);
+      expect(api.callCountByForm[38], 1);
+
+      // Sem limpar o cache, chamada repetida não bate na API de novo.
+      await appState.hasThirdPartyAudienceQuestion(38);
+      expect(api.callCountByForm[38], 1);
+
+      appState.clearThirdPartyAudienceCache();
+      await appState.hasThirdPartyAudienceQuestion(38);
+      expect(api.callCountByForm[38], 2);
+    },
+  );
 }
 
 class _AudienceGlpiClient extends GlpiClient {

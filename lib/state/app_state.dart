@@ -623,6 +623,14 @@ class AppState extends ChangeNotifier {
     return result;
   }
 
+  /// Limpa o cache de [hasThirdPartyAudienceQuestion]. Chamado junto com
+  /// `refreshServiceCatalogRepository()` (mesmo gatilho: app volta do
+  /// background) — sem isso, esse cache específico nunca revalida dentro da
+  /// mesma sessão do app, inconsistente com o resto dos dados governados.
+  void clearThirdPartyAudienceCache() {
+    _thirdPartyAudienceQuestionCache.clear();
+  }
+
   bool _isGovernedSubmitBlocker(Object error) {
     final detail = error.toString();
     return detail.contains('GLPI_PERMISSION_DENIED') ||

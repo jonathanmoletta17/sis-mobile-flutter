@@ -57,6 +57,15 @@ class _ServiceCatalogScreenState extends State<ServiceCatalogScreen>
     });
 
     await refreshServiceCatalogRepository();
+    // Mesmo gatilho de revalidação do catálogo governado, pro cache de
+    // "pergunta para quem" (AppState.hasThirdPartyAudienceQuestion) não ficar
+    // desalinhado do resto dos dados live que já revalidam aqui.
+    if (mounted) {
+      Provider.of<AppState>(
+        context,
+        listen: false,
+      ).clearThirdPartyAudienceCache();
+    }
 
     if (!mounted) return;
     setState(() {
