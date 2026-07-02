@@ -24,6 +24,15 @@ class GlpiTicket {
   final List<String?> attachmentMimeList;
   final List<String> attachmentPathsList;
 
+  /// Campos do formData original (ex.: `governedCategoryId`, `governedLocationId`,
+  /// `governedEntityId`, `governedFormId`) que não têm campo dedicado nesta classe.
+  /// Preservado para que a ressubmissão offline (`synchronizeTickets`) reconstrua
+  /// o payload com os MESMOS IDs governados resolvidos originalmente, em vez de
+  /// cair silenciosamente em busca legada por nome de serviço/string. Só guarda
+  /// valores JSON-safe (instâncias de classe como `GovernedSubmissionContract`
+  /// nunca sobrevivem ao round-trip local via SharedPreferences).
+  final Map<String, dynamic> rawFormData;
+
   GlpiTicket({
     required this.serviceName,
     required this.atendimentoPara,
@@ -47,10 +56,12 @@ class GlpiTicket {
     this.attachmentNameList = const [],
     this.attachmentMimeList = const [],
     this.attachmentPathsList = const [],
+    this.rawFormData = const {},
   });
 
   Map<String, dynamic> toMap() {
     return {
+      ...rawFormData,
       'serviceName': serviceName,
       'atendimentoPara': atendimentoPara,
       'nomePessoa': nomePessoa,
@@ -128,7 +139,30 @@ class GlpiTicket {
           ).ifEmpty(
             map['attachmentPath']?.toString() ?? map['anexoPath']?.toString(),
           ),
+      rawFormData: _jsonSafeSubset(map),
     );
+  }
+
+  static Map<String, dynamic> _jsonSafeSubset(Map<String, dynamic> map) {
+    final result = <String, dynamic>{};
+    for (final entry in map.entries) {
+      if (_isJsonSafe(entry.value)) {
+        result[entry.key] = entry.value;
+      }
+    }
+    return result;
+  }
+
+  static bool _isJsonSafe(dynamic value) {
+    if (value == null || value is String || value is num || value is bool) {
+      return true;
+    }
+    if (value is List) return value.every(_isJsonSafe);
+    if (value is Map) {
+      return value.keys.every((key) => key is String) &&
+          value.values.every(_isJsonSafe);
+    }
+    return false;
   }
 
   static int? _parseOptionalInt(dynamic value) {
