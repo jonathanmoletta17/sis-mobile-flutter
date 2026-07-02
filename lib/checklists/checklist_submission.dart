@@ -30,6 +30,15 @@ class SisChecklistPreparedSubmission {
   bool get canReview => missingRequiredQuestionIds.isEmpty;
   bool get hasAttachments => fileQuestionIds.isNotEmpty;
 
+  /// Quantas perguntas tipo `file` já têm ao menos um arquivo capturado em
+  /// [answers]. Usado para dar visibilidade ao usuário antes de enviar —
+  /// pergunta obrigatória sem anexo já bloqueia via [missingRequiredQuestionIds],
+  /// mas perguntas opcionais de anexo não têm outro sinal visível.
+  int get attachedFileCount => fileQuestionIds.where((id) {
+    final value = answers[id];
+    return value is List && value.isNotEmpty;
+  }).length;
+
   /// Payload no formato FormCreator (mantido para compatibilidade). Anexos
   /// (`file`) ficam de fora do JSON e sao tratados separadamente.
   Map<String, dynamic> toFormCreatorInput() {

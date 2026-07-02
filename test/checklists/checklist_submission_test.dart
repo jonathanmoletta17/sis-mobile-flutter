@@ -196,6 +196,35 @@ void main() {
     expect(payload.containsKey('formcreator_field_3'), isFalse);
   });
 
+  test('attachedFileCount reflects only questions with a non-empty list answer', () {
+    final withoutFile = _preparer().prepare(
+      formId: 50,
+      targetId: 341,
+      answers: {1: 'A'},
+    );
+    expect(withoutFile.hasAttachments, isTrue); // pergunta 3 existe no form
+    expect(withoutFile.attachedFileCount, 0);
+
+    final withEmptyList = _preparer().prepare(
+      formId: 50,
+      targetId: 341,
+      answers: {1: 'A', 3: <String>[]},
+    );
+    expect(withEmptyList.attachedFileCount, 0);
+
+    final withFile = _preparer().prepare(
+      formId: 50,
+      targetId: 341,
+      answers: {
+        1: 'A',
+        3: [
+          {'name': 'foto.jpg'},
+        ],
+      },
+    );
+    expect(withFile.attachedFileCount, 1);
+  });
+
   test('rejects target that does not belong to the form', () {
     expect(
       () => _preparer().prepare(formId: 49, targetId: 341, answers: {}),

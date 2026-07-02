@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import '../../services/glpi_ticket_support.dart';
+import '../../widgets/anexar_arquivo_widget.dart';
 import '../checklist_catalog.dart';
 import '../checklist_condition_engine.dart';
 import '../checklist_submission.dart';
@@ -281,6 +283,7 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
             value: _answers[question.id],
             onChanged: (value) => _setAnswer(question.id, value),
             glpiSelectBuilder: _glpiSelectBuilder,
+            fileBuilder: _fileBuilder,
           ),
         );
       }
@@ -328,10 +331,17 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
       final result = await onSubmit(submission);
       if (!mounted) return;
       final success = result['success'] == true;
+      final attachmentWarning = result['attachment_warning']?.toString();
       setState(() {
-        _resultMessage = success
-            ? 'Checklist enviado. Ticket: ${result['ticket_id'] ?? '—'}'
-            : 'Falha: ${result['message'] ?? 'erro desconhecido'}';
+        if (!success) {
+          _resultMessage = 'Falha: ${result['message'] ?? 'erro desconhecido'}';
+        } else if (attachmentWarning != null && attachmentWarning.isNotEmpty) {
+          _resultMessage =
+              '⚠️ Checklist enviado. Ticket: ${result['ticket_id'] ?? '—'}, '
+              'mas houve falha em anexo. $attachmentWarning';
+        } else {
+          _resultMessage = 'Checklist enviado. Ticket: ${result['ticket_id'] ?? '—'}';
+        }
       });
     } finally {
       if (mounted) setState(() => _submitting = false);
@@ -381,6 +391,33 @@ class _SisChecklistFormScreenState extends State<SisChecklistFormScreen> {
         ),
       );
     };
+  }
+
+  // Captura anexo(s) de uma pergunta `file` reaproveitando o mesmo picker do
+  // fluxo normal de ticket. Key por question.id para o AnexarArquivoWidget
+  // preservar a seleção do usuário através dos rebuilds de _setAnswer (que
+  // acontecem a cada resposta de QUALQUER pergunta na tela, não só desta).
+  Widget _fileBuilder(
+    SisChecklistQuestion question,
+    dynamic value,
+    ValueChanged<dynamic> onChanged,
+  ) {
+    return AnexarArquivoWidget(
+      key: Key('checklist_file_${question.id}'),
+      onFilesSelected: (files) {
+        onChanged(
+          files
+              .map(
+                (file) => GlpiTicketAttachment(
+                  bytes: file.bytes ?? const [],
+                  filename: file.name,
+                ),
+              )
+              .where((attachment) => attachment.bytes.isNotEmpty)
+              .toList(),
+        );
+      },
+    );
   }
 }
 

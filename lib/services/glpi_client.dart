@@ -2435,7 +2435,21 @@ class GlpiClient {
         dynamic data;
         if (response.body.isNotEmpty) data = jsonDecode(response.body);
         final ticketId = (data is Map ? data['id'] : null)?.toString();
-        return {'success': true, 'ticket_id': ticketId, 'raw': data};
+
+        final attachmentResult = (ticketId == null || ticketId.isEmpty)
+            ? const <String, dynamic>{}
+            : await _uploadChecklistAttachments(
+                sessionToken: sessionToken,
+                ticketId: ticketId,
+                submission: submission,
+              );
+
+        return {
+          'success': true,
+          'ticket_id': ticketId,
+          'raw': data,
+          ...attachmentResult,
+        };
       }
 
       if (_isAuthError(response.statusCode)) throw _authException(response);
@@ -2453,5 +2467,37 @@ class GlpiClient {
         'message': 'Erro ao criar ticket de checklist: $e',
       };
     }
+  }
+
+  /// Faz upload de cada anexo capturado (perguntas `file`) e vincula ao ticket
+  /// recem-criado, reaproveitando [uploadAndAttachToTicket] (mesma infra do
+  /// fluxo normal de anexo de ticket). Agregação de sucesso/falha fica em
+  /// [GlpiTicketSupport.uploadChecklistAttachments] (testável sem rede).
+  Future<Map<String, dynamic>> _uploadChecklistAttachments({
+    required String sessionToken,
+    required String ticketId,
+    required SisChecklistPreparedSubmission submission,
+  }) {
+    final uploads = <ChecklistAttachmentUpload>[];
+    for (final questionId in submission.fileQuestionIds) {
+      final value = submission.answers[questionId];
+      if (value is! List) continue;
+      for (final item in value) {
+        if (item is! GlpiTicketAttachment) continue;
+        uploads.add(
+          ChecklistAttachmentUpload(
+            filename: item.filename,
+            upload: () => uploadAndAttachToTicket(
+              sessionToken: sessionToken,
+              ticketId: ticketId,
+              bytes: item.bytes,
+              filename: item.filename,
+              mimeType: item.mimeType,
+            ),
+          ),
+        );
+      }
+    }
+    return GlpiTicketSupport.uploadChecklistAttachments(uploads);
   }
 }

@@ -65,6 +65,13 @@ class ChecklistReviewPanel extends StatelessWidget {
               'Obrigatórios faltando',
               '${submission.missingRequiredQuestionIds.length}',
             ),
+            if (submission.hasAttachments)
+              _row(
+                context,
+                'Anexos',
+                '${submission.attachedFileCount}/${submission.fileQuestionIds.length} '
+                    'pergunta(s) com arquivo anexado',
+              ),
             const SizedBox(height: 12),
             _statusBanner(context),
           ],

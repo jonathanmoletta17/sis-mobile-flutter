@@ -311,4 +311,52 @@ void main() {
       expect(GlpiTicketSupport.guessMimeFromFilename('sem_extensao'), isNull);
     });
   });
+
+  group('uploadChecklistAttachments', () {
+    test('lista vazia não gera nenhum campo de resultado', () async {
+      final result = await GlpiTicketSupport.uploadChecklistAttachments([]);
+      expect(result, isEmpty);
+    });
+
+    test('todos com sucesso não gera attachment_warning', () async {
+      final result = await GlpiTicketSupport.uploadChecklistAttachments([
+        ChecklistAttachmentUpload(
+          filename: 'a.jpg',
+          upload: () async {},
+        ),
+        ChecklistAttachmentUpload(
+          filename: 'b.jpg',
+          upload: () async {},
+        ),
+      ]);
+      expect(result['attachments_success'], 2);
+      expect(result.containsKey('attachment_warning'), isFalse);
+    });
+
+    test('falha parcial gera attachment_warning com o nome do arquivo', () async {
+      final result = await GlpiTicketSupport.uploadChecklistAttachments([
+        ChecklistAttachmentUpload(filename: 'ok.jpg', upload: () async {}),
+        ChecklistAttachmentUpload(
+          filename: 'falha.jpg',
+          upload: () async => throw Exception('timeout'),
+        ),
+      ]);
+      expect(result['attachments_success'], 1);
+      expect(result['attachments_fail'], 1);
+      expect(result['attachment_warning'], contains('falha.jpg'));
+      expect(result['attachment_warning'], contains('1 anexo(s)'));
+    });
+
+    test('todos falhando ainda reporta sucesso 0 sem lançar', () async {
+      final result = await GlpiTicketSupport.uploadChecklistAttachments([
+        ChecklistAttachmentUpload(
+          filename: 'x.jpg',
+          upload: () async => throw Exception('rede indisponível'),
+        ),
+      ]);
+      expect(result['attachments_success'], 0);
+      expect(result['attachments_fail'], 1);
+      expect(result['attachment_warning'], contains('x.jpg'));
+    });
+  });
 }

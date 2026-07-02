@@ -18,6 +18,20 @@ class GlpiTicketAttachment {
   final String? mimeType;
 }
 
+/// Um upload de anexo de checklist já vinculado a como executá-lo (a chamada
+/// real de rede fica no chamador — `upload` é só o resultado a aguardar).
+/// Mantido separado da chamada HTTP para que a lógica de agregação de
+/// sucesso/falha abaixo seja testável sem `GlpiClient`/rede.
+class ChecklistAttachmentUpload {
+  const ChecklistAttachmentUpload({
+    required this.filename,
+    required this.upload,
+  });
+
+  final String filename;
+  final Future<void> Function() upload;
+}
+
 class GlpiTicketSupport {
   static String buildTicketContent(Map<String, dynamic> formData) {
     final descricaoBase = (formData['descricao'] ?? '').toString().trim();
@@ -500,5 +514,39 @@ class GlpiTicketSupport {
         .replaceAll('ú', 'u')
         .replaceAll('ü', 'u')
         .replaceAll('ç', 'c');
+  }
+
+  /// Executa cada upload de anexo de checklist e agrega sucesso/falha. O
+  /// ticket já existe nesse ponto (chamado após a criação), então falha aqui
+  /// nunca desfaz a criação — vira `attachment_warning` para o usuário.
+  static Future<Map<String, dynamic>> uploadChecklistAttachments(
+    List<ChecklistAttachmentUpload> uploads,
+  ) async {
+    var successCount = 0;
+    var failCount = 0;
+    final errors = <String>[];
+
+    for (final item in uploads) {
+      try {
+        await item.upload();
+        successCount++;
+      } catch (e) {
+        failCount++;
+        errors.add('${item.filename}: $e');
+      }
+    }
+
+    if (failCount == 0) {
+      return successCount == 0
+          ? const <String, dynamic>{}
+          : {'attachments_success': successCount};
+    }
+    return {
+      'attachments_success': successCount,
+      'attachments_fail': failCount,
+      'attachment_warning':
+          '$failCount anexo(s) de checklist não puderam ser enviados: '
+          '${errors.join('; ')}',
+    };
   }
 }
